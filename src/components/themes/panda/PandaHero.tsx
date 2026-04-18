@@ -9,7 +9,7 @@ export function PandaHero() {
   const isExternalLink = ctaHref.startsWith('http');
 
   return (
-    <section className="relative isolate px-6 py-24 sm:px-8 lg:px-12">
+    <section className="relative isolate px-6 pb-24 pt-32 sm:px-8 lg:px-12">
       <div
         aria-hidden="true"
         className="absolute left-[-10%] top-6 h-[500px] w-[500px] rounded-full bg-blue-600/20 blur-[120px] mix-blend-screen pointer-events-none"
@@ -25,8 +25,8 @@ export function PandaHero() {
           Panda para VSLs y negocios
         </span>
 
-        <div className="mt-8 max-w-4xl space-y-5">
-          <h1 className="text-balance text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl lg:leading-[1.02]">
+        <div className="mt-8 max-w-5xl space-y-5">
+          <h1 className="text-balance text-5xl font-bold tracking-tighter text-white md:text-7xl">
             Aloja, protege y presenta tu video como una experiencia premium desde el primer segundo.
           </h1>
           <p className="mx-auto max-w-2xl text-pretty text-base font-light leading-7 text-gray-400 sm:text-lg">
@@ -35,17 +35,12 @@ export function PandaHero() {
           </p>
         </div>
 
-        <div id="demo" className="relative mt-14 w-full max-w-5xl">
+        <div id="demo" className="relative mt-16 w-full">
           <div
             aria-hidden="true"
-            className="absolute inset-x-12 top-10 h-40 rounded-full bg-gradient-to-r from-[#0047ff]/40 via-cyan-400/35 to-[#00bfff]/40 blur-[100px] pointer-events-none"
+            className="absolute top-1/2 left-1/2 -z-10 h-3/4 w-3/4 -translate-x-1/2 -translate-y-1/2 bg-blue-600/20 blur-[150px]"
           />
-          <div
-            aria-hidden="true"
-            className="absolute inset-x-0 top-16 mx-auto h-24 w-[85%] rounded-full bg-white/10 blur-[60px] pointer-events-none"
-          />
-
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl shadow-2xl">
+          <div className="relative mx-auto max-w-5xl rounded-[2rem] overflow-hidden ring-1 ring-white/10 shadow-[0_0_100px_rgba(0,191,255,0.15)]">
             {isVideoEnabled ? (
               <CoreVideoPlayer {...videoProps} className="aspect-video w-full rounded-none bg-transparent" />
             ) : (
