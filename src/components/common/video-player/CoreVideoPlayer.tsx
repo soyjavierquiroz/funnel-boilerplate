@@ -429,7 +429,7 @@ export function CoreVideoPlayer({
   return (
     <div
       className={formatClassName(
-        'relative aspect-video w-full overflow-hidden rounded-2xl bg-surface',
+        'relative aspect-video w-full overflow-hidden rounded-2xl bg-black',
         shouldApplyYoutubeUiHack && '[&_iframe]:scale-[1.45] [&_iframe]:origin-center',
         className,
       )}
@@ -478,7 +478,7 @@ export function CoreVideoPlayer({
         <MutedOverlay config={mutedPreview} onActivateSound={handleExitMutedPreview} />
       ) : null}
 
-      {shouldAutoPlay && isZeroDistractionMode ? <VslOverlay onUnmute={handleUnmute} visible={shouldShowUnmuteOverlay} /> : null}
+      <VslOverlay onUnmute={handleUnmute} visible={shouldShowUnmuteOverlay} />
 
       {shouldRenderGlobalClickLayer ? (
         <button

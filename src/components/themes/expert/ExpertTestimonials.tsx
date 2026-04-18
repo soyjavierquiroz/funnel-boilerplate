@@ -97,43 +97,41 @@ export function ExpertTestimonials({ items }: ExpertTestimonialsProps) {
 
       {activeItem && activeVideoId ? (
         <div
-          className="fixed inset-0 z-[90] bg-black/90 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={() => setActiveItem(null)}
           role="dialog"
           aria-modal="true"
           aria-label={`Testimonio de ${activeItem.name}`}
         >
-          <div className="flex min-h-screen items-center justify-center p-4 md:p-8">
-            <div
-              className="relative w-full max-w-[1120px]"
-              onClick={(event) => event.stopPropagation()}
+          <div
+            className="relative w-full max-w-[1120px]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setActiveItem(null)}
+              className="absolute right-3 top-3 z-[110] flex h-11 w-11 items-center justify-center rounded-full bg-black/55 text-white shadow-lg ring-1 ring-white/15 transition hover:bg-black/75"
+              aria-label="Cerrar testimonio"
             >
-              <button
-                type="button"
-                onClick={() => setActiveItem(null)}
-                className="absolute right-3 top-3 z-[100] flex h-11 w-11 items-center justify-center rounded-full bg-black/55 text-white shadow-lg ring-1 ring-white/15 transition hover:bg-black/75"
-                aria-label="Cerrar testimonio"
-              >
-                <X className="h-5 w-5" />
-              </button>
+              <X className="h-5 w-5" />
+            </button>
 
-              <CoreVideoPlayer
-                provider="youtube"
-                videoId={activeVideoId}
-                autoplay={true}
-                loop={true}
-                muted={true}
-                controls={false}
-                hideYouTubeBranding={true}
-                hideYoutubeUi={true}
-                className="!aspect-[3/4] max-h-[82svh] rounded-[22px] border border-white/10 bg-black shadow-[0_35px_90px_rgba(0,0,0,0.55)] md:!aspect-video [&_iframe]:h-full [&_iframe]:w-full [&_video]:object-cover"
-              />
+            <CoreVideoPlayer
+              provider="youtube"
+              videoId={activeVideoId}
+              autoplay={true}
+              loop={true}
+              muted={true}
+              controls={false}
+              hideYouTubeBranding={true}
+              hideYoutubeUi={true}
+              className="!aspect-[3/4] max-h-[82svh] rounded-[22px] border border-white/10 bg-black shadow-[0_35px_90px_rgba(0,0,0,0.55)] md:!aspect-video [&_iframe]:h-full [&_iframe]:w-full [&_video]:object-cover"
+            />
 
-              <div className="mt-4 px-1 text-white">
-                <p className="expert-headline text-[1.2rem] font-extrabold">{activeItem.name}</p>
-                <p className="expert-body mt-1 text-sm uppercase tracking-[0.14em] text-white/70">{activeItem.title}</p>
-                <p className="expert-body mt-3 max-w-[760px] text-[1rem] leading-7 text-white/84">{activeItem.quote}</p>
-              </div>
+            <div className="mt-4 px-1 text-white">
+              <p className="expert-headline text-[1.2rem] font-extrabold">{activeItem.name}</p>
+              <p className="expert-body mt-1 text-sm uppercase tracking-[0.14em] text-white/70">{activeItem.title}</p>
+              <p className="expert-body mt-3 max-w-[760px] text-[1rem] leading-7 text-white/84">{activeItem.quote}</p>
             </div>
           </div>
         </div>
