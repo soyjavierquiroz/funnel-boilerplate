@@ -324,13 +324,29 @@ export function CoreVideoPlayer({
   }, [controller.providerRef, requestPlay]);
 
   const handleUnmute = useCallback(() => {
+    const activeProvider = controller.providerRef.current;
+
     setIsMuted(false);
     setIsVslMuted(false);
     setInMutedPreview(false);
     setShowMutedPreviewOverlay(false);
     setShowUnmuteOverlay(false);
-    controller.providerRef.current?.mute(false);
-  }, [controller.providerRef]);
+
+    if (loop === undefined) {
+      activeProvider?.setLoop(false);
+    }
+
+    activeProvider?.mute(false);
+
+    if (activeProvider) {
+      void activeProvider.play().catch(() => {
+        void requestPlay('user', { unmute: true });
+      });
+      return;
+    }
+
+    void requestPlay('user', { unmute: true });
+  }, [controller.providerRef, loop, requestPlay]);
 
   const handleResumeFromPauseOverlay = useCallback(() => {
     void requestPlay('user');
@@ -460,7 +476,13 @@ export function CoreVideoPlayer({
           ) : (
             <div
               ref={controller.mountRef}
-              className={formatClassName('absolute inset-0 h-full w-full', shouldDisableDirectSurfaceInteraction && 'pointer-events-none')}
+              className={formatClassName(
+                'absolute inset-0 h-full w-full',
+                '[&_.plyr]:!h-full [&_.plyr]:!w-full [&_.plyr__video-wrapper]:!h-full [&_.plyr__video-wrapper]:!w-full',
+                '[&_.plyr__video-embed]:!h-full [&_.plyr__video-embed]:!w-full [&_.plyr__video-embed_iframe]:!h-full [&_.plyr__video-embed_iframe]:!w-full',
+                '[&_iframe]:!h-full [&_iframe]:!w-full',
+                shouldDisableDirectSurfaceInteraction && 'pointer-events-none',
+              )}
             />
           )}
         </div>
