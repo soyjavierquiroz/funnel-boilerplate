@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Volume2 } from 'lucide-react';
 import { CoreVideoPlayer } from '../../common/video-player/CoreVideoPlayer';
-import type { CoreVideoPlayerProps } from '../../common/video-player/types';
+import type { CoreVideoPlayerHandle, CoreVideoPlayerProps } from '../../common/video-player/types';
 
 function joinClassNames(...classNames: Array<string | false | null | undefined>) {
   return classNames.filter(Boolean).join(' ');
@@ -18,16 +18,22 @@ export function ExpertVslWrapper({
   ...playerProps
 }: ExpertVslWrapperProps) {
   const [isMuted, setIsMuted] = useState(true);
+  const playerRef = useRef<CoreVideoPlayerHandle | null>(null);
 
   const handleUnmute = () => {
+    playerRef.current?.seek(0);
+    playerRef.current?.setLoop(false);
+    playerRef.current?.mute(false);
+    void playerRef.current?.play().catch(() => undefined);
     setIsMuted(false);
   };
 
   return (
     <div className={joinClassNames('relative w-full aspect-video bg-black', className)}>
       <CoreVideoPlayer
-        key={isMuted ? 'expert-muted' : 'expert-audible'}
+        ref={playerRef}
         autoplay={true}
+        vslMode={true}
         muted={isMuted}
         controls={!isMuted}
         className={joinClassNames('!aspect-auto !h-full !w-full !rounded-none bg-transparent', playerClassName)}

@@ -53,6 +53,14 @@ export interface CoreVideoPlayerProps {
   className?: string;
 }
 
+export interface CoreVideoPlayerHandle {
+  play: () => Promise<void>;
+  pause: () => void;
+  mute: (muted: boolean) => void;
+  seek: (seconds: number) => void;
+  setLoop: (loop: boolean) => void;
+}
+
 export interface PlayerState {
   isReady: boolean;
   isPlaying: boolean;

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Play } from 'lucide-react';
 import { CallToActionOverlay } from './components/CallToActionOverlay';
 import { FakeProgressBar } from './components/FakeProgressBar';
@@ -7,13 +7,13 @@ import { PlayerControls } from './components/PlayerControls';
 import { SmartPoster } from './components/SmartPoster';
 import { useVideoProviderController } from './providers/useVideoProviderController';
 import type { IVideoProvider } from './providers/IVideoProvider';
-import type { CoreVideoPlayerProps } from './types';
+import type { CoreVideoPlayerHandle, CoreVideoPlayerProps } from './types';
 
 function formatClassName(...classNames: Array<string | false | null | undefined>) {
   return classNames.filter(Boolean).join(' ');
 }
 
-export function CoreVideoPlayer({
+export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayerProps>(function CoreVideoPlayer({
   provider,
   videoId,
   autoplay,
@@ -33,7 +33,7 @@ export function CoreVideoPlayer({
   hideYouTubeBranding,
   smartPoster,
   className,
-}: CoreVideoPlayerProps) {
+}, ref) {
   const isVslMode = Boolean(vslMode);
   const isMutedPreviewEnabled = Boolean(mutedPreview.enabled) && !isVslMode;
   const shouldAutoPlay = autoplay ?? (isVslMode || isMutedPreviewEnabled);
@@ -147,6 +147,28 @@ export function CoreVideoPlayer({
     onMuteChange: handleProviderMuteChange,
     onAutoplayBlocked: handleAutoplayBlocked,
   });
+
+  useImperativeHandle(ref, () => ({
+    async play() {
+      if (controller.providerRef.current) {
+        await controller.providerRef.current.play();
+      }
+    },
+    pause() {
+      controller.providerRef.current?.pause();
+    },
+    mute(nextMuted: boolean) {
+      controller.providerRef.current?.mute(nextMuted);
+      setIsMuted(nextMuted);
+    },
+    seek(seconds: number) {
+      controller.providerRef.current?.seek(seconds);
+      setCurrentTime(seconds);
+    },
+    setLoop(nextLoop: boolean) {
+      controller.providerRef.current?.setLoop(nextLoop);
+    },
+  }), [controller.providerRef]);
 
   const runPendingPlay = useCallback(async (activeProvider: IVideoProvider) => {
     const intent = pendingPlayIntentRef.current;
@@ -528,4 +550,4 @@ export function CoreVideoPlayer({
       ) : null}
     </div>
   );
-}
+});
