@@ -3,12 +3,14 @@ import { ExpertFAQ } from './ExpertFAQ';
 import { ExpertHero } from './ExpertHero';
 import { ExpertOrderForm } from './ExpertOrderForm';
 import { ExpertSalesLetter } from './ExpertSalesLetter';
+import { ExpertTestimonials } from './ExpertTestimonials';
 import {
   expertBonusItems,
   expertBrandAssets,
   expertFaqItems,
   expertLetterSections,
   expertPostscript,
+  expertTestimonials,
 } from './expertContent';
 import { ExpertCtaButton } from './ExpertCtaButton';
 
@@ -29,6 +31,7 @@ export function ExpertTheme() {
       </section>
 
       <ExpertSalesLetter sections={expertLetterSections} postscript={expertPostscript} />
+      <ExpertTestimonials items={expertTestimonials} />
 
       <section className="px-4 pb-4 sm:px-6">
         <div className="mx-auto max-w-[819px] rounded-[4px] border border-[#f4f0dc] bg-[#fcf8e3] px-5 py-8 shadow-[0_18px_40px_rgba(17,17,17,0.06)] sm:px-10 sm:py-10">

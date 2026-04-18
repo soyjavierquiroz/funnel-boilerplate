@@ -61,6 +61,7 @@ export function CoreVideoPlayer({
   const [ctaTriggered, setCtaTriggered] = useState(false);
   const [showCta, setShowCta] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
+  const [showUnmuteOverlay, setShowUnmuteOverlay] = useState(shouldAutoPlay && isZeroDistractionMode && shouldStartMuted);
   const pendingPlayIntentRef = useRef<'autoplay' | 'user' | null>(shouldAutoPlay ? 'autoplay' : null);
   const hasRestoredPlaybackRef = useRef(false);
   const lastPersistedSecondRef = useRef(-1);
@@ -194,10 +195,11 @@ export function CoreVideoPlayer({
     setAutoplayBlocked(false);
     setCtaTriggered(false);
     setShowCta(false);
+    setShowUnmuteOverlay(nextShouldAutoplay && controls === false && nextShouldStartMuted);
     hasRestoredPlaybackRef.current = false;
     lastPersistedSecondRef.current = -1;
     pendingPlayIntentRef.current = nextShouldAutoplay ? 'autoplay' : null;
-  }, [autoplay, lazyLoadYoutube, muted, provider, videoId, mutedPreview.enabled, vslMode]);
+  }, [autoplay, controls, lazyLoadYoutube, muted, provider, videoId, mutedPreview.enabled, vslMode]);
 
   useEffect(() => {
     if (!shouldLoadPlayer || !isReady || !controller.providerRef.current) {
@@ -323,9 +325,9 @@ export function CoreVideoPlayer({
     setIsVslMuted(false);
     setInMutedPreview(false);
     setShowMutedPreviewOverlay(false);
+    setShowUnmuteOverlay(false);
     controller.providerRef.current?.mute(false);
-    void requestPlay('user', { unmute: true });
-  }, [controller.providerRef, requestPlay]);
+  }, [controller.providerRef]);
 
   const handleResumeFromPauseOverlay = useCallback(() => {
     void requestPlay('user');
@@ -403,7 +405,7 @@ export function CoreVideoPlayer({
     shouldLoadPlayer &&
     shouldAutoPlay &&
     isZeroDistractionMode &&
-    isMuted &&
+    showUnmuteOverlay &&
     !showPoster &&
     !showCta &&
     !showMutedPreviewOverlay;
@@ -476,7 +478,7 @@ export function CoreVideoPlayer({
         <MutedOverlay config={mutedPreview} onActivateSound={handleExitMutedPreview} />
       ) : null}
 
-      {shouldShowUnmuteOverlay ? <VslOverlay onUnmute={handleUnmute} /> : null}
+      {shouldAutoPlay && isZeroDistractionMode ? <VslOverlay onUnmute={handleUnmute} visible={shouldShowUnmuteOverlay} /> : null}
 
       {shouldRenderGlobalClickLayer ? (
         <button

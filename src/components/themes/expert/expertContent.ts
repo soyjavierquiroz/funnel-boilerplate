@@ -22,6 +22,16 @@ export interface ExpertLetterSection {
   bullets?: string[];
 }
 
+export interface ExpertTestimonialItem {
+  id: string;
+  name: string;
+  title: string;
+  quote: string;
+  thumbnailUrl: string;
+  thumbnailAlt: string;
+  videoUrl: string;
+}
+
 export const expertBrandAssets = {
   logoUrl: 'https://statics.myclickfunnels.com/workspace/Jnbkrx/image/7882162/file/1e47b234006662e0cb8fde3631e17b81.svg',
   heroBackgroundUrl: 'https://statics.myclickfunnels.com/workspace/Jnbkrx/image/8565732/file/33f9b4e00ae24f5b8ce831abe9faa2f2.png',
@@ -178,4 +188,34 @@ export const expertPostscript = [
   'There is no catch, no gimmick, and no continuity trap. You only cover shipping and handling: $9.95 in the U.S. or $19.95 internationally.',
   'If you do not love the book, I will even refund your shipping costs and you do not have to send the book back.',
   'Click the button below to reserve your free copy now.',
+];
+
+export const expertTestimonials: ExpertTestimonialItem[] = [
+  {
+    id: 'tanya',
+    name: 'Tanya Alvarez',
+    title: 'Coach & Course Creator',
+    quote: 'This framework finally helped me explain my offer in a way people instantly understood.',
+    thumbnailUrl: 'https://i.ytimg.com/vi/M7lc1UVf-VE/hqdefault.jpg',
+    thumbnailAlt: 'Tanya testimonial video thumbnail',
+    videoUrl: 'https://www.youtube.com/watch?v=M7lc1UVf-VE',
+  },
+  {
+    id: 'marcus',
+    name: 'Marcus Lee',
+    title: 'Consultant & Speaker',
+    quote: 'The stories inside Expert Secrets gave me the confidence to lead with belief instead of features.',
+    thumbnailUrl: 'https://i.ytimg.com/vi/ysz5S6PUM-U/hqdefault.jpg',
+    thumbnailAlt: 'Marcus testimonial video thumbnail',
+    videoUrl: 'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+  },
+  {
+    id: 'jennifer',
+    name: 'Jennifer Ortiz',
+    title: 'Membership Founder',
+    quote: 'After applying the messaging stack, our webinar felt sharper and conversions jumped almost immediately.',
+    thumbnailUrl: 'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg',
+    thumbnailAlt: 'Jennifer testimonial video thumbnail',
+    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+  },
 ];

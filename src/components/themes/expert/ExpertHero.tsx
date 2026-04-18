@@ -30,13 +30,13 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
           </nav>
         </header>
 
-        <div className="mx-auto mt-5 max-w-[1040px]">
-          <p className="expert-body text-center text-[0.82rem] font-bold lowercase tracking-[0.08em] text-[#4876b9] sm:text-[0.95rem]">
+        <div className="mx-auto mt-4 max-w-[1040px] md:mt-5">
+          <p className="expert-body px-2 text-center text-xs font-bold lowercase tracking-[0.05em] text-[#4876b9] text-balance md:px-0 md:text-sm">
             what if people would actually pay you for your advice...?
           </p>
 
-          <div className="mt-[20px] border-2 border-[#1d3557] bg-[#e7f5ff] px-[15px] pb-[10px] pt-[8px] text-center shadow-[0_12px_24px_rgba(72,117,185,0.08)]">
-            <p className="expert-headline text-[18px] font-medium leading-tight tracking-[-0.025em] text-[#2d2d2d] sm:text-[28px] lg:text-[36px]">
+          <div className="mt-[16px] border-2 border-[#1d3557] bg-[#e7f5ff] px-3 pb-[10px] pt-[8px] text-center shadow-[0_12px_24px_rgba(72,117,185,0.08)] md:mt-[20px] md:px-[15px]">
+            <p className="expert-headline text-balance text-[14px] font-medium leading-tight tracking-[-0.02em] text-[#2d2d2d] sm:text-[16px] md:text-[20px] lg:text-[36px]">
               Your <span className="text-[#e01921]">FREE Copy</span> Of &apos;Expert Secrets&apos; Will Show You How To:
             </p>
           </div>
