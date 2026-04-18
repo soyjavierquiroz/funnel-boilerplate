@@ -30,18 +30,18 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
           </nav>
         </header>
 
-        <div className="mt-5">
-          <p className="expert-body text-center text-[0.88rem] font-bold lowercase tracking-[0.18em] text-[#4876b9] sm:text-[0.95rem]">
+        <div className="mx-auto mt-5 max-w-[1040px]">
+          <p className="expert-body text-center text-[0.82rem] font-bold lowercase tracking-[0.08em] text-[#4876b9] sm:text-[0.95rem]">
             what if people would actually pay you for your advice...?
           </p>
 
-          <div className="mt-5 bg-[#e7f5ff] px-[15px] py-[8px] text-center shadow-[0_12px_24px_rgba(72,117,185,0.08)]">
-            <p className="expert-headline text-[1.1rem] font-semibold leading-tight tracking-[-0.04em] text-[#2d2d2d] sm:text-[2rem] lg:text-[2.25rem]">
+          <div className="mt-[20px] border-2 border-[#1d3557] bg-[#e7f5ff] px-[15px] pb-[10px] pt-[8px] text-center shadow-[0_12px_24px_rgba(72,117,185,0.08)]">
+            <p className="expert-headline text-[18px] font-medium leading-tight tracking-[-0.025em] text-[#2d2d2d] sm:text-[28px] lg:text-[36px]">
               Your <span className="text-[#e01921]">FREE Copy</span> Of &apos;Expert Secrets&apos; Will Show You How To:
             </p>
           </div>
 
-          <h1 className="expert-headline mt-[10px] text-center text-[1.85rem] font-black uppercase leading-[0.98] tracking-[-0.06em] text-[#2d2d2d] sm:text-[3.25rem] lg:text-[4.12rem]">
+          <h1 className="expert-headline mt-[10px] text-center text-[1.68rem] font-black uppercase leading-none tracking-[-0.04em] text-[#2d2d2d] sm:text-[3.25rem] lg:text-[4.12rem]">
             “Find Your Message... Build A Tribe, And <span className="text-[#e01921]">Change The World!</span>”
           </h1>
         </div>
@@ -59,9 +59,9 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
               </p>
             </div>
 
-            <div className="mb-4 flex items-center justify-center gap-2 bg-[#4775b9] px-4 py-[11px] text-center text-white">
+            <div className="mb-4 flex items-center justify-center gap-[5px] bg-[#4775b9] px-[5px] py-[11px] text-center text-white">
               <Volume2 className="h-4 w-4 shrink-0" />
-              <p className="expert-headline text-[0.82rem] font-semibold uppercase tracking-[0.08em] sm:text-[1rem]">
+              <p className="expert-headline text-[12px] font-medium uppercase tracking-[0.08em] leading-[1.3] sm:text-[16px] sm:leading-none">
                 Make Sure Your Sound Is Turned ON! <span className="font-normal normal-case">(Please wait for video to fully load)</span>
               </p>
             </div>

@@ -45,6 +45,7 @@ export function CoreVideoPlayer({
   const isProviderImplemented = provider === 'youtube' || provider === 'bunnynet' || provider === 'html5';
   const isStickyEnabled = Boolean(stickyOnScroll ?? stickyScroll);
   const controlsVariant = isVslMode ? 'vsl' : controls === false ? 'minimal' : 'standard';
+  const isZeroDistractionMode = controls === false;
   const resumeStorageKey = `funnel-player:resume:${provider}:${videoId}`;
 
   const [shouldLoadPlayer, setShouldLoadPlayer] = useState(!isYoutubeLazyMode);
@@ -320,10 +321,10 @@ export function CoreVideoPlayer({
   const handleUnmute = useCallback(() => {
     setIsMuted(false);
     setIsVslMuted(false);
+    setInMutedPreview(false);
+    setShowMutedPreviewOverlay(false);
     controller.providerRef.current?.mute(false);
-    controller.providerRef.current?.seek(0);
-    setCurrentTime(0);
-    void requestPlay('user', { unmute: true, restartFromZero: true });
+    void requestPlay('user', { unmute: true });
   }, [controller.providerRef, requestPlay]);
 
   const handleResumeFromPauseOverlay = useCallback(() => {
@@ -398,12 +399,27 @@ export function CoreVideoPlayer({
     ? smartPoster?.description || 'Haz click para iniciar la reproducción manualmente.'
     : smartPoster?.description || 'Pulsa play para ver el video con nuestra experiencia premium.';
 
+  const shouldShowUnmuteOverlay =
+    shouldLoadPlayer &&
+    shouldAutoPlay &&
+    isZeroDistractionMode &&
+    isMuted &&
+    !showPoster &&
+    !showCta &&
+    !showMutedPreviewOverlay;
   const shouldShowPauseOverlay = !isVslMode && !isPlaying && isReady && !inMutedPreview && !isVslMuted && !showCta && !showPoster;
   const shouldShowControls = shouldLoadPlayer && isReady && !showPoster && !showCta && !showMutedPreviewOverlay && !isVslMuted;
   const shouldRenderCustomControls = controls !== false && !isVslMode && shouldShowControls;
   const shouldRenderFakeProgress = shouldLoadPlayer && isVslMode && !showPoster;
-  const shouldRenderGlobalClickLayer = shouldLoadPlayer && isVslMode && !showPoster && !showCta;
+  const shouldRenderGlobalClickLayer =
+    shouldLoadPlayer &&
+    !showPoster &&
+    !showCta &&
+    !showMutedPreviewOverlay &&
+    !shouldShowUnmuteOverlay &&
+    (isVslMode || isZeroDistractionMode);
   const shouldRenderVslPauseIndicator = isVslMode && !isVslMuted && !isPlaying && !showPoster && !showCta;
+  const shouldDisableDirectSurfaceInteraction = isVslMode || isZeroDistractionMode;
   const videoRef = controller.surface === 'video' ? controller.mountRef : undefined;
   const playerBackground =
     'radial-gradient(circle at top, rgb(var(--color-primary) / 0.18), transparent 35%), linear-gradient(135deg, rgb(var(--color-page) / 1), rgb(var(--color-surface) / 1))';
@@ -417,14 +433,15 @@ export function CoreVideoPlayer({
       )}
       data-provider={provider}
       data-vsl-mode={isVslMode ? 'true' : 'false'}
+      data-zero-distraction={isZeroDistractionMode ? 'true' : 'false'}
       data-sticky-enabled={isStickyEnabled ? 'true' : undefined}
     >
       {shouldLoadPlayer ? (
-        <div className={formatClassName('h-full w-full', isVslMode && 'pointer-events-none')}>
+        <div className={formatClassName('h-full w-full', shouldDisableDirectSurfaceInteraction && 'pointer-events-none')}>
           {controller.surface === 'video' ? (
             <video
               ref={videoRef}
-              className={formatClassName('w-full h-full object-cover', isVslMode && 'pointer-events-none')}
+              className={formatClassName('w-full h-full object-cover', shouldDisableDirectSurfaceInteraction && 'pointer-events-none')}
               playsInline
               controls={controls}
               onPlay={() => setIsPlaying(true)}
@@ -437,7 +454,7 @@ export function CoreVideoPlayer({
           ) : (
             <div
               ref={controller.mountRef}
-              className={formatClassName('w-full h-full object-cover', isVslMode && 'pointer-events-none')}
+              className={formatClassName('w-full h-full object-cover', shouldDisableDirectSurfaceInteraction && 'pointer-events-none')}
             />
           )}
         </div>
@@ -459,7 +476,7 @@ export function CoreVideoPlayer({
         <MutedOverlay config={mutedPreview} onActivateSound={handleExitMutedPreview} />
       ) : null}
 
-      {shouldLoadPlayer && isVslMode && isVslMuted && !showPoster ? <VslOverlay onUnmute={handleUnmute} /> : null}
+      {shouldShowUnmuteOverlay ? <VslOverlay onUnmute={handleUnmute} /> : null}
 
       {shouldRenderGlobalClickLayer ? (
         <button

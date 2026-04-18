@@ -1,5 +1,6 @@
 import { startTransition, useEffect, useState } from 'react';
 import { Check, ChevronLeft, CreditCard, Lock, MapPin, ShieldCheck, Truck } from 'lucide-react';
+import type { Country } from 'react-phone-number-input';
 import funnelConfig, { pricingProductKeys } from '../../../core/config/funnel.config';
 import { useHotmartPrices } from '../../../core/hooks/useHotmartPrices';
 import analytics from '../../../core/services/analytics';
@@ -77,6 +78,14 @@ function resolveOfferPrice(baseValue: number, localizedValue?: { total: string }
 
 const clickfunnelsFieldClassName =
   'bg-white border border-gray-300 text-gray-900 rounded-md focus:ring-2 focus:ring-blue-500 shadow-sm';
+
+function resolveDefaultPhoneCountry(countryCode?: string): Country {
+  if (!countryCode) {
+    return 'US';
+  }
+
+  return countryCode.toUpperCase() as Country;
+}
 
 export function ExpertOrderForm() {
   const { visitorData, isLoading } = useVisitor();
@@ -384,9 +393,11 @@ export function ExpertOrderForm() {
               error={errors.whatsapp}
               required
               autoDetectCountry
+              defaultCountry={resolveDefaultPhoneCountry(visitorData?.country_code)}
               label="Phone Number"
               labelClassName="expert-body mb-1.5 block text-sm font-semibold text-[#2d2d2d]"
               phoneInputClassName={clickfunnelsFieldClassName}
+              helperTextClassName="mt-1.5 text-xs text-[#4876b9]"
               errorTextClassName="mt-1.5 text-xs text-[#e01921]"
             />
 
