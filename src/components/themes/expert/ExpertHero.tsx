@@ -70,10 +70,15 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
               <CoreVideoPlayer
                 provider={heroVideo.provider}
                 videoId={heroVideo.videoId}
+                autoplay={true}
+                loop={true}
+                muted={true}
+                controls={false}
                 vslMode={heroVideo.vslMode}
                 resumePlayback={heroVideo.resumePlayback}
                 lazyLoadYoutube={heroVideo.lazyLoadYoutube}
                 hideYoutubeUi={heroVideo.hideYoutubeUi}
+                hideYouTubeBranding={true}
                 smartPoster={heroVideo.smartPoster}
                 vslProgressBarColor={heroVideo.vslProgressBarColor}
                 className="border-[6px] md:border-[8px] border-[#111] shadow-2xl w-full bg-black rounded-sm"

@@ -11,6 +11,7 @@ export function useBunnyProvider({
   muted,
   autoPlay,
   loop,
+  controls,
   onReady,
   onPlay,
   onPause,
@@ -79,6 +80,7 @@ export function useBunnyProvider({
     videoElement.muted = muted;
     videoElement.autoplay = autoPlay;
     videoElement.loop = loop;
+    videoElement.controls = controls ?? false;
 
     const cleanupEvents = bindNativeVideoEvents(videoElement, eventHub, notifyReady);
 
@@ -120,6 +122,14 @@ export function useBunnyProvider({
 
     mountRef.current.autoplay = autoPlay;
   }, [autoPlay, enabled]);
+
+  useEffect(() => {
+    if (!enabled || !mountRef.current) {
+      return;
+    }
+
+    mountRef.current.controls = controls ?? false;
+  }, [controls, enabled]);
 
   useEffect(() => {
     if (!enabled) {

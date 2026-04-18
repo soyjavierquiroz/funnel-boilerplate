@@ -10,6 +10,7 @@ export function useHtml5Provider({
   muted,
   autoPlay,
   loop,
+  controls,
   controlsVariant,
   onReady,
   onPlay,
@@ -77,7 +78,7 @@ export function useHtml5Provider({
     videoElement.muted = muted;
     videoElement.autoplay = autoPlay;
     videoElement.loop = loop;
-    videoElement.controls = false;
+    videoElement.controls = controls ?? false;
     videoElement.dataset.controlsVariant = controlsVariant || 'standard';
     videoElement.src = videoId;
 
@@ -98,6 +99,14 @@ export function useHtml5Provider({
 
     mountRef.current.autoplay = autoPlay;
   }, [autoPlay, enabled]);
+
+  useEffect(() => {
+    if (!enabled || !mountRef.current) {
+      return;
+    }
+
+    mountRef.current.controls = controls ?? false;
+  }, [controls, enabled]);
 
   useEffect(() => {
     if (!enabled) {

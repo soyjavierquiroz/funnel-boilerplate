@@ -48,6 +48,8 @@ export interface ProviderHookOptions extends ProviderLifecycleCallbacks {
   muted: boolean;
   autoPlay: boolean;
   loop: boolean;
+  controls?: boolean;
+  hideBranding?: boolean;
   hideNativeUi?: boolean;
   controlsVariant?: ControlsVariant;
 }

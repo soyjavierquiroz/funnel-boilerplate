@@ -17,6 +17,10 @@ function formatClassName(...classNames: Array<string | false | null | undefined>
 export function CoreVideoPlayer({
   provider,
   videoId,
+  autoplay,
+  loop,
+  muted,
+  controls = true,
   vslMode = false,
   vslProgressBarColor,
   mutedPreview = { enabled: false, overlayPosition: 'center' },
@@ -27,23 +31,26 @@ export function CoreVideoPlayer({
   onTimeUpdate,
   callToAction,
   hideYoutubeUi,
+  hideYouTubeBranding,
   smartPoster,
   className,
 }: CoreVideoPlayerProps) {
   const isVslMode = Boolean(vslMode);
   const isMutedPreviewEnabled = Boolean(mutedPreview.enabled) && !isVslMode;
-  const shouldAutoPlay = isVslMode || isMutedPreviewEnabled;
+  const shouldAutoPlay = autoplay ?? (isVslMode || isMutedPreviewEnabled);
+  const shouldStartMuted = muted ?? shouldAutoPlay;
   const isYoutubeLazyMode = provider === 'youtube' && Boolean(lazyLoadYoutube) && !shouldAutoPlay;
-  const shouldApplyYoutubeUiHack = provider === 'youtube' && Boolean(hideYoutubeUi);
+  const shouldApplyYoutubeUiHack =
+    provider === 'youtube' && Boolean(hideYoutubeUi || hideYouTubeBranding || controls === false);
   const isProviderImplemented = provider === 'youtube' || provider === 'bunnynet' || provider === 'html5';
   const isStickyEnabled = Boolean(stickyOnScroll ?? stickyScroll);
-  const controlsVariant = isVslMode ? 'vsl' : 'standard';
+  const controlsVariant = isVslMode ? 'vsl' : controls === false ? 'minimal' : 'standard';
   const resumeStorageKey = `funnel-player:resume:${provider}:${videoId}`;
 
   const [shouldLoadPlayer, setShouldLoadPlayer] = useState(!isYoutubeLazyMode);
   const [isReady, setIsReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(shouldAutoPlay);
+  const [isMuted, setIsMuted] = useState(shouldStartMuted);
   const [isVslMuted, setIsVslMuted] = useState(isVslMode);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -128,8 +135,10 @@ export function CoreVideoPlayer({
     videoId,
     autoPlay: shouldAutoPlay,
     muted: isMuted,
-    loop: inMutedPreview,
-    hideNativeUi: hideYoutubeUi,
+    loop: loop ?? inMutedPreview,
+    controls,
+    hideBranding: hideYouTubeBranding,
+    hideNativeUi: hideYoutubeUi || controls === false,
     controlsVariant,
     onReady: handleProviderReady,
     onPlay: handleProviderPlay,
@@ -167,13 +176,14 @@ export function CoreVideoPlayer({
   useEffect(() => {
     const nextVslMode = Boolean(vslMode);
     const nextMutedPreviewEnabled = Boolean(mutedPreview.enabled) && !nextVslMode;
-    const nextShouldAutoplay = nextVslMode || nextMutedPreviewEnabled;
+    const nextShouldAutoplay = autoplay ?? (nextVslMode || nextMutedPreviewEnabled);
+    const nextShouldStartMuted = muted ?? nextShouldAutoplay;
     const lazyMode = provider === 'youtube' && Boolean(lazyLoadYoutube) && !nextShouldAutoplay;
 
     setShouldLoadPlayer(!lazyMode);
     setIsReady(false);
     setIsPlaying(false);
-    setIsMuted(nextShouldAutoplay);
+    setIsMuted(nextShouldStartMuted);
     setIsVslMuted(nextVslMode);
     setCurrentTime(0);
     setDuration(0);
@@ -186,7 +196,7 @@ export function CoreVideoPlayer({
     hasRestoredPlaybackRef.current = false;
     lastPersistedSecondRef.current = -1;
     pendingPlayIntentRef.current = nextShouldAutoplay ? 'autoplay' : null;
-  }, [provider, videoId, lazyLoadYoutube, mutedPreview.enabled, vslMode]);
+  }, [autoplay, lazyLoadYoutube, muted, provider, videoId, mutedPreview.enabled, vslMode]);
 
   useEffect(() => {
     if (!shouldLoadPlayer || !isReady || !controller.providerRef.current) {
@@ -271,7 +281,10 @@ export function CoreVideoPlayer({
         setInMutedPreview(false);
         setShowMutedPreviewOverlay(false);
         controller.providerRef.current?.mute(false);
-        controller.providerRef.current?.setLoop(false);
+
+        if (loop === undefined) {
+          controller.providerRef.current?.setLoop(false);
+        }
       }
 
       if (!shouldLoadPlayer) {
@@ -285,7 +298,7 @@ export function CoreVideoPlayer({
 
       await runPendingPlay(controller.providerRef.current);
     },
-    [controller.providerRef, runPendingPlay, shouldLoadPlayer],
+    [controller.providerRef, loop, runPendingPlay, shouldLoadPlayer],
   );
 
   const handlePosterPlay = useCallback(() => {
@@ -357,9 +370,12 @@ export function CoreVideoPlayer({
     if (!nextMuted) {
       setInMutedPreview(false);
       setShowMutedPreviewOverlay(false);
-      controller.providerRef.current?.setLoop(false);
+
+      if (loop === undefined) {
+        controller.providerRef.current?.setLoop(false);
+      }
     }
-  }, [controller.providerRef, isMuted]);
+  }, [controller.providerRef, isMuted, loop]);
 
   const handleSeek = useCallback(
     (seconds: number) => {
@@ -384,7 +400,7 @@ export function CoreVideoPlayer({
 
   const shouldShowPauseOverlay = !isVslMode && !isPlaying && isReady && !inMutedPreview && !isVslMuted && !showCta && !showPoster;
   const shouldShowControls = shouldLoadPlayer && isReady && !showPoster && !showCta && !showMutedPreviewOverlay && !isVslMuted;
-  const shouldRenderCustomControls = !isVslMode && shouldShowControls;
+  const shouldRenderCustomControls = controls !== false && !isVslMode && shouldShowControls;
   const shouldRenderFakeProgress = shouldLoadPlayer && isVslMode && !showPoster;
   const shouldRenderGlobalClickLayer = shouldLoadPlayer && isVslMode && !showPoster && !showCta;
   const shouldRenderVslPauseIndicator = isVslMode && !isVslMuted && !isPlaying && !showPoster && !showCta;
@@ -410,11 +426,11 @@ export function CoreVideoPlayer({
               ref={videoRef}
               className={formatClassName('w-full h-full object-cover', isVslMode && 'pointer-events-none')}
               playsInline
-              controls={false}
+              controls={controls}
               onPlay={() => setIsPlaying(true)}
               onPause={() => setIsPlaying(false)}
-              controlsList={isVslMode ? 'nodownload noplaybackrate noremoteplayback' : undefined}
-              disablePictureInPicture={isVslMode}
+              controlsList={isVslMode || controls === false ? 'nodownload noplaybackrate noremoteplayback' : undefined}
+              disablePictureInPicture={isVslMode || controls === false}
               muted={isMuted}
               autoPlay={shouldAutoPlay}
             />

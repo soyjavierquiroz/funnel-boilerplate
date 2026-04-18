@@ -34,6 +34,10 @@ export interface SmartPosterConfig {
 export interface CoreVideoPlayerProps {
   provider: VideoProvider;
   videoId: string;
+  autoplay?: boolean;
+  loop?: boolean;
+  muted?: boolean;
+  controls?: boolean;
   vslMode?: boolean;
   vslProgressBarColor?: string;
   mutedPreview?: MutedPreviewConfig;
@@ -44,6 +48,7 @@ export interface CoreVideoPlayerProps {
   onTimeUpdate?: (currentTime: number) => void;
   callToAction?: CallToActionConfig;
   hideYoutubeUi?: boolean;
+  hideYouTubeBranding?: boolean;
   smartPoster?: SmartPosterConfig;
   className?: string;
 }
