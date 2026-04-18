@@ -26,18 +26,18 @@ export function PandaTrustLogos() {
   const marqueeLogos = [...placeholderLogos, ...placeholderLogos];
 
   return (
-    <section className="relative px-6 pb-10 sm:px-8 lg:px-12">
-      <div className="mx-auto max-w-6xl">
+    <section className="relative pb-10 md:pb-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="text-center text-xs font-medium uppercase tracking-[0.28em] text-gray-500">
           Cientos de empresas confían en nosotros
         </p>
+      </div>
 
-        <div className="mask-fade mt-6 overflow-hidden">
-          <div className="animate-marquee-left flex w-max min-w-full gap-8">
-            {marqueeLogos.map((logo, index) => (
-              <LogoPlaceholder key={`${logo.name}-${index}`} name={logo.name} shape={logo.shape} />
-            ))}
-          </div>
+      <div className="mask-fade mt-6 overflow-hidden">
+        <div className="animate-marquee-left flex w-max min-w-full gap-8">
+          {marqueeLogos.map((logo, index) => (
+            <LogoPlaceholder key={`${logo.name}-${index}`} name={logo.name} shape={logo.shape} />
+          ))}
         </div>
       </div>
     </section>

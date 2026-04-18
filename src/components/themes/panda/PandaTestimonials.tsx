@@ -74,7 +74,9 @@ function TestimonialCard({
   };
 }) {
   return (
-    <article className={`relative min-h-[250px] w-[320px] shrink-0 overflow-hidden rounded-3xl p-5 ${glassCardClassName}`}>
+    <article
+      className={`relative min-h-[240px] w-[280px] shrink-0 overflow-hidden rounded-3xl p-4 sm:w-[320px] sm:p-5 ${glassCardClassName}`}
+    >
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.12),transparent_40%),radial-gradient(circle_at_bottom_right,rgba(34,211,238,0.08),transparent_36%)]"
@@ -101,7 +103,7 @@ function TestimonialCard({
 
 export function PandaTestimonials() {
   return (
-    <section className="relative isolate px-6 py-24 sm:px-8 lg:px-12">
+    <section className="relative isolate overflow-hidden py-16 md:py-24">
       <div
         aria-hidden="true"
         className="absolute left-[-8%] top-0 h-[500px] w-[500px] rounded-full bg-blue-600/20 blur-[120px] mix-blend-screen pointer-events-none"
@@ -111,7 +113,7 @@ export function PandaTestimonials() {
         className="absolute right-[-6%] bottom-[-4rem] h-[500px] w-[500px] rounded-full bg-cyan-500/20 blur-[120px] mix-blend-screen pointer-events-none"
       />
 
-      <div className="relative mx-auto max-w-6xl">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <span className="inline-flex rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-gray-300 backdrop-blur-xl">
             Testimonios
@@ -125,21 +127,22 @@ export function PandaTestimonials() {
           </p>
         </div>
 
-        <div className="mt-14 space-y-8">
-          <div className="mask-fade overflow-hidden">
-            <div className="animate-marquee-left flex w-max min-w-full gap-8">
-              {[...topRowTestimonials, ...topRowTestimonials].map((testimonial, index) => (
-                <TestimonialCard key={`${testimonial.name}-top-${index}`} testimonial={testimonial} />
-              ))}
-            </div>
-          </div>
+      </div>
 
-          <div className="mask-fade overflow-hidden">
-            <div className="animate-marquee-right flex w-max min-w-full gap-8">
-              {[...bottomRowTestimonials, ...bottomRowTestimonials].map((testimonial, index) => (
-                <TestimonialCard key={`${testimonial.name}-bottom-${index}`} testimonial={testimonial} />
-              ))}
-            </div>
+      <div className="mt-12 space-y-8 md:mt-14">
+        <div className="mask-fade overflow-hidden">
+          <div className="animate-marquee-left flex w-max min-w-full gap-8">
+            {[...topRowTestimonials, ...topRowTestimonials].map((testimonial, index) => (
+              <TestimonialCard key={`${testimonial.name}-top-${index}`} testimonial={testimonial} />
+            ))}
+          </div>
+        </div>
+
+        <div className="mask-fade overflow-hidden">
+          <div className="animate-marquee-right flex w-max min-w-full gap-8">
+            {[...bottomRowTestimonials, ...bottomRowTestimonials].map((testimonial, index) => (
+              <TestimonialCard key={`${testimonial.name}-bottom-${index}`} testimonial={testimonial} />
+            ))}
           </div>
         </div>
       </div>

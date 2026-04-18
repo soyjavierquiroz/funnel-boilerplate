@@ -23,7 +23,7 @@ export function PandaInsights() {
   const blogUrl = 'https://pandavideo.com/es/blog';
 
   return (
-    <section className="relative isolate px-6 py-24 sm:px-8 lg:px-12">
+    <section className="relative isolate overflow-hidden py-16 md:py-24">
       <div
         aria-hidden="true"
         className="absolute left-[-12%] bottom-0 h-[500px] w-[500px] rounded-full bg-blue-600/20 blur-[120px] mix-blend-screen pointer-events-none"
@@ -33,7 +33,7 @@ export function PandaInsights() {
         className="absolute right-[-10%] top-8 h-[500px] w-[500px] rounded-full bg-cyan-500/20 blur-[120px] mix-blend-screen pointer-events-none"
       />
 
-      <div className="relative mx-auto max-w-6xl">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <span className="inline-flex rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-gray-300 backdrop-blur-xl">
@@ -59,7 +59,7 @@ export function PandaInsights() {
           </div>
         </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="mt-12 grid grid-cols-1 gap-6 md:mt-14 md:grid-cols-3">
           {insights.map((insight) => (
             <article
               key={insight.title}

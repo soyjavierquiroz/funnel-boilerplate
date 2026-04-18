@@ -6,7 +6,7 @@ import { PandaTrustLogos } from './PandaTrustLogos';
 
 export function PandaTheme() {
   return (
-    <div className="theme-panda min-h-screen bg-[#04050c] text-white font-sans overflow-x-hidden">
+    <div className="theme-panda relative min-h-screen overflow-x-hidden bg-[#04050c] text-white font-sans">
       <PandaHeader />
       <PandaHero />
       <PandaTrustLogos />
