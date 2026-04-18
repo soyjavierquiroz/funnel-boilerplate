@@ -60,6 +60,44 @@ const testimonials = [
 ];
 
 const glassCardClassName = 'bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl shadow-2xl';
+const topRowTestimonials = testimonials.slice(0, 4);
+const bottomRowTestimonials = testimonials.slice(4);
+
+function TestimonialCard({
+  testimonial,
+}: {
+  testimonial: {
+    name: string;
+    role: string;
+    quote: string;
+    avatar: string;
+  };
+}) {
+  return (
+    <article className={`relative min-h-[250px] w-[320px] shrink-0 overflow-hidden rounded-3xl p-5 ${glassCardClassName}`}>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.12),transparent_40%),radial-gradient(circle_at_bottom_right,rgba(34,211,238,0.08),transparent_36%)]"
+      />
+      <div className="relative flex h-full flex-col">
+        <div className="flex items-center gap-4">
+          <img
+            src={testimonial.avatar}
+            alt={testimonial.name}
+            className="h-14 w-14 rounded-full object-cover ring-1 ring-white/10"
+            loading="lazy"
+          />
+          <div>
+            <h3 className="text-lg font-semibold tracking-tight text-white">{testimonial.name}</h3>
+            <p className="text-sm font-light text-gray-400">{testimonial.role}</p>
+          </div>
+        </div>
+
+        <p className="mt-5 text-sm font-light leading-6 text-gray-400">{testimonial.quote}</p>
+      </div>
+    </article>
+  );
+}
 
 export function PandaTestimonials() {
   return (
@@ -87,34 +125,22 @@ export function PandaTestimonials() {
           </p>
         </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {testimonials.map((testimonial) => (
-            <article
-              key={testimonial.name}
-              className={`relative overflow-hidden rounded-3xl p-5 ${glassCardClassName} ${testimonial.spanClassName ?? ''}`}
-            >
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.12),transparent_40%),radial-gradient(circle_at_bottom_right,rgba(34,211,238,0.08),transparent_36%)]"
-              />
-              <div className="relative flex h-full flex-col">
-                <div className="flex items-center gap-4">
-                  <img
-                    src={testimonial.avatar}
-                    alt={testimonial.name}
-                    className="h-14 w-14 rounded-full object-cover ring-1 ring-white/10"
-                    loading="lazy"
-                  />
-                  <div>
-                    <h3 className="text-lg font-semibold tracking-tight text-white">{testimonial.name}</h3>
-                    <p className="text-sm font-light text-gray-400">{testimonial.role}</p>
-                  </div>
-                </div>
+        <div className="mt-14 space-y-8">
+          <div className="mask-fade overflow-hidden">
+            <div className="animate-marquee-left flex w-max min-w-full gap-8">
+              {[...topRowTestimonials, ...topRowTestimonials].map((testimonial, index) => (
+                <TestimonialCard key={`${testimonial.name}-top-${index}`} testimonial={testimonial} />
+              ))}
+            </div>
+          </div>
 
-                <p className="mt-5 text-sm font-light leading-6 text-gray-400">{testimonial.quote}</p>
-              </div>
-            </article>
-          ))}
+          <div className="mask-fade overflow-hidden">
+            <div className="animate-marquee-right flex w-max min-w-full gap-8">
+              {[...bottomRowTestimonials, ...bottomRowTestimonials].map((testimonial, index) => (
+                <TestimonialCard key={`${testimonial.name}-bottom-${index}`} testimonial={testimonial} />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
