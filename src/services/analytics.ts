@@ -503,7 +503,7 @@ const ensureTikTokStub = (): TikTokTrackFunction => {
     return window.ttq;
   }
 
-  const ttq = [] as TikTokTrackFunction;
+  const ttq = [] as unknown as TikTokTrackFunction;
   ttq.methods = [
     'page',
     'track',

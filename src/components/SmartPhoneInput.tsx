@@ -235,7 +235,6 @@ export function SmartPhoneInput({
   locale = 'es',
   onCountryChange,
   onValidityChange,
-  theme = 'light',
 }: SmartPhoneInputProps) {
   const { visitorData, isLoading } = useVisitor();
 

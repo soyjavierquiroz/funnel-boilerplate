@@ -1,7 +1,7 @@
 import { Lock } from 'lucide-react';
-import type { HeroVideoConfig, MainVslContentConfig } from '../../config/funnel.config';
-import { CoreVideoPlayer } from '../video-player';
-import { SectionWrapper } from './SectionWrapper';
+import type { HeroVideoConfig, MainVslContentConfig } from '../../../config/funnel.config';
+import { CoreVideoPlayer } from '../../video-player';
+import { SectionWrapper } from '../SectionWrapper';
 
 function cx(...classNames: Array<string | false | null | undefined>) {
   return classNames.filter(Boolean).join(' ');

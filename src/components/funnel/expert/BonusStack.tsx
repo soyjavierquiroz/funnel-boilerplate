@@ -1,10 +1,10 @@
 import { Gift, Sparkles } from 'lucide-react';
 import { useMemo } from 'react';
-import type { BonusStackConfig } from '../../config/funnel.config';
-import { useVisitor } from '../../context/VisitorContext';
-import { useHotmartPrices } from '../../hooks/useHotmartPrices';
-import { getFriendlyCurrencyName } from '../../utils/currency';
-import { SectionWrapper } from './SectionWrapper';
+import type { BonusStackConfig } from '../../../config/funnel.config';
+import { useVisitor } from '../../../context/VisitorContext';
+import { useHotmartPrices } from '../../../hooks/useHotmartPrices';
+import { getFriendlyCurrencyName } from '../../../utils/currency';
+import { SectionWrapper } from '../SectionWrapper';
 
 function formatCurrencyAmount(amount: number, currencyCode: string) {
   try {

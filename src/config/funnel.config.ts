@@ -1,6 +1,6 @@
 import type { CoreVideoPlayerProps } from '../components/video-player';
 
-export type FunnelTheme = 'premium-dark' | 'light-clean';
+export type FunnelTheme = 'theme-expert' | 'theme-panda' | 'light-clean';
 export type FunnelFormSuccessRedirectType = 'url' | 'whatsapp';
 export type FunnelPricingCurrencyMode = 'fixed-usd' | 'geo-priced';
 
@@ -100,7 +100,7 @@ export const pricingProductKeys = {
 export const funnelConfig: FunnelConfig = {
   brandName: 'Javier Quiroz Test',
   domain: 'javierquiroz.com',
-  theme: 'premium-dark',
+  theme: 'theme-panda',
   media: {
     heroVideo: {
       enabled: true,

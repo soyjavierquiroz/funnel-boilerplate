@@ -1,10 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { PricingCard } from './components/PricingCard';
-import { BonusStack } from './components/funnel/BonusStack';
-import { BentoGrid } from './components/funnel/BentoGrid';
-import { MainVSL } from './components/funnel/MainVSL';
-import { SectionWrapper } from './components/funnel/SectionWrapper';
-import funnelConfig, { pricingProductKeys } from './config/funnel.config';
+import { PandaBentoGrid } from './components/funnel/panda/PandaBentoGrid';
+import { PandaFeatures, pandaFeatureIcons } from './components/funnel/panda/PandaFeatures';
+import { PandaFooter } from './components/funnel/panda/PandaFooter';
+import { PandaHero } from './components/funnel/panda/PandaHero';
+import funnelConfig from './config/funnel.config';
 import analytics from './services/analytics';
 
 function App() {
@@ -12,6 +11,8 @@ function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', funnelConfig.theme);
+    document.body.classList.remove('theme-expert', 'theme-panda');
+    document.body.classList.add(funnelConfig.theme);
 
     if (hasTrackedPageViewRef.current) {
       return;
@@ -24,90 +25,155 @@ function App() {
       page_url: window.location.href,
       brand_name: funnelConfig.brandName,
     });
+
+    return () => {
+      document.body.classList.remove('theme-expert', 'theme-panda');
+    };
   }, []);
+
+  const pandaFeatures = [
+    {
+      title: 'Player pages that stay calm under pressure',
+      description: 'A large-format video canvas, measured spacing, and fewer competing signals keep the session focused on the story.',
+      icon: pandaFeatureIcons.workflow,
+    },
+    {
+      title: 'Playback analytics without visual noise',
+      description: 'The interface keeps reporting close at hand while the page still feels editorial instead of dashboard-heavy.',
+      icon: pandaFeatureIcons.analytics,
+    },
+    {
+      title: 'Secure checkout transitions',
+      description: 'Every CTA and next step can be styled to feel native while maintaining the trust cues people expect.',
+      icon: pandaFeatureIcons.security,
+    },
+    {
+      title: 'Faster discovery for your media library',
+      description: 'Search, sorting, and taxonomy blocks slot into the system without breaking the quieter brand language.',
+      icon: pandaFeatureIcons.search,
+    },
+    {
+      title: 'Shared workspace for marketing and ops',
+      description: 'The components are designed to look credible in a launch page and equally useful in an internal content stack.',
+      icon: pandaFeatureIcons.collaboration,
+    },
+    {
+      title: 'A reusable visual language',
+      description: 'Rounded geometry, thin cyan accents, and soft glass depth can now coexist with the old Expert funnel.',
+      icon: pandaFeatureIcons.library,
+    },
+  ];
+
+  const pandaTestimonials = [
+    {
+      quote: 'The new hero feels more like a product page than a sales page. The video takes the lead and the rest of the interface supports it.',
+      name: 'Camila Rojas',
+      role: 'Growth Lead, Studio Norte',
+    },
+    {
+      quote: 'It looks premium on first load, but the important part is that the CTA rhythm stayed clear across desktop and mobile.',
+      name: 'Diego Martinez',
+      role: 'Performance Director, Atlas Media',
+    },
+    {
+      quote: 'The glass cards finally feel restrained. We kept proof visible without turning the page into a wall of widgets.',
+      name: 'Paula Serrano',
+      role: 'Brand Strategist, Casa Linear',
+    },
+    {
+      quote: 'This gives us a second visual DNA in the library without sacrificing the conversion-focused Expert stack we already use.',
+      name: 'Martin Vega',
+      role: 'Product Marketing, Horizon Labs',
+    },
+  ];
+
+  const pandaFooterGroups = [
+    {
+      title: 'Product',
+      links: [
+        { label: 'Video Hosting', href: '#demo' },
+        { label: 'Player Branding', href: '#features' },
+        { label: 'Conversion Pages', href: '#stories' },
+        { label: 'Analytics', href: '#footer' },
+      ],
+    },
+    {
+      title: 'Solutions',
+      links: [
+        { label: 'Course Creators', href: '#features' },
+        { label: 'Agencies', href: '#stories' },
+        { label: 'Internal Enablement', href: '#footer' },
+        { label: 'Launch Teams', href: '#demo' },
+      ],
+    },
+    {
+      title: 'Resources',
+      links: [
+        { label: 'Documentation', href: '#features' },
+        { label: 'Status', href: '#footer' },
+        { label: 'Help Center', href: '#footer' },
+        { label: 'Brand Assets', href: '#footer' },
+      ],
+    },
+    {
+      title: 'Company',
+      links: [
+        { label: 'About', href: '#footer' },
+        { label: 'Privacy', href: '#footer' },
+        { label: 'Terms', href: '#footer' },
+        { label: 'Contact', href: `https://${funnelConfig.domain}` },
+      ],
+    },
+  ];
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-page text-text-main">
       <div className="relative isolate">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-[42rem]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[46rem]"
           style={{
             background:
-              'radial-gradient(circle at top, rgb(var(--color-primary) / 0.22), transparent 52%), radial-gradient(circle at 80% 16%, rgb(var(--color-accent) / 0.16), transparent 24%)',
+              'radial-gradient(circle at top, rgb(var(--color-accent) / 0.18), transparent 48%), radial-gradient(circle at 80% 10%, rgb(var(--color-primary) / 0.08), transparent 24%)',
           }}
         />
 
-        <SectionWrapper as="header" variant="display" spacing="md">
-          <div className="grid gap-6 lg:grid-cols-[1fr_0.82fr] lg:items-end">
-            <div className="space-y-4">
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-accent">Panda Style Catalog</p>
-              <h1 className="max-w-4xl text-4xl font-semibold tracking-[-0.05em] text-text-main sm:text-5xl lg:text-6xl">
-                Catálogo visual para validar la coherencia del funnel completo en Panda Blue.
-              </h1>
-              <p className="max-w-2xl text-base leading-7 text-text-muted sm:text-lg">
-                Reunimos los bloques principales en una sola página para revisar jerarquía, contraste, glows y ritmo de conversión antes de publicar en {funnelConfig.domain}.
-              </p>
-            </div>
+        <PandaHero
+          brandName={funnelConfig.brandName}
+          eyebrow="Panda Visual System"
+          headline="A quieter video funnel with more product confidence and less performance theater."
+          description={`A single Panda-style showcase page for ${funnelConfig.domain}, built to highlight large video, calmer hierarchy, and a more corporate conversion rhythm.`}
+          ctaLabel="Explore the system"
+          ctaHref="#features"
+          secondaryLabel="Watch the player"
+          secondaryHref="#demo"
+          video={funnelConfig.media.heroVideo}
+          highlights={['Rounded video canvas', 'Thin cyan accents', 'Multi-style component library']}
+        />
 
-            <div className="glass-surface rounded-[1.75rem] p-5 sm:p-6">
-              <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-[1.25rem] border border-primary/20 bg-primary/12 p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-primary">Primary</p>
-                  <p className="mt-3 text-xl font-semibold text-text-main">#0011ff</p>
-                </div>
-                <div className="rounded-[1.25rem] border border-white/10 bg-secondary p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-accent">Secondary</p>
-                  <p className="mt-3 text-xl font-semibold text-text-main">#0a0b1e</p>
-                </div>
-                <div className="rounded-[1.25rem] border border-accent/20 bg-accent/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-accent">Accent</p>
-                  <p className="mt-3 text-xl font-semibold text-text-main">#00f2ff</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </SectionWrapper>
+        <PandaFeatures
+          className="relative z-10"
+          eyebrow="Why Panda"
+          title="The system now has a second visual DNA built for a cleaner, lighter product story."
+          description="These components are meant to feel calm, software-native, and reusable across pages where the video and the interface need to share authority."
+          features={pandaFeatures}
+        />
 
-        <MainVSL content={funnelConfig.content.mainVsl} video={funnelConfig.media.heroVideo} />
-        <BentoGrid
+        <PandaBentoGrid
+          className="relative z-10"
+          eyebrow="Social proof"
+          title="Refined proof blocks that support the story instead of hijacking it."
+          description="The Panda testimonials live inside soft glass surfaces with more whitespace, less contrast noise, and typography that reads like product validation."
+          testimonials={pandaTestimonials}
+        />
+
+        <PandaFooter
+          className="relative z-10"
           brandName={funnelConfig.brandName}
           domain={funnelConfig.domain}
-          productCount={Object.keys(funnelConfig.pricing.products).length}
+          summary="A corporate footer designed to close the page with product depth, navigation density, and enough confidence to feel production-ready."
+          linkGroups={pandaFooterGroups}
         />
-        <BonusStack content={funnelConfig.content.bonusStack} />
-
-        <SectionWrapper id="pricing" variant="display" spacing="lg">
-          <section className="glass-surface space-y-8 rounded-[2rem] p-6 sm:p-8 lg:p-10">
-            <header className="space-y-3 border-b border-border-subtle/10 pb-6">
-              <p className="text-sm uppercase tracking-[0.24em] text-accent">Pricing Card Showcase</p>
-              <h2 className="text-3xl font-semibold tracking-[-0.04em] md:text-4xl">{funnelConfig.brandName}</h2>
-              <p className="max-w-2xl text-sm leading-6 text-text-muted md:text-base">
-                Tarjetas de pricing apiladas en una sola superficie para comprobar contraste, lectura de precio y claridad del CTA en la nueva paleta Panda.
-              </p>
-            </header>
-
-            <div className="rounded-[1.5rem] border border-border-subtle/10 bg-page/35 p-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary/80">Catálogo de Ofertas</p>
-              <h3 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-text-main sm:text-3xl">
-                Cada tarjeta mantiene el mismo sistema visual aunque cambie el producto.
-              </h3>
-              <p className="mt-3 max-w-3xl text-sm leading-6 text-text-muted sm:text-base">
-                El resultado es una sección de cierre limpia: precios localizados, CTA dominante y señales de seguridad con glows medidos.
-              </p>
-            </div>
-
-            <section className="grid gap-4 border-t border-border-subtle/10 pt-6 lg:grid-cols-2">
-              <PricingCard productId={pricingProductKeys.ofertaPrincipal} productName={`${funnelConfig.brandName} Principal`} />
-              <PricingCard productId={pricingProductKeys.orderBump} productName={`${funnelConfig.brandName} Order Bump`} />
-              <PricingCard
-                productId={pricingProductKeys.upsellContinuidad}
-                productName={`${funnelConfig.brandName} Continuidad`}
-              />
-              <PricingCard productId={pricingProductKeys.upsellVip} productName={`${funnelConfig.brandName} VIP`} />
-            </section>
-          </section>
-        </SectionWrapper>
       </div>
     </main>
   );
