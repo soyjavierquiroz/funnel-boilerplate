@@ -1,4 +1,4 @@
-import { BadgeCheck, Lock, ShieldCheck } from 'lucide-react';
+import { BadgeCheck, Check, Lock, ShieldCheck } from 'lucide-react';
 import { useMemo } from 'react';
 import funnelConfig, { pricingProductKeys } from '../../../core/config/funnel.config';
 import analytics from '../../../core/services/analytics';
@@ -17,6 +17,7 @@ const pricingPlans = [
     eyebrow: 'Entrada',
     title: 'Starter',
     description: 'Una puerta de entrada compacta para acelerar la decisión sin romper la estética premium.',
+    features: ['Acceso inmediato', 'Setup ligero', 'Checkout geolocalizado'],
   },
   {
     productKey: pricingProductKeys.ofertaPrincipal,
@@ -24,12 +25,14 @@ const pricingPlans = [
     title: 'Panda Core',
     description: 'La opción central con el mejor balance entre autoridad visual, conversión y monetización.',
     featured: true,
+    features: ['Flujo principal optimizado', 'Mayor autoridad visual', 'Stack de monetización completo'],
   },
   {
     productKey: pricingProductKeys.upsellVip,
     eyebrow: 'Escala Total',
     title: 'Panda Elite',
     description: 'La capa de acompañamiento más alta para quien quiere soporte intensivo y margen premium.',
+    features: ['Prioridad estratégica', 'Escala premium', 'Acompañamiento intensivo'],
   },
 ] as const;
 
@@ -50,12 +53,14 @@ function PandaPricingCard({
   eyebrow,
   title,
   description,
+  features,
   featured = false,
 }: {
   productKey: string;
   eyebrow: string;
   title: string;
   description: string;
+  features: readonly string[];
   featured?: boolean;
 }) {
   const { visitorData } = useVisitor();
@@ -102,6 +107,12 @@ function PandaPricingCard({
       ].join(' ')}
     >
       {featured ? (
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+          Más Popular
+        </div>
+      ) : null}
+
+      {featured ? (
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-10 top-8 h-32 rounded-full bg-blue-900/20 blur-[90px]"
@@ -137,6 +148,15 @@ function PandaPricingCard({
           )}
         </div>
 
+        <div className="mt-6 space-y-3">
+          {features.map((feature) => (
+            <div key={feature} className="flex items-center gap-3 text-sm text-gray-300">
+              <Check className="h-4 w-4 shrink-0 text-emerald-400" />
+              <span>{feature}</span>
+            </div>
+          ))}
+        </div>
+
         <div className="mt-6">
           {resolvedCheckoutUrl ? (
             <a
@@ -145,10 +165,10 @@ function PandaPricingCard({
               rel="noreferrer"
               onClick={handleCheckoutClick}
               className={[
-                'cta-shimmer inline-flex min-h-14 w-full items-center justify-center rounded-2xl px-6 text-base font-semibold text-white transition hover:opacity-95',
+                'inline-flex min-h-14 w-full items-center justify-center rounded-2xl px-6 text-base font-semibold text-white',
                 featured
-                  ? 'bg-gradient-to-r from-[#0047ff] to-[#00bfff] shadow-[0_20px_60px_rgba(0,191,255,0.24)]'
-                  : 'border border-white/[0.04] bg-white/[0.04]',
+                  ? 'cta-shimmer bg-gradient-to-r from-blue-600 to-cyan-500 shadow-[0_0_20px_rgba(0,191,255,0.4)] transition-transform hover:scale-105'
+                  : 'border border-white/10 bg-white/[0.03] transition-colors hover:bg-white/[0.08]',
               ].join(' ')}
             >
               Ir al pago
@@ -213,6 +233,7 @@ export function PandaPricing() {
               eyebrow={plan.eyebrow}
               title={plan.title}
               description={plan.description}
+              features={plan.features}
               featured={Boolean(plan.featured)}
             />
           ))}
