@@ -312,7 +312,18 @@ export function PandaCaptureForm() {
                   defaultCountry="BO"
                   autoDetectCountry
                   placeholder="79790873"
-                  theme="dark"
+                  labelClassName="mb-2 block text-xs font-medium uppercase tracking-wider text-white/40"
+                  phoneInputClassName={[
+                    'w-full rounded-xl border border-transparent bg-black/40 px-0 py-0 text-white shadow-inner transition-all',
+                    'focus-within:bg-black/60 focus-within:outline-none focus-within:ring-1 focus-within:ring-cyan-500',
+                    '[&_.PhoneInputCountry]:border-r [&_.PhoneInputCountry]:border-transparent [&_.PhoneInputCountry]:bg-black/40',
+                    '[&_.SmartPhoneCallingCode]:text-white',
+                    '[&_.PhoneInputCountrySelectArrow]:border-white/20',
+                    '[&_.PhoneInputInput]:bg-black/40 [&_.PhoneInputInput]:py-3 [&_.PhoneInputInput]:text-white [&_.PhoneInputInput]:placeholder:text-white/20',
+                  ].join(' ')}
+                  helperTextClassName="mt-2 text-xs text-white/30"
+                  errorTextClassName="mt-2 text-xs text-red-400"
+                  requiredMarkClassName="ml-1 text-red-400"
                 />
 
                 <input type="hidden" name="visitor_ip" value={visitorData?.ip || ''} />

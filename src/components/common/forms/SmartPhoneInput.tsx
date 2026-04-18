@@ -97,7 +97,11 @@ export interface SmartPhoneInputProps {
   locale?: string;
   onCountryChange?: (country: Country) => void;
   onValidityChange?: (isValid: boolean) => void;
-  theme?: 'light' | 'dark';
+  labelClassName?: string;
+  phoneInputClassName?: string;
+  helperTextClassName?: string;
+  errorTextClassName?: string;
+  requiredMarkClassName?: string;
 }
 
 function normalizeCountry(countryCode?: string): Country {
@@ -235,7 +239,11 @@ export function SmartPhoneInput({
   locale = 'es',
   onCountryChange,
   onValidityChange,
-  theme = 'light',
+  labelClassName,
+  phoneInputClassName,
+  helperTextClassName,
+  errorTextClassName,
+  requiredMarkClassName,
 }: SmartPhoneInputProps) {
   const { visitorData, isLoading } = useVisitor();
 
@@ -251,7 +259,6 @@ export function SmartPhoneInput({
 
   const isPhoneValid = useMemo(() => validateE164(value, required), [value, required]);
   const showAutoInvalidState = !error && value.trim().length > 0 && !isPhoneValid;
-  const isDarkTheme = theme === 'dark';
 
   useEffect(() => {
     if (!onValidityChange) return;
@@ -270,52 +277,50 @@ export function SmartPhoneInput({
     onCountryChange?.(detectedCountry);
   }, [autoDetectCountry, onCountryChange, selectedCountry, visitorData?.country_code]);
 
-  const phoneInputClasses = [
-    'w-full max-w-full min-w-0 box-border rounded-xl border transition-all duration-200 overflow-hidden',
-    showAutoInvalidState || error
-      ? 'border-red-500/60 focus-within:ring-1 focus-within:ring-red-500'
-      : isDarkTheme
-        ? 'border-transparent shadow-inner focus-within:ring-1 focus-within:ring-cyan-500'
-        : 'border-border-subtle focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
-    disabled ? 'opacity-70' : '',
-    '[&_.PhoneInputCountry]:m-0 [&_.PhoneInputCountry]:h-12 [&_.PhoneInputCountry]:min-w-[104px] sm:[&_.PhoneInputCountry]:min-w-[116px]',
-    isDarkTheme
-      ? '[&_.PhoneInputCountry]:border-r [&_.PhoneInputCountry]:border-transparent [&_.PhoneInputCountry]:bg-black/40'
-      : '[&_.PhoneInputCountry]:border-r [&_.PhoneInputCountry]:border-border-subtle [&_.PhoneInputCountry]:bg-surface',
-    '[&_.PhoneInputCountry]:px-3 [&_.PhoneInputCountry]:flex [&_.PhoneInputCountry]:items-center [&_.PhoneInputCountry]:gap-2',
+  const basePhoneInputClasses = [
+    'w-full max-w-full min-w-0 box-border overflow-hidden rounded-xl border transition-all duration-200',
+    '[&_.PhoneInputCountry]:m-0 [&_.PhoneInputCountry]:flex [&_.PhoneInputCountry]:h-12 [&_.PhoneInputCountry]:min-w-[104px] [&_.PhoneInputCountry]:items-center [&_.PhoneInputCountry]:gap-2 [&_.PhoneInputCountry]:px-3 sm:[&_.PhoneInputCountry]:min-w-[116px]',
     '[&_.PhoneInputCountryIcon]:h-4 [&_.PhoneInputCountryIcon]:w-6 [&_.PhoneInputCountryIcon]:rounded-sm [&_.PhoneInputCountryIcon]:shadow-sm',
-    isDarkTheme
-      ? '[&_.SmartPhoneCallingCode]:text-[18px] [&_.SmartPhoneCallingCode]:text-sm [&_.SmartPhoneCallingCode]:font-medium [&_.SmartPhoneCallingCode]:text-white'
-      : '[&_.SmartPhoneCallingCode]:text-[18px] [&_.SmartPhoneCallingCode]:text-sm [&_.SmartPhoneCallingCode]:font-medium [&_.SmartPhoneCallingCode]:text-text-main',
-    isDarkTheme
-      ? '[&_.PhoneInputCountrySelectArrow]:ml-auto [&_.PhoneInputCountrySelectArrow]:mt-0 [&_.PhoneInputCountrySelectArrow]:h-2.5 [&_.PhoneInputCountrySelectArrow]:w-2.5 [&_.PhoneInputCountrySelectArrow]:opacity-100 [&_.PhoneInputCountrySelectArrow]:border-gray-500'
-      : '[&_.PhoneInputCountrySelectArrow]:ml-auto [&_.PhoneInputCountrySelectArrow]:mt-0 [&_.PhoneInputCountrySelectArrow]:h-2.5 [&_.PhoneInputCountrySelectArrow]:w-2.5 [&_.PhoneInputCountrySelectArrow]:opacity-100 [&_.PhoneInputCountrySelectArrow]:border-text-muted',
-    isDarkTheme
-      ? '[&_.PhoneInputInput]:h-12 [&_.PhoneInputInput]:min-w-0 [&_.PhoneInputInput]:w-full [&_.PhoneInputInput]:flex-1 [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-black/40 [&_.PhoneInputInput]:px-4 [&_.PhoneInputInput]:py-3 [&_.PhoneInputInput]:text-base [&_.PhoneInputInput]:text-white'
-      : '[&_.PhoneInputInput]:h-12 [&_.PhoneInputInput]:min-w-0 [&_.PhoneInputInput]:w-full [&_.PhoneInputInput]:flex-1 [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-page [&_.PhoneInputInput]:px-4 [&_.PhoneInputInput]:text-base [&_.PhoneInputInput]:text-text-main',
-    isDarkTheme
-      ? '[&_.PhoneInputInput]:placeholder:text-white/20 [&_.PhoneInputInput]:focus:outline-none'
-      : '[&_.PhoneInputInput]:placeholder:text-text-muted [&_.PhoneInputInput]:focus:outline-none',
-    isDarkTheme ? 'w-full bg-black/40 rounded-xl px-0 py-0 text-white transition-all' : 'bg-surface',
-  ]
+    '[&_.SmartPhoneCallingCode]:text-[18px] [&_.SmartPhoneCallingCode]:text-sm [&_.SmartPhoneCallingCode]:font-medium',
+    '[&_.PhoneInputCountrySelectArrow]:ml-auto [&_.PhoneInputCountrySelectArrow]:mt-0 [&_.PhoneInputCountrySelectArrow]:h-2.5 [&_.PhoneInputCountrySelectArrow]:w-2.5 [&_.PhoneInputCountrySelectArrow]:opacity-100',
+    '[&_.PhoneInputInput]:h-12 [&_.PhoneInputInput]:min-w-0 [&_.PhoneInputInput]:w-full [&_.PhoneInputInput]:flex-1 [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:px-4 [&_.PhoneInputInput]:text-base [&_.PhoneInputInput]:focus:outline-none',
+  ];
+
+  const defaultPhoneInputVisualClasses = [
+    showAutoInvalidState || error
+      ? 'border-red-500 focus-within:border-red-500 focus-within:ring-2 focus-within:ring-red-500/20'
+      : 'border-border-subtle bg-surface focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
+    disabled ? 'opacity-70' : '',
+    '[&_.PhoneInputCountry]:border-r [&_.PhoneInputCountry]:border-border-subtle [&_.PhoneInputCountry]:bg-surface',
+    '[&_.SmartPhoneCallingCode]:text-text-main',
+    '[&_.PhoneInputCountrySelectArrow]:border-text-muted',
+    '[&_.PhoneInputInput]:bg-page [&_.PhoneInputInput]:text-text-main [&_.PhoneInputInput]:placeholder:text-text-muted',
+  ];
+
+  const customPhoneInputVisualClasses = [
+    phoneInputClassName ?? '',
+    disabled ? 'opacity-70' : '',
+    showAutoInvalidState || error ? 'border-red-500/60 focus-within:ring-1 focus-within:ring-red-500' : '',
+  ];
+
+  const phoneInputClasses = [...basePhoneInputClasses, ...(phoneInputClassName ? customPhoneInputVisualClasses : defaultPhoneInputVisualClasses)]
     .filter(Boolean)
     .join(' ');
 
-  const labelClassName = isDarkTheme
-    ? 'mb-2 block text-xs font-medium uppercase tracking-wider text-white/40'
-    : 'mb-2 block text-sm font-medium text-text-main';
-  const helperTextClassName = isDarkTheme ? 'mt-2 text-xs text-gray-500' : 'mt-2 text-xs text-text-muted';
-  const errorTextClassName = isDarkTheme ? 'mt-2 text-xs text-red-400' : 'mt-2 text-xs text-red-500';
+  const resolvedLabelClassName = labelClassName ?? 'mb-2 block text-sm font-medium text-text-main';
+  const resolvedHelperTextClassName = helperTextClassName ?? 'mt-2 text-xs text-text-muted';
+  const resolvedErrorTextClassName = errorTextClassName ?? 'mt-2 text-xs text-red-500';
+  const resolvedRequiredMarkClassName = requiredMarkClassName ?? 'ml-1 text-red-500';
 
   return (
     <div className={['w-full max-w-full min-w-0 box-border', className ?? ''].join(' ').trim()}>
       {label ? (
         <label
           htmlFor={inputId}
-          className={labelClassName}
+          className={resolvedLabelClassName}
         >
           {label}
-          {required ? <span className="ml-1 text-red-500">*</span> : null}
+          {required ? <span className={resolvedRequiredMarkClassName}>*</span> : null}
         </label>
       ) : null}
 
@@ -359,17 +364,17 @@ export function SmartPhoneInput({
       />
 
       {autoDetectCountry && isLoading ? (
-        <p className={helperTextClassName}>Detectando país por IP...</p>
+        <p className={resolvedHelperTextClassName}>Detectando país por IP...</p>
       ) : null}
 
       {error ? (
-        <p id={errorId} className={errorTextClassName}>
+        <p id={errorId} className={resolvedErrorTextClassName}>
           {error}
         </p>
       ) : null}
 
       {!error && showAutoInvalidState ? (
-        <p id={errorId} className={errorTextClassName}>
+        <p id={errorId} className={resolvedErrorTextClassName}>
           Número inválido.
         </p>
       ) : null}
