@@ -38,6 +38,7 @@ export interface CoreVideoPlayerProps {
   loop?: boolean;
   muted?: boolean;
   controls?: boolean;
+  enableVslOverlay?: boolean;
   vslMode?: boolean;
   vslProgressBarColor?: string;
   mutedPreview?: MutedPreviewConfig;

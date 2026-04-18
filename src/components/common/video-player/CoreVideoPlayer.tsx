@@ -21,6 +21,7 @@ export function CoreVideoPlayer({
   loop,
   muted,
   controls = true,
+  enableVslOverlay = false,
   vslMode = false,
   vslProgressBarColor,
   mutedPreview = { enabled: false, overlayPosition: 'center' },
@@ -61,7 +62,9 @@ export function CoreVideoPlayer({
   const [ctaTriggered, setCtaTriggered] = useState(false);
   const [showCta, setShowCta] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
-  const [showUnmuteOverlay, setShowUnmuteOverlay] = useState(shouldAutoPlay && isZeroDistractionMode && shouldStartMuted);
+  const [showUnmuteOverlay, setShowUnmuteOverlay] = useState(
+    shouldAutoPlay && isZeroDistractionMode && shouldStartMuted && enableVslOverlay,
+  );
   const pendingPlayIntentRef = useRef<'autoplay' | 'user' | null>(shouldAutoPlay ? 'autoplay' : null);
   const hasRestoredPlaybackRef = useRef(false);
   const lastPersistedSecondRef = useRef(-1);
@@ -195,11 +198,11 @@ export function CoreVideoPlayer({
     setAutoplayBlocked(false);
     setCtaTriggered(false);
     setShowCta(false);
-    setShowUnmuteOverlay(nextShouldAutoplay && controls === false && nextShouldStartMuted);
+    setShowUnmuteOverlay(nextShouldAutoplay && controls === false && nextShouldStartMuted && enableVslOverlay);
     hasRestoredPlaybackRef.current = false;
     lastPersistedSecondRef.current = -1;
     pendingPlayIntentRef.current = nextShouldAutoplay ? 'autoplay' : null;
-  }, [autoplay, controls, lazyLoadYoutube, muted, provider, videoId, mutedPreview.enabled, vslMode]);
+  }, [autoplay, controls, enableVslOverlay, lazyLoadYoutube, muted, provider, videoId, mutedPreview.enabled, vslMode]);
 
   useEffect(() => {
     if (!shouldLoadPlayer || !isReady || !controller.providerRef.current) {
@@ -405,6 +408,7 @@ export function CoreVideoPlayer({
     shouldLoadPlayer &&
     shouldAutoPlay &&
     isZeroDistractionMode &&
+    enableVslOverlay &&
     showUnmuteOverlay &&
     !showPoster &&
     !showCta &&
@@ -429,7 +433,7 @@ export function CoreVideoPlayer({
   return (
     <div
       className={formatClassName(
-        'relative aspect-video w-full overflow-hidden rounded-2xl bg-black',
+        'relative w-full h-full bg-black overflow-hidden',
         shouldApplyYoutubeUiHack && '[&_iframe]:scale-[1.45] [&_iframe]:origin-center',
         className,
       )}
@@ -439,11 +443,11 @@ export function CoreVideoPlayer({
       data-sticky-enabled={isStickyEnabled ? 'true' : undefined}
     >
       {shouldLoadPlayer ? (
-        <div className={formatClassName('h-full w-full', shouldDisableDirectSurfaceInteraction && 'pointer-events-none')}>
+        <div className={formatClassName('absolute inset-0 z-10 h-full w-full', shouldDisableDirectSurfaceInteraction && 'pointer-events-none')}>
           {controller.surface === 'video' ? (
             <video
               ref={videoRef}
-              className={formatClassName('w-full h-full object-cover', shouldDisableDirectSurfaceInteraction && 'pointer-events-none')}
+              className={formatClassName('absolute inset-0 h-full w-full object-cover', shouldDisableDirectSurfaceInteraction && 'pointer-events-none')}
               playsInline
               controls={controls}
               onPlay={() => setIsPlaying(true)}
@@ -456,12 +460,12 @@ export function CoreVideoPlayer({
           ) : (
             <div
               ref={controller.mountRef}
-              className={formatClassName('w-full h-full object-cover', shouldDisableDirectSurfaceInteraction && 'pointer-events-none')}
+              className={formatClassName('absolute inset-0 h-full w-full', shouldDisableDirectSurfaceInteraction && 'pointer-events-none')}
             />
           )}
         </div>
       ) : (
-        <div className="h-full w-full" style={{ background: playerBackground }} />
+        <div className="absolute inset-0 z-10 h-full w-full" style={{ background: playerBackground }} />
       )}
 
       <SmartPoster
@@ -478,7 +482,7 @@ export function CoreVideoPlayer({
         <MutedOverlay config={mutedPreview} onActivateSound={handleExitMutedPreview} />
       ) : null}
 
-      <VslOverlay onUnmute={handleUnmute} visible={shouldShowUnmuteOverlay} />
+      {enableVslOverlay ? <VslOverlay onUnmute={handleUnmute} visible={shouldShowUnmuteOverlay} /> : null}
 
       {shouldRenderGlobalClickLayer ? (
         <button

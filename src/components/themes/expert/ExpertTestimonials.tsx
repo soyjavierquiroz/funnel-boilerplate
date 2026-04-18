@@ -123,6 +123,7 @@ export function ExpertTestimonials({ items }: ExpertTestimonialsProps) {
               loop={true}
               muted={true}
               controls={false}
+              enableVslOverlay={true}
               hideYouTubeBranding={true}
               hideYoutubeUi={true}
               className="!aspect-[3/4] max-h-[82svh] rounded-[22px] border border-white/10 bg-black shadow-[0_35px_90px_rgba(0,0,0,0.55)] md:!aspect-video [&_iframe]:h-full [&_iframe]:w-full [&_video]:object-cover"

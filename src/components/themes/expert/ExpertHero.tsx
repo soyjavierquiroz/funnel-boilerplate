@@ -74,6 +74,7 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
                 loop={true}
                 muted={true}
                 controls={false}
+                enableVslOverlay={true}
                 vslMode={heroVideo.vslMode}
                 resumePlayback={heroVideo.resumePlayback}
                 lazyLoadYoutube={heroVideo.lazyLoadYoutube}
@@ -81,7 +82,7 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
                 hideYouTubeBranding={true}
                 smartPoster={heroVideo.smartPoster}
                 vslProgressBarColor={heroVideo.vslProgressBarColor}
-                className="border-[6px] md:border-[8px] border-[#111] shadow-2xl w-full bg-black rounded-sm"
+                className="aspect-video border-[6px] md:border-[8px] border-[#111] shadow-2xl w-full bg-black rounded-sm"
               />
             ) : (
               <img

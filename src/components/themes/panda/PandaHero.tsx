@@ -43,7 +43,7 @@ export function PandaHero() {
             />
             <div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-2xl ring-1 ring-white/10 shadow-[0_0_100px_rgba(0,191,255,0.15)] md:rounded-[2rem]">
               {isVideoEnabled ? (
-                <CoreVideoPlayer {...videoProps} className="aspect-video w-full rounded-none bg-transparent" />
+                <CoreVideoPlayer {...videoProps} enableVslOverlay={false} className="aspect-video w-full rounded-none" />
               ) : (
                 <div className="flex aspect-video w-full items-center justify-center bg-[#0b1020] px-6 text-center text-sm text-gray-400">
                   Video no disponible
