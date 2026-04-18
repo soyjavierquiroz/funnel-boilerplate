@@ -235,6 +235,7 @@ export function SmartPhoneInput({
   locale = 'es',
   onCountryChange,
   onValidityChange,
+  theme = 'light',
 }: SmartPhoneInputProps) {
   const { visitorData, isLoading } = useVisitor();
 
@@ -250,6 +251,7 @@ export function SmartPhoneInput({
 
   const isPhoneValid = useMemo(() => validateE164(value, required), [value, required]);
   const showAutoInvalidState = !error && value.trim().length > 0 && !isPhoneValid;
+  const isDarkTheme = theme === 'dark';
 
   useEffect(() => {
     if (!onValidityChange) return;
@@ -272,27 +274,43 @@ export function SmartPhoneInput({
     'w-full max-w-full min-w-0 box-border rounded-xl border transition-all duration-200 overflow-hidden',
     showAutoInvalidState || error
       ? 'border-red-500 focus-within:border-red-500 focus-within:ring-2 focus-within:ring-red-500/20'
-      : 'border-border-subtle focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
+      : isDarkTheme
+        ? 'border-white/10 focus-within:border-cyan-500 focus-within:ring-2 focus-within:ring-cyan-500/20'
+        : 'border-border-subtle focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
     disabled ? 'opacity-70' : '',
     '[&_.PhoneInputCountry]:m-0 [&_.PhoneInputCountry]:h-12 [&_.PhoneInputCountry]:min-w-[104px] sm:[&_.PhoneInputCountry]:min-w-[116px]',
-    '[&_.PhoneInputCountry]:border-r [&_.PhoneInputCountry]:border-border-subtle [&_.PhoneInputCountry]:bg-surface',
+    isDarkTheme
+      ? '[&_.PhoneInputCountry]:border-r [&_.PhoneInputCountry]:border-white/10 [&_.PhoneInputCountry]:bg-black/20'
+      : '[&_.PhoneInputCountry]:border-r [&_.PhoneInputCountry]:border-border-subtle [&_.PhoneInputCountry]:bg-surface',
     '[&_.PhoneInputCountry]:px-3 [&_.PhoneInputCountry]:flex [&_.PhoneInputCountry]:items-center [&_.PhoneInputCountry]:gap-2',
     '[&_.PhoneInputCountryIcon]:h-4 [&_.PhoneInputCountryIcon]:w-6 [&_.PhoneInputCountryIcon]:rounded-sm [&_.PhoneInputCountryIcon]:shadow-sm',
-    '[&_.SmartPhoneCallingCode]:text-[18px] [&_.SmartPhoneCallingCode]:text-sm [&_.SmartPhoneCallingCode]:font-medium [&_.SmartPhoneCallingCode]:text-text-main',
-    '[&_.PhoneInputCountrySelectArrow]:ml-auto [&_.PhoneInputCountrySelectArrow]:mt-0 [&_.PhoneInputCountrySelectArrow]:h-2.5 [&_.PhoneInputCountrySelectArrow]:w-2.5 [&_.PhoneInputCountrySelectArrow]:opacity-100 [&_.PhoneInputCountrySelectArrow]:border-text-muted',
-    '[&_.PhoneInputInput]:h-12 [&_.PhoneInputInput]:min-w-0 [&_.PhoneInputInput]:w-full [&_.PhoneInputInput]:flex-1 [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-page [&_.PhoneInputInput]:px-4 [&_.PhoneInputInput]:text-base [&_.PhoneInputInput]:text-text-main',
-    '[&_.PhoneInputInput]:placeholder:text-text-muted [&_.PhoneInputInput]:focus:outline-none',
-    'bg-surface',
+    isDarkTheme
+      ? '[&_.SmartPhoneCallingCode]:text-[18px] [&_.SmartPhoneCallingCode]:text-sm [&_.SmartPhoneCallingCode]:font-medium [&_.SmartPhoneCallingCode]:text-white'
+      : '[&_.SmartPhoneCallingCode]:text-[18px] [&_.SmartPhoneCallingCode]:text-sm [&_.SmartPhoneCallingCode]:font-medium [&_.SmartPhoneCallingCode]:text-text-main',
+    isDarkTheme
+      ? '[&_.PhoneInputCountrySelectArrow]:ml-auto [&_.PhoneInputCountrySelectArrow]:mt-0 [&_.PhoneInputCountrySelectArrow]:h-2.5 [&_.PhoneInputCountrySelectArrow]:w-2.5 [&_.PhoneInputCountrySelectArrow]:opacity-100 [&_.PhoneInputCountrySelectArrow]:border-gray-500'
+      : '[&_.PhoneInputCountrySelectArrow]:ml-auto [&_.PhoneInputCountrySelectArrow]:mt-0 [&_.PhoneInputCountrySelectArrow]:h-2.5 [&_.PhoneInputCountrySelectArrow]:w-2.5 [&_.PhoneInputCountrySelectArrow]:opacity-100 [&_.PhoneInputCountrySelectArrow]:border-text-muted',
+    isDarkTheme
+      ? '[&_.PhoneInputInput]:h-12 [&_.PhoneInputInput]:min-w-0 [&_.PhoneInputInput]:w-full [&_.PhoneInputInput]:flex-1 [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-black/20 [&_.PhoneInputInput]:px-4 [&_.PhoneInputInput]:text-base [&_.PhoneInputInput]:text-white'
+      : '[&_.PhoneInputInput]:h-12 [&_.PhoneInputInput]:min-w-0 [&_.PhoneInputInput]:w-full [&_.PhoneInputInput]:flex-1 [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-page [&_.PhoneInputInput]:px-4 [&_.PhoneInputInput]:text-base [&_.PhoneInputInput]:text-text-main',
+    isDarkTheme
+      ? '[&_.PhoneInputInput]:placeholder:text-gray-500 [&_.PhoneInputInput]:focus:outline-none'
+      : '[&_.PhoneInputInput]:placeholder:text-text-muted [&_.PhoneInputInput]:focus:outline-none',
+    isDarkTheme ? 'bg-black/20' : 'bg-surface',
   ]
     .filter(Boolean)
     .join(' ');
+
+  const labelClassName = isDarkTheme ? 'mb-2 block text-sm font-medium text-white' : 'mb-2 block text-sm font-medium text-text-main';
+  const helperTextClassName = isDarkTheme ? 'mt-2 text-xs text-gray-500' : 'mt-2 text-xs text-text-muted';
+  const errorTextClassName = isDarkTheme ? 'mt-2 text-xs text-red-400' : 'mt-2 text-xs text-red-500';
 
   return (
     <div className={['w-full max-w-full min-w-0 box-border', className ?? ''].join(' ').trim()}>
       {label ? (
         <label
           htmlFor={inputId}
-          className="mb-2 block text-sm font-medium text-text-main"
+          className={labelClassName}
         >
           {label}
           {required ? <span className="ml-1 text-red-500">*</span> : null}
@@ -339,17 +357,17 @@ export function SmartPhoneInput({
       />
 
       {autoDetectCountry && isLoading ? (
-        <p className="mt-2 text-xs text-text-muted">Detectando país por IP...</p>
+        <p className={helperTextClassName}>Detectando país por IP...</p>
       ) : null}
 
       {error ? (
-        <p id={errorId} className="mt-2 text-xs text-red-500">
+        <p id={errorId} className={errorTextClassName}>
           {error}
         </p>
       ) : null}
 
       {!error && showAutoInvalidState ? (
-        <p id={errorId} className="mt-2 text-xs text-red-500">
+        <p id={errorId} className={errorTextClassName}>
           Número inválido.
         </p>
       ) : null}

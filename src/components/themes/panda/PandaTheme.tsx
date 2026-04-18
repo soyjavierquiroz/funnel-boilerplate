@@ -1,6 +1,8 @@
+import { PandaCaptureForm } from './PandaCaptureForm';
 import { PandaHeader } from './PandaHeader';
 import { PandaHero } from './PandaHero';
 import { PandaInsights } from './PandaInsights';
+import { PandaPricing } from './PandaPricing';
 import { PandaTestimonials } from './PandaTestimonials';
 import { PandaTrustLogos } from './PandaTrustLogos';
 
@@ -10,8 +12,10 @@ export function PandaTheme() {
       <PandaHeader />
       <PandaHero />
       <PandaTrustLogos />
-      <PandaTestimonials />
+      <PandaCaptureForm />
       <PandaInsights />
+      <PandaTestimonials />
+      <PandaPricing />
     </div>
   );
 }
