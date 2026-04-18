@@ -1,132 +1,68 @@
-import { ArrowRight, PlayCircle } from 'lucide-react';
-import type { HeroVideoConfig } from '../../../core/config/funnel.config';
-import { SectionWrapper } from '../../common/layout/SectionWrapper';
+import funnelConfig from '../../../core/config/funnel.config';
 import { CoreVideoPlayer } from '../../common/video-player';
 
-function cx(...classNames: Array<string | false | null | undefined>) {
-  return classNames.filter(Boolean).join(' ');
-}
-
-export interface PandaHeroProps {
-  brandName: string;
-  eyebrow: string;
-  headline: string;
-  description: string;
-  ctaLabel: string;
-  ctaHref: string;
-  secondaryLabel: string;
-  secondaryHref: string;
-  video: HeroVideoConfig;
-  highlights: string[];
-  className?: string;
-}
-
-export function PandaHero({
-  brandName,
-  eyebrow,
-  headline,
-  description,
-  ctaLabel,
-  ctaHref,
-  secondaryLabel,
-  secondaryHref,
-  video,
-  highlights,
-  className,
-}: PandaHeroProps) {
-  const { enabled: isVideoEnabled, ...videoProps } = video;
+export function PandaHero() {
+  const { enabled: isVideoEnabled, ...videoProps } = funnelConfig.media.heroVideo;
+  const primaryOffer = funnelConfig.pricing.products[funnelConfig.pricing.defaultProductKey];
+  const ctaHref = primaryOffer?.checkoutUrl || '#demo';
+  const isExternalLink = ctaHref.startsWith('http');
 
   return (
-    <SectionWrapper
-      as="header"
-      variant="display"
-      spacing="xl"
-      className={cx('relative overflow-hidden', className)}
-    >
+    <section className="relative isolate">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(circle_at_top,rgba(6,182,212,0.16),transparent_50%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.14),transparent_45%),radial-gradient(circle_at_80%_20%,rgba(37,99,235,0.18),transparent_24%)]"
       />
 
-      <div className="relative z-10 space-y-10">
-        <div className="flex flex-col gap-6 rounded-[2rem] border border-border-subtle/50 bg-surface/85 px-6 py-5 shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:px-8 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-accent">{eyebrow}</p>
-            <div className="mt-4 flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]">
-                <span className="text-lg font-semibold text-white">{brandName.slice(0, 1)}</span>
-              </div>
-              <div>
-                <p className="text-lg font-semibold tracking-[-0.03em] text-text-main">{brandName}</p>
-                <p className="text-sm text-text-muted">Video infrastructure for a calmer conversion flow.</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3 text-sm text-text-muted">
-            {highlights.map((highlight) => (
-              <span
-                key={highlight}
-                className="rounded-full border border-border-subtle/45 bg-page/70 px-4 py-2"
-              >
-                {highlight}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,0.68fr)_minmax(0,1fr)] lg:items-end">
-          <div className="max-w-xl space-y-6">
-            <p className="text-sm font-medium uppercase tracking-[0.3em] text-accent">{brandName} Showcase</p>
-            <div className="space-y-5">
-              <h1 className="panda-display text-4xl font-semibold tracking-[-0.05em] text-text-main sm:text-5xl lg:text-[4.25rem] lg:leading-[0.96]">
-                {headline}
+      <div className="relative mx-auto flex min-h-screen w-full max-w-7xl items-center px-6 py-16 sm:px-8 lg:px-12">
+        <div className="grid w-full gap-12 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:items-center">
+          <div className="max-w-2xl space-y-8">
+            <div className="space-y-4">
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300/80">
+                Panda Conversion System
+              </p>
+              <h1 className="text-4xl font-semibold tracking-[-0.05em] text-white sm:text-5xl lg:text-6xl lg:leading-[0.94]">
+                Desbloquea el potencial de tu negocio
               </h1>
-              <p className="max-w-lg text-base leading-7 text-text-muted sm:text-lg">{description}</p>
+              <p className="max-w-xl text-base leading-7 text-slate-300 sm:text-lg">
+                Una experiencia limpia, sobria y enfocada en el video para presentar tu oferta con claridad y una
+                sensacion premium desde el primer segundo.
+              </p>
             </div>
 
-            <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <a
                 href={ctaHref}
-                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-secondary px-7 text-base font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-secondary/92"
+                className="inline-flex min-h-14 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-7 text-base font-semibold text-white shadow-[0_20px_40px_rgba(8,145,178,0.24)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_24px_48px_rgba(8,145,178,0.32)]"
+                target={isExternalLink ? '_blank' : undefined}
+                rel={isExternalLink ? 'noreferrer' : undefined}
               >
-                {ctaLabel}
-                <ArrowRight className="h-4 w-4" />
+                Quiero ver la oferta
               </a>
-              <a
-                href={secondaryHref}
-                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full border border-border-subtle/50 bg-surface/70 px-7 text-base font-medium text-text-main transition duration-300 hover:border-accent/40 hover:text-accent"
-              >
-                <PlayCircle className="h-4 w-4 text-accent" />
-                {secondaryLabel}
-              </a>
+              <p className="text-sm leading-6 text-slate-400">
+                {funnelConfig.brandName} combina narrativa, video y conversion sin contaminar el resto de la app.
+              </p>
             </div>
           </div>
 
           <div id="demo" className="relative">
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 rounded-[2.5rem] bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.16),transparent_58%)]"
+              className="pointer-events-none absolute -inset-4 rounded-[2.5rem] bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.12),transparent_55%)] blur-2xl"
             />
-
-            <div className="glass-surface relative overflow-hidden rounded-[2rem] p-3 sm:p-4">
-              <div className="overflow-hidden rounded-[1.5rem] bg-secondary">
-                {isVideoEnabled ? (
-                  <CoreVideoPlayer
-                    {...videoProps}
-                    className="aspect-video w-full"
-                  />
-                ) : (
-                  <div className="flex aspect-video items-center justify-center bg-page text-sm text-text-muted">
-                    Video no disponible
-                  </div>
-                )}
-              </div>
+            <div className="rounded-[2rem] overflow-hidden border border-white/10 bg-white/[0.03] shadow-[0_32px_90px_rgba(0,0,0,0.42)]">
+              {isVideoEnabled ? (
+                <CoreVideoPlayer {...videoProps} className="aspect-video w-full rounded-none bg-transparent" />
+              ) : (
+                <div className="flex aspect-video items-center justify-center bg-[#0b1020] px-6 text-center text-sm text-slate-300">
+                  Video no disponible
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
-    </SectionWrapper>
+    </section>
   );
 }
 

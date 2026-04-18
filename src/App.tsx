@@ -118,8 +118,6 @@ function App() {
         : `${funnelConfig.brandName} - ${currentTheme === 'expert' ? 'Expert Theme' : 'Panda Theme'}`;
 
     document.documentElement.setAttribute('data-theme', documentTheme);
-    document.body.classList.remove('theme-showroom', 'theme-expert', 'theme-panda');
-    document.body.classList.add(documentTheme);
     document.title = nextTitle;
 
     void analytics.trackEvent('ShowroomView', {
@@ -129,10 +127,6 @@ function App() {
       page_path: window.location.pathname,
       page_url: window.location.href,
     });
-
-    return () => {
-      document.body.classList.remove('theme-showroom', 'theme-expert', 'theme-panda');
-    };
   }, [currentTheme]);
 
   return (
