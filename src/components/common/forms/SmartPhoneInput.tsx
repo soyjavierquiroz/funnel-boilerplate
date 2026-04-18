@@ -8,7 +8,7 @@ import PhoneInput, {
 } from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
 import { parsePhoneNumberFromString } from 'libphonenumber-js/min';
-import { useVisitor } from '../context/VisitorContext';
+import { useVisitor } from '../../../core/visitor/VisitorContext';
 import 'react-phone-number-input/style.css';
 
 const SUPPORTED_COUNTRIES = new Set<Country>(getCountries() as Country[]);

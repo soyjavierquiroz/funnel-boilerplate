@@ -1,9 +1,9 @@
 import { BadgeCheck, Lock, ShieldCheck } from 'lucide-react';
 import { useMemo } from 'react';
-import funnelConfig from '../config/funnel.config';
-import { useVisitor } from '../context/VisitorContext';
-import { useHotmartPrices } from '../hooks/useHotmartPrices';
-import analytics from '../services/analytics';
+import funnelConfig from '../../../core/config/funnel.config';
+import { useVisitor } from '../../../core/visitor/VisitorContext';
+import { useHotmartPrices } from '../../../core/hooks/useHotmartPrices';
+import analytics from '../../../core/services/analytics';
 
 export interface PricingCardProps {
   productId: string;

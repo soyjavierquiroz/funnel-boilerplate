@@ -1,5 +1,5 @@
 import { Globe2, LayoutGrid, Sparkles, Zap } from 'lucide-react';
-import { SectionWrapper } from '../SectionWrapper';
+import { SectionWrapper } from '../../common/layout/SectionWrapper';
 
 function cx(...classNames: Array<string | false | null | undefined>) {
   return classNames.filter(Boolean).join(' ');

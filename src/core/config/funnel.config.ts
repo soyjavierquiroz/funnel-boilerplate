@@ -1,4 +1,4 @@
-import type { CoreVideoPlayerProps } from '../components/video-player';
+import type { CoreVideoPlayerProps } from '../../components/common/video-player';
 
 export type FunnelTheme = 'theme-expert' | 'theme-panda' | 'light-clean';
 export type FunnelFormSuccessRedirectType = 'url' | 'whatsapp';

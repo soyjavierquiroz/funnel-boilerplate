@@ -1,5 +1,5 @@
 import { Quote } from 'lucide-react';
-import { SectionWrapper } from '../SectionWrapper';
+import { SectionWrapper } from '../../common/layout/SectionWrapper';
 
 export interface PandaTestimonial {
   quote: string;

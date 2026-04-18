@@ -1,7 +1,7 @@
 import { ArrowRight, PlayCircle } from 'lucide-react';
-import type { HeroVideoConfig } from '../../../config/funnel.config';
-import { SectionWrapper } from '../SectionWrapper';
-import { CoreVideoPlayer } from '../../video-player';
+import type { HeroVideoConfig } from '../../../core/config/funnel.config';
+import { SectionWrapper } from '../../common/layout/SectionWrapper';
+import { CoreVideoPlayer } from '../../common/video-player';
 
 function cx(...classNames: Array<string | false | null | undefined>) {
   return classNames.filter(Boolean).join(' ');

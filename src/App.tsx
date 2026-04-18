@@ -1,181 +1,157 @@
-import { useEffect, useRef } from 'react';
-import { PandaBentoGrid } from './components/funnel/panda/PandaBentoGrid';
-import { PandaFeatures, pandaFeatureIcons } from './components/funnel/panda/PandaFeatures';
-import { PandaFooter } from './components/funnel/panda/PandaFooter';
-import { PandaHero } from './components/funnel/panda/PandaHero';
-import funnelConfig from './config/funnel.config';
-import analytics from './services/analytics';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import funnelConfig from './core/config/funnel.config';
+import analytics from './core/services/analytics';
+import { ExpertTheme } from './components/themes/expert/ExpertTheme';
+import { PandaTheme } from './components/themes/panda/PandaTheme';
+
+type ShowroomTheme = 'lobby' | 'expert' | 'panda';
+type ActiveDocumentTheme = 'theme-showroom' | 'theme-expert' | 'theme-panda';
+
+interface ThemeCard {
+  id: Exclude<ShowroomTheme, 'lobby'>;
+  label: string;
+  title: string;
+  description: string;
+  accentClassName: string;
+}
+
+const themeCards: ThemeCard[] = [
+  {
+    id: 'expert',
+    label: 'Ver Tema Expert',
+    title: 'Expert',
+    description: 'Conversión frontal, contraste alto, VSL dominante y una narrativa de oferta más agresiva.',
+    accentClassName: 'from-primary/35 via-primary/10 to-transparent',
+  },
+  {
+    id: 'panda',
+    label: 'Ver Tema Panda',
+    title: 'Panda',
+    description: 'Jerarquía más sobria, aire editorial, ritmo corporativo y foco visual en el canvas del video.',
+    accentClassName: 'from-accent/35 via-accent/10 to-transparent',
+  },
+];
+
+function resolveDocumentTheme(currentTheme: ShowroomTheme): ActiveDocumentTheme {
+  if (currentTheme === 'expert') {
+    return 'theme-expert';
+  }
+
+  if (currentTheme === 'panda') {
+    return 'theme-panda';
+  }
+
+  return 'theme-showroom';
+}
+
+function Lobby({ onSelectTheme }: { onSelectTheme: (theme: Exclude<ShowroomTheme, 'lobby'>) => void }) {
+  return (
+    <main className="relative min-h-screen overflow-hidden bg-page text-text-main">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.18),transparent_30%),radial-gradient(circle_at_80%_18%,rgba(34,211,238,0.14),transparent_20%)]"
+      />
+
+      <div className="relative mx-auto flex min-h-screen w-full max-w-7xl flex-col justify-between px-6 py-10 sm:px-8 lg:px-12 lg:py-14">
+        <div className="max-w-3xl space-y-6">
+          <p className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-white/70">
+            Arquitectura de Showroom
+          </p>
+          <div className="space-y-4">
+            <h1 className="text-5xl font-semibold tracking-[-0.05em] text-white sm:text-6xl lg:text-7xl">
+              Boilerplate UI Showcase
+            </h1>
+            <p className="max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
+              Un lobby editorial para navegar temas aislados. El core vive fuera de la piel visual y cada entrada de
+              showroom consume la misma base compartida.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-5 pt-14 lg:grid-cols-2">
+          {themeCards.map((themeCard) => (
+            <button
+              key={themeCard.id}
+              type="button"
+              onClick={() => onSelectTheme(themeCard.id)}
+              className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 text-left shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-white/20"
+            >
+              <div
+                aria-hidden="true"
+                className={`absolute inset-0 bg-gradient-to-br ${themeCard.accentClassName} opacity-90 transition duration-300 group-hover:scale-[1.02]`}
+              />
+              <div className="relative flex h-full flex-col justify-between gap-10">
+                <div className="space-y-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-white/60">Theme Entry</p>
+                  <div className="space-y-3">
+                    <h2 className="text-3xl font-semibold tracking-[-0.04em] text-white sm:text-4xl">
+                      {themeCard.title}
+                    </h2>
+                    <p className="max-w-xl text-sm leading-7 text-slate-200 sm:text-base">
+                      {themeCard.description}
+                    </p>
+                  </div>
+                </div>
+
+                <span className="inline-flex items-center gap-2 text-base font-semibold text-white">
+                  {themeCard.label}
+                  <ArrowRight className="h-4 w-4 transition duration-300 group-hover:translate-x-1" />
+                </span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </main>
+  );
+}
 
 function App() {
-  const hasTrackedPageViewRef = useRef(false);
+  const [currentTheme, setCurrentTheme] = useState<ShowroomTheme>('lobby');
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', funnelConfig.theme);
-    document.body.classList.remove('theme-expert', 'theme-panda');
-    document.body.classList.add(funnelConfig.theme);
+    const documentTheme = resolveDocumentTheme(currentTheme);
+    const nextTitle =
+      currentTheme === 'lobby'
+        ? 'Boilerplate UI Showcase'
+        : `${funnelConfig.brandName} - ${currentTheme === 'expert' ? 'Expert Theme' : 'Panda Theme'}`;
 
-    if (hasTrackedPageViewRef.current) {
-      return;
-    }
+    document.documentElement.setAttribute('data-theme', documentTheme);
+    document.body.classList.remove('theme-showroom', 'theme-expert', 'theme-panda');
+    document.body.classList.add(documentTheme);
+    document.title = nextTitle;
 
-    hasTrackedPageViewRef.current = true;
-    void analytics.trackEvent('PageView', {
-      page_title: document.title,
+    void analytics.trackEvent('ShowroomView', {
+      showroom_theme: currentTheme,
+      page_title: nextTitle,
+      brand_name: funnelConfig.brandName,
       page_path: window.location.pathname,
       page_url: window.location.href,
-      brand_name: funnelConfig.brandName,
     });
 
     return () => {
-      document.body.classList.remove('theme-expert', 'theme-panda');
+      document.body.classList.remove('theme-showroom', 'theme-expert', 'theme-panda');
     };
-  }, []);
-
-  const pandaFeatures = [
-    {
-      title: 'Player pages that stay calm under pressure',
-      description: 'A large-format video canvas, measured spacing, and fewer competing signals keep the session focused on the story.',
-      icon: pandaFeatureIcons.workflow,
-    },
-    {
-      title: 'Playback analytics without visual noise',
-      description: 'The interface keeps reporting close at hand while the page still feels editorial instead of dashboard-heavy.',
-      icon: pandaFeatureIcons.analytics,
-    },
-    {
-      title: 'Secure checkout transitions',
-      description: 'Every CTA and next step can be styled to feel native while maintaining the trust cues people expect.',
-      icon: pandaFeatureIcons.security,
-    },
-    {
-      title: 'Faster discovery for your media library',
-      description: 'Search, sorting, and taxonomy blocks slot into the system without breaking the quieter brand language.',
-      icon: pandaFeatureIcons.search,
-    },
-    {
-      title: 'Shared workspace for marketing and ops',
-      description: 'The components are designed to look credible in a launch page and equally useful in an internal content stack.',
-      icon: pandaFeatureIcons.collaboration,
-    },
-    {
-      title: 'A reusable visual language',
-      description: 'Rounded geometry, thin cyan accents, and soft glass depth can now coexist with the old Expert funnel.',
-      icon: pandaFeatureIcons.library,
-    },
-  ];
-
-  const pandaTestimonials = [
-    {
-      quote: 'The new hero feels more like a product page than a sales page. The video takes the lead and the rest of the interface supports it.',
-      name: 'Camila Rojas',
-      role: 'Growth Lead, Studio Norte',
-    },
-    {
-      quote: 'It looks premium on first load, but the important part is that the CTA rhythm stayed clear across desktop and mobile.',
-      name: 'Diego Martinez',
-      role: 'Performance Director, Atlas Media',
-    },
-    {
-      quote: 'The glass cards finally feel restrained. We kept proof visible without turning the page into a wall of widgets.',
-      name: 'Paula Serrano',
-      role: 'Brand Strategist, Casa Linear',
-    },
-    {
-      quote: 'This gives us a second visual DNA in the library without sacrificing the conversion-focused Expert stack we already use.',
-      name: 'Martin Vega',
-      role: 'Product Marketing, Horizon Labs',
-    },
-  ];
-
-  const pandaFooterGroups = [
-    {
-      title: 'Product',
-      links: [
-        { label: 'Video Hosting', href: '#demo' },
-        { label: 'Player Branding', href: '#features' },
-        { label: 'Conversion Pages', href: '#stories' },
-        { label: 'Analytics', href: '#footer' },
-      ],
-    },
-    {
-      title: 'Solutions',
-      links: [
-        { label: 'Course Creators', href: '#features' },
-        { label: 'Agencies', href: '#stories' },
-        { label: 'Internal Enablement', href: '#footer' },
-        { label: 'Launch Teams', href: '#demo' },
-      ],
-    },
-    {
-      title: 'Resources',
-      links: [
-        { label: 'Documentation', href: '#features' },
-        { label: 'Status', href: '#footer' },
-        { label: 'Help Center', href: '#footer' },
-        { label: 'Brand Assets', href: '#footer' },
-      ],
-    },
-    {
-      title: 'Company',
-      links: [
-        { label: 'About', href: '#footer' },
-        { label: 'Privacy', href: '#footer' },
-        { label: 'Terms', href: '#footer' },
-        { label: 'Contact', href: `https://${funnelConfig.domain}` },
-      ],
-    },
-  ];
+  }, [currentTheme]);
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-page text-text-main">
-      <div className="relative isolate">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-[46rem]"
-          style={{
-            background:
-              'radial-gradient(circle at top, rgb(var(--color-accent) / 0.18), transparent 48%), radial-gradient(circle at 80% 10%, rgb(var(--color-primary) / 0.08), transparent 24%)',
-          }}
-        />
+    <>
+      {currentTheme === 'lobby' ? <Lobby onSelectTheme={setCurrentTheme} /> : null}
+      {currentTheme === 'expert' ? <ExpertTheme /> : null}
+      {currentTheme === 'panda' ? <PandaTheme /> : null}
 
-        <PandaHero
-          brandName={funnelConfig.brandName}
-          eyebrow="Panda Visual System"
-          headline="A quieter video funnel with more product confidence and less performance theater."
-          description={`A single Panda-style showcase page for ${funnelConfig.domain}, built to highlight large video, calmer hierarchy, and a more corporate conversion rhythm.`}
-          ctaLabel="Explore the system"
-          ctaHref="#features"
-          secondaryLabel="Watch the player"
-          secondaryHref="#demo"
-          video={funnelConfig.media.heroVideo}
-          highlights={['Rounded video canvas', 'Thin cyan accents', 'Multi-style component library']}
-        />
-
-        <PandaFeatures
-          className="relative z-10"
-          eyebrow="Why Panda"
-          title="The system now has a second visual DNA built for a cleaner, lighter product story."
-          description="These components are meant to feel calm, software-native, and reusable across pages where the video and the interface need to share authority."
-          features={pandaFeatures}
-        />
-
-        <PandaBentoGrid
-          className="relative z-10"
-          eyebrow="Social proof"
-          title="Refined proof blocks that support the story instead of hijacking it."
-          description="The Panda testimonials live inside soft glass surfaces with more whitespace, less contrast noise, and typography that reads like product validation."
-          testimonials={pandaTestimonials}
-        />
-
-        <PandaFooter
-          className="relative z-10"
-          brandName={funnelConfig.brandName}
-          domain={funnelConfig.domain}
-          summary="A corporate footer designed to close the page with product depth, navigation density, and enough confidence to feel production-ready."
-          linkGroups={pandaFooterGroups}
-        />
-      </div>
-    </main>
+      {currentTheme !== 'lobby' ? (
+        <button
+          type="button"
+          onClick={() => setCurrentTheme('lobby')}
+          className="fixed bottom-5 right-5 z-50 inline-flex min-h-12 items-center gap-2 rounded-full border border-white/10 bg-slate-950/88 px-5 text-sm font-semibold text-white shadow-[0_16px_40px_rgba(2,6,23,0.35)] backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:border-white/20"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Volver al Lobby
+        </button>
+      ) : null}
+    </>
   );
 }
 

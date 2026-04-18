@@ -1,5 +1,5 @@
 import { ArrowUpRight } from 'lucide-react';
-import { SectionWrapper } from '../SectionWrapper';
+import { SectionWrapper } from '../../common/layout/SectionWrapper';
 
 export interface PandaFooterLinkGroup {
   title: string;

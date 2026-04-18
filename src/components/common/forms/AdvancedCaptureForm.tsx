@@ -1,10 +1,10 @@
 import { ChangeEvent, FormEvent, useMemo, useState } from 'react';
 import { PricingCard } from './PricingCard';
 import { SmartPhoneInput } from './SmartPhoneInput';
-import funnelConfig, { pricingProductKeys } from '../config/funnel.config';
-import { useVisitor } from '../context/VisitorContext';
-import analytics from '../services/analytics';
-import { getFriendlyCurrencyName } from '../utils/currency';
+import funnelConfig, { pricingProductKeys } from '../../../core/config/funnel.config';
+import { useVisitor } from '../../../core/visitor/VisitorContext';
+import analytics from '../../../core/services/analytics';
+import { getFriendlyCurrencyName } from '../../../core/utils/currency';
 
 interface FormErrors {
   firstName?: string;
@@ -285,10 +285,10 @@ export function AdvancedCaptureForm() {
         </form>
       </section>
 
-        <PricingCard
-          productId={pricingProductKeys.ofertaPrincipal}
-          productName={funnelConfig.brandName}
-        />
+      <PricingCard
+        productId={pricingProductKeys.ofertaPrincipal}
+        productName={funnelConfig.brandName}
+      />
     </section>
   );
 }
