@@ -68,7 +68,7 @@ export function BonusStack({ content, className }: BonusStackProps) {
             return (
               <article key={bonus.id} className="glass-surface rounded-[1.5rem] p-6 sm:p-7">
                 <div className="space-y-5">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/14 text-primary">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-accent/14 text-accent">
                     <Gift className="h-5 w-5" />
                   </div>
 
@@ -80,7 +80,7 @@ export function BonusStack({ content, className }: BonusStackProps) {
 
                   <div className="space-y-2 rounded-[1.25rem] border border-border-subtle/10 bg-page/40 p-4">
                     <p className="text-sm text-text-muted line-through">{formatCurrencyAmount(bonus.valueUSD, 'USD')}</p>
-                    <p className="text-2xl font-semibold tracking-[-0.03em] text-primary sm:text-3xl">
+                    <p className="text-2xl font-semibold tracking-[-0.03em] text-accent sm:text-3xl">
                       {canEstimateLocalizedBonusValue
                         ? formatCurrencyAmount(localizedValue, currencyCode)
                         : formatCurrencyAmount(bonus.valueUSD, 'USD')}

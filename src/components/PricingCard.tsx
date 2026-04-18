@@ -48,16 +48,16 @@ export function PricingCard({ productId, productName }: PricingCardProps) {
   };
 
   return (
-    <section className="rounded-2xl border border-border-subtle bg-surface p-6 shadow-xl backdrop-blur md:p-8">
+    <section className="glass-surface rounded-[1.75rem] p-6 md:p-8">
       <div className="mb-5">
-        <p className="text-xs uppercase tracking-[0.18em] text-primary">Oferta Especial</p>
+        <p className="text-xs uppercase tracking-[0.18em] text-accent">Oferta Especial</p>
         <h3 className="mt-2 text-2xl font-extrabold text-text-main md:text-3xl">
           Activa {resolvedProductName} hoy mismo
         </h3>
         <p className="mt-2 text-sm text-text-muted">Valor base: {basePriceUSD} USD</p>
       </div>
 
-      <div className="rounded-xl border border-border-subtle bg-page p-5">
+      <div className="rounded-[1.35rem] border border-border-subtle/15 bg-page/70 p-5">
         {isArgentinaCase ? (
           <div className="space-y-3 text-text-main">
             <p className="text-sm text-text-muted line-through">Precio base: {basePriceUSD} USD</p>
@@ -68,7 +68,7 @@ export function PricingCard({ productId, productName }: PricingCardProps) {
               <span className="text-text-muted">Impuestos locales (PAIS, Ganancias, etc.):</span>{' '}
               {countryPricing?.tax ? `${countryPricing.tax} ${currencyCode}` : `Incluidos ${currencyCode}`}
             </p>
-            <p className="text-lg font-bold text-primary md:text-xl">
+            <p className="text-lg font-bold text-accent md:text-xl">
               Total final en Hotmart: {countryPricing?.total} {currencyCode}
             </p>
           </div>
@@ -77,7 +77,7 @@ export function PricingCard({ productId, productName }: PricingCardProps) {
         {isStandardScrapedCase ? (
           <div className="space-y-2 text-center">
             <p className="text-sm text-text-muted line-through">{basePriceUSD} USD</p>
-            <p className="text-3xl font-extrabold text-primary md:text-4xl">
+            <p className="text-3xl font-extrabold text-accent md:text-4xl">
               {countryPricing?.total} {currencyCode}
             </p>
             <p className="text-xs text-text-muted md:text-sm">(Equivalente a {basePriceUSD} USD. Impuestos incluidos)</p>
@@ -86,7 +86,7 @@ export function PricingCard({ productId, productName }: PricingCardProps) {
 
         {!isArgentinaCase && !isStandardScrapedCase ? (
           <div className="text-center">
-            <p className="text-3xl font-extrabold text-primary md:text-4xl">{basePriceUSD} USD</p>
+            <p className="text-3xl font-extrabold text-accent md:text-4xl">{basePriceUSD} USD</p>
             <p className="mt-2 text-xs text-text-muted md:text-sm">Precio internacional directo.</p>
           </div>
         ) : null}
@@ -99,7 +99,7 @@ export function PricingCard({ productId, productName }: PricingCardProps) {
             target="_blank"
             rel="noreferrer"
             onClick={handleCheckoutClick}
-            className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-primary px-6 text-base font-bold text-white transition hover:opacity-95 md:h-14 md:text-lg"
+            className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-primary px-6 text-base font-bold text-secondary transition hover:opacity-95 md:h-14 md:text-lg"
           >
             Comprar Ahora
           </a>
@@ -107,23 +107,23 @@ export function PricingCard({ productId, productName }: PricingCardProps) {
           <button
             type="button"
             disabled
-            className="inline-flex h-12 w-full cursor-not-allowed items-center justify-center rounded-xl bg-primary/60 px-6 text-base font-bold text-white opacity-70 md:h-14 md:text-lg"
+            className="inline-flex h-12 w-full cursor-not-allowed items-center justify-center rounded-xl bg-primary/60 px-6 text-base font-bold text-secondary opacity-70 md:h-14 md:text-lg"
           >
             Producto no disponible
           </button>
         )}
 
         <div className="mt-4 grid gap-2 text-xs text-text-muted md:grid-cols-3 md:text-sm">
-          <p className="inline-flex items-center justify-center gap-2 rounded-lg border border-border-subtle bg-page px-3 py-2">
-            <ShieldCheck className="h-4 w-4 text-primary" />
+          <p className="inline-flex items-center justify-center gap-2 rounded-lg border border-border-subtle/15 bg-page/60 px-3 py-2">
+            <ShieldCheck className="h-4 w-4 text-accent" />
             Pago seguro
           </p>
-          <p className="inline-flex items-center justify-center gap-2 rounded-lg border border-border-subtle bg-page px-3 py-2">
-            <Lock className="h-4 w-4 text-primary" />
+          <p className="inline-flex items-center justify-center gap-2 rounded-lg border border-border-subtle/15 bg-page/60 px-3 py-2">
+            <Lock className="h-4 w-4 text-accent" />
             Procesado por Hotmart
           </p>
-          <p className="inline-flex items-center justify-center gap-2 rounded-lg border border-border-subtle bg-page px-3 py-2">
-            <BadgeCheck className="h-4 w-4 text-primary" />
+          <p className="inline-flex items-center justify-center gap-2 rounded-lg border border-border-subtle/15 bg-page/60 px-3 py-2">
+            <BadgeCheck className="h-4 w-4 text-accent" />
             Acceso inmediato
           </p>
         </div>

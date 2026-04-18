@@ -21,7 +21,7 @@ export function MainVSL({ content, video, className }: MainVSLProps) {
       <div className="relative overflow-hidden rounded-[2rem] border border-border-subtle/10 bg-surface/40 px-5 py-10 sm:px-8 lg:px-10 lg:py-14">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-8 top-0 h-40 rounded-full bg-primary/10 blur-3xl"
+          className="pointer-events-none absolute inset-x-8 top-0 h-40 rounded-full bg-accent/15 blur-3xl"
         />
 
         <div className="relative z-10 grid items-center gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
@@ -42,7 +42,7 @@ export function MainVSL({ content, video, className }: MainVSLProps) {
             <div className="flex flex-col items-start gap-3">
               <a
                 href={content.ctaHref}
-                className="cta-shimmer inline-flex min-h-14 items-center justify-center rounded-full bg-primary px-7 text-center text-base font-semibold text-black transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_45px_rgb(var(--color-primary)/0.28)] sm:text-lg"
+                className="cta-shimmer inline-flex min-h-14 items-center justify-center rounded-full bg-primary px-7 text-center text-base font-semibold text-secondary transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_45px_rgba(0,17,255,0.28)] sm:text-lg"
               >
                 {content.ctaLabel}
               </a>
@@ -60,7 +60,7 @@ export function MainVSL({ content, video, className }: MainVSLProps) {
             />
 
             <div className="glass-surface rounded-[1.75rem] p-3 sm:p-4">
-              <div className="overflow-hidden rounded-[1.35rem] bg-page/80">
+              <div className="overflow-hidden rounded-[1.35rem] border border-accent/15 bg-page/80">
                 {isVideoEnabled ? (
                   <CoreVideoPlayer
                     {...videoProps}
