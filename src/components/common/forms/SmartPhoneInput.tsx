@@ -273,14 +273,14 @@ export function SmartPhoneInput({
   const phoneInputClasses = [
     'w-full max-w-full min-w-0 box-border rounded-xl border transition-all duration-200 overflow-hidden',
     showAutoInvalidState || error
-      ? 'border-red-500 focus-within:border-red-500 focus-within:ring-2 focus-within:ring-red-500/20'
+      ? 'border-red-500/60 focus-within:ring-1 focus-within:ring-red-500'
       : isDarkTheme
-        ? 'border-white/10 focus-within:border-cyan-500 focus-within:ring-2 focus-within:ring-cyan-500/20'
+        ? 'border-transparent shadow-inner focus-within:ring-1 focus-within:ring-cyan-500'
         : 'border-border-subtle focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
     disabled ? 'opacity-70' : '',
     '[&_.PhoneInputCountry]:m-0 [&_.PhoneInputCountry]:h-12 [&_.PhoneInputCountry]:min-w-[104px] sm:[&_.PhoneInputCountry]:min-w-[116px]',
     isDarkTheme
-      ? '[&_.PhoneInputCountry]:border-r [&_.PhoneInputCountry]:border-white/10 [&_.PhoneInputCountry]:bg-black/20'
+      ? '[&_.PhoneInputCountry]:border-r [&_.PhoneInputCountry]:border-transparent [&_.PhoneInputCountry]:bg-black/40'
       : '[&_.PhoneInputCountry]:border-r [&_.PhoneInputCountry]:border-border-subtle [&_.PhoneInputCountry]:bg-surface',
     '[&_.PhoneInputCountry]:px-3 [&_.PhoneInputCountry]:flex [&_.PhoneInputCountry]:items-center [&_.PhoneInputCountry]:gap-2',
     '[&_.PhoneInputCountryIcon]:h-4 [&_.PhoneInputCountryIcon]:w-6 [&_.PhoneInputCountryIcon]:rounded-sm [&_.PhoneInputCountryIcon]:shadow-sm',
@@ -291,17 +291,19 @@ export function SmartPhoneInput({
       ? '[&_.PhoneInputCountrySelectArrow]:ml-auto [&_.PhoneInputCountrySelectArrow]:mt-0 [&_.PhoneInputCountrySelectArrow]:h-2.5 [&_.PhoneInputCountrySelectArrow]:w-2.5 [&_.PhoneInputCountrySelectArrow]:opacity-100 [&_.PhoneInputCountrySelectArrow]:border-gray-500'
       : '[&_.PhoneInputCountrySelectArrow]:ml-auto [&_.PhoneInputCountrySelectArrow]:mt-0 [&_.PhoneInputCountrySelectArrow]:h-2.5 [&_.PhoneInputCountrySelectArrow]:w-2.5 [&_.PhoneInputCountrySelectArrow]:opacity-100 [&_.PhoneInputCountrySelectArrow]:border-text-muted',
     isDarkTheme
-      ? '[&_.PhoneInputInput]:h-12 [&_.PhoneInputInput]:min-w-0 [&_.PhoneInputInput]:w-full [&_.PhoneInputInput]:flex-1 [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-black/20 [&_.PhoneInputInput]:px-4 [&_.PhoneInputInput]:text-base [&_.PhoneInputInput]:text-white'
+      ? '[&_.PhoneInputInput]:h-12 [&_.PhoneInputInput]:min-w-0 [&_.PhoneInputInput]:w-full [&_.PhoneInputInput]:flex-1 [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-black/40 [&_.PhoneInputInput]:px-4 [&_.PhoneInputInput]:py-3 [&_.PhoneInputInput]:text-base [&_.PhoneInputInput]:text-white'
       : '[&_.PhoneInputInput]:h-12 [&_.PhoneInputInput]:min-w-0 [&_.PhoneInputInput]:w-full [&_.PhoneInputInput]:flex-1 [&_.PhoneInputInput]:border-0 [&_.PhoneInputInput]:bg-page [&_.PhoneInputInput]:px-4 [&_.PhoneInputInput]:text-base [&_.PhoneInputInput]:text-text-main',
     isDarkTheme
-      ? '[&_.PhoneInputInput]:placeholder:text-gray-500 [&_.PhoneInputInput]:focus:outline-none'
+      ? '[&_.PhoneInputInput]:placeholder:text-white/20 [&_.PhoneInputInput]:focus:outline-none'
       : '[&_.PhoneInputInput]:placeholder:text-text-muted [&_.PhoneInputInput]:focus:outline-none',
-    isDarkTheme ? 'bg-black/20' : 'bg-surface',
+    isDarkTheme ? 'w-full bg-black/40 rounded-xl px-0 py-0 text-white transition-all' : 'bg-surface',
   ]
     .filter(Boolean)
     .join(' ');
 
-  const labelClassName = isDarkTheme ? 'mb-2 block text-sm font-medium text-white' : 'mb-2 block text-sm font-medium text-text-main';
+  const labelClassName = isDarkTheme
+    ? 'mb-2 block text-xs font-medium uppercase tracking-wider text-white/40'
+    : 'mb-2 block text-sm font-medium text-text-main';
   const helperTextClassName = isDarkTheme ? 'mt-2 text-xs text-gray-500' : 'mt-2 text-xs text-text-muted';
   const errorTextClassName = isDarkTheme ? 'mt-2 text-xs text-red-400' : 'mt-2 text-xs text-red-500';
 

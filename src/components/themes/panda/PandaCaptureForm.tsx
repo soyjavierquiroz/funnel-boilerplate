@@ -65,7 +65,7 @@ function PandaTextInput({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-sm font-medium text-white">
+      <label htmlFor={id} className="mb-2 block text-xs font-medium uppercase tracking-wider text-white/40">
         {label}
       </label>
       <input
@@ -75,9 +75,9 @@ function PandaTextInput({
         onChange={onChange}
         autoComplete={autoComplete}
         className={[
-          'h-12 w-full rounded-xl border bg-black/20 px-4 text-base text-white',
-          'placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/30',
-          error ? 'border-red-400 focus:border-red-500' : 'border-white/10 focus:border-cyan-500',
+          'w-full rounded-xl border border-transparent bg-black/40 px-4 py-3 text-white shadow-inner transition-all',
+          'placeholder:text-white/20 focus:bg-black/60 focus:outline-none focus:ring-1 focus:ring-cyan-500',
+          error ? 'focus:ring-red-500' : '',
         ].join(' ')}
         placeholder={placeholder}
       />
@@ -224,10 +224,10 @@ export function PandaCaptureForm() {
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="glass-surface overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] backdrop-blur-xl">
+        <div className="overflow-hidden rounded-[2rem] border border-white/[0.04] bg-white/[0.02] shadow-2xl shadow-black/50 backdrop-blur-2xl">
           <div className="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
-            <div className="border-b border-white/10 p-6 md:p-8 lg:border-b-0 lg:border-r">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-gray-300">
+            <div className="border-b border-white/[0.04] p-6 md:p-8 lg:border-b-0 lg:border-r">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.04] bg-white/[0.03] px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-gray-300">
                 <Sparkles className="h-3.5 w-3.5 text-cyan-300" />
                 Captura Premium
               </span>
@@ -250,7 +250,7 @@ export function PandaCaptureForm() {
                 ))}
               </div>
 
-              <div className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-4">
+              <div className="mt-8 rounded-2xl border border-white/[0.04] bg-black/20 p-4">
                 <div className="flex items-center gap-3">
                   <ShieldCheck className="h-5 w-5 text-cyan-400" />
                   <p className="text-sm font-medium text-white">Infraestructura de monetización conectada</p>

@@ -95,28 +95,28 @@ function PandaPricingCard({
   return (
     <article
       className={[
-        'glass-surface relative overflow-hidden rounded-[2rem] border bg-white/[0.03] p-6 backdrop-blur-xl',
+        'relative overflow-hidden rounded-[2rem] border bg-white/[0.02] p-8 shadow-2xl shadow-black/50 backdrop-blur-2xl md:p-10',
         featured
-          ? 'border-cyan-500 shadow-[0_0_80px_rgba(34,211,238,0.12)]'
-          : 'border-white/10',
+          ? 'border-cyan-500/60 shadow-[0_0_80px_rgba(30,64,175,0.18)]'
+          : 'border-white/[0.04]',
       ].join(' ')}
     >
       {featured ? (
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-10 top-8 h-32 rounded-full bg-cyan-500/10 blur-[90px]"
+          className="pointer-events-none absolute inset-x-10 top-8 h-32 rounded-full bg-blue-900/20 blur-[90px]"
         />
       ) : null}
 
       <div className="relative">
-        <span className="inline-flex rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-gray-300">
+        <span className="inline-flex rounded-full border border-white/[0.04] bg-black/20 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-gray-300">
           {eyebrow}
         </span>
 
         <h3 className="mt-5 text-3xl font-semibold tracking-tight text-white">{title}</h3>
         <p className="mt-3 min-h-[72px] text-sm leading-6 text-gray-400">{description}</p>
 
-        <div className="mt-8 rounded-[1.5rem] border border-white/10 bg-black/20 p-5">
+        <div className="mt-8 rounded-[1.5rem] border border-white/[0.04] bg-black/20 p-5">
           {status === 'loading' ? (
             <div className="space-y-2">
               <p className="text-sm text-gray-500">Calculando precio geolocalizado…</p>
@@ -125,7 +125,7 @@ function PandaPricingCard({
           ) : (
             <>
               <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Precio de hoy</p>
-              <p className="mt-3 text-4xl font-bold tracking-tight text-white">
+              <p className="mt-3 text-5xl font-bold tracking-tighter text-white drop-shadow-md md:text-6xl">
                 {formatCurrency(displayAmount, displayCurrency)}
               </p>
               <p className="mt-2 text-sm text-gray-500">
@@ -148,7 +148,7 @@ function PandaPricingCard({
                 'cta-shimmer inline-flex min-h-14 w-full items-center justify-center rounded-2xl px-6 text-base font-semibold text-white transition hover:opacity-95',
                 featured
                   ? 'bg-gradient-to-r from-[#0047ff] to-[#00bfff] shadow-[0_20px_60px_rgba(0,191,255,0.24)]'
-                  : 'border border-white/10 bg-white/[0.04]',
+                  : 'border border-white/[0.04] bg-white/[0.04]',
               ].join(' ')}
             >
               Ir al pago
@@ -157,7 +157,7 @@ function PandaPricingCard({
             <button
               type="button"
               disabled
-              className="inline-flex min-h-14 w-full cursor-not-allowed items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] px-6 text-base font-semibold text-white/60"
+              className="inline-flex min-h-14 w-full cursor-not-allowed items-center justify-center rounded-2xl border border-white/[0.04] bg-white/[0.04] px-6 text-base font-semibold text-white/60"
             >
               Producto no disponible
             </button>
@@ -167,9 +167,9 @@ function PandaPricingCard({
             {trustCues.map(({ icon: Icon, label }) => (
               <div
                 key={label}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-2 text-xs text-gray-500"
+                className="inline-flex items-center gap-2 rounded-full border border-white/[0.04] bg-black/20 px-3 py-2 text-[10px] uppercase tracking-widest text-white/30"
               >
-                <Icon className="h-3.5 w-3.5 text-cyan-400" />
+                <Icon className="h-3.5 w-3.5 text-cyan-400/40" />
                 {label}
               </div>
             ))}
@@ -194,7 +194,7 @@ export function PandaPricing() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-gray-300">
+          <span className="inline-flex rounded-full border border-white/[0.04] bg-white/[0.03] px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-gray-300">
             Panda Pricing
           </span>
           <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
