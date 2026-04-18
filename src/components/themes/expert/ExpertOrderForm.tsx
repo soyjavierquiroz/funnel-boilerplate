@@ -4,6 +4,7 @@ import funnelConfig, { pricingProductKeys } from '../../../core/config/funnel.co
 import { useHotmartPrices } from '../../../core/hooks/useHotmartPrices';
 import analytics from '../../../core/services/analytics';
 import { useVisitor } from '../../../core/visitor/VisitorContext';
+import { CommonTextField } from '../../common/forms/CommonTextField';
 import { SmartPhoneInput } from '../../common/forms/SmartPhoneInput';
 import { ExpertCtaButton } from './ExpertCtaButton';
 import { expertBrandAssets } from './expertContent';
@@ -73,6 +74,9 @@ function resolveOfferPrice(baseValue: number, localizedValue?: { total: string }
 
   return baseValue;
 }
+
+const clickfunnelsFieldClassName =
+  'bg-white border border-gray-300 text-gray-900 rounded-md focus:ring-2 focus:ring-blue-500 shadow-sm';
 
 export function ExpertOrderForm() {
   const { visitorData, isLoading } = useVisitor();
@@ -328,55 +332,46 @@ export function ExpertOrderForm() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label htmlFor="expert-first-name" className="expert-body mb-1.5 block text-sm font-semibold text-[#2d2d2d]">
-                  First Name
-                </label>
-                <input
-                  id="expert-first-name"
-                  value={firstName}
-                  onChange={(event) => {
-                    setFirstName(event.target.value);
-                    setErrors((prev) => ({ ...prev, firstName: undefined }));
-                  }}
-                  className="expert-input h-12 w-full rounded-md border border-[#cfd6df] px-4 text-[15px] focus:border-[#4876b9] focus:outline-none focus:ring-4 focus:ring-[#4876b9]/10"
-                />
-                {errors.firstName ? <p className="mt-1.5 text-xs text-[#e01921]">{errors.firstName}</p> : null}
-              </div>
-
-              <div>
-                <label htmlFor="expert-last-name" className="expert-body mb-1.5 block text-sm font-semibold text-[#2d2d2d]">
-                  Last Name
-                </label>
-                <input
-                  id="expert-last-name"
-                  value={lastName}
-                  onChange={(event) => {
-                    setLastName(event.target.value);
-                    setErrors((prev) => ({ ...prev, lastName: undefined }));
-                  }}
-                  className="expert-input h-12 w-full rounded-md border border-[#cfd6df] px-4 text-[15px] focus:border-[#4876b9] focus:outline-none focus:ring-4 focus:ring-[#4876b9]/10"
-                />
-                {errors.lastName ? <p className="mt-1.5 text-xs text-[#e01921]">{errors.lastName}</p> : null}
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="expert-email" className="expert-body mb-1.5 block text-sm font-semibold text-[#2d2d2d]">
-                Email Address
-              </label>
-              <input
-                id="expert-email"
-                type="email"
-                value={email}
+              <CommonTextField
+                id="expert-first-name"
+                label="First Name"
+                value={firstName}
                 onChange={(event) => {
-                  setEmail(event.target.value);
-                  setErrors((prev) => ({ ...prev, email: undefined }));
+                  setFirstName(event.target.value);
+                  setErrors((prev) => ({ ...prev, firstName: undefined }));
                 }}
-                className="expert-input h-12 w-full rounded-md border border-[#cfd6df] px-4 text-[15px] focus:border-[#4876b9] focus:outline-none focus:ring-4 focus:ring-[#4876b9]/10"
+                error={errors.firstName}
+                autoComplete="given-name"
+                inputClassName={clickfunnelsFieldClassName}
               />
-              {errors.email ? <p className="mt-1.5 text-xs text-[#e01921]">{errors.email}</p> : null}
+
+              <CommonTextField
+                id="expert-last-name"
+                label="Last Name"
+                value={lastName}
+                onChange={(event) => {
+                  setLastName(event.target.value);
+                  setErrors((prev) => ({ ...prev, lastName: undefined }));
+                }}
+                error={errors.lastName}
+                autoComplete="family-name"
+                inputClassName={clickfunnelsFieldClassName}
+              />
             </div>
+
+            <CommonTextField
+              id="expert-email"
+              label="Email Address"
+              type="email"
+              value={email}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setErrors((prev) => ({ ...prev, email: undefined }));
+              }}
+              error={errors.email}
+              autoComplete="email"
+              inputClassName={clickfunnelsFieldClassName}
+            />
 
             <SmartPhoneInput
               id="expert-whatsapp"
@@ -391,104 +386,86 @@ export function ExpertOrderForm() {
               autoDetectCountry
               label="Phone Number"
               labelClassName="expert-body mb-1.5 block text-sm font-semibold text-[#2d2d2d]"
-              phoneInputClassName="rounded-md border border-[#cfd6df] focus-within:border-[#4876b9] focus-within:ring-4 focus-within:ring-[#4876b9]/10"
+              phoneInputClassName={clickfunnelsFieldClassName}
               errorTextClassName="mt-1.5 text-xs text-[#e01921]"
             />
 
-            <div>
-              <label htmlFor="expert-address" className="expert-body mb-1.5 block text-sm font-semibold text-[#2d2d2d]">
-                Address
-              </label>
-              <input
-                id="expert-address"
-                value={address}
+            <CommonTextField
+              id="expert-address"
+              label="Address"
+              value={address}
+              onChange={(event) => {
+                setAddress(event.target.value);
+                setErrors((prev) => ({ ...prev, address: undefined }));
+              }}
+              error={errors.address}
+              autoComplete="address-line1"
+              inputClassName={clickfunnelsFieldClassName}
+            />
+
+            <CommonTextField
+              id="expert-apartment"
+              label="Apartment, building, floor (optional)"
+              value={apartment}
+              onChange={(event) => setApartment(event.target.value)}
+              autoComplete="address-line2"
+              inputClassName={clickfunnelsFieldClassName}
+            />
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <CommonTextField
+                id="expert-country"
+                label="Country"
+                value={country}
                 onChange={(event) => {
-                  setAddress(event.target.value);
-                  setErrors((prev) => ({ ...prev, address: undefined }));
+                  setCountry(event.target.value);
+                  setErrors((prev) => ({ ...prev, country: undefined }));
                 }}
-                className="expert-input h-12 w-full rounded-md border border-[#cfd6df] px-4 text-[15px] focus:border-[#4876b9] focus:outline-none focus:ring-4 focus:ring-[#4876b9]/10"
+                error={errors.country}
+                autoComplete="country-name"
+                inputClassName={clickfunnelsFieldClassName}
               />
-              {errors.address ? <p className="mt-1.5 text-xs text-[#e01921]">{errors.address}</p> : null}
-            </div>
 
-            <div>
-              <label htmlFor="expert-apartment" className="expert-body mb-1.5 block text-sm font-semibold text-[#2d2d2d]">
-                Apartment, building, floor (optional)
-              </label>
-              <input
-                id="expert-apartment"
-                value={apartment}
-                onChange={(event) => setApartment(event.target.value)}
-                className="expert-input h-12 w-full rounded-md border border-[#cfd6df] px-4 text-[15px] focus:border-[#4876b9] focus:outline-none focus:ring-4 focus:ring-[#4876b9]/10"
+              <CommonTextField
+                id="expert-state"
+                label="State"
+                value={state}
+                onChange={(event) => {
+                  setState(event.target.value);
+                  setErrors((prev) => ({ ...prev, state: undefined }));
+                }}
+                error={errors.state}
+                autoComplete="address-level1"
+                inputClassName={clickfunnelsFieldClassName}
               />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label htmlFor="expert-country" className="expert-body mb-1.5 block text-sm font-semibold text-[#2d2d2d]">
-                  Country
-                </label>
-                <input
-                  id="expert-country"
-                  value={country}
-                  onChange={(event) => {
-                    setCountry(event.target.value);
-                    setErrors((prev) => ({ ...prev, country: undefined }));
-                  }}
-                  className="expert-input h-12 w-full rounded-md border border-[#cfd6df] px-4 text-[15px] focus:border-[#4876b9] focus:outline-none focus:ring-4 focus:ring-[#4876b9]/10"
-                />
-                {errors.country ? <p className="mt-1.5 text-xs text-[#e01921]">{errors.country}</p> : null}
-              </div>
+              <CommonTextField
+                id="expert-city"
+                label="City"
+                value={city}
+                onChange={(event) => {
+                  setCity(event.target.value);
+                  setErrors((prev) => ({ ...prev, city: undefined }));
+                }}
+                error={errors.city}
+                autoComplete="address-level2"
+                inputClassName={clickfunnelsFieldClassName}
+              />
 
-              <div>
-                <label htmlFor="expert-state" className="expert-body mb-1.5 block text-sm font-semibold text-[#2d2d2d]">
-                  State
-                </label>
-                <input
-                  id="expert-state"
-                  value={state}
-                  onChange={(event) => {
-                    setState(event.target.value);
-                    setErrors((prev) => ({ ...prev, state: undefined }));
-                  }}
-                  className="expert-input h-12 w-full rounded-md border border-[#cfd6df] px-4 text-[15px] focus:border-[#4876b9] focus:outline-none focus:ring-4 focus:ring-[#4876b9]/10"
-                />
-                {errors.state ? <p className="mt-1.5 text-xs text-[#e01921]">{errors.state}</p> : null}
-              </div>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label htmlFor="expert-city" className="expert-body mb-1.5 block text-sm font-semibold text-[#2d2d2d]">
-                  City
-                </label>
-                <input
-                  id="expert-city"
-                  value={city}
-                  onChange={(event) => {
-                    setCity(event.target.value);
-                    setErrors((prev) => ({ ...prev, city: undefined }));
-                  }}
-                  className="expert-input h-12 w-full rounded-md border border-[#cfd6df] px-4 text-[15px] focus:border-[#4876b9] focus:outline-none focus:ring-4 focus:ring-[#4876b9]/10"
-                />
-                {errors.city ? <p className="mt-1.5 text-xs text-[#e01921]">{errors.city}</p> : null}
-              </div>
-
-              <div>
-                <label htmlFor="expert-postal" className="expert-body mb-1.5 block text-sm font-semibold text-[#2d2d2d]">
-                  Postal Code
-                </label>
-                <input
-                  id="expert-postal"
-                  value={postalCode}
-                  onChange={(event) => {
-                    setPostalCode(event.target.value);
-                    setErrors((prev) => ({ ...prev, postalCode: undefined }));
-                  }}
-                  className="expert-input h-12 w-full rounded-md border border-[#cfd6df] px-4 text-[15px] focus:border-[#4876b9] focus:outline-none focus:ring-4 focus:ring-[#4876b9]/10"
-                />
-                {errors.postalCode ? <p className="mt-1.5 text-xs text-[#e01921]">{errors.postalCode}</p> : null}
-              </div>
+              <CommonTextField
+                id="expert-postal"
+                label="Postal Code"
+                value={postalCode}
+                onChange={(event) => {
+                  setPostalCode(event.target.value);
+                  setErrors((prev) => ({ ...prev, postalCode: undefined }));
+                }}
+                error={errors.postalCode}
+                autoComplete="postal-code"
+                inputClassName={clickfunnelsFieldClassName}
+              />
             </div>
 
             <ExpertCtaButton

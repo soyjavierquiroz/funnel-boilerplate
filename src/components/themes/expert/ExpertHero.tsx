@@ -66,23 +66,25 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
               </p>
             </div>
 
-            <div className="overflow-hidden rounded-[8px] border-[6px] border-[#111] bg-black shadow-[0_28px_50px_rgba(17,17,17,0.26)]">
-              {heroVideo.enabled ? (
-                <CoreVideoPlayer
-                  provider={heroVideo.provider}
-                  videoId={heroVideo.videoId}
-                  vslMode={heroVideo.vslMode}
-                  resumePlayback={heroVideo.resumePlayback}
-                  lazyLoadYoutube={heroVideo.lazyLoadYoutube}
-                  hideYoutubeUi={heroVideo.hideYoutubeUi}
-                  smartPoster={heroVideo.smartPoster}
-                  vslProgressBarColor={heroVideo.vslProgressBarColor}
-                  className="aspect-video"
-                />
-              ) : (
-                <img src={expertBrandAssets.heroPosterUrl} alt="Expert Secrets video poster" className="aspect-video w-full object-cover" />
-              )}
-            </div>
+            {heroVideo.enabled ? (
+              <CoreVideoPlayer
+                provider={heroVideo.provider}
+                videoId={heroVideo.videoId}
+                vslMode={heroVideo.vslMode}
+                resumePlayback={heroVideo.resumePlayback}
+                lazyLoadYoutube={heroVideo.lazyLoadYoutube}
+                hideYoutubeUi={heroVideo.hideYoutubeUi}
+                smartPoster={heroVideo.smartPoster}
+                vslProgressBarColor={heroVideo.vslProgressBarColor}
+                className="border-[6px] md:border-[8px] border-[#111] shadow-2xl w-full bg-black rounded-sm"
+              />
+            ) : (
+              <img
+                src={expertBrandAssets.heroPosterUrl}
+                alt="Expert Secrets video poster"
+                className="border-[6px] md:border-[8px] border-[#111] shadow-2xl w-full bg-black rounded-sm aspect-video object-cover"
+              />
+            )}
 
             <img
               src={expertBrandAssets.heroCoverUrl}
