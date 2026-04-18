@@ -17,7 +17,7 @@ export interface TrackEventResult {
   capiStatus: number | null;
 }
 
-interface MetaFbqQueueEntry extends Array<unknown> {}
+type MetaFbqQueueEntry = Array<unknown>;
 
 interface MetaFbqFunction {
   (...args: readonly unknown[]): void;

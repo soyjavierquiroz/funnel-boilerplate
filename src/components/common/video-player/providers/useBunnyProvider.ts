@@ -111,7 +111,7 @@ export function useBunnyProvider({
       provider.destroy();
       providerRef.current = null;
     };
-  }, [enabled, videoId]);
+  }, [autoPlay, enabled, loop, muted, videoId]);
 
   useEffect(() => {
     if (!enabled || !mountRef.current) {

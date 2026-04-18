@@ -89,7 +89,7 @@ export function useHtml5Provider({
       provider.destroy();
       providerRef.current = null;
     };
-  }, [controlsVariant, enabled, videoId]);
+  }, [autoPlay, controlsVariant, enabled, loop, muted, videoId]);
 
   useEffect(() => {
     if (!enabled || !mountRef.current) {

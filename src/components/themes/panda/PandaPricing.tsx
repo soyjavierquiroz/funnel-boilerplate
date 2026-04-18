@@ -17,6 +17,7 @@ const pricingPlans = [
     eyebrow: 'Entrada',
     title: 'Starter',
     description: 'Una puerta de entrada compacta para acelerar la decisión sin romper la estética premium.',
+    featured: false,
     features: ['Acceso inmediato', 'Setup ligero', 'Checkout geolocalizado'],
   },
   {
@@ -32,6 +33,7 @@ const pricingPlans = [
     eyebrow: 'Escala Total',
     title: 'Panda Elite',
     description: 'La capa de acompañamiento más alta para quien quiere soporte intensivo y margen premium.',
+    featured: false,
     features: ['Prioridad estratégica', 'Escala premium', 'Acompañamiento intensivo'],
   },
 ] as const;

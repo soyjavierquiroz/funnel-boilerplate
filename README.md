@@ -91,6 +91,55 @@ Estados disponibles:
 
 Cuando no estamos en el lobby, aparece un botón fijo de `Volver al Lobby` en la esquina inferior derecha.
 
+## Protocolo de Despliegue Rápido (Sitios Ligeros)
+
+Este boilerplate puede usarse como showroom de temas durante desarrollo o como base ultra-ligera para desplegar un solo tema en producción. El flujo recomendado para futuros desarrolladores es el siguiente:
+
+1. Clonar el repositorio.
+
+```bash
+git clone <repo-url>
+cd boilerplate
+```
+
+2. Para mantener el sitio ultra-ligero, eliminar cualquier carpeta de tema no utilizada dentro de `src/components/themes/` usando `rm -rf`.
+
+Ejemplo si el despliegue final va a usar solo Panda:
+
+```bash
+rm -rf src/components/themes/expert
+```
+
+Ejemplo si el despliegue final va a usar solo Expert:
+
+```bash
+rm -rf src/components/themes/panda
+```
+
+3. Fijar el tema deseado como estado inicial en el showroom/router de `src/App.tsx`.
+
+Mientras el proyecto funciona como catálogo, el estado inicial recomendado es:
+
+```ts
+const [currentTheme, setCurrentTheme] = useState<ShowroomTheme>('lobby');
+```
+
+Si el objetivo es desplegar un único tema sin pasar por el lobby, cambia ese estado inicial al tema final:
+
+```ts
+const [currentTheme, setCurrentTheme] = useState<ShowroomTheme>('panda');
+```
+
+o:
+
+```ts
+const [currentTheme, setCurrentTheme] = useState<ShowroomTheme>('expert');
+```
+
+4. Construir la aplicación sabiendo que, gracias al tree-shaking de Vite y al aislamiento del CSS por arquitectura, el build final solo incluirá el código realmente referenciado por el tema activo.
+
+En otras palabras: si dejas un solo tema importado y eliminas las carpetas no utilizadas, el bundle de producción no arrastrará componentes visuales muertos. Esta separación funciona porque la lógica reusable vive en `src/core` y `src/components/common`, mientras que cada piel visual queda encapsulada dentro de `src/components/themes/<tema>`.
+
 ## Sistema de Tokens
 
 `src/index.css` define variables CSS por tema:

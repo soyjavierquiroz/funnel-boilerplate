@@ -183,7 +183,7 @@ export function useYouTubeProvider({
       provider.destroy();
       providerRef.current = null;
     };
-  }, [controlsVariant, enabled, hideNativeUi, videoId]);
+  }, [autoPlay, controlsVariant, enabled, hideNativeUi, loop, muted, videoId]);
 
   useEffect(() => {
     if (!enabled) {

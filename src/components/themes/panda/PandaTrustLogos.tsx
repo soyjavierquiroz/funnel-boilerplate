@@ -4,7 +4,7 @@ const placeholderLogos = [
   { name: 'Atlas One', shape: 'rect' },
   { name: 'Northstar', shape: 'circle' },
   { name: 'Pixel Forge', shape: 'rect' },
-];
+] as const;
 
 function LogoPlaceholder({ name, shape }: { name: string; shape: 'rect' | 'circle' }) {
   const iconClassName =

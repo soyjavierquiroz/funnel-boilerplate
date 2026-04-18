@@ -153,7 +153,7 @@ export function CoreVideoPlayer({
       await activeProvider.play();
       setShowPoster(false);
       setAutoplayBlocked(false);
-    } catch (error) {
+    } catch {
       activeProvider.pause();
       setShowPoster(!isVslMode);
       setShowMutedPreviewOverlay(false);
