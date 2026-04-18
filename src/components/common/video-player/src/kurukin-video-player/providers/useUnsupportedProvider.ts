@@ -7,19 +7,19 @@ const noopUnsubscribe = () => noop;
 function createUnsupportedProvider(provider: VideoProvider): IVideoProvider {
   return {
     async play() {
-      console.warn(`[CoreVideoPlayer] Provider "${provider}" no implementado todavía.`);
+      console.warn(`[KurukinPlayer] Provider "${provider}" no implementado todavía.`);
     },
     pause() {
-      console.warn(`[CoreVideoPlayer] Provider "${provider}" no implementado todavía.`);
+      console.warn(`[KurukinPlayer] Provider "${provider}" no implementado todavía.`);
     },
     mute() {
-      console.warn(`[CoreVideoPlayer] Provider "${provider}" no implementado todavía.`);
+      console.warn(`[KurukinPlayer] Provider "${provider}" no implementado todavía.`);
     },
     seek() {
-      console.warn(`[CoreVideoPlayer] Provider "${provider}" no implementado todavía.`);
+      console.warn(`[KurukinPlayer] Provider "${provider}" no implementado todavía.`);
     },
     setLoop() {
-      console.warn(`[CoreVideoPlayer] Provider "${provider}" no implementado todavía.`);
+      console.warn(`[KurukinPlayer] Provider "${provider}" no implementado todavía.`);
     },
     destroy() {
       noop();
@@ -55,7 +55,7 @@ export function useUnsupportedProvider(
       return;
     }
 
-    console.warn(`[CoreVideoPlayer] Provider "${provider}" no implementado todavía.`);
+    console.warn(`[KurukinPlayer] Provider "${provider}" no implementado todavía.`);
     providerRef.current = createUnsupportedProvider(provider);
 
     return () => {

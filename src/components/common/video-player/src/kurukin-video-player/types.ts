@@ -15,7 +15,6 @@ export interface MutedPreviewConfig {
 export interface CallToActionConfig {
   enabled: boolean;
   displayAtSeconds: number;
-  badgeText?: string;
   headline: string;
   buttonText: string;
   buttonUrl: string;
@@ -31,13 +30,9 @@ export interface SmartPosterConfig {
   buttonText?: string;
 }
 
-export interface CoreVideoPlayerProps {
+export interface KurukinPlayerProps {
   provider: VideoProvider;
   videoId: string;
-  autoplay?: boolean;
-  loop?: boolean;
-  muted?: boolean;
-  controls?: boolean;
   vslMode?: boolean;
   vslProgressBarColor?: string;
   mutedPreview?: MutedPreviewConfig;
@@ -48,17 +43,8 @@ export interface CoreVideoPlayerProps {
   onTimeUpdate?: (currentTime: number) => void;
   callToAction?: CallToActionConfig;
   hideYoutubeUi?: boolean;
-  hideYouTubeBranding?: boolean;
   smartPoster?: SmartPosterConfig;
   className?: string;
-}
-
-export interface CoreVideoPlayerHandle {
-  play: () => Promise<void>;
-  pause: () => void;
-  mute: (muted: boolean) => void;
-  seek: (seconds: number) => void;
-  setLoop: (loop: boolean) => void;
 }
 
 export interface PlayerState {

@@ -1,25 +1,23 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import 'plyr/dist/plyr.css';
 import { Play } from 'lucide-react';
 import { CallToActionOverlay } from './components/CallToActionOverlay';
 import { FakeProgressBar } from './components/FakeProgressBar';
 import { MutedOverlay } from './components/MutedOverlay';
 import { PlayerControls } from './components/PlayerControls';
 import { SmartPoster } from './components/SmartPoster';
+import { VslOverlay } from './components/VslOverlay';
 import { useVideoProviderController } from './providers/useVideoProviderController';
 import type { IVideoProvider } from './providers/IVideoProvider';
-import type { CoreVideoPlayerHandle, CoreVideoPlayerProps } from './types';
+import type { KurukinPlayerProps } from './types';
 
 function formatClassName(...classNames: Array<string | false | null | undefined>) {
   return classNames.filter(Boolean).join(' ');
 }
 
-export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayerProps>(function CoreVideoPlayer({
+export function KurukinPlayer({
   provider,
   videoId,
-  autoplay,
-  loop,
-  muted,
-  controls = true,
   vslMode = false,
   vslProgressBarColor,
   mutedPreview = { enabled: false, overlayPosition: 'center' },
@@ -30,26 +28,23 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
   onTimeUpdate,
   callToAction,
   hideYoutubeUi,
-  hideYouTubeBranding,
   smartPoster,
   className,
-}, ref) {
+}: KurukinPlayerProps) {
   const isVslMode = Boolean(vslMode);
   const isMutedPreviewEnabled = Boolean(mutedPreview.enabled) && !isVslMode;
-  const shouldAutoPlay = autoplay ?? (isVslMode || isMutedPreviewEnabled);
-  const shouldStartMuted = muted ?? shouldAutoPlay;
+  const shouldAutoPlay = isVslMode || isMutedPreviewEnabled;
   const isYoutubeLazyMode = provider === 'youtube' && Boolean(lazyLoadYoutube) && !shouldAutoPlay;
-  const shouldApplyYoutubeUiHack =
-    provider === 'youtube' && Boolean(hideYoutubeUi || hideYouTubeBranding || controls === false);
+  const shouldApplyYoutubeUiHack = provider === 'youtube' && Boolean(hideYoutubeUi);
   const isProviderImplemented = provider === 'youtube' || provider === 'bunnynet' || provider === 'html5';
   const isStickyEnabled = Boolean(stickyOnScroll ?? stickyScroll);
-  const controlsVariant = isVslMode ? 'vsl' : controls === false ? 'minimal' : 'standard';
-  const resumeStorageKey = `funnel-player:resume:${provider}:${videoId}`;
+  const controlsVariant = isVslMode ? 'vsl' : 'standard';
+  const resumeStorageKey = `kurukin-player:resume:${provider}:${videoId}`;
 
   const [shouldLoadPlayer, setShouldLoadPlayer] = useState(!isYoutubeLazyMode);
   const [isReady, setIsReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(shouldStartMuted);
+  const [isMuted, setIsMuted] = useState(shouldAutoPlay);
   const [isVslMuted, setIsVslMuted] = useState(isVslMode);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -97,7 +92,7 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
       window.localStorage.setItem(resumeStorageKey, String(roundedSecond));
       lastPersistedSecondRef.current = roundedSecond;
     } catch (error) {
-      console.warn('[CoreVideoPlayer] No se pudo persistir el progreso del video.', error);
+      console.warn('[KurukinPlayer] No se pudo persistir el progreso del video.', error);
     }
   }, [isVslMode, onTimeUpdate, resumePlayback, resumeStorageKey]);
 
@@ -113,7 +108,7 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
       window.localStorage.removeItem(resumeStorageKey);
       lastPersistedSecondRef.current = -1;
     } catch (error) {
-      console.warn('[CoreVideoPlayer] No se pudo limpiar el progreso guardado.', error);
+      console.warn('[KurukinPlayer] No se pudo limpiar el progreso guardado.', error);
     }
   }, [resumePlayback, resumeStorageKey]);
 
@@ -134,10 +129,8 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
     videoId,
     autoPlay: shouldAutoPlay,
     muted: isMuted,
-    loop: loop ?? inMutedPreview,
-    controls,
-    hideBranding: hideYouTubeBranding,
-    hideNativeUi: hideYoutubeUi || controls === false,
+    loop: inMutedPreview,
+    hideNativeUi: hideYoutubeUi,
     controlsVariant,
     onReady: handleProviderReady,
     onPlay: handleProviderPlay,
@@ -147,28 +140,6 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
     onMuteChange: handleProviderMuteChange,
     onAutoplayBlocked: handleAutoplayBlocked,
   });
-
-  useImperativeHandle(ref, () => ({
-    async play() {
-      if (controller.providerRef.current) {
-        await controller.providerRef.current.play();
-      }
-    },
-    pause() {
-      controller.providerRef.current?.pause();
-    },
-    mute(nextMuted: boolean) {
-      controller.providerRef.current?.mute(nextMuted);
-      setIsMuted(nextMuted);
-    },
-    seek(seconds: number) {
-      controller.providerRef.current?.seek(seconds);
-      setCurrentTime(seconds);
-    },
-    setLoop(nextLoop: boolean) {
-      controller.providerRef.current?.setLoop(nextLoop);
-    },
-  }), [controller.providerRef]);
 
   const runPendingPlay = useCallback(async (activeProvider: IVideoProvider) => {
     const intent = pendingPlayIntentRef.current;
@@ -183,7 +154,7 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
       await activeProvider.play();
       setShowPoster(false);
       setAutoplayBlocked(false);
-    } catch {
+    } catch (error) {
       activeProvider.pause();
       setShowPoster(!isVslMode);
       setShowMutedPreviewOverlay(false);
@@ -197,14 +168,13 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
   useEffect(() => {
     const nextVslMode = Boolean(vslMode);
     const nextMutedPreviewEnabled = Boolean(mutedPreview.enabled) && !nextVslMode;
-    const nextShouldAutoplay = autoplay ?? (nextVslMode || nextMutedPreviewEnabled);
-    const nextShouldStartMuted = muted ?? nextShouldAutoplay;
+    const nextShouldAutoplay = nextVslMode || nextMutedPreviewEnabled;
     const lazyMode = provider === 'youtube' && Boolean(lazyLoadYoutube) && !nextShouldAutoplay;
 
     setShouldLoadPlayer(!lazyMode);
     setIsReady(false);
     setIsPlaying(false);
-    setIsMuted(nextShouldStartMuted);
+    setIsMuted(nextShouldAutoplay);
     setIsVslMuted(nextVslMode);
     setCurrentTime(0);
     setDuration(0);
@@ -217,7 +187,7 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
     hasRestoredPlaybackRef.current = false;
     lastPersistedSecondRef.current = -1;
     pendingPlayIntentRef.current = nextShouldAutoplay ? 'autoplay' : null;
-  }, [autoplay, lazyLoadYoutube, muted, provider, videoId, mutedPreview.enabled, vslMode]);
+  }, [provider, videoId, lazyLoadYoutube, mutedPreview.enabled, vslMode]);
 
   useEffect(() => {
     if (!shouldLoadPlayer || !isReady || !controller.providerRef.current) {
@@ -271,7 +241,7 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
       hasRestoredPlaybackRef.current = true;
     } catch (error) {
       hasRestoredPlaybackRef.current = true;
-      console.warn('[CoreVideoPlayer] No se pudo restaurar el progreso guardado.', error);
+      console.warn('[KurukinPlayer] No se pudo restaurar el progreso guardado.', error);
     }
   }, [controller.providerRef, duration, isReady, isVslMode, resumePlayback, resumeStorageKey]);
 
@@ -302,10 +272,7 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
         setInMutedPreview(false);
         setShowMutedPreviewOverlay(false);
         controller.providerRef.current?.mute(false);
-
-        if (loop === undefined) {
-          controller.providerRef.current?.setLoop(false);
-        }
+        controller.providerRef.current?.setLoop(false);
       }
 
       if (!shouldLoadPlayer) {
@@ -319,7 +286,7 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
 
       await runPendingPlay(controller.providerRef.current);
     },
-    [controller.providerRef, loop, runPendingPlay, shouldLoadPlayer],
+    [controller.providerRef, runPendingPlay, shouldLoadPlayer],
   );
 
   const handlePosterPlay = useCallback(() => {
@@ -336,6 +303,15 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
     controller.providerRef.current?.seek(0);
     setCurrentTime(0);
     void requestPlay('user', { unmute: true });
+  }, [controller.providerRef, requestPlay]);
+
+  const handleUnmute = useCallback(() => {
+    setIsMuted(false);
+    setIsVslMuted(false);
+    controller.providerRef.current?.mute(false);
+    controller.providerRef.current?.seek(0);
+    setCurrentTime(0);
+    void requestPlay('user', { unmute: true, restartFromZero: true });
   }, [controller.providerRef, requestPlay]);
 
   const handleResumeFromPauseOverlay = useCallback(() => {
@@ -382,12 +358,9 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
     if (!nextMuted) {
       setInMutedPreview(false);
       setShowMutedPreviewOverlay(false);
-
-      if (loop === undefined) {
-        controller.providerRef.current?.setLoop(false);
-      }
+      controller.providerRef.current?.setLoop(false);
     }
-  }, [controller.providerRef, isMuted, loop]);
+  }, [controller.providerRef, isMuted]);
 
   const handleSeek = useCallback(
     (seconds: number) => {
@@ -412,19 +385,16 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
 
   const shouldShowPauseOverlay = !isVslMode && !isPlaying && isReady && !inMutedPreview && !isVslMuted && !showCta && !showPoster;
   const shouldShowControls = shouldLoadPlayer && isReady && !showPoster && !showCta && !showMutedPreviewOverlay && !isVslMuted;
-  const shouldRenderCustomControls = controls !== false && !isVslMode && shouldShowControls;
+  const shouldRenderCustomControls = !isVslMode && shouldShowControls;
   const shouldRenderFakeProgress = shouldLoadPlayer && isVslMode && !showPoster;
   const shouldRenderGlobalClickLayer = shouldLoadPlayer && isVslMode && !showPoster && !showCta;
   const shouldRenderVslPauseIndicator = isVslMode && !isVslMuted && !isPlaying && !showPoster && !showCta;
-  const shouldDisableDirectSurfaceInteraction = isVslMode;
   const videoRef = controller.surface === 'video' ? controller.mountRef : undefined;
-  const playerBackground =
-    'radial-gradient(circle at top, rgb(var(--color-primary) / 0.18), transparent 35%), linear-gradient(135deg, rgb(var(--color-page) / 1), rgb(var(--color-surface) / 1))';
 
   return (
     <div
       className={formatClassName(
-        'relative aspect-video w-full overflow-hidden rounded-2xl bg-surface',
+        'relative aspect-video w-full overflow-hidden rounded-2xl bg-black',
         shouldApplyYoutubeUiHack && '[&_iframe]:scale-[1.45] [&_iframe]:origin-center',
         className,
       )}
@@ -433,41 +403,39 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
       data-sticky-enabled={isStickyEnabled ? 'true' : undefined}
     >
       {shouldLoadPlayer ? (
-        <div className={formatClassName('h-full w-full', shouldDisableDirectSurfaceInteraction && 'pointer-events-none')}>
+        <div className={formatClassName('h-full w-full', isVslMode && 'pointer-events-none')}>
           {controller.surface === 'video' ? (
             <video
               ref={videoRef}
-              className={formatClassName('h-full w-full object-cover', shouldDisableDirectSurfaceInteraction && 'pointer-events-none')}
+              className={formatClassName('w-full h-full object-cover', isVslMode && 'pointer-events-none')}
               playsInline
-              controls={controls}
+              controls={false}
               onPlay={() => setIsPlaying(true)}
               onPause={() => setIsPlaying(false)}
-              controlsList={isVslMode || controls === false ? 'nodownload noplaybackrate noremoteplayback' : undefined}
-              disablePictureInPicture={isVslMode || controls === false}
+              controlsList={isVslMode ? 'nodownload noplaybackrate noremoteplayback' : undefined}
+              disablePictureInPicture={isVslMode}
               muted={isMuted}
               autoPlay={shouldAutoPlay}
             />
           ) : (
             <div
               ref={controller.mountRef}
-              className={formatClassName(
-                'absolute inset-0 w-full h-full',
-                '[&_.plyr]:!h-full [&_.plyr]:!w-full [&_.plyr__video-wrapper]:!h-full [&_.plyr__video-wrapper]:!w-full',
-                '[&_.plyr__video-embed]:!h-full [&_.plyr__video-embed]:!w-full [&_.plyr__video-embed_iframe]:!h-full [&_.plyr__video-embed_iframe]:!w-full',
-                '[&_iframe]:!h-full [&_iframe]:!w-full',
-                shouldDisableDirectSurfaceInteraction && 'pointer-events-none',
-              )}
+              className={formatClassName('w-full h-full object-cover', isVslMode && 'pointer-events-none')}
             />
           )}
         </div>
       ) : (
-        <div className="h-full w-full" style={{ background: playerBackground }} />
+        <div className="h-full w-full bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.18),transparent_35%),linear-gradient(135deg,#0a0a0b,#111827)]" />
       )}
 
       <SmartPoster
         visible={showPoster}
         imageUrl={smartPoster?.imageUrl}
-        eyebrow={smartPoster?.eyebrow}
+        eyebrow={
+          autoplayBlocked
+            ? smartPoster?.eyebrow || 'Autoplay bloqueado'
+            : smartPoster?.eyebrow || (isYoutubeLazyMode ? 'Smart Poster' : 'Universal Video Engine')
+        }
         title={posterTitle}
         description={posterDescription}
         buttonText={smartPoster?.buttonText || 'Reproducir video'}
@@ -477,6 +445,8 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
       {shouldLoadPlayer && isMutedPreviewEnabled && showMutedPreviewOverlay ? (
         <MutedOverlay config={mutedPreview} onActivateSound={handleExitMutedPreview} />
       ) : null}
+
+      {shouldLoadPlayer && isVslMode && isVslMuted && !showPoster ? <VslOverlay onUnmute={handleUnmute} /> : null}
 
       {shouldRenderGlobalClickLayer ? (
         <button
@@ -536,8 +506,8 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
 
       {!isProviderImplemented ? (
         <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/70 px-6 text-center text-white">
-          <div className="rounded-2xl border border-primary/20 bg-surface/80 px-6 py-4 backdrop-blur-sm">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">Provider pendiente</p>
+          <div className="rounded-2xl border border-white/10 bg-white/5 px-6 py-4 backdrop-blur-sm">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-300">Provider pendiente</p>
             <p className="mt-2 text-sm text-white/80">
               {provider} quedó preparado en la factory, pero su adapter aún no está implementado.
             </p>
@@ -550,4 +520,4 @@ export const CoreVideoPlayer = forwardRef<CoreVideoPlayerHandle, CoreVideoPlayer
       ) : null}
     </div>
   );
-});
+}

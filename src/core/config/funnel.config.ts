@@ -1,10 +1,10 @@
-import type { CoreVideoPlayerProps } from '../../components/common/video-player';
+import type { KurukinPlayerProps } from '../../components/common/video-player/src/kurukin-video-player/types';
 
 export type FunnelTheme = 'theme-expert' | 'theme-panda' | 'light-clean';
 export type FunnelFormSuccessRedirectType = 'url' | 'whatsapp';
 export type FunnelPricingCurrencyMode = 'fixed-usd' | 'geo-priced';
 
-export interface HeroVideoConfig extends CoreVideoPlayerProps {
+export interface HeroVideoConfig extends KurukinPlayerProps {
   enabled: boolean;
 }
 

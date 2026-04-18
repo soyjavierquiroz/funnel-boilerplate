@@ -21,5 +21,13 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": [
+    "src/components/common/video-player/dist",
+    "src/components/common/video-player/node_modules",
+    "src/components/common/video-player/public",
+    "src/components/common/video-player/src/App.tsx",
+    "src/components/common/video-player/src/main.tsx",
+    "src/components/common/video-player/vite.config.ts"
+  ]
 }

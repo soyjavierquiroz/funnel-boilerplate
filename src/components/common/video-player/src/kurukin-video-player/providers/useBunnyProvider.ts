@@ -11,7 +11,6 @@ export function useBunnyProvider({
   muted,
   autoPlay,
   loop,
-  controls,
   onReady,
   onPlay,
   onPause,
@@ -80,7 +79,6 @@ export function useBunnyProvider({
     videoElement.muted = muted;
     videoElement.autoplay = autoPlay;
     videoElement.loop = loop;
-    videoElement.controls = controls ?? false;
 
     const cleanupEvents = bindNativeVideoEvents(videoElement, eventHub, notifyReady);
 
@@ -103,7 +101,7 @@ export function useBunnyProvider({
       videoElement.src = videoId;
       console.log('[BunnyProvider] Usando fallback nativo HLS para Safari:', videoId);
     } else {
-      console.warn('[CoreVideoPlayer] HLS no es compatible en este navegador para Bunny.net.');
+      console.warn('[KurukinPlayer] HLS no es compatible en este navegador para Bunny.net.');
     }
 
     return () => {
@@ -113,7 +111,7 @@ export function useBunnyProvider({
       provider.destroy();
       providerRef.current = null;
     };
-  }, [autoPlay, enabled, loop, muted, videoId]);
+  }, [enabled, videoId]);
 
   useEffect(() => {
     if (!enabled || !mountRef.current) {
@@ -122,14 +120,6 @@ export function useBunnyProvider({
 
     mountRef.current.autoplay = autoPlay;
   }, [autoPlay, enabled]);
-
-  useEffect(() => {
-    if (!enabled || !mountRef.current) {
-      return;
-    }
-
-    mountRef.current.controls = controls ?? false;
-  }, [controls, enabled]);
 
   useEffect(() => {
     if (!enabled) {

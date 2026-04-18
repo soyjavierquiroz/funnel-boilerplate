@@ -18,8 +18,6 @@ interface MutedOverlayProps {
 export function MutedOverlay({ config, onActivateSound }: MutedOverlayProps) {
   const [imageError, setImageError] = useState(false);
   const overlayPosition = config.overlayPosition || 'center';
-  const fallbackColor = config.fallbackColor || 'rgb(var(--color-primary) / 1)';
-  const fallbackGlow = config.fallbackColor || 'rgb(var(--color-primary) / 0.4)';
 
   useEffect(() => {
     setImageError(false);
@@ -43,8 +41,8 @@ export function MutedOverlay({ config, onActivateSound }: MutedOverlayProps) {
           <div
             className="flex h-12 w-12 items-center justify-center rounded-full animate-pulse"
             style={{
-              backgroundColor: fallbackColor,
-              boxShadow: `0 0 20px ${fallbackGlow}`,
+              backgroundColor: config.fallbackColor || '#f39c12',
+              boxShadow: `0 0 20px ${config.fallbackColor || '#f39c12'}66`,
             }}
           >
             <Volume2 className="h-6 w-6 text-white" fill="currentColor" />

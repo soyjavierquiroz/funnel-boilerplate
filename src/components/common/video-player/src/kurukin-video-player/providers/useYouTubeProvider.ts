@@ -10,8 +10,6 @@ export function useYouTubeProvider({
   muted,
   autoPlay,
   loop,
-  controls,
-  hideBranding,
   hideNativeUi,
   controlsVariant = 'standard',
   onReady,
@@ -53,10 +51,8 @@ export function useYouTubeProvider({
 
     const eventHub = createProviderEventHub();
     const container = mountRef.current;
-    const controlsEnabled = controls ?? true;
-    const shouldUseZeroUi =
-      controlsEnabled === false || controlsVariant === 'vsl' || controlsVariant === 'minimal' || hideNativeUi;
-    const playerControls = shouldUseZeroUi
+    const shouldUseZeroUi = controlsVariant === 'vsl' || controlsVariant === 'minimal' || hideNativeUi;
+    const controls = shouldUseZeroUi
       ? []
       : ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'];
 
@@ -67,17 +63,16 @@ export function useYouTubeProvider({
       autoplay: autoPlay,
       muted,
       clickToPlay: false,
-      controls: playerControls,
+      controls,
       youtube: {
         noCookie: true,
         rel: 0,
-        showinfo: hideBranding ? 0 : 1,
-        modestbranding: hideBranding ? 1 : 0,
-        iv_load_policy: hideBranding ? 3 : 1,
-        controls: controlsEnabled ? 1 : 0,
-        disablekb: controlsEnabled ? 0 : 1,
+        showinfo: 0,
+        modestbranding: 1,
+        iv_load_policy: 3,
+        controls: 0,
+        disablekb: 1,
         playsinline: 1,
-        fs: controlsEnabled ? 1 : 0,
       },
     });
 
@@ -188,7 +183,7 @@ export function useYouTubeProvider({
       provider.destroy();
       providerRef.current = null;
     };
-  }, [autoPlay, controlsVariant, enabled, hideNativeUi, loop, muted, videoId]);
+  }, [controlsVariant, enabled, hideNativeUi, videoId]);
 
   useEffect(() => {
     if (!enabled) {
