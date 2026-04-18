@@ -98,59 +98,66 @@ export const pricingProductKeys = {
 } as const;
 
 export const funnelConfig: FunnelConfig = {
-  brandName: 'Javier Quiroz Test',
-  domain: 'javierquiroz.com',
-  theme: 'theme-panda',
+  brandName: 'Expert Secrets',
+  domain: 'expertsecrets.com',
+  theme: 'theme-expert',
   media: {
     heroVideo: {
       enabled: true,
       provider: 'youtube',
       videoId: 'dQw4w9WgXcQ',
-      vslMode: true,
+      vslMode: false,
+      lazyLoadYoutube: true,
+      hideYoutubeUi: true,
       resumePlayback: true,
-      vslProgressBarColor: 'rgb(var(--color-primary))',
+      smartPoster: {
+        enabled: true,
+        imageUrl:
+          'https://images.clickfunnels.com/cdn-cgi/image/width=1000px,fit=scale-down,f=auto,q=80/https://statics.myclickfunnels.com/workspace/Jnbkrx/image/15107832/file/6d106a40e8d451eb343b5d72732dbbfa.jpg',
+        eyebrow: 'Expert Secrets',
+        title: 'Watch The Free Training',
+        description: 'Find your message, build a tribe, and change the world.',
+        buttonText: 'Play Video',
+      },
+      vslProgressBarColor: '#4876b9',
     },
   },
   content: {
     mainVsl: {
-      eyebrow: 'Sistema de Conversión Agnóstico',
-      headline: 'Convierte con una VSL de autoridad y una interfaz que se siente premium desde el primer scroll.',
+      eyebrow: 'Free Hardcover Offer',
+      headline: 'Get your FREE copy of Expert Secrets and learn how to turn your message into a movement.',
       subheadline:
-        'Jerarquía de lectura forzada, profundidad técnica y una llamada a la acción imposible de ignorar, todo alimentado desde configuración.',
-      ctaLabel: 'Quiero Ver La Oferta Completa',
-      ctaHref: '#pricing',
-      certaintyText: 'Pago 100% seguro',
-      useTextGradient: true,
+        'Build belief, create a tribe, and package your specialized knowledge into an offer people are excited to buy.',
+      ctaLabel: 'Reserve My Free Copy',
+      ctaHref: '#checkout',
+      certaintyText: 'Secure 2-step order form',
     },
     bonusStack: {
-      eyebrow: 'Bonos de Alto Valor',
-      title: 'Apila valor percibido sin romper la coherencia local del precio.',
+      eyebrow: 'Bonus Stack',
+      title: 'Everything you get when you order Expert Secrets today.',
       description:
-        'Cada bono comunica una ganancia concreta y su valor se localiza con el mismo motor de precios del funnel para que la oferta se sienta real en cada país.',
+        'The full value stack is shown in the offer and the localized pricing hook stays available for checkout-aware UI.',
       pricingSourceProductKey: pricingProductKeys.ofertaPrincipal,
       bonuses: [
         {
           id: 'bonus_01',
-          eyebrow: 'Bono 01',
-          title: 'Script de Cierre de Alta Conversión',
-          description:
-            'Una secuencia lista para adaptar tus llamadas, objeciones y cierres sin improvisar ni perder autoridad comercial.',
-          valueUSD: 97,
+          eyebrow: 'Bonus 01',
+          title: 'Expert Evolution',
+          description: 'A guided training to sharpen your expert positioning and message.',
+          valueUSD: 97.0,
         },
         {
           id: 'bonus_02',
-          eyebrow: 'Bono 02',
-          title: 'Biblioteca de Hooks para VSL',
-          description:
-            'Arranques, loops de curiosidad y transiciones pensadas para retener atención en el primer minuto del video.',
+          eyebrow: 'Bonus 02',
+          title: 'Hook, Story, Offer',
+          description: 'The messaging structure behind high-converting presentations and pitches.',
           valueUSD: 147,
         },
         {
           id: 'bonus_03',
-          eyebrow: 'Bono 03',
-          title: 'Stack de Automatizaciones de Seguimiento',
-          description:
-            'Mensajes y triggers para recuperar leads tibios, elevar respuesta y sostener la percepción premium del funnel.',
+          eyebrow: 'Bonus 03',
+          title: '30 Day Expert Secrets Challenge',
+          description: 'Daily prompts and implementation sprints to build momentum around your message.',
           valueUSD: 197,
         },
       ],
@@ -161,7 +168,7 @@ export const funnelConfig: FunnelConfig = {
       enabled: true,
       webhookUrl: 'https://hook.us1.make.com/test-webhook-url',
       successRedirectType: 'url',
-      successRedirectUrl: 'https://javierquiroz.com/gracias',
+      successRedirectUrl: '#checkout',
     },
   },
   pricing: {
@@ -169,24 +176,24 @@ export const funnelConfig: FunnelConfig = {
     defaultProductKey: pricingProductKeys.ofertaPrincipal,
     products: {
       [pricingProductKeys.ofertaPrincipal]: {
-        basePriceUSD: 497,
-        hotmartProductId: 'T31166654J',
-        checkoutUrl: 'https://pay.hotmart.com/T31166654J',
+        basePriceUSD: 609.95,
+        hotmartProductId: 'EXPERT_SECRETS_MAIN',
+        checkoutUrl: '#checkout',
       },
       [pricingProductKeys.orderBump]: {
-        basePriceUSD: 97,
-        hotmartProductId: 'M47153038V',
-        checkoutUrl: 'https://pay.hotmart.com/M47153038V',
+        basePriceUSD: 37,
+        hotmartProductId: 'EXPERT_SECRETS_AUDIOBOOK',
+        checkoutUrl: '#checkout',
       },
       [pricingProductKeys.upsellContinuidad]: {
-        basePriceUSD: 297,
-        hotmartProductId: 'W17722015X',
-        checkoutUrl: 'https://pay.hotmart.com/W17722015X',
+        basePriceUSD: 97,
+        hotmartProductId: 'EXPERT_SECRETS_RECORDINGS',
+        checkoutUrl: '#checkout',
       },
       [pricingProductKeys.upsellVip]: {
-        basePriceUSD: 997,
-        hotmartProductId: 'E53983014T',
-        checkoutUrl: 'https://pay.hotmart.com/E53983014T',
+        basePriceUSD: 197,
+        hotmartProductId: 'EXPERT_SECRETS_WEBINAR_SLIDES',
+        checkoutUrl: '#checkout',
       },
     },
   },
