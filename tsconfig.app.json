@@ -23,17 +23,17 @@
   },
   "include": ["src"],
   "exclude": [
-    "src/components/common/video-player/dist",
-    "src/components/common/video-player/node_modules",
-    "src/components/common/video-player/public",
-    "src/components/common/video-player/src/App.tsx",
-    "src/components/common/video-player/src/main.tsx",
-    "src/components/common/video-player/vite.config.ts",
     "src/components/themes/expert/components/video-player/dist",
     "src/components/themes/expert/components/video-player/node_modules",
     "src/components/themes/expert/components/video-player/public",
     "src/components/themes/expert/components/video-player/src/App.tsx",
     "src/components/themes/expert/components/video-player/src/main.tsx",
-    "src/components/themes/expert/components/video-player/vite.config.ts"
+    "src/components/themes/expert/components/video-player/vite.config.ts",
+    "src/components/themes/panda/components/video-player/dist",
+    "src/components/themes/panda/components/video-player/node_modules",
+    "src/components/themes/panda/components/video-player/public",
+    "src/components/themes/panda/components/video-player/src/App.tsx",
+    "src/components/themes/panda/components/video-player/src/main.tsx",
+    "src/components/themes/panda/components/video-player/vite.config.ts"
   ]
 }

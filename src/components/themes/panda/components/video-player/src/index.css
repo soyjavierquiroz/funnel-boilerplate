@@ -1,8 +1,8 @@
+@import 'plyr/dist/plyr.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import 'plyr/dist/plyr.css';
 
 @layer base {
   .plyr {
@@ -80,5 +80,16 @@
 
   [data-vsl-mode='true'] .kurukin-vsl-controls {
     display: none !important;
+  }
+
+  [data-provider] .plyr,
+  [data-provider] .plyr__video-wrapper,
+  [data-provider] .plyr__video-embed,
+  [data-provider] iframe {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
   }
 }

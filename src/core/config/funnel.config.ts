@@ -1,11 +1,58 @@
-import type { KurukinPlayerProps } from '../../components/common/video-player/src/kurukin-video-player/types';
+export type VideoProvider = 'youtube' | 'bunnynet' | 'vimeo' | 'wistia' | 'html5';
+export type OverlayPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
+
+export interface MutedPreviewConfig {
+  enabled: boolean;
+  overlayImageUrl?: string;
+  overlayPosition?: OverlayPosition;
+  buttonText?: string;
+  fallbackColor?: string;
+  fallbackText1?: string;
+  fallbackText2?: string;
+}
+
+export interface CallToActionConfig {
+  enabled: boolean;
+  displayAtSeconds: number;
+  headline: string;
+  buttonText: string;
+  buttonUrl: string;
+  isDismissible?: boolean;
+}
+
+export interface SmartPosterConfig {
+  enabled?: boolean;
+  imageUrl?: string;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  buttonText?: string;
+}
 
 export type FunnelTheme = 'theme-expert' | 'theme-panda' | 'light-clean';
 export type FunnelFormSuccessRedirectType = 'url' | 'whatsapp';
 export type FunnelPricingCurrencyMode = 'fixed-usd' | 'geo-priced';
 
-export interface HeroVideoConfig extends KurukinPlayerProps {
+export interface HeroVideoConfig {
   enabled: boolean;
+  provider: VideoProvider;
+  videoId: string;
+  vslMode?: boolean;
+  autoplay?: boolean;
+  muted?: boolean;
+  idleHideControls?: boolean;
+  allowFullscreen?: boolean;
+  vslProgressBarColor?: string;
+  mutedPreview?: MutedPreviewConfig;
+  lazyLoadYoutube?: boolean;
+  stickyOnScroll?: boolean;
+  stickyScroll?: boolean;
+  resumePlayback?: boolean;
+  onTimeUpdate?: (currentTime: number) => void;
+  callToAction?: CallToActionConfig;
+  hideYoutubeUi?: boolean;
+  smartPoster?: SmartPosterConfig;
+  className?: string;
 }
 
 export interface FunnelMediaConfig {

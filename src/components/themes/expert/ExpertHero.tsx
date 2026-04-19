@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Volume2 } from 'lucide-react';
 import funnelConfig from '../../../core/config/funnel.config';
-import { ExpertVideoPlayer } from './components/video-player/index';
+import { KurukinPlayer as ExpertVideoPlayer } from './components/video-player/src/kurukin-video-player';
 import { ExpertCtaButton } from './ExpertCtaButton';
 import { expertBrandAssets } from './expertContent';
 
@@ -73,6 +73,8 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
                 vslMode={true}
                 autoplay={true}
                 muted={true}
+                idleHideControls={true}
+                allowFullscreen={false}
                 resumePlayback={heroVideo.resumePlayback}
                 lazyLoadYoutube={heroVideo.lazyLoadYoutube}
                 hideYoutubeUi={heroVideo.hideYoutubeUi}

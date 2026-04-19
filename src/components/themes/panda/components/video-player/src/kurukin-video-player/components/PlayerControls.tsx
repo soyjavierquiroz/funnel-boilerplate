@@ -1,12 +1,14 @@
-import { Pause, Play, RotateCcw, Volume2, VolumeX } from 'lucide-react';
+import { Maximize, Minimize, Pause, Play, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 
 type PlayerControlsVariant = 'standard' | 'minimal';
 
 interface PlayerControlsProps {
   currentTime: number;
   duration: number;
+  isFullscreen?: boolean;
   isMuted: boolean;
   isPlaying: boolean;
+  onToggleFullscreen?: () => void;
   onRestart: () => void;
   onSeek: (seconds: number) => void;
   onToggleMute: () => void;
@@ -29,8 +31,10 @@ function formatTime(seconds: number) {
 export function PlayerControls({
   currentTime,
   duration,
+  isFullscreen = false,
   isMuted,
   isPlaying,
+  onToggleFullscreen,
   onRestart,
   onSeek,
   onToggleMute,
@@ -95,6 +99,17 @@ export function PlayerControls({
               aria-label="Reiniciar video"
             >
               <RotateCcw className="h-3.5 w-3.5" />
+            </button>
+          ) : null}
+
+          {!isMinimal && onToggleFullscreen ? (
+            <button
+              type="button"
+              onClick={onToggleFullscreen}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/12 bg-white/10 transition hover:bg-white/15"
+              aria-label={isFullscreen ? 'Salir de pantalla completa' : 'Entrar en pantalla completa'}
+            >
+              {isFullscreen ? <Minimize className="h-3.5 w-3.5" /> : <Maximize className="h-3.5 w-3.5" />}
             </button>
           ) : null}
 

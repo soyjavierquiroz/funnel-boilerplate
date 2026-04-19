@@ -1,7 +1,6 @@
 import { Sparkles } from 'lucide-react';
 import funnelConfig from '../../../core/config/funnel.config';
-// @ts-expect-error Golden Master dist bundle ships without host-consumable declarations.
-import { KurukinPlayer } from '../../common/video-player/dist/kurukin-video-player.es.js';
+import { KurukinPlayer as PandaVideoPlayer } from './components/video-player/src/kurukin-video-player';
 
 export function PandaHero() {
   const { enabled: isVideoEnabled, ...videoProps } = funnelConfig.media.heroVideo;
@@ -44,7 +43,13 @@ export function PandaHero() {
             />
             <div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-2xl ring-1 ring-white/10 shadow-[0_0_100px_rgba(0,191,255,0.15)] md:rounded-[2rem]">
               {isVideoEnabled ? (
-                <KurukinPlayer {...videoProps} className="aspect-video w-full rounded-none" />
+                <PandaVideoPlayer
+                  {...videoProps}
+                  vslMode={false}
+                  idleHideControls={true}
+                  allowFullscreen={true}
+                  className="aspect-video w-full rounded-none"
+                />
               ) : (
                 <div className="flex aspect-video w-full items-center justify-center bg-[#0b1020] px-6 text-center text-sm text-gray-400">
                   Video no disponible

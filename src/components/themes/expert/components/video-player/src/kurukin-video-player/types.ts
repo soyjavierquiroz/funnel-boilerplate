@@ -36,6 +36,8 @@ export interface KurukinPlayerProps {
   vslMode?: boolean;
   autoplay?: boolean;
   muted?: boolean;
+  idleHideControls?: boolean;
+  allowFullscreen?: boolean;
   vslProgressBarColor?: string;
   mutedPreview?: MutedPreviewConfig;
   lazyLoadYoutube?: boolean;

@@ -20,6 +20,8 @@ export function KurukinPlayer({
   vslMode = false,
   autoplay,
   muted,
+  idleHideControls = false,
+  allowFullscreen = false,
   vslProgressBarColor,
   mutedPreview = { enabled: false, overlayPosition: 'center' },
   lazyLoadYoutube,
@@ -215,16 +217,22 @@ export function KurukinPlayer({
     setIsIdle(false);
     clearIdleTimer();
 
-    if (!isPlaying) {
+    if (!idleHideControls || !isPlaying) {
       return;
     }
 
     idleTimerRef.current = setTimeout(() => {
       setIsIdle(true);
     }, 2500);
-  }, [clearIdleTimer, isPlaying]);
+  }, [clearIdleTimer, idleHideControls, isPlaying]);
 
   useEffect(() => {
+    if (!idleHideControls) {
+      clearIdleTimer();
+      setIsIdle(false);
+      return;
+    }
+
     if (isPlaying) {
       resetIdleTimer();
       return;
@@ -232,7 +240,7 @@ export function KurukinPlayer({
 
     clearIdleTimer();
     setIsIdle(false);
-  }, [clearIdleTimer, isPlaying, resetIdleTimer]);
+  }, [clearIdleTimer, idleHideControls, isPlaying, resetIdleTimer]);
 
   useEffect(() => () => {
     clearIdleTimer();
@@ -473,7 +481,7 @@ export function KurukinPlayer({
   const shouldRenderFakeProgress = shouldLoadPlayer && isVslMode && !showPoster;
   const shouldRenderGlobalClickLayer = shouldLoadPlayer && isVslMode && !showPoster && !showCta;
   const shouldRenderVslPauseIndicator = isVslMode && !isVslMuted && !isPlaying && !showPoster && !showCta;
-  const shouldHidePlaybackChrome = isPlaying && isIdle;
+  const shouldHidePlaybackChrome = idleHideControls && isPlaying && isIdle;
   const videoRef = controller.surface === 'video' ? controller.mountRef : undefined;
 
   return (
@@ -487,12 +495,16 @@ export function KurukinPlayer({
       data-provider={provider}
       data-vsl-mode={isVslMode ? 'true' : 'false'}
       data-sticky-enabled={isStickyEnabled ? 'true' : undefined}
-      onMouseMove={resetIdleTimer}
-      onTouchStart={resetIdleTimer}
-      onMouseLeave={() => {
-        clearIdleTimer();
-        setIsIdle(isPlaying);
-      }}
+      onMouseMove={idleHideControls ? resetIdleTimer : undefined}
+      onTouchStart={idleHideControls ? resetIdleTimer : undefined}
+      onMouseLeave={
+        idleHideControls
+          ? () => {
+              clearIdleTimer();
+              setIsIdle(isPlaying);
+            }
+          : undefined
+      }
     >
       {shouldLoadPlayer ? (
         <div className={formatClassName('h-full w-full', isVslMode && 'pointer-events-none')}>
@@ -623,7 +635,7 @@ export function KurukinPlayer({
             isFullscreen={isFullscreen}
             isMuted={isMuted}
             isPlaying={isPlaying}
-            onToggleFullscreen={!isVslMode ? handleToggleFullscreen : undefined}
+            onToggleFullscreen={!isVslMode && allowFullscreen ? handleToggleFullscreen : undefined}
             onRestart={handleRestart}
             onSeek={handleSeek}
             onToggleMute={handleToggleMute}

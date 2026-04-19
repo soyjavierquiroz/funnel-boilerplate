@@ -6,7 +6,6 @@ import { FakeProgressBar } from './components/FakeProgressBar';
 import { MutedOverlay } from './components/MutedOverlay';
 import { PlayerControls } from './components/PlayerControls';
 import { SmartPoster } from './components/SmartPoster';
-import { VslOverlay } from './components/VslOverlay';
 import { useVideoProviderController } from './providers/useVideoProviderController';
 import type { IVideoProvider } from './providers/IVideoProvider';
 import type { KurukinPlayerProps } from './types';
@@ -19,6 +18,10 @@ export function KurukinPlayer({
   provider,
   videoId,
   vslMode = false,
+  autoplay,
+  muted,
+  idleHideControls = false,
+  allowFullscreen = false,
   vslProgressBarColor,
   mutedPreview = { enabled: false, overlayPosition: 'center' },
   lazyLoadYoutube,
@@ -33,19 +36,21 @@ export function KurukinPlayer({
 }: KurukinPlayerProps) {
   const isVslMode = Boolean(vslMode);
   const isMutedPreviewEnabled = Boolean(mutedPreview.enabled) && !isVslMode;
-  const shouldAutoPlay = isVslMode || isMutedPreviewEnabled;
+  const shouldAutoPlay = autoplay ?? (isVslMode || isMutedPreviewEnabled);
   const isYoutubeLazyMode = provider === 'youtube' && Boolean(lazyLoadYoutube) && !shouldAutoPlay;
   const shouldApplyYoutubeUiHack = provider === 'youtube' && Boolean(hideYoutubeUi);
   const isProviderImplemented = provider === 'youtube' || provider === 'bunnynet' || provider === 'html5';
   const isStickyEnabled = Boolean(stickyOnScroll ?? stickyScroll);
   const controlsVariant = isVslMode ? 'vsl' : 'standard';
   const resumeStorageKey = `kurukin-player:resume:${provider}:${videoId}`;
+  const initialMutedState = muted ?? shouldAutoPlay;
+  const initialVslMutedState = isVslMode && initialMutedState;
 
   const [shouldLoadPlayer, setShouldLoadPlayer] = useState(!isYoutubeLazyMode);
   const [isReady, setIsReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(shouldAutoPlay);
-  const [isVslMuted, setIsVslMuted] = useState(isVslMode);
+  const [isMuted, setIsMuted] = useState(initialMutedState);
+  const [isVslMuted, setIsVslMuted] = useState(initialVslMutedState);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [inMutedPreview, setInMutedPreview] = useState(isMutedPreviewEnabled);
@@ -54,9 +59,13 @@ export function KurukinPlayer({
   const [ctaTriggered, setCtaTriggered] = useState(false);
   const [showCta, setShowCta] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isIdle, setIsIdle] = useState(false);
   const pendingPlayIntentRef = useRef<'autoplay' | 'user' | null>(shouldAutoPlay ? 'autoplay' : null);
   const hasRestoredPlaybackRef = useRef(false);
   const lastPersistedSecondRef = useRef(-1);
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const handleProviderReady = useCallback((activeProvider: IVideoProvider) => {
     setIsReady(true);
@@ -66,12 +75,14 @@ export function KurukinPlayer({
 
   const handleProviderPlay = useCallback(() => {
     setIsPlaying(true);
+    setIsIdle(false);
     setShowPoster(false);
     setAutoplayBlocked(false);
   }, []);
 
   const handleProviderPause = useCallback(() => {
     setIsPlaying(false);
+    setIsIdle(false);
   }, []);
 
   const handleProviderProgress = useCallback((seconds: number) => {
@@ -118,6 +129,7 @@ export function KurukinPlayer({
 
   const handleAutoplayBlocked = useCallback(() => {
     setAutoplayBlocked(true);
+    setIsIdle(false);
     setShowPoster(!isVslMode);
     setShowMutedPreviewOverlay(false);
     setIsPlaying(false);
@@ -168,26 +180,84 @@ export function KurukinPlayer({
   useEffect(() => {
     const nextVslMode = Boolean(vslMode);
     const nextMutedPreviewEnabled = Boolean(mutedPreview.enabled) && !nextVslMode;
-    const nextShouldAutoplay = nextVslMode || nextMutedPreviewEnabled;
+    const nextShouldAutoplay = autoplay ?? (nextVslMode || nextMutedPreviewEnabled);
     const lazyMode = provider === 'youtube' && Boolean(lazyLoadYoutube) && !nextShouldAutoplay;
+    const nextMutedState = muted ?? nextShouldAutoplay;
+    const nextVslMutedState = nextVslMode && nextMutedState;
 
     setShouldLoadPlayer(!lazyMode);
     setIsReady(false);
     setIsPlaying(false);
-    setIsMuted(nextShouldAutoplay);
-    setIsVslMuted(nextVslMode);
+    setIsMuted(nextMutedState);
+    setIsVslMuted(nextVslMutedState);
     setCurrentTime(0);
     setDuration(0);
     setInMutedPreview(nextMutedPreviewEnabled);
     setShowMutedPreviewOverlay(nextMutedPreviewEnabled);
     setShowPoster(lazyMode);
     setAutoplayBlocked(false);
+    setIsIdle(false);
     setCtaTriggered(false);
     setShowCta(false);
     hasRestoredPlaybackRef.current = false;
     lastPersistedSecondRef.current = -1;
     pendingPlayIntentRef.current = nextShouldAutoplay ? 'autoplay' : null;
-  }, [provider, videoId, lazyLoadYoutube, mutedPreview.enabled, vslMode]);
+  }, [autoplay, lazyLoadYoutube, muted, mutedPreview.enabled, provider, videoId, vslMode]);
+
+  const clearIdleTimer = useCallback(() => {
+    if (!idleTimerRef.current) {
+      return;
+    }
+
+    clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = null;
+  }, []);
+
+  const resetIdleTimer = useCallback(() => {
+    setIsIdle(false);
+    clearIdleTimer();
+
+    if (!idleHideControls || !isPlaying) {
+      return;
+    }
+
+    idleTimerRef.current = setTimeout(() => {
+      setIsIdle(true);
+    }, 2500);
+  }, [clearIdleTimer, idleHideControls, isPlaying]);
+
+  useEffect(() => {
+    if (!idleHideControls) {
+      clearIdleTimer();
+      setIsIdle(false);
+      return;
+    }
+
+    if (isPlaying) {
+      resetIdleTimer();
+      return;
+    }
+
+    clearIdleTimer();
+    setIsIdle(false);
+  }, [clearIdleTimer, idleHideControls, isPlaying, resetIdleTimer]);
+
+  useEffect(() => () => {
+    clearIdleTimer();
+  }, [clearIdleTimer]);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const fullscreenElement = document.fullscreenElement;
+      setIsFullscreen(Boolean(fullscreenElement && fullscreenElement === containerRef.current));
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (!shouldLoadPlayer || !isReady || !controller.providerRef.current) {
@@ -308,11 +378,14 @@ export function KurukinPlayer({
   const handleUnmute = useCallback(() => {
     setIsMuted(false);
     setIsVslMuted(false);
-    controller.providerRef.current?.mute(false);
-    controller.providerRef.current?.seek(0);
+    setInMutedPreview(false);
+    setShowMutedPreviewOverlay(false);
     setCurrentTime(0);
-    void requestPlay('user', { unmute: true, restartFromZero: true });
-  }, [controller.providerRef, requestPlay]);
+    controller.providerRef.current?.seek(0);
+    controller.providerRef.current?.mute(false);
+    controller.providerRef.current?.setLoop(false);
+    void controller.providerRef.current?.play().catch(() => undefined);
+  }, [controller.providerRef]);
 
   const handleResumeFromPauseOverlay = useCallback(() => {
     void requestPlay('user');
@@ -375,6 +448,25 @@ export function KurukinPlayer({
     void requestPlay('user');
   }, [handleSeek, requestPlay]);
 
+  const handleToggleFullscreen = useCallback(async () => {
+    const containerElement = containerRef.current;
+
+    if (!containerElement) {
+      return;
+    }
+
+    try {
+      if (document.fullscreenElement === containerElement) {
+        await document.exitFullscreen();
+        return;
+      }
+
+      await containerElement.requestFullscreen();
+    } catch (error) {
+      console.warn('[KurukinPlayer] No se pudo alternar pantalla completa.', error);
+    }
+  }, []);
+
   const posterTitle = autoplayBlocked
     ? smartPoster?.title || 'El navegador bloqueó el autoplay'
     : smartPoster?.title || 'Video listo para reproducir';
@@ -389,10 +481,12 @@ export function KurukinPlayer({
   const shouldRenderFakeProgress = shouldLoadPlayer && isVslMode && !showPoster;
   const shouldRenderGlobalClickLayer = shouldLoadPlayer && isVslMode && !showPoster && !showCta;
   const shouldRenderVslPauseIndicator = isVslMode && !isVslMuted && !isPlaying && !showPoster && !showCta;
+  const shouldHidePlaybackChrome = idleHideControls && isPlaying && isIdle;
   const videoRef = controller.surface === 'video' ? controller.mountRef : undefined;
 
   return (
     <div
+      ref={containerRef}
       className={formatClassName(
         'relative aspect-video w-full overflow-hidden rounded-2xl bg-black',
         shouldApplyYoutubeUiHack && '[&_iframe]:scale-[1.45] [&_iframe]:origin-center',
@@ -401,6 +495,16 @@ export function KurukinPlayer({
       data-provider={provider}
       data-vsl-mode={isVslMode ? 'true' : 'false'}
       data-sticky-enabled={isStickyEnabled ? 'true' : undefined}
+      onMouseMove={idleHideControls ? resetIdleTimer : undefined}
+      onTouchStart={idleHideControls ? resetIdleTimer : undefined}
+      onMouseLeave={
+        idleHideControls
+          ? () => {
+              clearIdleTimer();
+              setIsIdle(isPlaying);
+            }
+          : undefined
+      }
     >
       {shouldLoadPlayer ? (
         <div className={formatClassName('h-full w-full', isVslMode && 'pointer-events-none')}>
@@ -446,7 +550,28 @@ export function KurukinPlayer({
         <MutedOverlay config={mutedPreview} onActivateSound={handleExitMutedPreview} />
       ) : null}
 
-      {shouldLoadPlayer && isVslMode && isVslMuted && !showPoster ? <VslOverlay onUnmute={handleUnmute} /> : null}
+      {shouldLoadPlayer && isVslMode && isVslMuted && !showPoster ? (
+        <div
+          className="absolute inset-0 z-50 flex cursor-pointer items-center justify-center bg-black/30 backdrop-blur-sm"
+          onClick={handleUnmute}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              handleUnmute();
+            }
+          }}
+          aria-label="Activar sonido"
+        >
+          <button
+            type="button"
+            className="pointer-events-none px-6 py-3 bg-black/60 backdrop-blur-md text-white font-medium rounded-full animate-pulse border border-white/20 shadow-xl"
+          >
+            🔊 Haz clic para escuchar
+          </button>
+        </div>
+      ) : null}
 
       {shouldRenderGlobalClickLayer ? (
         <button
@@ -458,7 +583,14 @@ export function KurukinPlayer({
       ) : null}
 
       {shouldRenderFakeProgress ? (
-        <FakeProgressBar color={vslProgressBarColor} currentTime={currentTime} duration={duration} />
+        <div
+          className={formatClassName(
+            'transition-opacity duration-500 ease-in-out',
+            isVslMode ? 'opacity-100' : shouldHidePlaybackChrome ? 'opacity-0 pointer-events-none' : 'opacity-100',
+          )}
+        >
+          <FakeProgressBar color={vslProgressBarColor} currentTime={currentTime} duration={duration} />
+        </div>
       ) : null}
 
       {shouldRenderVslPauseIndicator ? (
@@ -491,17 +623,26 @@ export function KurukinPlayer({
       ) : null}
 
       {shouldRenderCustomControls ? (
-        <PlayerControls
-          currentTime={currentTime}
-          duration={duration}
-          isMuted={isMuted}
-          isPlaying={isPlaying}
-          onRestart={handleRestart}
-          onSeek={handleSeek}
-          onToggleMute={handleToggleMute}
-          onTogglePlay={handleTogglePlay}
-          variant={controlsVariant === 'vsl' ? 'standard' : controlsVariant}
-        />
+        <div
+          className={formatClassName(
+            'transition-opacity duration-500 ease-in-out',
+            shouldHidePlaybackChrome ? 'opacity-0 pointer-events-none' : 'opacity-100',
+          )}
+        >
+          <PlayerControls
+            currentTime={currentTime}
+            duration={duration}
+            isFullscreen={isFullscreen}
+            isMuted={isMuted}
+            isPlaying={isPlaying}
+            onToggleFullscreen={!isVslMode && allowFullscreen ? handleToggleFullscreen : undefined}
+            onRestart={handleRestart}
+            onSeek={handleSeek}
+            onToggleMute={handleToggleMute}
+            onTogglePlay={handleTogglePlay}
+            variant={controlsVariant === 'vsl' ? 'standard' : controlsVariant}
+          />
+        </div>
       ) : null}
 
       {!isProviderImplemented ? (
