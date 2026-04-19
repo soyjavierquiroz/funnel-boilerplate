@@ -19,8 +19,7 @@ services:
           location /assets/ {
             try_files $$uri =404;
             access_log off;
-            expires 7d;
-            add_header Cache-Control 'public, max-age=604800, immutable';
+            add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
           }
 
           location / {

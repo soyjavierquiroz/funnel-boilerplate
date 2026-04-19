@@ -43,3 +43,16 @@
 ## Milestone
 
 Milestone: Estructura base sellada. Siguiente fase: Abstracción de configuración y Tokens de Diseño
+
+## Fase 2: Abstracción Semántica
+
+- El Tema Expert ya no depende de colores hardcodeados para su identidad principal.
+- Los colores semánticos del tema viven en `src/index.css` como variables CSS:
+  - `--color-brand-primary`
+  - `--color-brand-accent`
+  - `--color-cta-base`
+  - `--color-cta-hover`
+  - `--color-surface-bump`
+- `tailwind.config.js` expone esos tokens mediante `brand.*`, `cta.*` y `surface.bump`.
+- Los componentes en `src/components/themes/expert/` ya consumen tokens semánticos en lugar de clases hardcodeadas para rojo principal, acento marino, CTA y fondo del order bump.
+- La infraestructura de entrega desactiva el caché agresivo para `/assets/` durante esta fase, de modo que los cambios visuales del funnel se reflejen inmediatamente.
