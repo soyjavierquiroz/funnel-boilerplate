@@ -1,6 +1,7 @@
 import { ExpertBonusStack } from './ExpertBonusStack';
 import { ExpertFAQ } from './ExpertFAQ';
 import { ExpertHero } from './ExpertHero';
+import { ExpertOfferStack } from './ExpertOfferStack';
 import { ExpertOrderForm } from './ExpertOrderForm';
 import { ExpertSalesLetter } from './ExpertSalesLetter';
 import { ExpertTestimonials } from './ExpertTestimonials';
@@ -58,6 +59,7 @@ export function ExpertTheme() {
       </section>
 
       <ExpertBonusStack bonuses={expertBonusItems} />
+      <ExpertOfferStack />
       <ExpertFAQ items={expertFaqItems} />
 
       <footer className="border-t-[10px] border-t-[#4875b9] bg-[#242424] px-4 py-10 text-center text-white sm:px-6">
