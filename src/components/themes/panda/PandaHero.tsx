@@ -41,13 +41,15 @@ export function PandaHero() {
               aria-hidden="true"
               className="absolute left-1/2 top-1/2 -z-10 h-3/4 w-3/4 -translate-x-1/2 -translate-y-1/2 bg-blue-600/20 blur-[150px]"
             />
-            <div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-2xl ring-1 ring-white/10 shadow-[0_0_100px_rgba(0,191,255,0.15)] md:rounded-[2rem]">
+            <div className="relative w-full overflow-hidden rounded-2xl ring-1 ring-white/10 shadow-[0_0_100px_rgba(0,191,255,0.15)] md:rounded-[2rem]">
               {isVideoEnabled ? (
                 <PandaVideoPlayer
                   {...videoProps}
-                  vslMode={false}
+                  vslMode={true}
+                  autoplay={true}
+                  muted={true}
                   idleHideControls={true}
-                  allowFullscreen={true}
+                  allowFullscreen={false}
                   className="aspect-video w-full rounded-none"
                 />
               ) : (
