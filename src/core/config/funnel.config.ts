@@ -148,16 +148,14 @@ export const pricingProductKeys = {
 
 export const funnelConfig: FunnelConfig = {
   brandName: DNA.copy.productName,
-  domain: 'magiadelabundancia.com',
+  domain: 'magiadelaabundancia.com',
   theme: resolveDnaFunnelTheme(),
   media: {
     heroVideo: {
       enabled: true,
-      provider: 'youtube',
+      provider: 'bunnynet',
       videoId: DNA.vslVideoId,
       vslMode: false,
-      lazyLoadYoutube: true,
-      hideYoutubeUi: true,
       resumePlayback: true,
       smartPoster: {
         enabled: false,

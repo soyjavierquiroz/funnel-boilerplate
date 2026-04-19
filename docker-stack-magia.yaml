@@ -1,10 +1,10 @@
 version: "3.8"
 
 services:
-  magia-abundancia-v1:
+  magia-v1:
     image: nginx:1.27-alpine
     volumes:
-      - /opt/webs/magiadelabundancia.com/dist:/usr/share/nginx/html:ro
+      - /opt/webs/magiadelaabundancia.com/dist:/usr/share/nginx/html:ro
     command:
       - /bin/sh
       - -c
@@ -19,6 +19,7 @@ services:
           location /assets/ {
             try_files $$uri =404;
             access_log off;
+            expires 0;
             add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
           }
 
@@ -32,20 +33,15 @@ services:
       - traefik_public
     deploy:
       replicas: 1
-      restart_policy:
-        condition: on-failure
-      placement:
-        constraints:
-          - node.role == manager
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=traefik_public"
-        - "traefik.http.services.magia_abundancia_v1.loadbalancer.server.port=80"
-        - "traefik.http.routers.magia_abundancia_v1.rule=Host(`magiadelabundancia.com`) || Host(`www.magiadelabundancia.com`)"
-        - "traefik.http.routers.magia_abundancia_v1.entrypoints=websecure"
-        - "traefik.http.routers.magia_abundancia_v1.tls=true"
-        - "traefik.http.routers.magia_abundancia_v1.tls.certresolver=le"
-        - "traefik.http.routers.magia_abundancia_v1.priority=100"
+        - "traefik.http.services.magia_v1.loadbalancer.server.port=80"
+        - "traefik.http.routers.magia_v1.rule=Host(`magiadelaabundancia.com`) || Host(`www.magiadelaabundancia.com`)"
+        - "traefik.http.routers.magia_v1.entrypoints=websecure"
+        - "traefik.http.routers.magia_v1.tls=true"
+        - "traefik.http.routers.magia_v1.tls.certresolver=le"
+        - "traefik.http.routers.magia_v1.priority=100"
 
 networks:
   traefik_public:

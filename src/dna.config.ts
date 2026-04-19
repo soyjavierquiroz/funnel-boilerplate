@@ -48,7 +48,7 @@ export const DNA = {
     ctaHover: '255 210 120',
     surface: '255 245 245',
   },
-  vslVideoId: 'eTD0WWFIDAg',
+  vslVideoId: 'https://vz-1623229a-088.b-cdn.net/f9a1fb53-dd48-46b2-bea3-275cdc7d8b16/playlist.m3u8',
   prices: {
     main: '50',
     bump: '80',
