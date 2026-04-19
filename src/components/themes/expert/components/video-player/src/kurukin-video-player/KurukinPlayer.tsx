@@ -57,11 +57,13 @@ export function KurukinPlayer({
   const [ctaTriggered, setCtaTriggered] = useState(false);
   const [showCta, setShowCta] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [isIdle, setIsIdle] = useState(false);
   const pendingPlayIntentRef = useRef<'autoplay' | 'user' | null>(shouldAutoPlay ? 'autoplay' : null);
   const hasRestoredPlaybackRef = useRef(false);
   const lastPersistedSecondRef = useRef(-1);
   const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const handleProviderReady = useCallback((activeProvider: IVideoProvider) => {
     setIsReady(true);
@@ -235,6 +237,19 @@ export function KurukinPlayer({
   useEffect(() => () => {
     clearIdleTimer();
   }, [clearIdleTimer]);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const fullscreenElement = document.fullscreenElement;
+      setIsFullscreen(Boolean(fullscreenElement && fullscreenElement === containerRef.current));
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (!shouldLoadPlayer || !isReady || !controller.providerRef.current) {
@@ -425,6 +440,25 @@ export function KurukinPlayer({
     void requestPlay('user');
   }, [handleSeek, requestPlay]);
 
+  const handleToggleFullscreen = useCallback(async () => {
+    const containerElement = containerRef.current;
+
+    if (!containerElement) {
+      return;
+    }
+
+    try {
+      if (document.fullscreenElement === containerElement) {
+        await document.exitFullscreen();
+        return;
+      }
+
+      await containerElement.requestFullscreen();
+    } catch (error) {
+      console.warn('[KurukinPlayer] No se pudo alternar pantalla completa.', error);
+    }
+  }, []);
+
   const posterTitle = autoplayBlocked
     ? smartPoster?.title || 'El navegador bloqueó el autoplay'
     : smartPoster?.title || 'Video listo para reproducir';
@@ -444,6 +478,7 @@ export function KurukinPlayer({
 
   return (
     <div
+      ref={containerRef}
       className={formatClassName(
         'relative aspect-video w-full overflow-hidden rounded-2xl bg-black',
         shouldApplyYoutubeUiHack && '[&_iframe]:scale-[1.45] [&_iframe]:origin-center',
@@ -529,7 +564,7 @@ export function KurukinPlayer({
         <div
           className={formatClassName(
             'transition-opacity duration-500 ease-in-out',
-            shouldHidePlaybackChrome ? 'opacity-0 pointer-events-none' : 'opacity-100',
+            isVslMode ? 'opacity-100' : shouldHidePlaybackChrome ? 'opacity-0 pointer-events-none' : 'opacity-100',
           )}
         >
           <FakeProgressBar color={vslProgressBarColor} currentTime={currentTime} duration={duration} />
@@ -575,8 +610,10 @@ export function KurukinPlayer({
           <PlayerControls
             currentTime={currentTime}
             duration={duration}
+            isFullscreen={isFullscreen}
             isMuted={isMuted}
             isPlaying={isPlaying}
+            onToggleFullscreen={!isVslMode ? handleToggleFullscreen : undefined}
             onRestart={handleRestart}
             onSeek={handleSeek}
             onToggleMute={handleToggleMute}
