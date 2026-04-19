@@ -65,7 +65,7 @@ function PandaTextInput({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-xs font-medium uppercase tracking-wider text-white/40">
+      <label htmlFor={id} className="mb-2 block text-xs font-medium uppercase tracking-wider text-text-main/40">
         {label}
       </label>
       <input
@@ -75,8 +75,8 @@ function PandaTextInput({
         onChange={onChange}
         autoComplete={autoComplete}
         className={[
-          'w-full rounded-xl border border-transparent bg-black/40 px-4 py-3 text-white shadow-inner transition-all',
-          'placeholder:text-white/20 focus:bg-black/60 focus:outline-none focus:ring-1 focus:ring-cyan-500',
+          'w-full rounded-xl border border-transparent bg-surface-bump px-4 py-3 text-text-main shadow-inner transition-all',
+          'placeholder:text-text-main/20 focus:bg-surface-bump focus:outline-none focus:ring-1 focus:ring-cta',
           error ? 'focus:ring-red-500' : '',
         ].join(' ')}
         placeholder={placeholder}
@@ -216,26 +216,26 @@ export function PandaCaptureForm() {
     <section className="relative isolate py-16 md:py-24">
       <div
         aria-hidden="true"
-        className="absolute left-[-10%] top-8 h-[500px] w-[500px] rounded-full bg-blue-600/20 blur-[120px] mix-blend-screen pointer-events-none"
+        className="pointer-events-none absolute left-[-10%] top-8 h-[500px] w-[500px] rounded-full bg-brand-primary/20 blur-[120px] mix-blend-screen"
       />
       <div
         aria-hidden="true"
-        className="absolute right-[-8%] bottom-0 h-[500px] w-[500px] rounded-full bg-cyan-500/20 blur-[120px] mix-blend-screen pointer-events-none"
+        className="pointer-events-none absolute right-[-8%] bottom-0 h-[500px] w-[500px] rounded-full bg-cta/20 blur-[120px] mix-blend-screen"
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="overflow-hidden rounded-[2rem] border border-white/[0.04] bg-white/[0.02] shadow-2xl shadow-black/50 backdrop-blur-2xl">
+        <div className="overflow-hidden rounded-[2rem] border border-border-subtle/20 bg-surface/70 shadow-2xl shadow-brand-accent/40 backdrop-blur-2xl">
           <div className="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
-            <div className="border-b border-white/[0.04] p-6 md:p-8 lg:border-b-0 lg:border-r">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.04] bg-white/[0.03] px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-gray-300">
-                <Sparkles className="h-3.5 w-3.5 text-cyan-300" />
+            <div className="border-b border-border-subtle/20 p-6 md:p-8 lg:border-b-0 lg:border-r">
+              <span className="inline-flex items-center gap-2 rounded-full border border-border-subtle/20 bg-surface/50 px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-text-muted">
+                <Sparkles className="h-3.5 w-3.5 text-cta" />
                 Captura Premium
               </span>
 
-              <h2 className="mt-6 text-3xl font-semibold tracking-tight text-white md:text-4xl">
+              <h2 className="mt-6 text-3xl font-semibold tracking-tight text-text-main md:text-4xl">
                 Convierte la visita en lead antes de hablar de precio.
               </h2>
-              <p className="mt-4 text-base leading-7 text-gray-400">{dynamicSubheadline}</p>
+              <p className="mt-4 text-base leading-7 text-text-muted">{dynamicSubheadline}</p>
 
               <div className="mt-8 space-y-4">
                 {[
@@ -244,18 +244,18 @@ export function PandaCaptureForm() {
                   'Payload enriquecido con ciudad, país, moneda y zona horaria.',
                 ].map((item) => (
                   <div key={item} className="flex items-start gap-3">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-cyan-400" />
-                    <p className="text-sm leading-6 text-gray-400">{item}</p>
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-cta" />
+                    <p className="text-sm leading-6 text-text-muted">{item}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-8 rounded-2xl border border-white/[0.04] bg-black/20 p-4">
+              <div className="mt-8 rounded-2xl border border-border-subtle/20 bg-surface-bump p-4">
                 <div className="flex items-center gap-3">
-                  <ShieldCheck className="h-5 w-5 text-cyan-400" />
-                  <p className="text-sm font-medium text-white">Infraestructura de monetización conectada</p>
+                  <ShieldCheck className="h-5 w-5 text-cta" />
+                  <p className="text-sm font-medium text-text-main">Infraestructura de monetización conectada</p>
                 </div>
-                <p className="mt-2 text-sm leading-6 text-gray-500">
+                <p className="mt-2 text-sm leading-6 text-text-muted/80">
                   El formulario queda preparado para disparar seguimiento, scoring y automatizaciones sin salir de la
                   estética Panda.
                 </p>
@@ -312,16 +312,16 @@ export function PandaCaptureForm() {
                   defaultCountry="BO"
                   autoDetectCountry
                   placeholder="79790873"
-                  labelClassName="mb-2 block text-xs font-medium uppercase tracking-wider text-white/40"
+                  labelClassName="mb-2 block text-xs font-medium uppercase tracking-wider text-text-main/40"
                   phoneInputClassName={[
-                    'w-full rounded-xl border border-transparent bg-black/40 px-0 py-0 text-white shadow-inner transition-all',
-                    'focus-within:bg-black/60 focus-within:outline-none focus-within:ring-1 focus-within:ring-cyan-500',
-                    '[&_.PhoneInputCountry]:border-r [&_.PhoneInputCountry]:border-transparent [&_.PhoneInputCountry]:bg-black/40',
-                    '[&_.SmartPhoneCallingCode]:text-white',
-                    '[&_.PhoneInputCountrySelectArrow]:border-white/20',
-                    '[&_.PhoneInputInput]:bg-black/40 [&_.PhoneInputInput]:py-3 [&_.PhoneInputInput]:text-white [&_.PhoneInputInput]:placeholder:text-white/20',
+                    'w-full rounded-xl border border-transparent bg-surface-bump px-0 py-0 text-text-main shadow-inner transition-all',
+                    'focus-within:bg-surface-bump focus-within:outline-none focus-within:ring-1 focus-within:ring-cta',
+                    '[&_.PhoneInputCountry]:border-r [&_.PhoneInputCountry]:border-transparent [&_.PhoneInputCountry]:bg-surface-bump',
+                    '[&_.SmartPhoneCallingCode]:text-text-main',
+                    '[&_.PhoneInputCountrySelectArrow]:border-text-main/20',
+                    '[&_.PhoneInputInput]:bg-surface-bump [&_.PhoneInputInput]:py-3 [&_.PhoneInputInput]:text-text-main [&_.PhoneInputInput]:placeholder:text-text-main/20',
                   ].join(' ')}
-                  helperTextClassName="mt-2 text-xs text-white/30"
+                  helperTextClassName="mt-2 text-xs text-text-main/30"
                   errorTextClassName="mt-2 text-xs text-red-400"
                   requiredMarkClassName="ml-1 text-red-400"
                 />
@@ -339,11 +339,11 @@ export function PandaCaptureForm() {
                 ) : null}
 
                 <div className="sticky bottom-4 z-10 pt-2 md:static md:pt-0">
-                  <div className="rounded-2xl bg-gradient-to-t from-[#04050c] via-[#04050c]/90 to-transparent p-2 md:bg-none md:p-0">
+                  <div className="rounded-2xl bg-gradient-to-t from-page via-page/90 to-transparent p-2 md:bg-none md:p-0">
                     <button
                       type="submit"
                       disabled={!canSubmit}
-                      className="cta-shimmer inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#0047ff] to-[#00bfff] px-6 text-base font-semibold text-white shadow-[0_24px_80px_rgba(0,191,255,0.22)] transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="cta-shimmer inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-primary to-cta px-6 text-base font-semibold text-text-main shadow-[0_24px_80px_rgb(var(--color-cta-base)/0.22)] transition hover:opacity-95 hover:to-cta-hover disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {isSubmitting ? 'Enviando...' : 'Reservar mi acceso'}
                       {!isSubmitting ? <ArrowRight className="h-4 w-4" /> : null}

@@ -59,7 +59,7 @@ const testimonials = [
   },
 ];
 
-const glassCardClassName = 'bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl shadow-2xl';
+const glassCardClassName = 'border border-border-subtle/25 bg-surface/70 backdrop-blur-xl shadow-2xl shadow-brand-accent/30';
 const topRowTestimonials = testimonials.slice(0, 4);
 const bottomRowTestimonials = testimonials.slice(4);
 
@@ -79,23 +79,23 @@ function TestimonialCard({
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.12),transparent_40%),radial-gradient(circle_at_bottom_right,rgba(34,211,238,0.08),transparent_36%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgb(var(--color-brand-primary)/0.12),transparent_40%),radial-gradient(circle_at_bottom_right,rgb(var(--color-cta-base)/0.08),transparent_36%)]"
       />
       <div className="relative flex h-full flex-col">
         <div className="flex items-center gap-4">
           <img
             src={testimonial.avatar}
             alt={testimonial.name}
-            className="h-14 w-14 rounded-full object-cover ring-1 ring-white/10"
+            className="h-14 w-14 rounded-full object-cover ring-1 ring-border-subtle/30"
             loading="lazy"
           />
           <div>
-            <h3 className="text-lg font-semibold tracking-tight text-white">{testimonial.name}</h3>
-            <p className="text-sm font-light text-gray-400">{testimonial.role}</p>
+            <h3 className="text-lg font-semibold tracking-tight text-text-main">{testimonial.name}</h3>
+            <p className="text-sm font-light text-text-muted">{testimonial.role}</p>
           </div>
         </div>
 
-        <p className="mt-5 text-sm font-light leading-6 text-gray-400">{testimonial.quote}</p>
+        <p className="mt-5 text-sm font-light leading-6 text-text-muted">{testimonial.quote}</p>
       </div>
     </article>
   );
@@ -106,22 +106,22 @@ export function PandaTestimonials() {
     <section className="relative isolate overflow-hidden py-16 md:py-24">
       <div
         aria-hidden="true"
-        className="absolute left-[-8%] top-0 h-[500px] w-[500px] rounded-full bg-blue-600/20 blur-[120px] mix-blend-screen pointer-events-none"
+        className="pointer-events-none absolute left-[-8%] top-0 h-[500px] w-[500px] rounded-full bg-brand-primary/20 blur-[120px] mix-blend-screen"
       />
       <div
         aria-hidden="true"
-        className="absolute right-[-6%] bottom-[-4rem] h-[500px] w-[500px] rounded-full bg-cyan-500/20 blur-[120px] mix-blend-screen pointer-events-none"
+        className="pointer-events-none absolute right-[-6%] bottom-[-4rem] h-[500px] w-[500px] rounded-full bg-cta/20 blur-[120px] mix-blend-screen"
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-gray-300 backdrop-blur-xl">
+          <span className="inline-flex rounded-full border border-border-subtle/25 bg-surface/50 px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-text-muted backdrop-blur-xl">
             Testimonios
           </span>
-          <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+          <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-text-main sm:text-4xl">
             Comentarios de personas y empresas que utilizan nuestro servicio
           </h2>
-          <p className="mt-4 text-base font-light leading-7 text-gray-400">
+          <p className="mt-4 text-base font-light leading-7 text-text-muted">
             Comentarios reales extraídos del ecosistema Panda Video para recrear el bloque social con la misma energía
             oscura, técnica y confiable del original.
           </p>

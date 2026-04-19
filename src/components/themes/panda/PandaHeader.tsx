@@ -1,7 +1,7 @@
 function PandaMark() {
   return (
-    <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
-      <svg viewBox="0 0 32 32" className="h-5 w-5 text-white" fill="none" aria-hidden="true">
+    <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle/30 bg-surface-bump/80">
+      <svg viewBox="0 0 32 32" className="h-5 w-5 text-text-main" fill="none" aria-hidden="true">
         <path
           d="M9 11.5C9 8.462 11.462 6 14.5 6h3C20.538 6 23 8.462 23 11.5V16c0 5.523-4.477 10-10 10h-1a3 3 0 0 1-3-3V11.5Z"
           stroke="currentColor"
@@ -21,11 +21,11 @@ const navItems = ['Productos', 'Precios', 'Compañía'];
 
 export function PandaHeader() {
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-white/5 bg-[#04050c]/80 backdrop-blur-md">
+    <header className="fixed top-0 z-50 w-full border-b border-border-subtle/20 bg-page/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 md:h-20 md:px-8 lg:px-8">
         <a href="#" className="flex items-center gap-3">
           <PandaMark />
-          <span className="text-base font-bold tracking-tight text-white sm:text-lg">PandaVideo</span>
+          <span className="text-base font-bold tracking-tight text-text-main sm:text-lg">PandaVideo</span>
         </a>
 
         <nav className="hidden items-center gap-6 md:flex">
@@ -33,7 +33,7 @@ export function PandaHeader() {
             <a
               key={item}
               href="#"
-              className="text-sm font-medium text-gray-400 transition hover:text-white"
+              className="text-sm font-medium text-text-muted transition hover:text-text-main"
             >
               {item}
             </a>
@@ -42,7 +42,7 @@ export function PandaHeader() {
 
         <a
           href="#"
-          className="inline-flex min-h-10 items-center justify-center rounded-full border border-white/10 px-3.5 text-sm font-semibold text-white transition hover:bg-white/[0.04] sm:px-4"
+          className="inline-flex min-h-10 items-center justify-center rounded-full border border-border-subtle/30 px-3.5 text-sm font-semibold text-text-main transition hover:bg-surface-bump/80 sm:px-4"
         >
           Entrar
         </a>

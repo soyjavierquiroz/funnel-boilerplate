@@ -9,13 +9,13 @@ const placeholderLogos = [
 function LogoPlaceholder({ name, shape }: { name: string; shape: 'rect' | 'circle' }) {
   const iconClassName =
     shape === 'circle'
-      ? 'h-8 w-8 rounded-full bg-white/10'
-      : 'h-7 w-10 rounded-lg bg-white/10';
+      ? 'h-8 w-8 rounded-full bg-surface-bump'
+      : 'h-7 w-10 rounded-lg bg-surface-bump';
 
   return (
-    <div className="group flex min-w-[180px] shrink-0 items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-6 py-4 backdrop-blur-xl grayscale opacity-30 transition duration-300 hover:grayscale-0 hover:opacity-100">
+    <div className="group flex min-w-[180px] shrink-0 items-center justify-center gap-3 rounded-2xl border border-border-subtle/20 bg-surface/60 px-6 py-4 backdrop-blur-xl grayscale opacity-30 transition duration-300 hover:grayscale-0 hover:opacity-100">
       <span className={iconClassName} aria-hidden="true" />
-      <span className="text-sm font-medium uppercase tracking-[0.12em] text-white/70 transition duration-300 group-hover:text-white">
+      <span className="text-sm font-medium uppercase tracking-[0.12em] text-text-main/70 transition duration-300 group-hover:text-text-main">
         {name}
       </span>
     </div>
@@ -28,7 +28,7 @@ export function PandaTrustLogos() {
   return (
     <section className="relative pb-10 md:pb-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <p className="text-center text-xs font-medium uppercase tracking-[0.28em] text-gray-500">
+        <p className="text-center text-xs font-medium uppercase tracking-[0.28em] text-text-muted/80">
           Cientos de empresas confían en nosotros
         </p>
       </div>

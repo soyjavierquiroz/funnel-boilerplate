@@ -64,6 +64,15 @@
     font-family: var(--font-sans);
   }
 
+  .theme-panda {
+    --color-brand-primary: 37 99 235;
+    --color-brand-accent: 8 13 25;
+    --color-cta-base: 6 182 212;
+    --color-cta-hover: 8 145 178;
+    --color-surface-bump: 11 17 32;
+    font-family: var(--font-sans);
+  }
+
   .theme-expert .expert-headline {
     font-family: var(--font-serif);
   }

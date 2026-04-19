@@ -26,31 +26,31 @@ export function PandaInsights() {
     <section className="relative isolate overflow-hidden py-16 md:py-24">
       <div
         aria-hidden="true"
-        className="absolute left-[-12%] bottom-0 h-[500px] w-[500px] rounded-full bg-blue-600/20 blur-[120px] mix-blend-screen pointer-events-none"
+        className="pointer-events-none absolute left-[-12%] bottom-0 h-[500px] w-[500px] rounded-full bg-brand-primary/20 blur-[120px] mix-blend-screen"
       />
       <div
         aria-hidden="true"
-        className="absolute right-[-10%] top-8 h-[500px] w-[500px] rounded-full bg-cyan-500/20 blur-[120px] mix-blend-screen pointer-events-none"
+        className="pointer-events-none absolute right-[-10%] top-8 h-[500px] w-[500px] rounded-full bg-cta/20 blur-[120px] mix-blend-screen"
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
-            <span className="inline-flex rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-gray-300 backdrop-blur-xl">
+            <span className="inline-flex rounded-full border border-border-subtle/25 bg-surface/50 px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-text-muted backdrop-blur-xl">
               Aprender más
             </span>
-            <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-text-main sm:text-4xl">
               Perspectivas sobre videos, marketing y negocios
             </h2>
           </div>
 
           <div className="max-w-sm">
-            <p className="text-base font-light leading-7 text-gray-400">
+            <p className="text-base font-light leading-7 text-text-muted">
               Vea consejos, tutoriales y estrategias para mejorar los resultados con video.
             </p>
             <a
               href={blogUrl}
-              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] px-5 text-sm font-semibold text-white backdrop-blur-xl transition hover:bg-white/[0.06]"
+              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl border border-border-subtle/25 bg-surface/50 px-5 text-sm font-semibold text-text-main backdrop-blur-xl transition hover:bg-surface/70"
               target="_blank"
               rel="noreferrer"
             >
@@ -63,7 +63,7 @@ export function PandaInsights() {
           {insights.map((insight) => (
             <article
               key={insight.title}
-              className="group relative aspect-[3/4] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#081226]"
+              className="group relative aspect-[3/4] overflow-hidden rounded-2xl border border-border-subtle/25 bg-surface-bump"
             >
               <img
                 src={insight.image}
@@ -72,15 +72,15 @@ export function PandaInsights() {
                 loading="lazy"
               />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-[#04050c] via-[#04050c]/72 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-page via-page/70 to-transparent" />
 
               <div className="absolute inset-x-0 bottom-0 p-5">
-                <div className="rounded-[1.25rem] border border-white/[0.08] bg-white/[0.03] p-4 backdrop-blur-xl shadow-2xl">
-                  <span className="inline-flex rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-gray-300">
+                <div className="rounded-[1.25rem] border border-border-subtle/25 bg-surface/70 p-4 backdrop-blur-xl shadow-2xl shadow-brand-accent/30">
+                  <span className="inline-flex rounded-full border border-border-subtle/25 bg-surface/80 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-text-muted">
                     {insight.tag}
                   </span>
-                  <h3 className="mt-4 text-xl font-semibold tracking-tight text-white">{insight.title}</h3>
-                  <p className="mt-4 text-sm font-light uppercase tracking-[0.18em] text-gray-400">{insight.date}</p>
+                  <h3 className="mt-4 text-xl font-semibold tracking-tight text-text-main">{insight.title}</h3>
+                  <p className="mt-4 text-sm font-light uppercase tracking-[0.18em] text-text-muted">{insight.date}</p>
                 </div>
               </div>
             </article>
