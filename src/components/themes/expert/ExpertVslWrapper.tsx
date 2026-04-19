@@ -30,7 +30,7 @@ export function ExpertVslWrapper({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const playerRef = useRef<IVideoProvider | null>(null);
-  const restartOnReadyRef = useRef(false);
+  const unmuteTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const controller = useVideoProviderController({
     provider,
@@ -50,17 +50,6 @@ export function ExpertVslWrapper({
       if (nextDuration > 0) {
         setDuration(nextDuration);
       }
-
-      if (!restartOnReadyRef.current) {
-        return;
-      }
-
-      restartOnReadyRef.current = false;
-      activeProvider.setLoop(false);
-      activeProvider.mute(false);
-      activeProvider.seek(0);
-      setCurrentTime(0);
-      void activeProvider.play().catch(() => undefined);
     },
     onPlay: () => {
       setIsReady(true);
@@ -87,8 +76,18 @@ export function ExpertVslWrapper({
     setCurrentTime(0);
     setDuration(0);
     playerRef.current = null;
-    restartOnReadyRef.current = false;
+
+    if (unmuteTimeoutRef.current) {
+      clearTimeout(unmuteTimeoutRef.current);
+      unmuteTimeoutRef.current = null;
+    }
   }, [provider, videoId]);
+
+  useEffect(() => () => {
+    if (unmuteTimeoutRef.current) {
+      clearTimeout(unmuteTimeoutRef.current);
+    }
+  }, []);
 
   useEffect(() => {
     const activeProvider = playerRef.current ?? controller.providerRef.current;
@@ -107,20 +106,49 @@ export function ExpertVslWrapper({
     controller.mountRef.current.autoplay = true;
     controller.mountRef.current.controls = !isMuted;
     controller.mountRef.current.muted = isMuted;
-  }, [controller, isMuted]);
+  }, [controller.mountRef, controller.surface, isMuted]);
 
   const handleUnmute = useCallback(() => {
-    restartOnReadyRef.current = true;
+    if (!isMuted) {
+      return;
+    }
+
+    if (unmuteTimeoutRef.current) {
+      clearTimeout(unmuteTimeoutRef.current);
+      unmuteTimeoutRef.current = null;
+    }
+
     setIsMuted(false);
     setCurrentTime(0);
 
     const activeProvider = playerRef.current ?? controller.providerRef.current;
 
-    activeProvider?.setLoop(false);
-    activeProvider?.mute(false);
-    activeProvider?.seek(0);
-    void activeProvider?.play().catch(() => undefined);
-  }, [controller.providerRef]);
+    if (!activeProvider) {
+      return;
+    }
+
+    try {
+      activeProvider.mute(false);
+
+      unmuteTimeoutRef.current = setTimeout(() => {
+        try {
+          const providerForPlayback = playerRef.current ?? controller.providerRef.current;
+
+          providerForPlayback?.seek(0);
+          setCurrentTime(0);
+          void providerForPlayback?.play().catch((error) => {
+            console.warn('VSL sequence suppressed', error);
+          });
+        } catch (error) {
+          console.warn('VSL sequence suppressed', error);
+        } finally {
+          unmuteTimeoutRef.current = null;
+        }
+      }, 75);
+    } catch (error) {
+      console.warn('VSL sequence suppressed', error);
+    }
+  }, [controller.providerRef, isMuted]);
 
   const shouldShowSmartBar = isMuted && (isReady || currentTime > 0);
 
@@ -129,7 +157,7 @@ export function ExpertVslWrapper({
       {controller.surface === 'video' ? (
         <video
           ref={controller.mountRef}
-          className={joinClassNames('h-full w-full bg-black object-cover', playerClassName)}
+          className={joinClassNames('absolute inset-0 h-full w-full bg-black object-cover', playerClassName)}
           autoPlay={true}
           muted={isMuted}
           controls={!isMuted}
@@ -138,7 +166,7 @@ export function ExpertVslWrapper({
       ) : (
         <div
           ref={controller.mountRef}
-          className={joinClassNames('h-full w-full bg-black', playerClassName)}
+          className={joinClassNames('absolute inset-0 h-full w-full bg-black', playerClassName)}
         />
       )}
 
