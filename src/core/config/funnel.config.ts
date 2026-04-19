@@ -1,3 +1,5 @@
+import { DNA, dnaNumericPrices, resolveDnaFunnelTheme } from '../../dna.config';
+
 export type VideoProvider = 'youtube' | 'bunnynet' | 'vimeo' | 'wistia' | 'html5';
 export type OverlayPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
 
@@ -145,14 +147,14 @@ export const pricingProductKeys = {
 } as const;
 
 export const funnelConfig: FunnelConfig = {
-  brandName: 'Expert Secrets',
+  brandName: DNA.copy.productName,
   domain: 'expertsecrets.com',
-  theme: 'theme-expert',
+  theme: resolveDnaFunnelTheme(),
   media: {
     heroVideo: {
       enabled: true,
       provider: 'youtube',
-      videoId: 'dQw4w9WgXcQ',
+      videoId: DNA.vslVideoId,
       vslMode: false,
       lazyLoadYoutube: true,
       hideYoutubeUi: true,
@@ -161,9 +163,9 @@ export const funnelConfig: FunnelConfig = {
         enabled: true,
         imageUrl:
           'https://images.clickfunnels.com/cdn-cgi/image/width=1000px,fit=scale-down,f=auto,q=80/https://statics.myclickfunnels.com/workspace/Jnbkrx/image/15107832/file/6d106a40e8d451eb343b5d72732dbbfa.jpg',
-        eyebrow: 'Expert Secrets',
-        title: 'Watch The Free Training',
-        description: 'Find your message, build a tribe, and change the world.',
+        eyebrow: DNA.copy.productName,
+        title: `Mira la presentación de ${DNA.copy.productName}`,
+        description: 'Activa la oferta principal, revisa el stack de valor y entra con el pricing del DNA.',
         buttonText: 'Play Video',
       },
       vslProgressBarColor: '#4876b9',
@@ -171,11 +173,11 @@ export const funnelConfig: FunnelConfig = {
   },
   content: {
     mainVsl: {
-      eyebrow: 'Free Hardcover Offer',
-      headline: 'Get your FREE copy of Expert Secrets and learn how to turn your message into a movement.',
+      eyebrow: 'Oferta Principal',
+      headline: `Descubre cómo ${DNA.copy.productName} te ayuda a convertir una oferta clara en una página estática lista para vender.`,
       subheadline:
-        'Build belief, create a tribe, and package your specialized knowledge into an offer people are excited to buy.',
-      ctaLabel: 'Reserve My Free Copy',
+        'Centraliza tema, pricing, VSL y copy en un solo ADN para clonar funnels rápidos sin rehacer el layout.',
+      ctaLabel: `Activar ${DNA.copy.productName}`,
       ctaHref: '#checkout',
       certaintyText: 'Secure 2-step order form',
     },
@@ -223,17 +225,17 @@ export const funnelConfig: FunnelConfig = {
     defaultProductKey: pricingProductKeys.ofertaPrincipal,
     products: {
       [pricingProductKeys.ofertaPrincipal]: {
-        basePriceUSD: 609.95,
+        basePriceUSD: dnaNumericPrices.main,
         hotmartProductId: 'EXPERT_SECRETS_MAIN',
         checkoutUrl: '#checkout',
       },
       [pricingProductKeys.orderBump]: {
-        basePriceUSD: 37,
+        basePriceUSD: dnaNumericPrices.bump,
         hotmartProductId: 'EXPERT_SECRETS_AUDIOBOOK',
         checkoutUrl: '#checkout',
       },
       [pricingProductKeys.upsellContinuidad]: {
-        basePriceUSD: 97,
+        basePriceUSD: dnaNumericPrices.main,
         hotmartProductId: 'EXPERT_SECRETS_RECORDINGS',
         checkoutUrl: '#checkout',
       },

@@ -1,3 +1,4 @@
+import { DNA } from '../../../dna.config';
 import { ExpertBonusStack } from './ExpertBonusStack';
 import { ExpertFAQ } from './ExpertFAQ';
 import { ExpertHero } from './ExpertHero';
@@ -37,21 +38,20 @@ export function ExpertTheme() {
       <section className="px-4 pb-4 sm:px-6">
         <div className="mx-auto max-w-[819px] rounded-[4px] border border-surface-bump bg-surface-bump px-5 py-8 shadow-[0_18px_40px_rgba(17,17,17,0.06)] sm:px-10 sm:py-10">
           <p className="expert-headline text-center text-[2.3rem] font-normal leading-none tracking-[-0.04em] text-[#2d2d2d] sm:text-[3.35rem]">
-            Send Me Your Address...
+            Activa Tu Acceso...
           </p>
           <p className="expert-headline mt-2 text-center text-[1.6rem] font-normal leading-tight text-[#2d2d2d] sm:text-[2.25rem]">
-            I&apos;d like to rush a <span className="text-brand-primary">FREE</span> copy of my brand new hardcover book to your doorstep, ASAP!
+            Entra hoy a <span className="text-brand-primary">{DNA.copy.productName}</span> y desbloquea el stack completo sin rehacer el funnel.
           </p>
           <img src={expertBrandAssets.bundleUrl} alt="Expert Secrets bundle" className="mx-auto mt-8 w-full max-w-[733px]" loading="lazy" />
           <p className="expert-body mt-6 text-center text-[1.05rem] leading-8 text-[#2d2d2d] sm:text-[1.2rem]">
-            Like I mentioned before, this book is free. I&apos;ll pay for the book and all I ask is that you help cover the
-            shipping and handling cost. We&apos;ll send it anywhere in the world.
+            El DNA del proyecto ya fija el video, el pricing y el copy principal para que este clon salga listo para producción desde el build estático.
           </p>
           <div className="mx-auto mt-6 max-w-[650px]">
             <ExpertCtaButton
               href="#checkout"
-              label="Yes! Reserve My Free Copy Now!"
-              subLabel="You pay only $9.95 for shipping and handling in US ($19.95 intl)"
+              label={`Sí, quiero activar ${DNA.copy.productName}`}
+              subLabel={`Hoy por solo $${DNA.prices.main} con bump de $${DNA.prices.bump}`}
               fullWidth
             />
           </div>

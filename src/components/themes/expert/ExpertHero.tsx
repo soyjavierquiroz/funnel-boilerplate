@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Volume2 } from 'lucide-react';
+import { DNA } from '../../../dna.config';
 import funnelConfig from '../../../core/config/funnel.config';
 import { KurukinPlayer as ExpertVideoPlayer } from './components/video-player/src/kurukin-video-player';
 import { ExpertCtaButton } from './ExpertCtaButton';
@@ -37,12 +38,12 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
 
           <div className="mt-[16px] border-2 border-brand-accent bg-brand-accent/5 px-3 pb-[10px] pt-[8px] text-center shadow-[0_12px_24px_rgba(72,117,185,0.08)] md:mt-[20px] md:px-[15px]">
             <p className="expert-headline text-balance text-[14px] font-medium leading-tight tracking-[-0.02em] text-[#2d2d2d] sm:text-[16px] md:text-[20px] lg:text-[36px]">
-              Your <span className="text-brand-primary">FREE Copy</span> Of &apos;Expert Secrets&apos; Will Show You How To:
+              Tu acceso a <span className="text-brand-primary">{DNA.copy.productName}</span> te mostrará cómo:
             </p>
           </div>
 
           <h1 className="expert-headline mt-[10px] text-center text-[1.68rem] font-black uppercase leading-none tracking-[-0.04em] text-[#2d2d2d] sm:text-[3.25rem] lg:text-[4.12rem]">
-            “Find Your Message... Build A Tribe, And <span className="text-brand-primary">Change The World!</span>”
+            “Escalar tu oferta, duplicar tu sistema y <span className="text-brand-primary">cerrar con más claridad</span>”
           </h1>
         </div>
 
@@ -98,15 +99,14 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
             />
 
             <blockquote className="expert-headline mt-5 text-center text-[1.15rem] font-semibold leading-8 tracking-[-0.04em] text-[#2d2d2d] sm:text-[1.5rem]">
-              “Expert Secrets is the map that will allow you to <span className="text-brand-primary">turn your specialized knowledge</span>,
-              talents and abilities into a business that will work for you.” - Robert Kiyosaki
+              “{DNA.copy.productName} organiza tu mensaje, tu oferta y tu stack para que el funnel convierta sin cargar lógica visual innecesaria.”
             </blockquote>
 
             <div className="mx-auto mt-6 max-w-[420px] lg:hidden">
               <ExpertCtaButton
                 href="#checkout"
-                label="Reserve My Free Copy"
-                subLabel="Jump straight to the 2-step order form"
+                label={`Quiero entrar a ${DNA.copy.productName}`}
+                subLabel={`Precio principal: $${DNA.prices.main}`}
                 fullWidth
               />
             </div>

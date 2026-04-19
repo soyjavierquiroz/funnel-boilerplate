@@ -1,6 +1,7 @@
 import { startTransition, useEffect, useState } from 'react';
 import { ArrowDownRight, Check, ChevronLeft, CreditCard, Lock, MapPin, ShieldCheck, Truck } from 'lucide-react';
 import type { Country } from 'react-phone-number-input';
+import { DNA } from '../../../dna.config';
 import funnelConfig, { pricingProductKeys } from '../../../core/config/funnel.config';
 import { useHotmartPrices } from '../../../core/hooks/useHotmartPrices';
 import analytics from '../../../core/services/analytics';
@@ -133,7 +134,6 @@ export function ExpertOrderForm() {
     liveRecordingsOffer.scrapedData?.[countryCode],
   );
   const orderTotal = shippingPrice + (wantsAudiobook ? audiobookPrice : 0) + (wantsLiveRecordings ? liveRecordingsPrice : 0);
-  const compareAtValue = mainOffer.product.basePriceUSD;
   const checkoutUrl = mainOffer.product.checkoutUrl;
 
   const validateShippingStep = () => {
@@ -333,22 +333,22 @@ export function ExpertOrderForm() {
           <img src={expertBrandAssets.bundleUrl} alt="Expert Secrets bundle" className="mx-auto w-full" loading="lazy" />
           <p className="expert-body mt-3 text-center text-[14px] text-[#2d2d2d]/65">384 Pages | Industry Specific Examples | 5 Free Bonuses</p>
           <p className="expert-headline mt-2 text-center text-[1.6rem] font-extrabold leading-tight text-brand-primary sm:text-[2rem]">
-            Only <span className="line-through">{formatPrice(compareAtValue)}</span> FREE Today!
+            Antes <span className="line-through">${DNA.prices.regularPrice}</span>, hoy solo ${DNA.prices.main}
           </p>
           <p className="expert-body mt-2 text-center text-sm text-[#2d2d2d]/80">
-            You pay only {formatPrice(shippingPrice)} for shipping and handling in {countryCode === 'US' ? 'the U.S.' : 'your region'}
+            El ADN fija el pricing principal y deja el checkout listo para activarse desde este clon estático.
           </p>
           <p className="expert-headline mt-2 text-center text-[1rem] font-semibold leading-6 text-[#2d2d2d]">
-            Get your FREE copy now + receive instant access to 5 bonuses.
+            Accede a {DNA.copy.productName} y conserva el bump listo para un checkout de alto contraste.
           </p>
         </div>
 
         {step === 1 ? (
           <div className="mt-5 space-y-4">
             <div className="rounded-[14px] border border-brand-accent/10 bg-brand-accent/5 px-4 py-3">
-              <p className="expert-headline text-[1.05rem] font-bold text-[#2d2d2d]">Get Your FREE Book, Send Me Your Address</p>
+              <p className="expert-headline text-[1.05rem] font-bold text-[#2d2d2d]">Reserva tu acceso a {DNA.copy.productName}</p>
               <p className="expert-body mt-1 text-sm leading-6 text-[#333]">
-                I&apos;d like to rush a free hardcover copy of Expert Secrets to your doorstep.
+                Completa tus datos para continuar con el checkout y mantener la oferta principal en el contexto correcto.
               </p>
             </div>
 
@@ -560,17 +560,17 @@ export function ExpertOrderForm() {
                 <div className="flex items-center justify-between gap-3">
                   <span className="flex items-center gap-2">
                     <Check className="h-4 w-4 text-cta" />
-                    Hardcover Book
+                    {DNA.copy.productName}
                   </span>
-                  <span className="font-semibold">FREE</span>
+                  <span className="font-semibold">${DNA.prices.main}</span>
                 </div>
                 <div className="flex items-center justify-between gap-3">
-                  <span>Shipping & handling</span>
-                  <span className="font-semibold">{formatPrice(shippingPrice)}</span>
+                  <span>Precio configurado en DNA</span>
+                  <span className="font-semibold">${DNA.prices.regularPrice}</span>
                 </div>
                 {wantsAudiobook ? (
                   <div className="flex items-center justify-between gap-3">
-                    <span>Audiobook bump</span>
+                    <span>Order bump</span>
                     <span className="font-semibold">{formatPrice(audiobookPrice)}</span>
                   </div>
                 ) : null}
@@ -597,7 +597,7 @@ export function ExpertOrderForm() {
               <div className="flex items-center gap-3 bg-brand-primary p-2 text-white">
                 <ArrowDownRight className="h-5 w-5 shrink-0 animate-pulse" />
                 <p className="expert-headline text-sm font-extrabold uppercase sm:text-[15px]">
-                  ¡SÍ, QUIERO AÑADIR ESTO A MI ORDEN!
+                  {DNA.copy.orderBumpTitle}
                 </p>
               </div>
               <div className="mt-4 flex items-start gap-4">
@@ -615,10 +615,10 @@ export function ExpertOrderForm() {
                 />
                 <div className="min-w-0">
                   <p className="expert-headline text-[1rem] font-extrabold leading-5 text-brand-primary sm:text-[1.05rem]">
-                    OFERTA UNICA: Audiobook + 4 More Exclusive Products por {formatPrice(audiobookPrice)}
+                    {DNA.copy.orderBumpTitle} por ${DNA.prices.bump}
                   </p>
                   <p className="expert-body mt-2 text-sm leading-6 text-[#5d5d5d]">
-                    Esta oferta especial solo aparece aqui durante tu checkout y no estara disponible en ningun otro lugar.
+                    Este bump queda conectado al DNA para clonarse junto al resto del pricing sin tocar el layout.
                   </p>
                 </div>
               </div>

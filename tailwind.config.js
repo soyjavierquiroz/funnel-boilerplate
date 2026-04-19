@@ -1,24 +1,26 @@
+import { DNA } from './src/dna.config.ts';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}', '!./src/**/node_modules/**/*'],
   theme: {
     extend: {
       colors: {
-        primary: 'rgb(var(--color-primary) / <alpha-value>)',
+        primary: DNA.colors.primary,
         secondary: 'rgb(var(--color-secondary) / <alpha-value>)',
-        accent: 'rgb(var(--color-accent) / <alpha-value>)',
+        accent: DNA.colors.accent,
         page: 'rgb(var(--color-page) / <alpha-value>)',
         surface: {
           DEFAULT: 'rgb(var(--color-surface) / <alpha-value>)',
-          bump: 'rgb(var(--color-surface-bump) / <alpha-value>)',
+          bump: DNA.colors.surface,
         },
         brand: {
-          primary: 'rgb(var(--color-brand-primary) / <alpha-value>)',
-          accent: 'rgb(var(--color-brand-accent) / <alpha-value>)',
+          primary: DNA.colors.primary,
+          accent: DNA.colors.accent,
         },
         cta: {
-          DEFAULT: 'rgb(var(--color-cta-base) / <alpha-value>)',
-          hover: 'rgb(var(--color-cta-hover) / <alpha-value>)',
+          DEFAULT: DNA.colors.cta,
+          hover: DNA.colors.ctaHover,
         },
         'border-subtle': 'rgb(var(--color-border-subtle) / <alpha-value>)',
         'text-main': 'rgb(var(--color-text-main) / <alpha-value>)',

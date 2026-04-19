@@ -1,5 +1,6 @@
 import { BadgeCheck, Lock, ShieldCheck } from 'lucide-react';
 import { useMemo } from 'react';
+import { DNA } from '../../../dna.config';
 import funnelConfig from '../../../core/config/funnel.config';
 import { useVisitor } from '../../../core/visitor/VisitorContext';
 import { useHotmartPrices } from '../../../core/hooks/useHotmartPrices';
@@ -17,7 +18,7 @@ export function PricingCard({ productId, productName }: PricingCardProps) {
   const countryCode = visitorData?.country_code?.toUpperCase() ?? 'US';
   const currencyCode = visitorData?.currency?.toUpperCase() ?? 'USD';
   const resolvedCheckoutUrl = hasRequestedProduct ? product.checkoutUrl : undefined;
-  const resolvedProductName = productName ?? funnelConfig.brandName;
+  const resolvedProductName = productName ?? DNA.copy.productName ?? funnelConfig.brandName;
   const basePriceUSD = product.basePriceUSD;
 
   const countryPricing = useMemo(() => {

@@ -1,7 +1,8 @@
 import { Check, CreditCard, Lock, ShieldCheck } from 'lucide-react';
+import { DNA } from '../../../dna.config';
 
 const offerItems = [
-  { id: 'kurukin-core', name: 'Sistema Kurukin Core', value: '$1,997' },
+  { id: 'kurukin-core', name: DNA.copy.productName, value: `$${DNA.prices.regularPrice}` },
   { id: 'autonomous-prospecting', name: 'El Sistema Autónomo de Prospección', value: '$997' },
   { id: 'team-duplication', name: 'Plantillas de Duplicación de Equipo', value: '$497' },
   { id: 'closing-masterclass', name: 'Masterclass: Cierre Sin Resistencia', value: '$297' },
@@ -41,9 +42,9 @@ export function ExpertOfferStack() {
         <hr className="my-6 border-2 border-gray-300" />
 
         <div className="space-y-3">
-          <p className="text-center text-2xl font-bold text-gray-900">Valor Total: $3,788</p>
-          <p className="text-center text-xl text-gray-500 line-through">Precio Regular: $997</p>
-          <p className="my-4 animate-pulse text-center text-5xl font-black text-brand-primary">¡HOY SOLO $97!</p>
+          <p className="text-center text-2xl font-bold text-gray-900">Valor Total: ${DNA.prices.totalValue}</p>
+          <p className="text-center text-xl text-gray-500 line-through">Precio Regular: ${DNA.prices.regularPrice}</p>
+          <p className="my-4 animate-pulse text-center text-5xl font-black text-brand-primary">¡HOY SOLO ${DNA.prices.main}!</p>
         </div>
 
         <div className="mt-8">
@@ -51,7 +52,7 @@ export function ExpertOfferStack() {
             href="#checkout"
             className="block w-full rounded bg-cta py-6 text-center text-2xl font-black uppercase text-black shadow-[0_5px_0_rgb(202,138,4)] transition-all transform hover:translate-y-1 hover:bg-cta-hover hover:shadow-none"
           >
-            ¡SÍ, QUIERO MI ACCESO AHORA!
+            {`¡SÍ, QUIERO ACTIVAR ${DNA.copy.productName.toUpperCase()}!`}
           </a>
 
           <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-sm font-bold text-gray-600">
