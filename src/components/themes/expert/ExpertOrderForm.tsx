@@ -1,5 +1,5 @@
 import { startTransition, useEffect, useState } from 'react';
-import { Check, ChevronLeft, CreditCard, Lock, MapPin, ShieldCheck, Truck } from 'lucide-react';
+import { ArrowDownRight, Check, ChevronLeft, CreditCard, Lock, MapPin, ShieldCheck, Truck } from 'lucide-react';
 import type { Country } from 'react-phone-number-input';
 import funnelConfig, { pricingProductKeys } from '../../../core/config/funnel.config';
 import { useHotmartPrices } from '../../../core/hooks/useHotmartPrices';
@@ -274,7 +274,7 @@ export function ExpertOrderForm() {
 
   if (isSubmitted) {
     return (
-      <aside className="rounded-[12px] bg-white shadow-[0_26px_54px_rgba(0,0,0,0.1)]">
+      <aside className="overflow-hidden rounded-lg border-2 border-gray-300 bg-white shadow-xl">
         <div className="rounded-t-[12px] bg-[#4876b9] px-5 py-4 text-center text-white">
           <p className="expert-headline text-[1rem] font-extrabold uppercase tracking-[0.08em]">Order Reserved</p>
         </div>
@@ -304,15 +304,27 @@ export function ExpertOrderForm() {
   }
 
   return (
-    <aside id="checkout" className="rounded-[12px] bg-white shadow-[0_26px_54px_rgba(0,0,0,0.1)]">
-      <div className="grid grid-cols-2 overflow-hidden rounded-t-[12px] text-white">
-        <div className={`px-4 py-4 text-center ${step === 1 ? 'bg-[#4876b9]' : 'bg-[#7ea0ce]'}`}>
-          <p className="expert-body text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">Step 1</p>
-          <p className="expert-headline mt-1 text-sm font-extrabold uppercase sm:text-[15px]">Shipping</p>
+    <aside id="checkout" className="overflow-hidden rounded-lg border-2 border-gray-300 bg-white shadow-xl">
+      <div className="grid grid-cols-2 border-b border-gray-300">
+        <div
+          className={`px-4 py-4 text-center transition-colors ${
+            step === 1 ? 'bg-[#111111] text-white' : 'bg-[#efefef] text-[#5b5b5b]'
+          }`}
+        >
+          <p className={`expert-body text-[11px] font-bold uppercase tracking-[0.2em] ${step === 1 ? 'text-white/80' : 'text-[#777]'}`}>
+            {step === 1 ? 'Activo' : 'Completo'}
+          </p>
+          <p className="expert-headline mt-1 text-sm font-extrabold sm:text-[15px]">Paso 1: Info de Contacto</p>
         </div>
-        <div className={`px-4 py-4 text-center ${step === 2 ? 'bg-[#4876b9]' : 'bg-[#7ea0ce]'}`}>
-          <p className="expert-body text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">Step 2</p>
-          <p className="expert-headline mt-1 text-sm font-extrabold uppercase sm:text-[15px]">Review</p>
+        <div
+          className={`border-l border-gray-300 px-4 py-4 text-center transition-colors ${
+            step === 2 ? 'bg-[#111111] text-white' : 'bg-[#efefef] text-[#5b5b5b]'
+          }`}
+        >
+          <p className={`expert-body text-[11px] font-bold uppercase tracking-[0.2em] ${step === 2 ? 'text-white/80' : 'text-[#777]'}`}>
+            {step === 2 ? 'Activo' : 'Siguiente'}
+          </p>
+          <p className="expert-headline mt-1 text-sm font-extrabold sm:text-[15px]">Paso 2: Pago Seguro</p>
         </div>
       </div>
 
@@ -506,25 +518,6 @@ export function ExpertOrderForm() {
             <label className="flex cursor-pointer items-start gap-3 rounded-[14px] border border-[#dae3ef] bg-white p-4">
               <input
                 type="checkbox"
-                checked={wantsAudiobook}
-                onChange={(event) => setWantsAudiobook(event.target.checked)}
-                className="mt-1 h-4 w-4 rounded border-[#cfd6df] text-[#4876b9] focus:ring-[#4876b9]"
-              />
-              <img src={expertBrandAssets.audiobookUrl} alt="Expert Secrets audiobook bonus" className="h-16 w-16 rounded-xl object-cover" loading="lazy" />
-              <div className="min-w-0">
-                <p className="expert-body text-xs font-bold uppercase tracking-[0.18em] text-[#4876b9]">Special One Time Offer</p>
-                <p className="expert-headline mt-1 text-[1rem] font-extrabold leading-5 text-[#2d2d2d]">
-                  Audiobook + 4 More Exclusive Products
-                </p>
-                <p className="expert-body mt-1 text-sm leading-6 text-[#333]">
-                  Add this order bump for just {formatPrice(audiobookPrice)}.
-                </p>
-              </div>
-            </label>
-
-            <label className="flex cursor-pointer items-start gap-3 rounded-[14px] border border-[#dae3ef] bg-white p-4">
-              <input
-                type="checkbox"
                 checked={wantsLiveRecordings}
                 onChange={(event) => setWantsLiveRecordings(event.target.checked)}
                 className="mt-1 h-4 w-4 rounded border-[#cfd6df] text-[#4876b9] focus:ring-[#4876b9]"
@@ -600,25 +593,65 @@ export function ExpertOrderForm() {
               </div>
             ) : null}
 
-            <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+            <label className="block cursor-pointer overflow-hidden rounded-none border-4 border-dashed border-[#e01921] bg-yellow-50 p-4 md:p-6 my-6">
+              <div className="flex items-center gap-3 bg-[#e01921] p-2 text-white">
+                <ArrowDownRight className="h-5 w-5 shrink-0 animate-pulse" />
+                <p className="expert-headline text-sm font-extrabold uppercase sm:text-[15px]">
+                  ¡SÍ, QUIERO AÑADIR ESTO A MI ORDEN!
+                </p>
+              </div>
+              <div className="mt-4 flex items-start gap-4">
+                <input
+                  type="checkbox"
+                  checked={wantsAudiobook}
+                  onChange={(event) => setWantsAudiobook(event.target.checked)}
+                  className="mt-1 h-5 w-5 rounded border-2 border-[#c1373d] text-[#e01921] focus:ring-[#e01921]"
+                />
+                <img
+                  src={expertBrandAssets.audiobookUrl}
+                  alt="Expert Secrets audiobook bonus"
+                  className="hidden h-16 w-16 rounded-xl object-cover sm:block"
+                  loading="lazy"
+                />
+                <div className="min-w-0">
+                  <p className="expert-headline text-[1rem] font-extrabold leading-5 text-[#e01921] sm:text-[1.05rem]">
+                    OFERTA UNICA: Audiobook + 4 More Exclusive Products por {formatPrice(audiobookPrice)}
+                  </p>
+                  <p className="expert-body mt-2 text-sm leading-6 text-[#5d5d5d]">
+                    Esta oferta especial solo aparece aqui durante tu checkout y no estara disponible en ningun otro lugar.
+                  </p>
+                </div>
+              </div>
+            </label>
+
+            <div className="space-y-3">
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="inline-flex min-h-[58px] items-center justify-center gap-2 rounded-md border border-[#d0d8e2] px-5 text-sm font-semibold text-[#2d2d2d] transition hover:bg-[#f8fafc]"
+                className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-md border border-[#d0d8e2] px-5 text-sm font-semibold text-[#2d2d2d] transition hover:bg-[#f8fafc]"
               >
                 <ChevronLeft className="h-4 w-4" />
                 Back
               </button>
 
-              <ExpertCtaButton
-                label={isSubmitting ? 'Submitting Order...' : 'Send My Book'}
-                subLabel="Yes! I want this free book now!"
+              <button
+                type="button"
                 onClick={() => {
                   void handleSubmit();
                 }}
-                fullWidth
                 disabled={isSubmitting}
-              />
+                className="flex min-h-[84px] w-full flex-col items-center justify-center rounded-lg bg-green-500 px-6 py-4 text-center text-white shadow-[0_14px_28px_rgba(34,197,94,0.35)] transition hover:bg-green-600 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                <span className="expert-headline text-[1.2rem] font-extrabold uppercase tracking-[0.04em] sm:text-[1.35rem]">
+                  {isSubmitting ? 'PROCESANDO ORDEN...' : 'COMPLETAR MI ORDEN'}
+                </span>
+                <span className="expert-body mt-1 text-sm font-normal opacity-90">Procesamiento seguro a 256-bit</span>
+              </button>
+            </div>
+
+            <div className="flex items-center justify-center gap-2 text-center text-sm font-semibold text-[#2d2d2d]">
+              <Lock className="h-4 w-4 text-[#111111]" />
+              <span>Garantía de Devolución de 30 Días</span>
             </div>
 
             <p className="expert-body text-center text-xs leading-5 text-[#2d2d2d]/70">
