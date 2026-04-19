@@ -363,3 +363,15 @@
   -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
   mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
 }
+
+/* Anti-Black Screen overrides for Video Players */
+.theme-expert .plyr,
+.theme-expert .plyr__video-wrapper,
+.theme-expert .plyr__video-embed,
+.theme-expert iframe {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}

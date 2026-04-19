@@ -30,7 +30,6 @@ export function ExpertVslWrapper({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const playerRef = useRef<IVideoProvider | null>(null);
-  const unmuteTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const controller = useVideoProviderController({
     provider,
@@ -76,18 +75,7 @@ export function ExpertVslWrapper({
     setCurrentTime(0);
     setDuration(0);
     playerRef.current = null;
-
-    if (unmuteTimeoutRef.current) {
-      clearTimeout(unmuteTimeoutRef.current);
-      unmuteTimeoutRef.current = null;
-    }
   }, [provider, videoId]);
-
-  useEffect(() => () => {
-    if (unmuteTimeoutRef.current) {
-      clearTimeout(unmuteTimeoutRef.current);
-    }
-  }, []);
 
   useEffect(() => {
     const activeProvider = playerRef.current ?? controller.providerRef.current;
@@ -113,11 +101,6 @@ export function ExpertVslWrapper({
       return;
     }
 
-    if (unmuteTimeoutRef.current) {
-      clearTimeout(unmuteTimeoutRef.current);
-      unmuteTimeoutRef.current = null;
-    }
-
     setIsMuted(false);
     setCurrentTime(0);
 
@@ -128,27 +111,19 @@ export function ExpertVslWrapper({
     }
 
     try {
+      activeProvider.seek(0);
+      setCurrentTime(0);
       activeProvider.mute(false);
 
-      unmuteTimeoutRef.current = setTimeout(() => {
-        try {
-          const providerForPlayback = playerRef.current ?? controller.providerRef.current;
-
-          providerForPlayback?.seek(0);
-          setCurrentTime(0);
-          void providerForPlayback?.play().catch((error) => {
-            console.warn('VSL sequence suppressed', error);
-          });
-        } catch (error) {
+      if (controller.surface === 'video' && controller.mountRef.current?.paused) {
+        void activeProvider.play().catch((error) => {
           console.warn('VSL sequence suppressed', error);
-        } finally {
-          unmuteTimeoutRef.current = null;
-        }
-      }, 75);
+        });
+      }
     } catch (error) {
       console.warn('VSL sequence suppressed', error);
     }
-  }, [controller.providerRef, isMuted]);
+  }, [controller.mountRef, controller.providerRef, controller.surface, isMuted]);
 
   const shouldShowSmartBar = isMuted && (isReady || currentTime > 0);
 
