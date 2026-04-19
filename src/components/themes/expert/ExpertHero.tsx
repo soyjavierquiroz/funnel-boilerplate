@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 import { Volume2 } from 'lucide-react';
 import funnelConfig from '../../../core/config/funnel.config';
+import { ExpertVideoPlayer } from './components/video-player/index';
 import { ExpertCtaButton } from './ExpertCtaButton';
 import { expertBrandAssets } from './expertContent';
-import { ExpertVslWrapper } from './ExpertVslWrapper';
 
 interface ExpertHeroProps {
   aside: ReactNode;
@@ -67,15 +67,13 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
             </div>
 
             {heroVideo.enabled ? (
-              <ExpertVslWrapper
+              <ExpertVideoPlayer
                 provider={heroVideo.provider}
                 videoId={heroVideo.videoId}
-                loop={true}
-                vslMode={heroVideo.vslMode}
+                vslMode={true}
                 resumePlayback={heroVideo.resumePlayback}
                 lazyLoadYoutube={heroVideo.lazyLoadYoutube}
                 hideYoutubeUi={heroVideo.hideYoutubeUi}
-                hideYouTubeBranding={true}
                 smartPoster={heroVideo.smartPoster}
                 vslProgressBarColor={heroVideo.vslProgressBarColor}
                 className="border-[6px] md:border-[8px] border-[#111] shadow-2xl w-full rounded-sm"

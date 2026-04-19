@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Play, X } from 'lucide-react';
+import { ExpertVideoPlayer } from './components/video-player/index';
 import type { ExpertTestimonialItem } from './expertContent';
-import { ExpertVslWrapper } from './ExpertVslWrapper';
 
 interface ExpertTestimonialsProps {
   items: ExpertTestimonialItem[];
@@ -116,14 +116,12 @@ export function ExpertTestimonials({ items }: ExpertTestimonialsProps) {
               <X className="h-5 w-5" />
             </button>
 
-            <ExpertVslWrapper
+            <ExpertVideoPlayer
               provider="youtube"
               videoId={activeVideoId}
-              loop={true}
-              hideYouTubeBranding={true}
+              vslMode={true}
               hideYoutubeUi={true}
-              className="aspect-[3/4] max-h-[82svh] rounded-[22px] border border-white/10 shadow-[0_35px_90px_rgba(0,0,0,0.55)] md:aspect-video"
-              playerClassName="[&_iframe]:h-full [&_iframe]:w-full [&_video]:object-cover"
+              className="aspect-[3/4] max-h-[82svh] rounded-[22px] border border-white/10 shadow-[0_35px_90px_rgba(0,0,0,0.55)] md:aspect-video [&_iframe]:h-full [&_iframe]:w-full [&_video]:object-cover"
             />
 
             <div className="mt-4 px-1 text-white">
