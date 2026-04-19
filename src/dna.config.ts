@@ -25,25 +25,41 @@ function hexToRgbTriplet(hex: string) {
   return `${red} ${green} ${blue}`;
 }
 
+function normalizeColorValue(value: string) {
+  const normalizedValue = value.trim();
+
+  if (normalizedValue.startsWith('#')) {
+    return hexToRgbTriplet(normalizedValue);
+  }
+
+  if (/^\d{1,3}\s+\d{1,3}\s+\d{1,3}$/.test(normalizedValue)) {
+    return normalizedValue.replace(/\s+/g, ' ');
+  }
+
+  throw new Error(`[DNA] Invalid color value: "${value}"`);
+}
+
 export const DNA = {
   theme: 'expert',
   colors: {
-    primary: '#e01921',
-    accent: '#1d3557',
-    cta: '#fac215',
-    ctaHover: '#eab308',
-    surface: '#fefce8',
+    primary: '242 169 167',
+    accent: '109 89 122',
+    cta: '255 221 153',
+    ctaHover: '255 210 120',
+    surface: '255 245 245',
   },
-  vslVideoId: 'ABC123XYZ',
+  vslVideoId: 'eTD0WWFIDAg',
   prices: {
-    main: '97',
-    bump: '37',
-    totalValue: '3,788',
-    regularPrice: '997',
+    main: '50',
+    bump: '80',
+    totalValue: '130',
+    regularPrice: '80',
   },
   copy: {
-    productName: 'Sistema Kurukin Core',
-    orderBumpTitle: '¡SÍ! AÑADIR EL PACK DE DUPLICACIÓN',
+    productName: 'Magia de la Abundancia',
+    headline: 'Activa el flujo de abundancia en tu vida',
+    ctaText: '¡RESERVAR MI LUGAR AHORA!',
+    orderBumpTitle: 'Activación energética guiada',
   },
 } as const satisfies {
   theme: DnaTheme;
@@ -63,6 +79,8 @@ export const DNA = {
   };
   copy: {
     productName: string;
+    headline: string;
+    ctaText: string;
     orderBumpTitle: string;
   };
 };
@@ -84,13 +102,13 @@ export function resolveDnaFunnelTheme(theme: DnaTheme = DNA.theme) {
 
 export function resolveDnaThemeStyle() {
   return {
-    '--color-primary': hexToRgbTriplet(DNA.colors.primary),
-    '--color-secondary': hexToRgbTriplet(DNA.colors.accent),
-    '--color-accent': hexToRgbTriplet(DNA.colors.cta),
-    '--color-brand-primary': hexToRgbTriplet(DNA.colors.primary),
-    '--color-brand-accent': hexToRgbTriplet(DNA.colors.accent),
-    '--color-cta-base': hexToRgbTriplet(DNA.colors.cta),
-    '--color-cta-hover': hexToRgbTriplet(DNA.colors.ctaHover),
-    '--color-surface-bump': hexToRgbTriplet(DNA.colors.surface),
+    '--color-primary': normalizeColorValue(DNA.colors.primary),
+    '--color-secondary': normalizeColorValue(DNA.colors.accent),
+    '--color-accent': normalizeColorValue(DNA.colors.cta),
+    '--color-brand-primary': normalizeColorValue(DNA.colors.primary),
+    '--color-brand-accent': normalizeColorValue(DNA.colors.accent),
+    '--color-cta-base': normalizeColorValue(DNA.colors.cta),
+    '--color-cta-hover': normalizeColorValue(DNA.colors.ctaHover),
+    '--color-surface-bump': normalizeColorValue(DNA.colors.surface),
   } as const;
 }

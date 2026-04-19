@@ -1,26 +1,28 @@
-import { startTransition, useEffect, useState } from 'react';
-import { ArrowDownRight, Check, ChevronLeft, CreditCard, Lock, MapPin, ShieldCheck, Truck } from 'lucide-react';
+import { startTransition, useState } from 'react';
+import { ChevronLeft, Lock, MapPin, ShieldCheck, Sparkles } from 'lucide-react';
 import type { Country } from 'react-phone-number-input';
+import { useNavigate } from 'react-router-dom';
 import { DNA } from '../../../dna.config';
-import funnelConfig, { pricingProductKeys } from '../../../core/config/funnel.config';
-import { useHotmartPrices } from '../../../core/hooks/useHotmartPrices';
+import funnelConfig from '../../../core/config/funnel.config';
 import analytics from '../../../core/services/analytics';
 import { useVisitor } from '../../../core/visitor/VisitorContext';
+import {
+  magiaEventOptions,
+  magiaPayment,
+  resolveEventOption,
+  saveRegistrationSnapshot,
+  type EventMode,
+} from '../../../content/magia';
 import { CommonTextField } from '../../common/forms/CommonTextField';
 import { SmartPhoneInput } from '../../common/forms/SmartPhoneInput';
 import { ExpertCtaButton } from './ExpertCtaButton';
-import { expertBrandAssets } from './expertContent';
 
 interface FormErrors {
+  eventMode?: string;
   firstName?: string;
   lastName?: string;
   email?: string;
   whatsapp?: string;
-  address?: string;
-  country?: string;
-  state?: string;
-  city?: string;
-  postalCode?: string;
 }
 
 interface OrderLeadPayload {
@@ -29,18 +31,13 @@ interface OrderLeadPayload {
     last_name: string;
     email: string;
     whatsapp: string;
-    address: string;
-    apartment: string;
-    country: string;
-    state: string;
-    city: string;
-    postal_code: string;
   };
-  order: {
-    shipping_usd: number;
-    add_audiobook: boolean;
-    add_live_recordings: boolean;
-    total_usd: number;
+  event: {
+    mode: EventMode;
+    label: string;
+    amount_bs: number;
+    schedule: string;
+    location: string;
   };
   meta: {
     ip?: string;
@@ -55,107 +52,54 @@ function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-function formatPrice(value: number) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: value % 1 === 0 ? 0 : 2,
-    maximumFractionDigits: 2,
-  }).format(value);
-}
-
 function isMockWebhook(url: string) {
   return !url || url.includes('test-webhook-url');
 }
 
-function resolveOfferPrice(baseValue: number, localizedValue?: { total: string }) {
-  const parsed = Number(localizedValue?.total);
-  if (Number.isFinite(parsed) && parsed > 0) {
-    return parsed;
-  }
-
-  return baseValue;
-}
-
-const clickfunnelsFieldClassName =
-  'bg-white border border-gray-300 text-gray-900 rounded-md focus:ring-2 focus:ring-brand-accent shadow-sm';
-
 function resolveDefaultPhoneCountry(countryCode?: string): Country {
   if (!countryCode) {
-    return 'US';
+    return 'BO';
   }
 
   return countryCode.toUpperCase() as Country;
 }
 
+const fieldClassName =
+  'bg-white border border-[rgb(var(--color-brand-accent)/0.18)] text-gray-900 rounded-xl focus:ring-2 focus:ring-brand-accent shadow-sm';
+
 export function ExpertOrderForm() {
-  const { visitorData, isLoading } = useVisitor();
-  const mainOffer = useHotmartPrices(pricingProductKeys.ofertaPrincipal);
-  const audiobookOffer = useHotmartPrices(pricingProductKeys.orderBump);
-  const liveRecordingsOffer = useHotmartPrices(pricingProductKeys.upsellContinuidad);
+  const navigate = useNavigate();
+  const { visitorData } = useVisitor();
 
   const [step, setStep] = useState<1 | 2>(1);
+  const [eventMode, setEventMode] = useState<EventMode | ''>('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
-  const [address, setAddress] = useState('');
-  const [apartment, setApartment] = useState('');
-  const [country, setCountry] = useState('');
-  const [state, setState] = useState('');
-  const [city, setCity] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [wantsAudiobook, setWantsAudiobook] = useState(false);
-  const [wantsLiveRecordings, setWantsLiveRecordings] = useState(false);
   const [isWhatsappValid, setIsWhatsappValid] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitError, setSubmitError] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  useEffect(() => {
-    if (isLoading || !visitorData) {
-      return;
-    }
+  const selectedEvent = eventMode ? resolveEventOption(eventMode) : null;
 
-    setCountry((currentValue) => currentValue || visitorData.country_name || '');
-    setState((currentValue) => currentValue || visitorData.region || '');
-    setCity((currentValue) => currentValue || visitorData.city || '');
-  }, [isLoading, visitorData]);
-
-  const countryCode = visitorData?.country_code?.toUpperCase() ?? 'US';
-  const shippingPrice = countryCode === 'US' ? 9.95 : 19.95;
-  const audiobookPrice = resolveOfferPrice(
-    audiobookOffer.product.basePriceUSD,
-    audiobookOffer.scrapedData?.[countryCode],
-  );
-  const liveRecordingsPrice = resolveOfferPrice(
-    liveRecordingsOffer.product.basePriceUSD,
-    liveRecordingsOffer.scrapedData?.[countryCode],
-  );
-  const orderTotal = shippingPrice + (wantsAudiobook ? audiobookPrice : 0) + (wantsLiveRecordings ? liveRecordingsPrice : 0);
-  const checkoutUrl = mainOffer.product.checkoutUrl;
-
-  const validateShippingStep = () => {
+  const validateStepOne = () => {
     const nextErrors: FormErrors = {};
 
-    if (!firstName.trim()) nextErrors.firstName = 'Complete this field.';
-    if (!lastName.trim()) nextErrors.lastName = 'Complete this field.';
+    if (!eventMode) nextErrors.eventMode = 'Selecciona una modalidad para continuar.';
+    if (!firstName.trim()) nextErrors.firstName = 'Completa tu nombre.';
+    if (!lastName.trim()) nextErrors.lastName = 'Completa tu apellido.';
     if (!email.trim()) {
-      nextErrors.email = 'Please enter your email.';
+      nextErrors.email = 'Ingresa tu correo.';
     } else if (!isValidEmail(email.trim())) {
-      nextErrors.email = 'Please enter a valid email.';
+      nextErrors.email = 'Ingresa un correo valido.';
     }
     if (!whatsapp.trim()) {
-      nextErrors.whatsapp = 'Please enter your phone number.';
+      nextErrors.whatsapp = 'Ingresa tu WhatsApp.';
     } else if (!isWhatsappValid) {
-      nextErrors.whatsapp = 'Please use an international phone format.';
+      nextErrors.whatsapp = 'Usa un formato internacional valido.';
     }
-    if (!address.trim()) nextErrors.address = 'Address is required.';
-    if (!country.trim()) nextErrors.country = 'Country is required.';
-    if (!state.trim()) nextErrors.state = 'State is required.';
-    if (!city.trim()) nextErrors.city = 'City is required.';
-    if (!postalCode.trim()) nextErrors.postalCode = 'Postal code is required.';
 
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
@@ -164,17 +108,17 @@ export function ExpertOrderForm() {
   const handleContinue = async () => {
     setSubmitError('');
 
-    if (!validateShippingStep()) {
+    if (!validateStepOne() || !selectedEvent) {
       return;
     }
 
     try {
       await analytics.trackEvent('AddToCart', {
-        product_id: pricingProductKeys.ofertaPrincipal,
-        product_name: funnelConfig.brandName,
-        value: orderTotal,
-        shipping_value: shippingPrice,
-        country_code: countryCode,
+        product_name: DNA.copy.productName,
+        event_mode: selectedEvent.id,
+        event_label: selectedEvent.label,
+        amount_bs: selectedEvent.amountBs,
+        country_code: visitorData?.country_code?.toUpperCase() ?? 'BO',
       });
     } catch (trackingError) {
       console.warn('[ExpertOrderForm] could not track AddToCart', trackingError);
@@ -188,7 +132,7 @@ export function ExpertOrderForm() {
   const handleSubmit = async () => {
     setSubmitError('');
 
-    if (!validateShippingStep()) {
+    if (!validateStepOne() || !selectedEvent) {
       setStep(1);
       return;
     }
@@ -201,18 +145,13 @@ export function ExpertOrderForm() {
         last_name: lastName.trim(),
         email: email.trim(),
         whatsapp: whatsapp.trim(),
-        address: address.trim(),
-        apartment: apartment.trim(),
-        country: country.trim(),
-        state: state.trim(),
-        city: city.trim(),
-        postal_code: postalCode.trim(),
       },
-      order: {
-        shipping_usd: shippingPrice,
-        add_audiobook: wantsAudiobook,
-        add_live_recordings: wantsLiveRecordings,
-        total_usd: orderTotal,
+      event: {
+        mode: selectedEvent.id,
+        label: selectedEvent.label,
+        amount_bs: selectedEvent.amountBs,
+        schedule: selectedEvent.schedule,
+        location: selectedEvent.location,
       },
       meta: {
         ip: visitorData?.ip,
@@ -238,124 +177,126 @@ export function ExpertOrderForm() {
           throw new Error(`Webhook responded with ${response.status}`);
         }
       } else {
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 400));
       }
 
+      saveRegistrationSnapshot({
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.trim(),
+        whatsapp: whatsapp.trim(),
+        eventMode: selectedEvent.id,
+        createdAt: new Date().toISOString(),
+      });
+
       await analytics.trackEvent('Lead', {
-        form_id: 'expert_order_form',
+        form_id: 'magia_expert_order_form',
+        content_name: DNA.copy.productName,
         lead: payload.lead,
-        order: payload.order,
-        content_name: funnelConfig.brandName,
+        event: payload.event,
         status: 'submitted',
       });
 
-      await analytics.trackEvent('InitiateCheckout', {
-        product_id: pricingProductKeys.ofertaPrincipal,
-        product_name: funnelConfig.brandName,
-        value: orderTotal,
-        shipping_value: shippingPrice,
-        checkout_url: checkoutUrl,
-        country_code: countryCode,
+      const searchParams = new URLSearchParams({
+        sesion: selectedEvent.id,
+        pname: firstName.trim(),
       });
 
-      if (/^https?:\/\//i.test(checkoutUrl)) {
-        window.location.assign(checkoutUrl);
-        return;
-      }
-
-      setIsSubmitted(true);
+      startTransition(() => {
+        navigate(`/confirmacion?${searchParams.toString()}`);
+      });
     } catch (error) {
-      console.error('[ExpertOrderForm] checkout handoff failed', error);
-      setSubmitError('We could not continue to checkout right now. Please try again in a moment.');
+      console.error('[ExpertOrderForm] registration handoff failed', error);
+      setSubmitError('No pudimos completar tu registro en este momento. Intenta nuevamente en unos segundos.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  if (isSubmitted) {
-    return (
-      <aside className="overflow-hidden rounded-lg border-2 border-gray-300 bg-white shadow-xl">
-        <div className="rounded-t-[12px] bg-brand-accent px-5 py-4 text-center text-white">
-          <p className="expert-headline text-[1rem] font-extrabold uppercase tracking-[0.08em]">Order Reserved</p>
-        </div>
-        <div className="space-y-4 px-5 py-6">
-          <div className="flex items-center gap-3 rounded-[14px] bg-brand-accent/5 p-4">
-            <ShieldCheck className="h-8 w-8 text-brand-accent" />
-            <div>
-              <p className="expert-headline text-[1.1rem] font-extrabold text-[#2d2d2d]">Your spot is held.</p>
-              <p className="expert-body text-sm leading-6 text-[#333]">
-                We captured your details and the order form is ready for the next step.
-              </p>
-            </div>
-          </div>
-
-          <ExpertCtaButton
-            label="Update My Shipping Details"
-            subLabel="Return to the form"
-            onClick={() => {
-              setIsSubmitted(false);
-              setStep(1);
-            }}
-            fullWidth
-          />
-        </div>
-      </aside>
-    );
-  }
-
   return (
-    <aside id="checkout" className="overflow-hidden rounded-lg border-2 border-gray-300 bg-white shadow-xl">
-      <div className="grid grid-cols-2 border-b border-gray-300">
-        <div
-          className={`px-4 py-4 text-center transition-colors ${
-            step === 1 ? 'bg-[#111111] text-white' : 'bg-[#efefef] text-[#5b5b5b]'
-          }`}
-        >
-          <p className={`expert-body text-[11px] font-bold uppercase tracking-[0.2em] ${step === 1 ? 'text-white/80' : 'text-[#777]'}`}>
+    <aside
+      id="checkout"
+      className="overflow-hidden rounded-[32px] border border-white/15 bg-white/95 text-[#2f2535] shadow-[0_30px_80px_rgba(14,10,18,0.36)] backdrop-blur"
+    >
+      <div className="grid grid-cols-2 border-b border-[rgb(var(--color-brand-accent)/0.12)]">
+        <div className={`px-4 py-4 text-center transition-colors ${step === 1 ? 'bg-[#3b2d42] text-white' : 'bg-[#f6eef5] text-[#6b5a72]'}`}>
+          <p className={`expert-body text-[11px] font-bold uppercase tracking-[0.2em] ${step === 1 ? 'text-white/78' : 'text-[#8d7b94]'}`}>
             {step === 1 ? 'Activo' : 'Completo'}
           </p>
-          <p className="expert-headline mt-1 text-sm font-extrabold sm:text-[15px]">Paso 1: Info de Contacto</p>
+          <p className="expert-headline mt-1 text-sm font-extrabold sm:text-[15px]">Paso 1: Registro</p>
         </div>
-        <div
-          className={`border-l border-gray-300 px-4 py-4 text-center transition-colors ${
-            step === 2 ? 'bg-[#111111] text-white' : 'bg-[#efefef] text-[#5b5b5b]'
-          }`}
-        >
-          <p className={`expert-body text-[11px] font-bold uppercase tracking-[0.2em] ${step === 2 ? 'text-white/80' : 'text-[#777]'}`}>
+        <div className={`border-l border-[rgb(var(--color-brand-accent)/0.12)] px-4 py-4 text-center transition-colors ${step === 2 ? 'bg-[#3b2d42] text-white' : 'bg-[#f6eef5] text-[#6b5a72]'}`}>
+          <p className={`expert-body text-[11px] font-bold uppercase tracking-[0.2em] ${step === 2 ? 'text-white/78' : 'text-[#8d7b94]'}`}>
             {step === 2 ? 'Activo' : 'Siguiente'}
           </p>
-          <p className="expert-headline mt-1 text-sm font-extrabold sm:text-[15px]">Paso 2: Pago Seguro</p>
+          <p className="expert-headline mt-1 text-sm font-extrabold sm:text-[15px]">Paso 2: Confirmacion</p>
         </div>
       </div>
 
       <div className="px-5 pb-6 pt-5 sm:px-6">
-        <div className="rounded-[12px] bg-white px-4 pb-4 pt-2 shadow-[0_0_54px_rgba(0,0,0,0.08)]">
-          <img src={expertBrandAssets.bundleUrl} alt="Expert Secrets bundle" className="mx-auto w-full" loading="lazy" />
-          <p className="expert-body mt-3 text-center text-[14px] text-[#2d2d2d]/65">384 Pages | Industry Specific Examples | 5 Free Bonuses</p>
-          <p className="expert-headline mt-2 text-center text-[1.6rem] font-extrabold leading-tight text-brand-primary sm:text-[2rem]">
-            Antes <span className="line-through">${DNA.prices.regularPrice}</span>, hoy solo ${DNA.prices.main}
-          </p>
-          <p className="expert-body mt-2 text-center text-sm text-[#2d2d2d]/80">
-            El ADN fija el pricing principal y deja el checkout listo para activarse desde este clon estático.
-          </p>
-          <p className="expert-headline mt-2 text-center text-[1rem] font-semibold leading-6 text-[#2d2d2d]">
-            Accede a {DNA.copy.productName} y conserva el bump listo para un checkout de alto contraste.
-          </p>
+        <div className="rounded-[24px] bg-[linear-gradient(180deg,#fff7f7_0%,#f7eef5_100%)] px-5 py-5 shadow-[0_18px_40px_rgba(80,56,89,0.08)]">
+          <div className="flex items-start gap-3">
+            <Sparkles className="mt-1 h-6 w-6 shrink-0 text-brand-primary" />
+            <div>
+              <p className="expert-headline text-[1.15rem] font-extrabold text-[#3b2d42]">
+                {DNA.copy.ctaText}
+              </p>
+              <p className="expert-body mt-1 text-sm leading-6 text-[#5f4f65]">
+                Elige tu modalidad y deja tus datos para recibir una confirmacion especifica para Zoom o Cochabamba.
+              </p>
+            </div>
+          </div>
         </div>
 
         {step === 1 ? (
           <div className="mt-5 space-y-4">
-            <div className="rounded-[14px] border border-brand-accent/10 bg-brand-accent/5 px-4 py-3">
-              <p className="expert-headline text-[1.05rem] font-bold text-[#2d2d2d]">Reserva tu acceso a {DNA.copy.productName}</p>
-              <p className="expert-body mt-1 text-sm leading-6 text-[#333]">
-                Completa tus datos para continuar con el checkout y mantener la oferta principal en el contexto correcto.
-              </p>
+            <div className="rounded-[24px] border border-[rgb(var(--color-brand-accent)/0.1)] bg-[#fffaf8] p-4">
+              <p className="expert-headline text-[1.05rem] font-bold text-[#3b2d42]">Selecciona la ceremonia a la que asistiras</p>
+              <div className="mt-3 grid gap-3">
+                {magiaEventOptions.map((option) => {
+                  const isSelected = eventMode === option.id;
+
+                  return (
+                    <label
+                      key={option.id}
+                      className={`block cursor-pointer rounded-[22px] border px-4 py-4 transition ${
+                        isSelected
+                          ? 'border-brand-primary bg-[rgb(var(--color-brand-primary)/0.1)] shadow-[0_12px_30px_rgba(112,69,90,0.12)]'
+                          : 'border-[rgb(var(--color-brand-accent)/0.12)] bg-white hover:border-brand-accent/40'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="magia-event-mode"
+                        value={option.id}
+                        checked={isSelected}
+                        onChange={() => {
+                          setEventMode(option.id);
+                          setErrors((prev) => ({ ...prev, eventMode: undefined }));
+                        }}
+                        className="sr-only"
+                      />
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <p className="expert-headline text-[1.1rem] font-bold text-[#3b2d42]">{option.label}</p>
+                          <p className="expert-body mt-1 text-sm leading-6 text-[#5f4f65]">{option.schedule}</p>
+                          <p className="expert-body mt-1 text-xs uppercase tracking-[0.18em] text-brand-accent">{option.location}</p>
+                        </div>
+                        <div className="rounded-full bg-[rgb(var(--color-surface-bump))] px-4 py-2">
+                          <p className="expert-headline text-[1rem] font-extrabold text-brand-primary">Bs {option.amountBs}</p>
+                        </div>
+                      </div>
+                    </label>
+                  );
+                })}
+              </div>
+              {errors.eventMode ? <p className="mt-2 text-xs text-brand-primary">{errors.eventMode}</p> : null}
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <CommonTextField
-                id="expert-first-name"
-                label="First Name"
+                id="magia-first-name"
+                label="Nombre"
                 value={firstName}
                 onChange={(event) => {
                   setFirstName(event.target.value);
@@ -363,12 +304,12 @@ export function ExpertOrderForm() {
                 }}
                 error={errors.firstName}
                 autoComplete="given-name"
-                inputClassName={clickfunnelsFieldClassName}
+                inputClassName={fieldClassName}
               />
 
               <CommonTextField
-                id="expert-last-name"
-                label="Last Name"
+                id="magia-last-name"
+                label="Apellido"
                 value={lastName}
                 onChange={(event) => {
                   setLastName(event.target.value);
@@ -376,13 +317,13 @@ export function ExpertOrderForm() {
                 }}
                 error={errors.lastName}
                 autoComplete="family-name"
-                inputClassName={clickfunnelsFieldClassName}
+                inputClassName={fieldClassName}
               />
             </div>
 
             <CommonTextField
-              id="expert-email"
-              label="Email Address"
+              id="magia-email"
+              label="Correo electronico"
               type="email"
               value={email}
               onChange={(event) => {
@@ -391,11 +332,11 @@ export function ExpertOrderForm() {
               }}
               error={errors.email}
               autoComplete="email"
-              inputClassName={clickfunnelsFieldClassName}
+              inputClassName={fieldClassName}
             />
 
             <SmartPhoneInput
-              id="expert-whatsapp"
+              id="magia-whatsapp"
               value={whatsapp}
               onChange={(nextValue) => {
                 setWhatsapp(nextValue);
@@ -406,94 +347,25 @@ export function ExpertOrderForm() {
               required
               autoDetectCountry
               defaultCountry={resolveDefaultPhoneCountry(visitorData?.country_code)}
-              label="Phone Number"
-              labelClassName="expert-body mb-1.5 block text-sm font-semibold text-[#2d2d2d]"
-              phoneInputClassName={clickfunnelsFieldClassName}
+              label="WhatsApp"
+              labelClassName="expert-body mb-1.5 block text-sm font-semibold text-[#3b2d42]"
+              phoneInputClassName={fieldClassName}
               helperTextClassName="mt-1.5 text-xs text-brand-accent"
               errorTextClassName="mt-1.5 text-xs text-brand-primary"
             />
 
-            <CommonTextField
-              id="expert-address"
-              label="Address"
-              value={address}
-              onChange={(event) => {
-                setAddress(event.target.value);
-                setErrors((prev) => ({ ...prev, address: undefined }));
-              }}
-              error={errors.address}
-              autoComplete="address-line1"
-              inputClassName={clickfunnelsFieldClassName}
-            />
-
-            <CommonTextField
-              id="expert-apartment"
-              label="Apartment, building, floor (optional)"
-              value={apartment}
-              onChange={(event) => setApartment(event.target.value)}
-              autoComplete="address-line2"
-              inputClassName={clickfunnelsFieldClassName}
-            />
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <CommonTextField
-                id="expert-country"
-                label="Country"
-                value={country}
-                onChange={(event) => {
-                  setCountry(event.target.value);
-                  setErrors((prev) => ({ ...prev, country: undefined }));
-                }}
-                error={errors.country}
-                autoComplete="country-name"
-                inputClassName={clickfunnelsFieldClassName}
-              />
-
-              <CommonTextField
-                id="expert-state"
-                label="State"
-                value={state}
-                onChange={(event) => {
-                  setState(event.target.value);
-                  setErrors((prev) => ({ ...prev, state: undefined }));
-                }}
-                error={errors.state}
-                autoComplete="address-level1"
-                inputClassName={clickfunnelsFieldClassName}
-              />
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <CommonTextField
-                id="expert-city"
-                label="City"
-                value={city}
-                onChange={(event) => {
-                  setCity(event.target.value);
-                  setErrors((prev) => ({ ...prev, city: undefined }));
-                }}
-                error={errors.city}
-                autoComplete="address-level2"
-                inputClassName={clickfunnelsFieldClassName}
-              />
-
-              <CommonTextField
-                id="expert-postal"
-                label="Postal Code"
-                value={postalCode}
-                onChange={(event) => {
-                  setPostalCode(event.target.value);
-                  setErrors((prev) => ({ ...prev, postalCode: undefined }));
-                }}
-                error={errors.postalCode}
-                autoComplete="postal-code"
-                inputClassName={clickfunnelsFieldClassName}
-              />
+            <div className="rounded-[20px] bg-[#f7f1f8] px-4 py-4">
+              <div className="flex gap-3">
+                <MapPin className="mt-1 h-5 w-5 shrink-0 text-brand-accent" />
+                <p className="expert-body text-sm leading-6 text-[#5f4f65]">
+                  Tus datos solo se usan para confirmar tu asistencia y enviarte el acceso o la ubicacion final por WhatsApp.
+                </p>
+              </div>
             </div>
 
             <ExpertCtaButton
-              label="Continue To Step 2"
-              subLabel="Review your free order and bonuses"
+              label="Continuar a confirmacion"
+              subLabel="Verifica modalidad, monto y siguientes pasos"
               onClick={() => {
                 void handleContinue();
               }}
@@ -502,161 +374,75 @@ export function ExpertOrderForm() {
           </div>
         ) : (
           <div className="mt-5 space-y-4">
-            <div className="rounded-[14px] border border-brand-accent/10 bg-brand-accent/5 p-4">
+            <div className="rounded-[24px] border border-[rgb(var(--color-brand-accent)/0.12)] bg-[#fff9fb] px-5 py-5">
               <div className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-brand-accent" />
-                <div className="expert-body text-sm leading-6 text-[#2d2d2d]">
-                  <p className="font-semibold">Shipping to</p>
-                  <p>
-                    {firstName} {lastName}, {address}
-                    {apartment ? `, ${apartment}` : ''}, {city}, {state}, {country}, {postalCode}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <label className="flex cursor-pointer items-start gap-3 rounded-[14px] border border-brand-accent/10 bg-white p-4">
-              <input
-                type="checkbox"
-                checked={wantsLiveRecordings}
-                onChange={(event) => setWantsLiveRecordings(event.target.checked)}
-                className="mt-1 h-4 w-4 rounded border-[#cfd6df] text-brand-accent focus:ring-brand-accent"
-              />
-              <img src={expertBrandAssets.liveRecordingsUrl} alt="Expert Secrets live recordings" className="h-16 w-16 rounded-xl object-cover" loading="lazy" />
-              <div className="min-w-0">
-                <p className="expert-body text-xs font-bold uppercase tracking-[0.18em] text-brand-accent">Special One Time Offer</p>
-                <p className="expert-headline mt-1 text-[1rem] font-extrabold leading-5 text-[#2d2d2d]">
-                  Expert Secrets Live Recordings
-                </p>
-                <p className="expert-body mt-1 text-sm leading-6 text-[#333]">
-                  Add the recordings for {formatPrice(liveRecordingsPrice)} before checkout.
-                </p>
-              </div>
-            </label>
-
-            <div className="rounded-[14px] border border-brand-accent/10 bg-brand-accent/5 p-4">
-              <div className="flex items-start gap-3">
-                <Lock className="mt-0.5 h-5 w-5 shrink-0 text-brand-accent" />
+                <ShieldCheck className="mt-1 h-6 w-6 shrink-0 text-brand-primary" />
                 <div>
-                  <p className="expert-headline text-[1rem] font-bold text-[#2d2d2d]">Secure Payment Handoff</p>
-                  <p className="expert-body mt-1 text-sm leading-6 text-[#333]">
-                    We review your order here and continue through the secure checkout configured in the funnel logic.
+                  <p className="expert-headline text-[1.2rem] font-extrabold text-[#3b2d42]">Tu lugar esta casi reservado</p>
+                  <p className="expert-body mt-1 text-sm leading-6 text-[#5f4f65]">
+                    Confirmaras tu modalidad y luego pasaras a la pagina con instrucciones de pago y acceso.
                   </p>
-                  <div className="mt-3 flex items-center gap-3 text-brand-accent">
-                    <CreditCard className="h-5 w-5" />
-                    <Truck className="h-5 w-5" />
-                    <ShieldCheck className="h-5 w-5" />
-                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-[14px] bg-[#111827] p-4 text-white">
-              <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                <p className="expert-headline text-[1.05rem] font-bold">Order Summary</p>
-                <p className="expert-body text-sm text-white/70">Secure 2-step form</p>
-              </div>
-              <div className="expert-body mt-4 space-y-3 text-sm">
-                <div className="flex items-center justify-between gap-3">
-                  <span className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-cta" />
-                    {DNA.copy.productName}
-                  </span>
-                  <span className="font-semibold">${DNA.prices.main}</span>
+            {selectedEvent ? (
+              <div className="rounded-[24px] bg-[linear-gradient(180deg,#fff7f7_0%,#f6eef5_100%)] px-5 py-5 shadow-[0_18px_40px_rgba(80,56,89,0.08)]">
+                <p className="expert-body text-xs uppercase tracking-[0.22em] text-brand-accent">Modalidad seleccionada</p>
+                <p className="expert-headline mt-2 text-[1.7rem] leading-tight text-[#3b2d42]">{selectedEvent.label}</p>
+                <p className="expert-body mt-2 text-sm leading-6 text-[#5f4f65]">
+                  {selectedEvent.schedule}
+                  <br />
+                  {selectedEvent.location}
+                </p>
+                <div className="mt-4 rounded-[20px] bg-white px-4 py-4">
+                  <p className="expert-body text-xs uppercase tracking-[0.22em] text-brand-accent">Monto a pagar</p>
+                  <p className="expert-headline mt-2 text-[2.3rem] leading-none text-brand-primary">Bs {selectedEvent.amountBs}</p>
+                  <p className="expert-body mt-2 text-sm leading-6 text-[#5f4f65]">
+                    Deposito o QR a nombre de {magiaPayment.holder}. Luego envia tu comprobante al WhatsApp {magiaPayment.whatsapp}.
+                  </p>
                 </div>
-                <div className="flex items-center justify-between gap-3">
-                  <span>Precio configurado en DNA</span>
-                  <span className="font-semibold">${DNA.prices.regularPrice}</span>
-                </div>
-                {wantsAudiobook ? (
-                  <div className="flex items-center justify-between gap-3">
-                    <span>Order bump</span>
-                    <span className="font-semibold">{formatPrice(audiobookPrice)}</span>
-                  </div>
-                ) : null}
-                {wantsLiveRecordings ? (
-                  <div className="flex items-center justify-between gap-3">
-                    <span>Live recordings bump</span>
-                    <span className="font-semibold">{formatPrice(liveRecordingsPrice)}</span>
-                  </div>
-                ) : null}
-                <div className="flex items-center justify-between gap-3 border-t border-white/10 pt-3 text-base font-bold">
-                  <span>Total due now</span>
-                  <span>{formatPrice(orderTotal)}</span>
-                </div>
-              </div>
-            </div>
-
-            {submitError ? (
-              <div className="rounded-[12px] border border-brand-primary/25 bg-brand-primary/8 px-4 py-3 text-sm text-brand-primary">
-                {submitError}
               </div>
             ) : null}
 
-            <label className="my-6 block cursor-pointer overflow-hidden rounded-none border-4 border-dashed border-brand-primary bg-surface-bump p-4 md:p-6">
-              <div className="flex items-center gap-3 bg-brand-primary p-2 text-white">
-                <ArrowDownRight className="h-5 w-5 shrink-0 animate-pulse" />
-                <p className="expert-headline text-sm font-extrabold uppercase sm:text-[15px]">
-                  {DNA.copy.orderBumpTitle}
-                </p>
-              </div>
-              <div className="mt-4 flex items-start gap-4">
-                <input
-                  type="checkbox"
-                  checked={wantsAudiobook}
-                  onChange={(event) => setWantsAudiobook(event.target.checked)}
-                  className="mt-1 h-5 w-5 rounded border-2 border-brand-primary/70 text-brand-primary focus:ring-brand-primary"
-                />
-                <img
-                  src={expertBrandAssets.audiobookUrl}
-                  alt="Expert Secrets audiobook bonus"
-                  className="hidden h-16 w-16 rounded-xl object-cover sm:block"
-                  loading="lazy"
-                />
-                <div className="min-w-0">
-                  <p className="expert-headline text-[1rem] font-extrabold leading-5 text-brand-primary sm:text-[1.05rem]">
-                    {DNA.copy.orderBumpTitle} por ${DNA.prices.bump}
-                  </p>
-                  <p className="expert-body mt-2 text-sm leading-6 text-[#5d5d5d]">
-                    Este bump queda conectado al DNA para clonarse junto al resto del pricing sin tocar el layout.
-                  </p>
-                </div>
-              </div>
-            </label>
+            <div className="rounded-[24px] border border-[rgb(var(--color-brand-accent)/0.12)] bg-white px-5 py-5">
+              <p className="expert-headline text-[1.05rem] font-bold text-[#3b2d42]">Resumen del registro</p>
+              <p className="expert-body mt-3 text-sm leading-7 text-[#5f4f65]">
+                {firstName} {lastName}
+                <br />
+                {email}
+                <br />
+                {whatsapp}
+              </p>
+            </div>
 
-            <div className="space-y-3">
+            {submitError ? (
+              <p className="rounded-[18px] bg-[rgb(var(--color-brand-primary)/0.08)] px-4 py-3 text-sm text-brand-primary">
+                {submitError}
+              </p>
+            ) : null}
+
+            <div className="grid gap-3 sm:grid-cols-[0.8fr_1.2fr]">
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-md border border-[#d0d8e2] px-5 text-sm font-semibold text-[#2d2d2d] transition hover:bg-[#f8fafc]"
+                className="inline-flex min-h-[60px] items-center justify-center gap-2 rounded-[18px] border border-[rgb(var(--color-brand-accent)/0.14)] bg-white px-5 py-4 text-sm font-semibold text-[#4b3d53] transition hover:bg-[#f7f1f8]"
               >
                 <ChevronLeft className="h-4 w-4" />
-                Back
+                Editar
               </button>
 
-              <button
-                type="button"
+              <ExpertCtaButton
+                label="Ir a mi confirmacion"
+                subLabel="Ver monto, QR y pasos finales"
                 onClick={() => {
                   void handleSubmit();
                 }}
+                fullWidth
                 disabled={isSubmitting}
-                className="flex min-h-[84px] w-full flex-col items-center justify-center rounded-lg bg-green-500 px-6 py-4 text-center text-white shadow-[0_14px_28px_rgba(34,197,94,0.35)] transition hover:bg-green-600 disabled:cursor-not-allowed disabled:opacity-70"
-              >
-                <span className="expert-headline text-[1.2rem] font-extrabold uppercase tracking-[0.04em] sm:text-[1.35rem]">
-                  {isSubmitting ? 'PROCESANDO ORDEN...' : 'COMPLETAR MI ORDEN'}
-                </span>
-                <span className="expert-body mt-1 text-sm font-normal opacity-90">Procesamiento seguro a 256-bit</span>
-              </button>
+                icon={<Lock className="h-5 w-5 shrink-0" strokeWidth={2.5} />}
+              />
             </div>
-
-            <div className="flex items-center justify-center gap-2 text-center text-sm font-semibold text-[#2d2d2d]">
-              <Lock className="h-4 w-4 text-[#111111]" />
-              <span>Garantía de Devolución de 30 Días</span>
-            </div>
-
-            <p className="expert-body text-center text-xs leading-5 text-[#2d2d2d]/70">
-              By clicking the button, you consent to receive promotional messaging via email, calls, and SMS.
-            </p>
           </div>
         )}
       </div>
