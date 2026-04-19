@@ -34,6 +34,8 @@ export interface KurukinPlayerProps {
   provider: VideoProvider;
   videoId: string;
   vslMode?: boolean;
+  autoplay?: boolean;
+  muted?: boolean;
   vslProgressBarColor?: string;
   mutedPreview?: MutedPreviewConfig;
   lazyLoadYoutube?: boolean;

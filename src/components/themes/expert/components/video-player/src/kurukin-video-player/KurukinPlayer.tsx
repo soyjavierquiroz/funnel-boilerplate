@@ -18,6 +18,8 @@ export function KurukinPlayer({
   provider,
   videoId,
   vslMode = false,
+  autoplay,
+  muted,
   vslProgressBarColor,
   mutedPreview = { enabled: false, overlayPosition: 'center' },
   lazyLoadYoutube,
@@ -32,19 +34,21 @@ export function KurukinPlayer({
 }: KurukinPlayerProps) {
   const isVslMode = Boolean(vslMode);
   const isMutedPreviewEnabled = Boolean(mutedPreview.enabled) && !isVslMode;
-  const shouldAutoPlay = isVslMode || isMutedPreviewEnabled;
+  const shouldAutoPlay = autoplay ?? (isVslMode || isMutedPreviewEnabled);
   const isYoutubeLazyMode = provider === 'youtube' && Boolean(lazyLoadYoutube) && !shouldAutoPlay;
   const shouldApplyYoutubeUiHack = provider === 'youtube' && Boolean(hideYoutubeUi);
   const isProviderImplemented = provider === 'youtube' || provider === 'bunnynet' || provider === 'html5';
   const isStickyEnabled = Boolean(stickyOnScroll ?? stickyScroll);
   const controlsVariant = isVslMode ? 'vsl' : 'standard';
   const resumeStorageKey = `kurukin-player:resume:${provider}:${videoId}`;
+  const initialMutedState = muted ?? shouldAutoPlay;
+  const initialVslMutedState = isVslMode && initialMutedState;
 
   const [shouldLoadPlayer, setShouldLoadPlayer] = useState(!isYoutubeLazyMode);
   const [isReady, setIsReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(shouldAutoPlay);
-  const [isVslMuted, setIsVslMuted] = useState(isVslMode);
+  const [isMuted, setIsMuted] = useState(initialMutedState);
+  const [isVslMuted, setIsVslMuted] = useState(initialVslMutedState);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [inMutedPreview, setInMutedPreview] = useState(isMutedPreviewEnabled);
@@ -167,14 +171,16 @@ export function KurukinPlayer({
   useEffect(() => {
     const nextVslMode = Boolean(vslMode);
     const nextMutedPreviewEnabled = Boolean(mutedPreview.enabled) && !nextVslMode;
-    const nextShouldAutoplay = nextVslMode || nextMutedPreviewEnabled;
+    const nextShouldAutoplay = autoplay ?? (nextVslMode || nextMutedPreviewEnabled);
     const lazyMode = provider === 'youtube' && Boolean(lazyLoadYoutube) && !nextShouldAutoplay;
+    const nextMutedState = muted ?? nextShouldAutoplay;
+    const nextVslMutedState = nextVslMode && nextMutedState;
 
     setShouldLoadPlayer(!lazyMode);
     setIsReady(false);
     setIsPlaying(false);
-    setIsMuted(nextShouldAutoplay);
-    setIsVslMuted(nextVslMode);
+    setIsMuted(nextMutedState);
+    setIsVslMuted(nextVslMutedState);
     setCurrentTime(0);
     setDuration(0);
     setInMutedPreview(nextMutedPreviewEnabled);
@@ -186,7 +192,7 @@ export function KurukinPlayer({
     hasRestoredPlaybackRef.current = false;
     lastPersistedSecondRef.current = -1;
     pendingPlayIntentRef.current = nextShouldAutoplay ? 'autoplay' : null;
-  }, [provider, videoId, lazyLoadYoutube, mutedPreview.enabled, vslMode]);
+  }, [autoplay, lazyLoadYoutube, muted, mutedPreview.enabled, provider, videoId, vslMode]);
 
   useEffect(() => {
     if (!shouldLoadPlayer || !isReady || !controller.providerRef.current) {
@@ -302,7 +308,7 @@ export function KurukinPlayer({
     controller.providerRef.current?.seek(0);
     setCurrentTime(0);
     void requestPlay('user', { unmute: true });
-  }, [controller.providerRef]);
+  }, [controller.providerRef, requestPlay]);
 
   const handleUnmute = useCallback(() => {
     setIsMuted(false);
@@ -314,7 +320,7 @@ export function KurukinPlayer({
     controller.providerRef.current?.mute(false);
     controller.providerRef.current?.setLoop(false);
     void controller.providerRef.current?.play().catch(() => undefined);
-  }, [controller.providerRef, requestPlay]);
+  }, [controller.providerRef]);
 
   const handleResumeFromPauseOverlay = useCallback(() => {
     void requestPlay('user');

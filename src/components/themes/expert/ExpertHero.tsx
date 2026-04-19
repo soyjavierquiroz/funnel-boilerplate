@@ -71,6 +71,8 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
                 provider={heroVideo.provider}
                 videoId={heroVideo.videoId}
                 vslMode={true}
+                autoplay={true}
+                muted={true}
                 resumePlayback={heroVideo.resumePlayback}
                 lazyLoadYoutube={heroVideo.lazyLoadYoutube}
                 hideYoutubeUi={heroVideo.hideYoutubeUi}
