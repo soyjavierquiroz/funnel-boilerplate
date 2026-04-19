@@ -57,9 +57,11 @@ export function KurukinPlayer({
   const [ctaTriggered, setCtaTriggered] = useState(false);
   const [showCta, setShowCta] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
+  const [isIdle, setIsIdle] = useState(false);
   const pendingPlayIntentRef = useRef<'autoplay' | 'user' | null>(shouldAutoPlay ? 'autoplay' : null);
   const hasRestoredPlaybackRef = useRef(false);
   const lastPersistedSecondRef = useRef(-1);
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleProviderReady = useCallback((activeProvider: IVideoProvider) => {
     setIsReady(true);
@@ -69,12 +71,14 @@ export function KurukinPlayer({
 
   const handleProviderPlay = useCallback(() => {
     setIsPlaying(true);
+    setIsIdle(false);
     setShowPoster(false);
     setAutoplayBlocked(false);
   }, []);
 
   const handleProviderPause = useCallback(() => {
     setIsPlaying(false);
+    setIsIdle(false);
   }, []);
 
   const handleProviderProgress = useCallback((seconds: number) => {
@@ -121,6 +125,7 @@ export function KurukinPlayer({
 
   const handleAutoplayBlocked = useCallback(() => {
     setAutoplayBlocked(true);
+    setIsIdle(false);
     setShowPoster(!isVslMode);
     setShowMutedPreviewOverlay(false);
     setIsPlaying(false);
@@ -187,12 +192,49 @@ export function KurukinPlayer({
     setShowMutedPreviewOverlay(nextMutedPreviewEnabled);
     setShowPoster(lazyMode);
     setAutoplayBlocked(false);
+    setIsIdle(false);
     setCtaTriggered(false);
     setShowCta(false);
     hasRestoredPlaybackRef.current = false;
     lastPersistedSecondRef.current = -1;
     pendingPlayIntentRef.current = nextShouldAutoplay ? 'autoplay' : null;
   }, [autoplay, lazyLoadYoutube, muted, mutedPreview.enabled, provider, videoId, vslMode]);
+
+  const clearIdleTimer = useCallback(() => {
+    if (!idleTimerRef.current) {
+      return;
+    }
+
+    clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = null;
+  }, []);
+
+  const resetIdleTimer = useCallback(() => {
+    setIsIdle(false);
+    clearIdleTimer();
+
+    if (!isPlaying) {
+      return;
+    }
+
+    idleTimerRef.current = setTimeout(() => {
+      setIsIdle(true);
+    }, 2500);
+  }, [clearIdleTimer, isPlaying]);
+
+  useEffect(() => {
+    if (isPlaying) {
+      resetIdleTimer();
+      return;
+    }
+
+    clearIdleTimer();
+    setIsIdle(false);
+  }, [clearIdleTimer, isPlaying, resetIdleTimer]);
+
+  useEffect(() => () => {
+    clearIdleTimer();
+  }, [clearIdleTimer]);
 
   useEffect(() => {
     if (!shouldLoadPlayer || !isReady || !controller.providerRef.current) {
@@ -397,6 +439,7 @@ export function KurukinPlayer({
   const shouldRenderFakeProgress = shouldLoadPlayer && isVslMode && !showPoster;
   const shouldRenderGlobalClickLayer = shouldLoadPlayer && isVslMode && !showPoster && !showCta;
   const shouldRenderVslPauseIndicator = isVslMode && !isVslMuted && !isPlaying && !showPoster && !showCta;
+  const shouldHidePlaybackChrome = isPlaying && isIdle;
   const videoRef = controller.surface === 'video' ? controller.mountRef : undefined;
 
   return (
@@ -409,6 +452,12 @@ export function KurukinPlayer({
       data-provider={provider}
       data-vsl-mode={isVslMode ? 'true' : 'false'}
       data-sticky-enabled={isStickyEnabled ? 'true' : undefined}
+      onMouseMove={resetIdleTimer}
+      onTouchStart={resetIdleTimer}
+      onMouseLeave={() => {
+        clearIdleTimer();
+        setIsIdle(isPlaying);
+      }}
     >
       {shouldLoadPlayer ? (
         <div className={formatClassName('h-full w-full', isVslMode && 'pointer-events-none')}>
@@ -477,7 +526,14 @@ export function KurukinPlayer({
       ) : null}
 
       {shouldRenderFakeProgress ? (
-        <FakeProgressBar color={vslProgressBarColor} currentTime={currentTime} duration={duration} />
+        <div
+          className={formatClassName(
+            'transition-opacity duration-500 ease-in-out',
+            shouldHidePlaybackChrome ? 'opacity-0 pointer-events-none' : 'opacity-100',
+          )}
+        >
+          <FakeProgressBar color={vslProgressBarColor} currentTime={currentTime} duration={duration} />
+        </div>
       ) : null}
 
       {shouldRenderVslPauseIndicator ? (
@@ -510,17 +566,24 @@ export function KurukinPlayer({
       ) : null}
 
       {shouldRenderCustomControls ? (
-        <PlayerControls
-          currentTime={currentTime}
-          duration={duration}
-          isMuted={isMuted}
-          isPlaying={isPlaying}
-          onRestart={handleRestart}
-          onSeek={handleSeek}
-          onToggleMute={handleToggleMute}
-          onTogglePlay={handleTogglePlay}
-          variant={controlsVariant === 'vsl' ? 'standard' : controlsVariant}
-        />
+        <div
+          className={formatClassName(
+            'transition-opacity duration-500 ease-in-out',
+            shouldHidePlaybackChrome ? 'opacity-0 pointer-events-none' : 'opacity-100',
+          )}
+        >
+          <PlayerControls
+            currentTime={currentTime}
+            duration={duration}
+            isMuted={isMuted}
+            isPlaying={isPlaying}
+            onRestart={handleRestart}
+            onSeek={handleSeek}
+            onToggleMute={handleToggleMute}
+            onTogglePlay={handleTogglePlay}
+            variant={controlsVariant === 'vsl' ? 'standard' : controlsVariant}
+          />
+        </div>
       ) : null}
 
       {!isProviderImplemented ? (
