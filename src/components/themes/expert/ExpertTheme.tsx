@@ -1,4 +1,5 @@
-import { DNA } from '../../../dna.config';
+import type { CSSProperties } from 'react';
+import { DNA, resolveDnaThemeStyle } from '../../../dna.config';
 import { ExpertBonusStack } from './ExpertBonusStack';
 import { ExpertFAQ } from './ExpertFAQ';
 import { ExpertHero } from './ExpertHero';
@@ -18,7 +19,7 @@ import { ExpertCtaButton } from './ExpertCtaButton';
 
 export function ExpertTheme() {
   return (
-    <div className="theme-expert min-h-screen bg-page text-text-main">
+    <div className="theme-expert min-h-screen bg-page text-text-main" style={resolveDnaThemeStyle() as CSSProperties}>
       <ExpertHero aside={<ExpertOrderForm />} />
 
       <section className="px-4 pt-8 sm:px-6">

@@ -1,217 +1,42 @@
-# Boilerplate UI Showcase
+# Factory Boilerplate
 
-Arquitectura temática para funnels y experiencias VSL donde el `core` de negocio queda aislado del diseño visual. La app ahora funciona como un showroom con lobby y dos temas activos: `Expert` y `Panda`.
+Boilerplate para clonar funnels VSL donde el tema visual, el pricing, el copy y el video principal se gobiernan desde `src/dna.config.ts`.
 
-## Stack
+## Protocolo de Clonación Chilita
 
-- Vite + React 18 + TypeScript
-- Tailwind CSS con tokens semánticos por tema
-- `CoreVideoPlayer` reutilizable para YouTube, Bunny y HTML5
-- Captura avanzada de leads con contexto geográfico
-- Pricing Hotmart con fallback por producto
-- Tracking browser-side para Meta Pixel, TikTok Pixel y CAPI
-
-## Arquitectura Temática
-
-La regla del proyecto es simple: la lógica agnóstica vive en `src/core`, los bloques reutilizables de UI viven en `src/components/common`, y cada piel visual vive dentro de `src/components/themes/<tema>`.
-
-```text
-src/
-├── App.tsx
-├── core/
-│   ├── config/
-│   ├── hooks/
-│   ├── services/
-│   ├── utils/
-│   └── visitor/
-├── components/
-│   ├── common/
-│   │   ├── forms/
-│   │   ├── layout/
-│   │   └── video-player/
-│   └── themes/
-│       ├── expert/
-│       └── panda/
-├── index.css
-└── main.tsx
-```
-
-### `src/core/`
-
-Contiene todo lo que no debería depender del tema visual.
-
-- `config/funnel.config.ts`: configuración de marca, pricing, media e integraciones.
-- `hooks/useHotmartPrices.ts`: acceso al catálogo regionalizado de Hotmart.
-- `services/analytics.ts`: capa de tracking.
-- `utils/currency.ts`: utilidades de moneda.
-- `visitor/`: contexto, tipos y detección/caché de visitante por IP.
-
-### `src/components/common/`
-
-Contiene componentes compartidos y agnósticos a la piel visual.
-
-- `video-player/`: `CoreVideoPlayer` y su infraestructura interna.
-- `forms/AdvancedCaptureForm.tsx`: captura de leads reutilizable.
-- `forms/SmartPhoneInput.tsx`: input telefónico inteligente.
-- `forms/PricingCard.tsx`: pricing común.
-- `layout/SectionWrapper.tsx`: layout wrapper compartido.
-
-### `src/components/themes/expert/`
-
-Implementa la experiencia visual estilo Expert.
-
-- `ExpertTheme.tsx`: entrada del tema.
-- `MainVSL.tsx`
-- `BentoGrid.tsx`
-- `BonusStack.tsx`
-
-### `src/components/themes/panda/`
-
-Implementa la experiencia visual estilo Panda.
-
-- `PandaTheme.tsx`: entrada del tema.
-- `PandaHero.tsx`
-- `PandaFeatures.tsx`
-- `PandaBentoGrid.tsx`
-- `PandaFooter.tsx`
-
-## Showroom
-
-`src/App.tsx` es ahora un router de showroom con estado local:
-
-```ts
-const [currentTheme, setCurrentTheme] = useState<'lobby' | 'expert' | 'panda'>('lobby');
-```
-
-Estados disponibles:
-
-- `lobby`: pantalla de bienvenida con selector de temas.
-- `expert`: renderiza `ExpertTheme`.
-- `panda`: renderiza `PandaTheme`.
-
-Cuando no estamos en el lobby, aparece un botón fijo de `Volver al Lobby` en la esquina inferior derecha.
-
-## Protocolo de Despliegue Rápido (Sitios Ligeros)
-
-Este boilerplate puede usarse como showroom de temas durante desarrollo o como base ultra-ligera para desplegar un solo tema en producción. El flujo recomendado para futuros desarrolladores es el siguiente:
-
-1. Clonar el repositorio.
+1. Clona el boilerplate.
 
 ```bash
-git clone <repo-url>
+git clone git@github.com:soyjavierquiroz/boilerplate.git
 cd boilerplate
 ```
 
-2. Para mantener el sitio ultra-ligero, eliminar cualquier carpeta de tema no utilizada dentro de `src/components/themes/` usando `rm -rf`.
+2. Edita `src/dna.config.ts`.
 
-Ejemplo si el despliegue final va a usar solo Panda:
+Actualiza al menos estos bloques antes de tu primer build:
 
-```bash
-rm -rf src/components/themes/expert
-```
+- `theme`
+- `colors`
+- `copy`
+- `prices`
+- `vslVideoId`
 
-Ejemplo si el despliegue final va a usar solo Expert:
+Todo el baseline productivo toma esos valores para renderizar el tema activo, aplicar colores de marca y alimentar el pricing principal del funnel.
 
-```bash
-rm -rf src/components/themes/panda
-```
-
-3. Fijar el tema deseado como estado inicial en el showroom/router de `src/App.tsx`.
-
-Mientras el proyecto funciona como catálogo, el estado inicial recomendado es:
-
-```ts
-const [currentTheme, setCurrentTheme] = useState<ShowroomTheme>('lobby');
-```
-
-Si el objetivo es desplegar un único tema sin pasar por el lobby, cambia ese estado inicial al tema final:
-
-```ts
-const [currentTheme, setCurrentTheme] = useState<ShowroomTheme>('panda');
-```
-
-o:
-
-```ts
-const [currentTheme, setCurrentTheme] = useState<ShowroomTheme>('expert');
-```
-
-4. Construir la aplicación sabiendo que, gracias al tree-shaking de Vite y al aislamiento del CSS por arquitectura, el build final solo incluirá el código realmente referenciado por el tema activo.
-
-En otras palabras: si dejas un solo tema importado y eliminas las carpetas no utilizadas, el bundle de producción no arrastrará componentes visuales muertos. Esta separación funciona porque la lógica reusable vive en `src/core` y `src/components/common`, mientras que cada piel visual queda encapsulada dentro de `src/components/themes/<tema>`.
-
-## Sistema de Tokens
-
-`src/index.css` define variables CSS por tema:
-
-- `theme-showroom`
-- `theme-expert`
-- `theme-panda`
-
-Los componentes deben consumir clases semánticas como `bg-page`, `bg-surface`, `text-text-main` o `border-border-subtle`. Evita hardcodear hexadecimales dentro de los componentes salvo que sea estrictamente necesario para una composición muy puntual.
-
-## Cómo Crear Un Tema Nuevo
-
-Para añadir un tema nuevo dentro de `/themes`, sigue este flujo:
-
-1. Crea una carpeta nueva en `src/components/themes/<nuevo-tema>/`.
-2. Crea un componente de entrada, por ejemplo `NewTheme.tsx`.
-3. Usa `src/core` para toda la lógica:
-   configuración, hooks, visitor context, analytics, pricing y utilidades.
-4. Usa `src/components/common` para toda la UI compartida:
-   player, formularios, wrappers y piezas agnósticas.
-5. Mantén dentro del tema sólo lo visual y lo compositivo:
-   hero, layout, secciones, copy del tema, pruebas visuales y ritmo de página.
-6. Registra el nuevo estado en `App.tsx` para que el showroom pueda abrirlo.
-7. Si el tema necesita identidad propia, añade un nuevo bloque `:root[data-theme='...']` en `src/index.css`.
-
-### Regla de oro
-
-Si una pieza puede ser usada por más de un tema sin cambiar su intención funcional, debería vivir en `common` o en `core`, no dentro del tema.
-
-## Flujo de Trabajo Recomendado
-
-1. Ajusta `src/core/config/funnel.config.ts`.
-2. Construye o modifica componentes compartidos en `src/components/common/` si hacen falta.
-3. Compón el tema en `src/components/themes/<tema>/`.
-4. Verifica el showroom en `App.tsx`.
-5. Ejecuta build.
-
-## Build
-
-Build local con Node:
-
-```bash
-npm ci
-npm run build
-```
-
-Build en Docker:
+3. Genera el build con Docker y sube `dist/` al server.
 
 ```bash
 docker run --rm \
-  -v /opt/webs/boilerplate:/app \
+  -v "$PWD":/app \
   -w /app \
   node:20-alpine \
   sh -lc 'npm ci && npm run build'
 ```
 
-## Push
+El artefacto listo para publicar queda en `dist/`.
 
-Después de validar el build:
+## Notas Operativas
 
-```bash
-git status
-git add -A
-git commit -m "Implement showroom architecture"
-git push origin main
-```
-
-## Archivos Clave
-
-- `src/App.tsx`: router/showroom.
-- `src/core/config/funnel.config.ts`: contrato central del funnel.
-- `src/core/visitor/VisitorContext.tsx`: contexto de visitante.
-- `src/components/common/video-player/CoreVideoPlayer.tsx`: player reutilizable.
-- `src/components/themes/expert/ExpertTheme.tsx`: tema Expert.
-- `src/components/themes/panda/PandaTheme.tsx`: tema Panda.
+- `src/App.tsx` renderiza directamente el tema definido en `DNA.theme`.
+- `src/components/themes/panda/` y `src/components/themes/expert/` comparten la misma base de DNA.
+- `src/core/config/funnel.config.ts` consume `DNA.copy`, `DNA.prices` y `DNA.vslVideoId` para mantener el funnel alineado con el clon.

@@ -36,6 +36,10 @@ function isValidEmail(value: string): boolean {
 function resolveSuccessRedirectUrl() {
   const { successRedirectType, successRedirectUrl } = funnelConfig.forms.capture;
 
+  if (successRedirectUrl === '#checkout') {
+    return '#pricing';
+  }
+
   if (successRedirectType === 'whatsapp' && !/^https?:\/\//i.test(successRedirectUrl)) {
     const normalizedPhone = successRedirectUrl.replace(/\D/g, '');
     return `https://wa.me/${normalizedPhone}`;
@@ -213,7 +217,7 @@ export function PandaCaptureForm() {
   };
 
   return (
-    <section className="relative isolate py-16 md:py-24">
+    <section id="capture" className="relative isolate py-16 md:py-24">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-[-10%] top-8 h-[500px] w-[500px] rounded-full bg-brand-primary/20 blur-[120px] mix-blend-screen"

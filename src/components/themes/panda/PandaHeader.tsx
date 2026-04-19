@@ -1,3 +1,5 @@
+import { DNA } from '../../../dna.config';
+
 function PandaMark() {
   return (
     <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle/30 bg-surface-bump/80">
@@ -17,7 +19,11 @@ function PandaMark() {
   );
 }
 
-const navItems = ['Productos', 'Precios', 'Compañía'];
+const navItems = [
+  { label: 'Video', href: '#video' },
+  { label: 'Captura', href: '#capture' },
+  { label: 'Precios', href: '#pricing' },
+] as const;
 
 export function PandaHeader() {
   return (
@@ -25,26 +31,26 @@ export function PandaHeader() {
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 md:h-20 md:px-8 lg:px-8">
         <a href="#" className="flex items-center gap-3">
           <PandaMark />
-          <span className="text-base font-bold tracking-tight text-text-main sm:text-lg">PandaVideo</span>
+          <span className="text-base font-bold tracking-tight text-text-main sm:text-lg">{DNA.copy.productName}</span>
         </a>
 
         <nav className="hidden items-center gap-6 md:flex">
           {navItems.map((item) => (
             <a
-              key={item}
-              href="#"
+              key={item.label}
+              href={item.href}
               className="text-sm font-medium text-text-muted transition hover:text-text-main"
             >
-              {item}
+              {item.label}
             </a>
           ))}
         </nav>
 
         <a
-          href="#"
+          href="#pricing"
           className="inline-flex min-h-10 items-center justify-center rounded-full border border-border-subtle/30 px-3.5 text-sm font-semibold text-text-main transition hover:bg-surface-bump/80 sm:px-4"
         >
-          Entrar
+          Ver oferta
         </a>
       </div>
     </header>

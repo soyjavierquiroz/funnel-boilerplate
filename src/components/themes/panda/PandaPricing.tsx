@@ -1,5 +1,6 @@
 import { BadgeCheck, Check, Lock, ShieldCheck } from 'lucide-react';
 import { useMemo } from 'react';
+import { DNA } from '../../../dna.config';
 import funnelConfig, { pricingProductKeys } from '../../../core/config/funnel.config';
 import analytics from '../../../core/services/analytics';
 import { useHotmartPrices } from '../../../core/hooks/useHotmartPrices';
@@ -13,28 +14,28 @@ const trustCues = [
 
 const pricingPlans = [
   {
-    productKey: pricingProductKeys.orderBump,
-    eyebrow: 'Entrada',
-    title: 'Starter',
-    description: 'Una puerta de entrada compacta para acelerar la decisión sin romper la estética premium.',
-    featured: false,
-    features: ['Acceso inmediato', 'Setup ligero', 'Checkout geolocalizado'],
-  },
-  {
     productKey: pricingProductKeys.ofertaPrincipal,
     eyebrow: 'Oferta Principal',
-    title: 'Panda Core',
-    description: 'La opción central con el mejor balance entre autoridad visual, conversión y monetización.',
+    title: DNA.copy.productName,
+    description: `Oferta principal sincronizada con el DNA para que el precio base, el copy y el checkout salgan listos desde el clon.`,
     featured: true,
-    features: ['Flujo principal optimizado', 'Mayor autoridad visual', 'Stack de monetización completo'],
+    features: [
+      `Precio DNA: $${DNA.prices.main}`,
+      `Precio regular: $${DNA.prices.regularPrice}`,
+      `Valor total del stack: $${DNA.prices.totalValue}`,
+    ],
   },
   {
-    productKey: pricingProductKeys.upsellVip,
-    eyebrow: 'Escala Total',
-    title: 'Panda Elite',
-    description: 'La capa de acompañamiento más alta para quien quiere soporte intensivo y margen premium.',
+    productKey: pricingProductKeys.orderBump,
+    eyebrow: 'Order Bump',
+    title: DNA.copy.orderBumpTitle,
+    description: 'Monetización incremental conectada al mismo DNA para mantener consistencia entre VSL, checkout y upsell inmediato.',
     featured: false,
-    features: ['Prioridad estratégica', 'Escala premium', 'Acompañamiento intensivo'],
+    features: [
+      `Bump DNA: $${DNA.prices.bump}`,
+      `Se suma a un stack de $${DNA.prices.totalValue}`,
+      'Ideal para complementar la oferta principal',
+    ],
   },
 ] as const;
 
@@ -71,6 +72,9 @@ function PandaPricingCard({
   const countryCode = visitorData?.country_code?.toUpperCase() ?? 'US';
   const currencyCode = visitorData?.currency?.toUpperCase() ?? 'USD';
   const resolvedCheckoutUrl = hasRequestedProduct ? product.checkoutUrl : undefined;
+  const checkoutHref =
+    resolvedCheckoutUrl === '#checkout' ? '#capture' : resolvedCheckoutUrl;
+  const isExternalCheckout = Boolean(checkoutHref?.startsWith('http'));
 
   const countryPricing = useMemo(() => {
     if (!scrapedData) return undefined;
@@ -83,7 +87,7 @@ function PandaPricingCard({
   const displayCurrency = hasLocalizedNumeric ? currencyCode : 'USD';
 
   const handleCheckoutClick = () => {
-    if (!resolvedCheckoutUrl) {
+    if (!checkoutHref) {
       return;
     }
 
@@ -91,7 +95,7 @@ function PandaPricingCard({
       product_id: resolvedProductKey,
       product_name: title,
       content_name: funnelConfig.brandName,
-      checkout_url: resolvedCheckoutUrl,
+      checkout_url: checkoutHref,
       hotmart_product_id: product.hotmartProductId,
       country_code: countryCode,
       currency: displayCurrency,
@@ -160,11 +164,11 @@ function PandaPricingCard({
         </div>
 
         <div className="mt-6">
-          {resolvedCheckoutUrl ? (
+          {checkoutHref ? (
             <a
-              href={resolvedCheckoutUrl}
-              target="_blank"
-              rel="noreferrer"
+              href={checkoutHref}
+              target={isExternalCheckout ? '_blank' : undefined}
+              rel={isExternalCheckout ? 'noreferrer' : undefined}
               onClick={handleCheckoutClick}
               className={[
                 'inline-flex min-h-14 w-full items-center justify-center rounded-2xl px-6 text-base font-semibold text-text-main',
@@ -217,17 +221,33 @@ export function PandaPricing() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <span className="inline-flex rounded-full border border-border-subtle/20 bg-surface/50 px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-text-muted">
-            Panda Pricing
+            Pricing DNA
           </span>
           <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-text-main sm:text-4xl">
-            Precios dinámicos conectados a HotPrices y listos para convertir.
+            Pricing conectado al DNA y listo para vender {DNA.copy.productName}.
           </h2>
           <p className="mt-4 text-base leading-7 text-text-muted">
-            La tabla se adapta a la moneda y al país del visitante sin sacrificar la estética de software premium.
+            El precio principal, el bump y las referencias de valor salen del DNA, mientras HotPrices puede localizar
+            el importe final por país sin romper la coherencia visual.
           </p>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="rounded-full border border-border-subtle/20 bg-surface/40 px-4 py-2 text-sm text-text-muted">
+            Oferta principal: <span className="font-semibold text-text-main">${DNA.prices.main}</span>
+          </div>
+          <div className="rounded-full border border-border-subtle/20 bg-surface/40 px-4 py-2 text-sm text-text-muted">
+            Order bump: <span className="font-semibold text-text-main">${DNA.prices.bump}</span>
+          </div>
+          <div className="rounded-full border border-border-subtle/20 bg-surface/40 px-4 py-2 text-sm text-text-muted">
+            Precio regular: <span className="font-semibold text-text-main">${DNA.prices.regularPrice}</span>
+          </div>
+          <div className="rounded-full border border-border-subtle/20 bg-surface/40 px-4 py-2 text-sm text-text-muted">
+            Valor total: <span className="font-semibold text-text-main">${DNA.prices.totalValue}</span>
+          </div>
+        </div>
+
+        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2">
           {pricingPlans.map((plan) => (
             <PandaPricingCard
               key={plan.productKey}

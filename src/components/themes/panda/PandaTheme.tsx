@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+import { resolveDnaThemeStyle } from '../../../dna.config';
 import { PandaCaptureForm } from './PandaCaptureForm';
 import { PandaHeader } from './PandaHeader';
 import { PandaHero } from './PandaHero';
@@ -8,7 +10,10 @@ import { PandaTrustLogos } from './PandaTrustLogos';
 
 export function PandaTheme() {
   return (
-    <div className="theme-panda relative min-h-screen overflow-x-hidden bg-page text-text-main font-sans">
+    <div
+      className="theme-panda relative min-h-screen overflow-x-hidden bg-page text-text-main font-sans"
+      style={resolveDnaThemeStyle() as CSSProperties}
+    >
       <PandaHeader />
       <PandaHero />
       <PandaTrustLogos />

@@ -1,60 +1,62 @@
+import { DNA } from '../../../dna.config';
+
 const testimonials = [
   {
-    name: 'Pablo Marçal',
-    role: 'PLX',
+    name: 'Lucia Herrera',
+    role: 'Consultora',
     quote:
-      'Pudimos reducir significativamente el costo de alojar videos que estaban en Vimeo, proporcionando una mejor experiencia para los estudiantes en diversas plataformas.',
+      'Tomamos el boilerplate, ajustamos el DNA y en menos de una tarde ya teníamos una VSL nueva con aspecto premium y pricing coherente.',
     avatar: 'https://framerusercontent.com/images/zxdpIPhqc9YaLWvipDKlh4TrU.png?width=900&height=900',
     spanClassName: 'md:col-span-2 lg:col-span-2',
   },
   {
-    name: 'Marcos Paulo',
-    role: 'PLX',
+    name: 'Mateo Rojas',
+    role: 'Info-productor',
     quote:
-      'Precio más bajo, jugador más rápido y soporte en portugués. No entiendo por qué algunas personas todavía usan Vimeo, arriesgándose a descargar contenido con un solo clic. Panda no tiene competencia.',
+      'La parte que más valoro es que el precio principal, el bump y el valor total salen del mismo DNA. No volvimos a romper una oferta por olvidar un número viejo.',
     avatar: 'https://framerusercontent.com/images/a75aZaOa43QxpyRPEHYSQylX3Uo.webp?width=288&height=288',
   },
   {
-    name: 'Cristian Barbosa',
-    role: 'Tríada del Tiempo',
+    name: 'Camila Torres',
+    role: 'Performance Lead',
     quote:
-      'Estamos migrando todas mis plataformas de cursos, así como las de TriadPS y nuestros socios, a Panda Video. Es más rápido y más seguro que Vimeo.',
+      'Cambiar de oferta ya no implica reescribir media landing. Editamos el DNA, verificamos el build y publicamos.',
     avatar: 'https://framerusercontent.com/images/D83i6v4gZp38pGUwMxt3La9qF8.webp?width=288&height=288',
   },
   {
-    name: 'Rafael Wisch',
-    role: 'Greenn',
+    name: 'Diego Peña',
+    role: 'Agency Owner',
     quote:
-      'Nos impresionó la calidad del video y la velocidad de transmisión; superó con creces a Vimeo. Es una gran fuente de orgullo ver a una empresa brasileña ofreciendo este nivel de calidad. Ellos llegarán lejos.',
+      'Nos ayudó a estandarizar entregas. El equipo ya sabe que si el tema usa el DNA, el proyecto entra a QA más rápido.',
     avatar: 'https://framerusercontent.com/images/sZT5i2JB1jHnQnGC28JpStB8Lk.webp?width=180&height=180',
   },
   {
-    name: 'Eleandro Ferronatto',
-    role: 'Investfy',
+    name: 'Valeria Soto',
+    role: 'Growth Operator',
     quote:
-      'Migramos nuestra base de datos de videos completa de Vimeo a Panda. Esencial para garantizar la disponibilidad de videos en cualquier momento. Más seguro, muy fácil de usar.',
+      'La versión Panda quedó perfecta para ofertas que necesitan una sensación más técnica y cinematográfica sin perder velocidad de edición.',
     avatar: 'https://framerusercontent.com/images/KdiP3Lnuopp8aTb8PeRHdcd5UY.webp?width=160&height=160',
   },
   {
-    name: 'Romanni Souza',
-    role: 'Instituto Romanni',
+    name: 'Andrés Vega',
+    role: 'Closer Manager',
     quote:
-      'Panda Video es robusto y tiene el mejor soporte en el mercado, y siempre están haciendo mejoras constantes, con optimizaciones específicas diseñadas para creadores de infoproductos.',
+      `Pudimos adaptar ${DNA.copy.productName} sin arrastrar branding ajeno. Ese era el miedo principal y quedó resuelto.`,
     avatar: 'https://framerusercontent.com/images/j0jIaUS1RSWwMFMkmwlyM4B3wR4.webp?width=288&height=288',
     spanClassName: 'md:col-span-2 lg:col-span-2',
   },
   {
-    name: 'Rainer Borene',
-    role: 'Memberkit',
+    name: 'Paula Méndez',
+    role: 'Project Manager',
     quote:
-      'Recibimos varios pedidos de integración con Panda Video. Finalmente, tenemos una alternativa viable y con una calidad extraordinaria de alojamiento de videos. Panda tiene un futuro increíble por delante.',
+      'El README actualizado nos quitó fricción. Ahora el procedimiento de clonación y despliegue es exactamente el que seguimos en producción.',
     avatar: 'https://framerusercontent.com/images/MCxH7MJxmyt9Iu5U4TTL38QSnd8.webp?width=288&height=288',
   },
   {
-    name: 'João Alves',
-    role: 'Nuevos Ricos',
+    name: 'Sebastián Cruz',
+    role: 'Implementación',
     quote:
-      'Panda nos salvó cuando Vimeo presentó un cargo exorbitante por uso de ancho de banda. Pudimos migrar todo rápidamente gracias al apoyo del equipo.',
+      'La parte visual se siente fuerte, pero lo importante es que el repo ya quedó listo para clonar, personalizar y subir sin sorpresas.',
     avatar: 'https://framerusercontent.com/images/0kKzI4Gc75aPguZrFSQL8qKw8Q.webp?width=180&height=180',
   },
 ];
@@ -119,11 +121,11 @@ export function PandaTestimonials() {
             Testimonios
           </span>
           <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-text-main sm:text-4xl">
-            Comentarios de personas y empresas que utilizan nuestro servicio
+            Comentarios de equipos que ya operan con una base lista para clonar
           </h2>
           <p className="mt-4 text-base font-light leading-7 text-text-muted">
-            Comentarios reales extraídos del ecosistema Panda Video para recrear el bloque social con la misma energía
-            oscura, técnica y confiable del original.
+            Testimonios genéricos de factory listos para reemplazar por prueba social real sin arrastrar branding
+            externo dentro del tema.
           </p>
         </div>
 

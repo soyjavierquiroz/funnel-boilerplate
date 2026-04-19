@@ -1,29 +1,27 @@
 const insights = [
   {
-    tag: 'Conversión',
-    title: 'VSL horizontal o vertical: ¿qué formato convierte más?',
-    date: '17 abr 2026',
+    tag: 'VSL',
+    title: 'Qué ajustar primero cuando clonas una VSL para un cliente nuevo',
+    date: 'Factory Step 01',
     image: 'https://framerusercontent.com/images/RtF1KrtoO1DcCVHhgRJ7T8Nkv8.webp?width=1440&height=810',
   },
   {
-    tag: 'Conversión',
-    title: 'Remarketing para VSL: 4 segmentos a los que necesitas anunciar',
-    date: '6 abr 2026',
+    tag: 'Pricing',
+    title: 'Cómo validar que precios, bump y valor total salen todos del DNA',
+    date: 'Factory Step 02',
     image: 'https://framerusercontent.com/images/8Xp8nIzEH2RPEqjkBElDfOw4g.webp?width=1440&height=810',
   },
   {
-    tag: 'Conversión',
-    title: '¿Cómo hacer remarketing para quienes vieron tus videos?',
-    date: '6 abr 2026',
+    tag: 'Deploy',
+    title: 'Checklist previo al build: tema, copy, video y salida estática',
+    date: 'Factory Step 03',
     image: 'https://framerusercontent.com/images/tlzF1WaYXTRv6yCfrvoVkRYoQU.webp?width=1440&height=810',
   },
 ];
 
 export function PandaInsights() {
-  const blogUrl = 'https://pandavideo.com/es/blog';
-
   return (
-    <section className="relative isolate overflow-hidden py-16 md:py-24">
+    <section id="insights" className="relative isolate overflow-hidden py-16 md:py-24">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-[-12%] bottom-0 h-[500px] w-[500px] rounded-full bg-brand-primary/20 blur-[120px] mix-blend-screen"
@@ -37,24 +35,22 @@ export function PandaInsights() {
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <span className="inline-flex rounded-full border border-border-subtle/25 bg-surface/50 px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-text-muted backdrop-blur-xl">
-              Aprender más
+              Manual rápido
             </span>
             <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-text-main sm:text-4xl">
-              Perspectivas sobre videos, marketing y negocios
+              Tres chequeos antes de declarar un funnel listo para producción
             </h2>
           </div>
 
           <div className="max-w-sm">
             <p className="text-base font-light leading-7 text-text-muted">
-              Vea consejos, tutoriales y estrategias para mejorar los resultados con video.
+              Usa esta sección como recordatorio visual del flujo mínimo que debe pasar cada clon antes del deploy.
             </p>
             <a
-              href={blogUrl}
+              href="#capture"
               className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl border border-border-subtle/25 bg-surface/50 px-5 text-sm font-semibold text-text-main backdrop-blur-xl transition hover:bg-surface/70"
-              target="_blank"
-              rel="noreferrer"
             >
-              Ver Blog
+              Preparar captura
             </a>
           </div>
         </div>
