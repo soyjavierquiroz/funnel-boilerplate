@@ -332,7 +332,7 @@ export function ExpertOrderForm() {
         <div className="rounded-[12px] bg-white px-4 pb-4 pt-2 shadow-[0_0_54px_rgba(0,0,0,0.08)]">
           <img src={expertBrandAssets.bundleUrl} alt="Expert Secrets bundle" className="mx-auto w-full" loading="lazy" />
           <p className="expert-body mt-3 text-center text-[14px] text-[#2d2d2d]/65">384 Pages | Industry Specific Examples | 5 Free Bonuses</p>
-          <p className="expert-headline mt-2 text-center text-[1.6rem] font-extrabold leading-tight text-[#e01921] sm:text-[2rem]">
+          <p className="expert-headline mt-2 text-center text-[1.6rem] font-extrabold leading-tight text-brand-primary sm:text-[2rem]">
             Only <span className="line-through">{formatPrice(compareAtValue)}</span> FREE Today!
           </p>
           <p className="expert-body mt-2 text-center text-sm text-[#2d2d2d]/80">
@@ -410,7 +410,7 @@ export function ExpertOrderForm() {
               labelClassName="expert-body mb-1.5 block text-sm font-semibold text-[#2d2d2d]"
               phoneInputClassName={clickfunnelsFieldClassName}
               helperTextClassName="mt-1.5 text-xs text-[#4876b9]"
-              errorTextClassName="mt-1.5 text-xs text-[#e01921]"
+              errorTextClassName="mt-1.5 text-xs text-brand-primary"
             />
 
             <CommonTextField
@@ -559,7 +559,7 @@ export function ExpertOrderForm() {
               <div className="expert-body mt-4 space-y-3 text-sm">
                 <div className="flex items-center justify-between gap-3">
                   <span className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-[#ffcc00]" />
+                    <Check className="h-4 w-4 text-cta" />
                     Hardcover Book
                   </span>
                   <span className="font-semibold">FREE</span>
@@ -588,13 +588,13 @@ export function ExpertOrderForm() {
             </div>
 
             {submitError ? (
-              <div className="rounded-[12px] border border-[#e01921]/25 bg-[#e01921]/8 px-4 py-3 text-sm text-[#a1151b]">
+              <div className="rounded-[12px] border border-brand-primary/25 bg-brand-primary/8 px-4 py-3 text-sm text-brand-primary">
                 {submitError}
               </div>
             ) : null}
 
-            <label className="block cursor-pointer overflow-hidden rounded-none border-4 border-dashed border-[#e01921] bg-yellow-50 p-4 md:p-6 my-6">
-              <div className="flex items-center gap-3 bg-[#e01921] p-2 text-white">
+            <label className="my-6 block cursor-pointer overflow-hidden rounded-none border-4 border-dashed border-brand-primary bg-surface-bump p-4 md:p-6">
+              <div className="flex items-center gap-3 bg-brand-primary p-2 text-white">
                 <ArrowDownRight className="h-5 w-5 shrink-0 animate-pulse" />
                 <p className="expert-headline text-sm font-extrabold uppercase sm:text-[15px]">
                   ¡SÍ, QUIERO AÑADIR ESTO A MI ORDEN!
@@ -605,7 +605,7 @@ export function ExpertOrderForm() {
                   type="checkbox"
                   checked={wantsAudiobook}
                   onChange={(event) => setWantsAudiobook(event.target.checked)}
-                  className="mt-1 h-5 w-5 rounded border-2 border-[#c1373d] text-[#e01921] focus:ring-[#e01921]"
+                  className="mt-1 h-5 w-5 rounded border-2 border-brand-primary/70 text-brand-primary focus:ring-brand-primary"
                 />
                 <img
                   src={expertBrandAssets.audiobookUrl}
@@ -614,7 +614,7 @@ export function ExpertOrderForm() {
                   loading="lazy"
                 />
                 <div className="min-w-0">
-                  <p className="expert-headline text-[1rem] font-extrabold leading-5 text-[#e01921] sm:text-[1.05rem]">
+                  <p className="expert-headline text-[1rem] font-extrabold leading-5 text-brand-primary sm:text-[1.05rem]">
                     OFERTA UNICA: Audiobook + 4 More Exclusive Products por {formatPrice(audiobookPrice)}
                   </p>
                   <p className="expert-body mt-2 text-sm leading-6 text-[#5d5d5d]">

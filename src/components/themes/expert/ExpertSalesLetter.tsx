@@ -36,7 +36,7 @@ export function ExpertSalesLetter({ sections, postscript }: ExpertSalesLetterPro
                     <ul className="expert-body mt-6 space-y-3 text-[1.08rem] leading-8 text-[#2d2d2d] sm:text-[1.14rem]">
                       {section.bullets.map((bullet) => (
                         <li key={bullet} className="flex gap-3">
-                          <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#e01921]" />
+                          <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-brand-primary" />
                           <span>{bullet}</span>
                         </li>
                       ))}
@@ -55,7 +55,7 @@ export function ExpertSalesLetter({ sections, postscript }: ExpertSalesLetterPro
 
           <div className="mt-10 rounded-[20px] border border-[#efe7bf] bg-[#fcf8e3] px-5 py-6 sm:px-7">
             <p className="expert-body text-[1.12rem] leading-9 text-[#2d2d2d] sm:text-[1.18rem]">
-              <strong className="expert-headline font-extrabold text-[#e01921]">P.S.</strong>{' '}
+              <strong className="expert-headline font-extrabold text-brand-primary">P.S.</strong>{' '}
               {postscript[0]}
             </p>
             <div className="expert-body mt-4 space-y-4 text-[1.08rem] leading-8 text-[#2d2d2d] sm:text-[1.12rem]">

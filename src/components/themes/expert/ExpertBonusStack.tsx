@@ -44,7 +44,7 @@ export function ExpertBonusStack({ bonuses }: ExpertBonusStackProps) {
           <div className="mt-8 grid gap-4 rounded-[16px] bg-white px-5 py-5 text-center shadow-[0_18px_50px_rgba(17,17,17,0.08)] sm:grid-cols-3 sm:text-left">
             <div>
               <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-[#4875b9]">Total Value</p>
-              <p className="expert-headline mt-2 text-[2rem] font-extrabold text-[#e01921] sm:text-[2.35rem]">
+              <p className="expert-headline mt-2 text-[2rem] font-extrabold text-brand-primary sm:text-[2.35rem]">
                 <span className="line-through">{formatUsd(product.basePriceUSD)}</span>
               </p>
             </div>
@@ -84,7 +84,7 @@ export function ExpertBonusStack({ bonuses }: ExpertBonusStackProps) {
 
               <div className="text-left sm:text-right">
                 <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-[#4875b9]">Value</p>
-                <p className="expert-headline mt-2 text-[1.5rem] font-extrabold text-[#e01921] sm:text-[1.8rem]">
+                <p className="expert-headline mt-2 text-[1.5rem] font-extrabold text-brand-primary sm:text-[1.8rem]">
                   {formatUsd(bonus.valueUSD)}
                 </p>
               </div>

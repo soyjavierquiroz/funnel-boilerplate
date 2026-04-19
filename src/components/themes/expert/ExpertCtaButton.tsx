@@ -19,9 +19,9 @@ interface ExpertCtaButtonProps {
 
 const sharedClassName = [
   'animate-shimmer relative inline-flex min-h-[62px] items-center justify-center overflow-hidden rounded-md',
-  'border border-[#c79d00] border-b-4 border-[#b28f00] bg-[#ffcc00] px-6 py-4 text-center text-black',
-  'shadow-[0_18px_32px_rgba(255,204,0,0.28)] transition duration-200 hover:-translate-y-0.5',
-  'focus:outline-none focus:ring-4 focus:ring-[#ffd84d]/60 disabled:cursor-not-allowed disabled:opacity-60',
+  'border border-cta-hover border-b-4 border-b-cta-hover bg-cta px-6 py-4 text-center text-black',
+  'shadow-[0_18px_32px_rgb(var(--color-cta-base)/0.28)] transition duration-200 hover:-translate-y-0.5 hover:bg-cta-hover',
+  'focus:outline-none focus:ring-4 focus:ring-cta/60 disabled:cursor-not-allowed disabled:opacity-60',
 ].join(' ');
 
 export function ExpertCtaButton({

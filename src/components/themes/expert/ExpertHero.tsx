@@ -35,21 +35,21 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
             what if people would actually pay you for your advice...?
           </p>
 
-          <div className="mt-[16px] border-2 border-[#1d3557] bg-[#e7f5ff] px-3 pb-[10px] pt-[8px] text-center shadow-[0_12px_24px_rgba(72,117,185,0.08)] md:mt-[20px] md:px-[15px]">
+          <div className="mt-[16px] border-2 border-brand-accent bg-[#e7f5ff] px-3 pb-[10px] pt-[8px] text-center shadow-[0_12px_24px_rgba(72,117,185,0.08)] md:mt-[20px] md:px-[15px]">
             <p className="expert-headline text-balance text-[14px] font-medium leading-tight tracking-[-0.02em] text-[#2d2d2d] sm:text-[16px] md:text-[20px] lg:text-[36px]">
-              Your <span className="text-[#e01921]">FREE Copy</span> Of &apos;Expert Secrets&apos; Will Show You How To:
+              Your <span className="text-brand-primary">FREE Copy</span> Of &apos;Expert Secrets&apos; Will Show You How To:
             </p>
           </div>
 
           <h1 className="expert-headline mt-[10px] text-center text-[1.68rem] font-black uppercase leading-none tracking-[-0.04em] text-[#2d2d2d] sm:text-[3.25rem] lg:text-[4.12rem]">
-            “Find Your Message... Build A Tribe, And <span className="text-[#e01921]">Change The World!</span>”
+            “Find Your Message... Build A Tribe, And <span className="text-brand-primary">Change The World!</span>”
           </h1>
         </div>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_430px] lg:items-start">
           <div>
             <div className="mb-4 flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-1 text-[20px] text-[#ffcc00]">
+              <div className="flex items-center gap-1 text-[20px] text-cta">
                 {Array.from({ length: 5 }).map((_, index) => (
                   <span key={index}>★</span>
                 ))}
@@ -98,7 +98,7 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
             />
 
             <blockquote className="expert-headline mt-5 text-center text-[1.15rem] font-semibold leading-8 tracking-[-0.04em] text-[#2d2d2d] sm:text-[1.5rem]">
-              “Expert Secrets is the map that will allow you to <span className="text-[#e01921]">turn your specialized knowledge</span>,
+              “Expert Secrets is the map that will allow you to <span className="text-brand-primary">turn your specialized knowledge</span>,
               talents and abilities into a business that will work for you.” - Robert Kiyosaki
             </blockquote>
 

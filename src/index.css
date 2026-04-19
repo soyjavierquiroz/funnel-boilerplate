@@ -56,6 +56,11 @@
   }
 
   .theme-expert {
+    --color-brand-primary: 224 25 33;
+    --color-brand-accent: 29 53 87;
+    --color-cta-base: 250 204 21;
+    --color-cta-hover: 234 179 8;
+    --color-surface-bump: 254 252 232;
     font-family: var(--font-sans);
   }
 

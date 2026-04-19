@@ -16,7 +16,7 @@ const certaintyItems = [
 export function ExpertOfferStack() {
   return (
     <section className="px-4 py-12 sm:px-6 sm:py-16">
-      <div className="max-w-4xl mx-auto rounded-xl border-4 border-dashed border-[#e01921] bg-white p-8 shadow-2xl md:p-12">
+      <div className="max-w-4xl mx-auto rounded-xl border-4 border-dashed border-brand-primary bg-white p-8 shadow-2xl md:p-12">
         <h2 className="mb-8 text-center text-4xl font-black uppercase text-gray-900">
           LO QUE TE LLEVAS HOY...
         </h2>
@@ -43,13 +43,13 @@ export function ExpertOfferStack() {
         <div className="space-y-3">
           <p className="text-center text-2xl font-bold text-gray-900">Valor Total: $3,788</p>
           <p className="text-center text-xl text-gray-500 line-through">Precio Regular: $997</p>
-          <p className="my-4 text-center text-5xl font-black text-[#e01921] animate-pulse">¡HOY SOLO $97!</p>
+          <p className="my-4 animate-pulse text-center text-5xl font-black text-brand-primary">¡HOY SOLO $97!</p>
         </div>
 
         <div className="mt-8">
           <a
             href="#checkout"
-            className="block w-full rounded bg-yellow-400 py-6 text-center text-2xl font-black uppercase text-black shadow-[0_5px_0_rgb(202,138,4)] transition-all transform hover:translate-y-1 hover:bg-yellow-500 hover:shadow-none"
+            className="block w-full rounded bg-cta py-6 text-center text-2xl font-black uppercase text-black shadow-[0_5px_0_rgb(202,138,4)] transition-all transform hover:translate-y-1 hover:bg-cta-hover hover:shadow-none"
           >
             ¡SÍ, QUIERO MI ACCESO AHORA!
           </a>

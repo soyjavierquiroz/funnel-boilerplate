@@ -40,7 +40,7 @@ export function ExpertTheme() {
             Send Me Your Address...
           </p>
           <p className="expert-headline mt-2 text-center text-[1.6rem] font-normal leading-tight text-[#2d2d2d] sm:text-[2.25rem]">
-            I&apos;d like to rush a <span className="text-[#e01921]">FREE</span> copy of my brand new hardcover book to your doorstep, ASAP!
+            I&apos;d like to rush a <span className="text-brand-primary">FREE</span> copy of my brand new hardcover book to your doorstep, ASAP!
           </p>
           <img src={expertBrandAssets.bundleUrl} alt="Expert Secrets bundle" className="mx-auto mt-8 w-full max-w-[733px]" loading="lazy" />
           <p className="expert-body mt-6 text-center text-[1.05rem] leading-8 text-[#2d2d2d] sm:text-[1.2rem]">
