@@ -31,7 +31,7 @@ export function ExpertOfferStack() {
               <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <span className="text-lg font-extrabold text-gray-900 sm:text-xl">{item.name}</span>
                 <span className="text-lg font-extrabold text-gray-700 sm:text-right sm:text-xl">
-                  Valor: <span className="text-red-500 line-through">{item.value}</span>
+                  Valor: <span className="text-brand-primary line-through">{item.value}</span>
                 </span>
               </div>
             </li>
@@ -57,7 +57,7 @@ export function ExpertOfferStack() {
           <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-sm font-bold text-gray-600">
             {certaintyItems.map(({ id, label, icon: Icon }) => (
               <div key={id} className="flex items-center gap-2">
-                <Icon className="h-4 w-4 text-[#4875b9]" strokeWidth={2.25} aria-hidden="true" />
+                <Icon className="h-4 w-4 text-brand-accent" strokeWidth={2.25} aria-hidden="true" />
                 <span>{label}</span>
               </div>
             ))}

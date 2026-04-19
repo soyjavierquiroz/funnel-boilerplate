@@ -11,13 +11,13 @@ export function ExpertFAQ({ items }: ExpertFAQProps) {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section className="bg-[rgba(72,117,185,0.1)] px-4 py-6 sm:px-6 sm:py-9">
+    <section className="bg-brand-accent/10 px-4 py-6 sm:px-6 sm:py-9">
       <div className="mx-auto max-w-[935px]">
         <div className="mb-8 flex items-center gap-6">
           <h2 className="expert-headline text-[2rem] font-black leading-none tracking-[-0.05em] text-[#2d2d2d] sm:text-[2.5rem]">
             Frequently Asked Questions
           </h2>
-          <div className="h-1 flex-1 bg-[#4875b9]" />
+          <div className="h-1 flex-1 bg-brand-accent" />
         </div>
 
         <div className="space-y-3">
@@ -27,7 +27,7 @@ export function ExpertFAQ({ items }: ExpertFAQProps) {
             return (
               <div
                 key={item.question}
-                className="rounded-[5px] border-l-4 border-l-[#4875b9] bg-white px-4 py-4 shadow-[0_10px_25px_rgba(17,17,17,0.05)]"
+                className="rounded-[5px] border-l-4 border-l-brand-accent bg-white px-4 py-4 shadow-[0_10px_25px_rgba(17,17,17,0.05)]"
               >
                 <button
                   type="button"
@@ -37,7 +37,7 @@ export function ExpertFAQ({ items }: ExpertFAQProps) {
                   <span className="expert-headline text-[1.08rem] font-bold leading-6 text-[#141414] sm:text-[1.3rem]">
                     {item.question}
                   </span>
-                  <span className="mt-0.5 shrink-0 text-[#4875b9]">
+                  <span className="mt-0.5 shrink-0 text-brand-accent">
                     {isOpen ? <Minus className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
                   </span>
                 </button>

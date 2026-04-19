@@ -55,7 +55,7 @@ export function ExpertTestimonials({ items }: ExpertTestimonialsProps) {
       <section className="px-4 py-10 sm:px-6">
         <div className="mx-auto max-w-[1080px]">
           <div className="text-center">
-            <p className="expert-body text-sm font-bold uppercase tracking-[0.28em] text-[#4876b9]">Success Stories</p>
+            <p className="expert-body text-sm font-bold uppercase tracking-[0.28em] text-brand-accent">Success Stories</p>
             <h2 className="expert-headline mt-3 text-[2rem] font-black leading-none tracking-[-0.05em] text-[#2d2d2d] sm:text-[2.85rem]">
               Hear How Readers Use Expert Secrets In The Real World
             </h2>
@@ -67,7 +67,7 @@ export function ExpertTestimonials({ items }: ExpertTestimonialsProps) {
                 key={item.id}
                 type="button"
                 onClick={() => setActiveItem(item)}
-                className="group overflow-hidden rounded-[18px] border border-[#d7e2f0] bg-white text-left shadow-[0_20px_45px_rgba(17,17,17,0.08)] transition-transform duration-200 hover:-translate-y-1"
+                className="group overflow-hidden rounded-[18px] border border-brand-accent/10 bg-white text-left shadow-[0_20px_45px_rgba(17,17,17,0.08)] transition-transform duration-200 hover:-translate-y-1"
               >
                 <div className="relative aspect-video overflow-hidden bg-[#111]">
                   <img
@@ -86,7 +86,7 @@ export function ExpertTestimonials({ items }: ExpertTestimonialsProps) {
 
                 <div className="px-5 py-5">
                   <p className="expert-headline text-[1.12rem] font-extrabold text-[#2d2d2d]">{item.name}</p>
-                  <p className="expert-body mt-1 text-sm font-semibold uppercase tracking-[0.12em] text-[#4876b9]">{item.title}</p>
+                  <p className="expert-body mt-1 text-sm font-semibold uppercase tracking-[0.12em] text-brand-accent">{item.title}</p>
                   <p className="expert-body mt-3 text-[0.98rem] leading-7 text-[#2d2d2d]">{item.quote}</p>
                 </div>
               </button>

@@ -77,7 +77,7 @@ function resolveOfferPrice(baseValue: number, localizedValue?: { total: string }
 }
 
 const clickfunnelsFieldClassName =
-  'bg-white border border-gray-300 text-gray-900 rounded-md focus:ring-2 focus:ring-blue-500 shadow-sm';
+  'bg-white border border-gray-300 text-gray-900 rounded-md focus:ring-2 focus:ring-brand-accent shadow-sm';
 
 function resolveDefaultPhoneCountry(countryCode?: string): Country {
   if (!countryCode) {
@@ -275,12 +275,12 @@ export function ExpertOrderForm() {
   if (isSubmitted) {
     return (
       <aside className="overflow-hidden rounded-lg border-2 border-gray-300 bg-white shadow-xl">
-        <div className="rounded-t-[12px] bg-[#4876b9] px-5 py-4 text-center text-white">
+        <div className="rounded-t-[12px] bg-brand-accent px-5 py-4 text-center text-white">
           <p className="expert-headline text-[1rem] font-extrabold uppercase tracking-[0.08em]">Order Reserved</p>
         </div>
         <div className="space-y-4 px-5 py-6">
-          <div className="flex items-center gap-3 rounded-[14px] bg-[#f4f8ff] p-4">
-            <ShieldCheck className="h-8 w-8 text-[#4876b9]" />
+          <div className="flex items-center gap-3 rounded-[14px] bg-brand-accent/5 p-4">
+            <ShieldCheck className="h-8 w-8 text-brand-accent" />
             <div>
               <p className="expert-headline text-[1.1rem] font-extrabold text-[#2d2d2d]">Your spot is held.</p>
               <p className="expert-body text-sm leading-6 text-[#333]">
@@ -345,7 +345,7 @@ export function ExpertOrderForm() {
 
         {step === 1 ? (
           <div className="mt-5 space-y-4">
-            <div className="rounded-[14px] border border-[#d8e3f2] bg-[#f7fbff] px-4 py-3">
+            <div className="rounded-[14px] border border-brand-accent/10 bg-brand-accent/5 px-4 py-3">
               <p className="expert-headline text-[1.05rem] font-bold text-[#2d2d2d]">Get Your FREE Book, Send Me Your Address</p>
               <p className="expert-body mt-1 text-sm leading-6 text-[#333]">
                 I&apos;d like to rush a free hardcover copy of Expert Secrets to your doorstep.
@@ -409,7 +409,7 @@ export function ExpertOrderForm() {
               label="Phone Number"
               labelClassName="expert-body mb-1.5 block text-sm font-semibold text-[#2d2d2d]"
               phoneInputClassName={clickfunnelsFieldClassName}
-              helperTextClassName="mt-1.5 text-xs text-[#4876b9]"
+              helperTextClassName="mt-1.5 text-xs text-brand-accent"
               errorTextClassName="mt-1.5 text-xs text-brand-primary"
             />
 
@@ -502,9 +502,9 @@ export function ExpertOrderForm() {
           </div>
         ) : (
           <div className="mt-5 space-y-4">
-            <div className="rounded-[14px] border border-[#d8e3f2] bg-[#f7fbff] p-4">
+            <div className="rounded-[14px] border border-brand-accent/10 bg-brand-accent/5 p-4">
               <div className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#4876b9]" />
+                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-brand-accent" />
                 <div className="expert-body text-sm leading-6 text-[#2d2d2d]">
                   <p className="font-semibold">Shipping to</p>
                   <p>
@@ -515,16 +515,16 @@ export function ExpertOrderForm() {
               </div>
             </div>
 
-            <label className="flex cursor-pointer items-start gap-3 rounded-[14px] border border-[#dae3ef] bg-white p-4">
+            <label className="flex cursor-pointer items-start gap-3 rounded-[14px] border border-brand-accent/10 bg-white p-4">
               <input
                 type="checkbox"
                 checked={wantsLiveRecordings}
                 onChange={(event) => setWantsLiveRecordings(event.target.checked)}
-                className="mt-1 h-4 w-4 rounded border-[#cfd6df] text-[#4876b9] focus:ring-[#4876b9]"
+                className="mt-1 h-4 w-4 rounded border-[#cfd6df] text-brand-accent focus:ring-brand-accent"
               />
               <img src={expertBrandAssets.liveRecordingsUrl} alt="Expert Secrets live recordings" className="h-16 w-16 rounded-xl object-cover" loading="lazy" />
               <div className="min-w-0">
-                <p className="expert-body text-xs font-bold uppercase tracking-[0.18em] text-[#4876b9]">Special One Time Offer</p>
+                <p className="expert-body text-xs font-bold uppercase tracking-[0.18em] text-brand-accent">Special One Time Offer</p>
                 <p className="expert-headline mt-1 text-[1rem] font-extrabold leading-5 text-[#2d2d2d]">
                   Expert Secrets Live Recordings
                 </p>
@@ -534,15 +534,15 @@ export function ExpertOrderForm() {
               </div>
             </label>
 
-            <div className="rounded-[14px] border border-[#dae3ef] bg-[#fbfdff] p-4">
+            <div className="rounded-[14px] border border-brand-accent/10 bg-brand-accent/5 p-4">
               <div className="flex items-start gap-3">
-                <Lock className="mt-0.5 h-5 w-5 shrink-0 text-[#4876b9]" />
+                <Lock className="mt-0.5 h-5 w-5 shrink-0 text-brand-accent" />
                 <div>
                   <p className="expert-headline text-[1rem] font-bold text-[#2d2d2d]">Secure Payment Handoff</p>
                   <p className="expert-body mt-1 text-sm leading-6 text-[#333]">
                     We review your order here and continue through the secure checkout configured in the funnel logic.
                   </p>
-                  <div className="mt-3 flex items-center gap-3 text-[#4876b9]">
+                  <div className="mt-3 flex items-center gap-3 text-brand-accent">
                     <CreditCard className="h-5 w-5" />
                     <Truck className="h-5 w-5" />
                     <ShieldCheck className="h-5 w-5" />

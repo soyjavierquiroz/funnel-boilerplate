@@ -17,7 +17,7 @@ import { ExpertCtaButton } from './ExpertCtaButton';
 
 export function ExpertTheme() {
   return (
-    <div className="theme-expert bg-[#f9f9f9] min-h-screen text-[#222]">
+    <div className="theme-expert min-h-screen bg-page text-text-main">
       <ExpertHero aside={<ExpertOrderForm />} />
 
       <section className="px-4 pt-8 sm:px-6">
@@ -35,7 +35,7 @@ export function ExpertTheme() {
       <ExpertTestimonials items={expertTestimonials} />
 
       <section className="px-4 pb-4 sm:px-6">
-        <div className="mx-auto max-w-[819px] rounded-[4px] border border-[#f4f0dc] bg-[#fcf8e3] px-5 py-8 shadow-[0_18px_40px_rgba(17,17,17,0.06)] sm:px-10 sm:py-10">
+        <div className="mx-auto max-w-[819px] rounded-[4px] border border-surface-bump bg-surface-bump px-5 py-8 shadow-[0_18px_40px_rgba(17,17,17,0.06)] sm:px-10 sm:py-10">
           <p className="expert-headline text-center text-[2.3rem] font-normal leading-none tracking-[-0.04em] text-[#2d2d2d] sm:text-[3.35rem]">
             Send Me Your Address...
           </p>
@@ -62,7 +62,7 @@ export function ExpertTheme() {
       <ExpertOfferStack />
       <ExpertFAQ items={expertFaqItems} />
 
-      <footer className="border-t-[10px] border-t-[#4875b9] bg-[#242424] px-4 py-10 text-center text-white sm:px-6">
+      <footer className="border-t-[10px] border-t-brand-accent bg-[#242424] px-4 py-10 text-center text-white sm:px-6">
         <div className="mx-auto max-w-[1170px]">
           <img src={expertBrandAssets.logoUrl} alt="Expert Secrets" className="mx-auto h-8 w-auto sm:h-9" />
           <p className="expert-body mx-auto mt-8 max-w-[780px] text-sm leading-7 text-white/78">

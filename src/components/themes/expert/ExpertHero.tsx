@@ -14,28 +14,28 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
 
   return (
     <section
-      className="border-b border-[#dce7f3] bg-white bg-top bg-repeat pb-[60px]"
+      className="border-b border-brand-accent/10 bg-white bg-top bg-repeat pb-[60px]"
       style={{
-        backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.66) 0%, rgba(72,117,185,0.09) 98%), url(${expertBrandAssets.heroBackgroundUrl})`,
+        backgroundImage: `linear-gradient(180deg, rgb(255 255 255 / 0.66) 0%, rgb(var(--color-brand-accent) / 0.09) 98%), url(${expertBrandAssets.heroBackgroundUrl})`,
       }}
     >
       <div className="mx-auto max-w-[1225px] px-4 pt-4 sm:px-6">
-        <header className="flex flex-col items-center justify-between gap-5 border-b border-[#e8edf3] pb-5 lg:flex-row">
+        <header className="flex flex-col items-center justify-between gap-5 border-b border-brand-accent/10 pb-5 lg:flex-row">
           <img src={expertBrandAssets.logoUrl} alt="Expert Secrets" className="h-8 w-auto sm:h-9" />
 
           <nav className="expert-body flex flex-wrap items-center justify-center gap-4 text-sm font-semibold text-[#2d2d2d] sm:gap-6">
-            <a href="#checkout" className="transition hover:text-[#4876b9]">Order Now</a>
-            <a href="mailto:support@marketingsecrets.com" className="transition hover:text-[#4876b9]">Support</a>
-            <a href="https://www.primemover.com/courses/expert-secrets" className="transition hover:text-[#4876b9]">Login</a>
+            <a href="#checkout" className="transition hover:text-brand-accent">Order Now</a>
+            <a href="mailto:support@marketingsecrets.com" className="transition hover:text-brand-accent">Support</a>
+            <a href="https://www.primemover.com/courses/expert-secrets" className="transition hover:text-brand-accent">Login</a>
           </nav>
         </header>
 
         <div className="mx-auto mt-4 max-w-[1040px] md:mt-5">
-          <p className="expert-body px-2 text-center text-xs font-bold lowercase tracking-[0.05em] text-[#4876b9] text-balance md:px-0 md:text-sm">
+          <p className="expert-body px-2 text-center text-xs font-bold lowercase tracking-[0.05em] text-brand-accent text-balance md:px-0 md:text-sm">
             what if people would actually pay you for your advice...?
           </p>
 
-          <div className="mt-[16px] border-2 border-brand-accent bg-[#e7f5ff] px-3 pb-[10px] pt-[8px] text-center shadow-[0_12px_24px_rgba(72,117,185,0.08)] md:mt-[20px] md:px-[15px]">
+          <div className="mt-[16px] border-2 border-brand-accent bg-brand-accent/5 px-3 pb-[10px] pt-[8px] text-center shadow-[0_12px_24px_rgba(72,117,185,0.08)] md:mt-[20px] md:px-[15px]">
             <p className="expert-headline text-balance text-[14px] font-medium leading-tight tracking-[-0.02em] text-[#2d2d2d] sm:text-[16px] md:text-[20px] lg:text-[36px]">
               Your <span className="text-brand-primary">FREE Copy</span> Of &apos;Expert Secrets&apos; Will Show You How To:
             </p>
@@ -59,7 +59,7 @@ export function ExpertHero({ aside }: ExpertHeroProps) {
               </p>
             </div>
 
-            <div className="mb-4 flex items-center justify-center gap-[5px] bg-[#4775b9] px-[5px] py-[11px] text-center text-white">
+            <div className="mb-4 flex items-center justify-center gap-[5px] bg-brand-accent px-[5px] py-[11px] text-center text-white">
               <Volume2 className="h-4 w-4 shrink-0" />
               <p className="expert-headline text-[12px] font-medium uppercase tracking-[0.08em] leading-[1.3] sm:text-[16px] sm:leading-none">
                 Make Sure Your Sound Is Turned ON! <span className="font-normal normal-case">(Please wait for video to fully load)</span>

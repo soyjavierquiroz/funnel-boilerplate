@@ -25,7 +25,7 @@ export function ExpertBonusStack({ bonuses }: ExpertBonusStackProps) {
     <section className="px-4 py-12 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-[1040px] rounded-[26px] bg-white px-4 py-8 shadow-[0_26px_70px_rgba(17,17,17,0.08)] sm:px-8">
         <div className="text-center">
-          <p className="expert-headline text-[1.35rem] font-semibold italic text-[#4875b9] sm:text-[1.65rem]">
+          <p className="expert-headline text-[1.35rem] font-semibold italic text-brand-accent sm:text-[1.65rem]">
             Let Me Show You EVERYTHING
           </p>
           <h2 className="expert-headline mt-2 text-[2rem] font-black uppercase leading-none tracking-[-0.05em] text-[#2d2d2d] sm:text-[3rem]">
@@ -33,7 +33,7 @@ export function ExpertBonusStack({ bonuses }: ExpertBonusStackProps) {
           </h2>
         </div>
 
-        <div className="mt-8 overflow-hidden rounded-[18px] border border-[#eae5d0] bg-[#fcf8e3] px-5 py-6 sm:px-8 sm:py-10">
+        <div className="mt-8 overflow-hidden rounded-[18px] border border-surface-bump bg-surface-bump px-5 py-6 sm:px-8 sm:py-10">
           <img
             src={expertBrandAssets.bundleWideUrl}
             alt="Expert Secrets bundle with bonuses"
@@ -43,17 +43,17 @@ export function ExpertBonusStack({ bonuses }: ExpertBonusStackProps) {
 
           <div className="mt-8 grid gap-4 rounded-[16px] bg-white px-5 py-5 text-center shadow-[0_18px_50px_rgba(17,17,17,0.08)] sm:grid-cols-3 sm:text-left">
             <div>
-              <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-[#4875b9]">Total Value</p>
+              <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Total Value</p>
               <p className="expert-headline mt-2 text-[2rem] font-extrabold text-brand-primary sm:text-[2.35rem]">
                 <span className="line-through">{formatUsd(product.basePriceUSD)}</span>
               </p>
             </div>
             <div>
-              <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-[#4875b9]">Today</p>
+              <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Today</p>
               <p className="expert-headline mt-2 text-[2rem] font-extrabold text-[#2d2d2d] sm:text-[2.35rem]">FREE!</p>
             </div>
             <div>
-              <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-[#4875b9]">Just Cover</p>
+              <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Just Cover</p>
               <p className="expert-headline mt-2 text-[1.3rem] font-extrabold leading-tight text-[#2d2d2d] sm:text-[1.55rem]">
                 Shipping On The Book
               </p>
@@ -72,7 +72,7 @@ export function ExpertBonusStack({ bonuses }: ExpertBonusStackProps) {
               </div>
 
               <div>
-                <p className="expert-body inline-flex items-center gap-2 rounded-full bg-[#e7f5ff] px-3 py-1 text-xs font-bold uppercase tracking-[0.22em] text-[#4875b9]">
+                <p className="expert-body inline-flex items-center gap-2 rounded-full bg-brand-accent/5 px-3 py-1 text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
                   <Check className="h-3.5 w-3.5" />
                   Included Free
                 </p>
@@ -83,7 +83,7 @@ export function ExpertBonusStack({ bonuses }: ExpertBonusStackProps) {
               </div>
 
               <div className="text-left sm:text-right">
-                <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-[#4875b9]">Value</p>
+                <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Value</p>
                 <p className="expert-headline mt-2 text-[1.5rem] font-extrabold text-brand-primary sm:text-[1.8rem]">
                   {formatUsd(bonus.valueUSD)}
                 </p>
