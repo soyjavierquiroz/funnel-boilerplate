@@ -539,12 +539,22 @@ export function KurukinPlayer({
       ) : null}
 
       {shouldLoadPlayer && isVslMode && isVslMuted && !showPoster ? (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+        <div
+          className="absolute inset-0 z-50 flex cursor-pointer items-center justify-center bg-black/30 backdrop-blur-sm"
+          onClick={handleUnmute}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              handleUnmute();
+            }
+          }}
+          aria-label="Activar sonido"
+        >
           <button
             type="button"
-            onClick={handleUnmute}
-            aria-label="Activar sonido"
-            className="px-6 py-3 bg-black/60 backdrop-blur-md text-white font-medium rounded-full animate-pulse border border-white/20 shadow-xl"
+            className="pointer-events-none px-6 py-3 bg-black/60 backdrop-blur-md text-white font-medium rounded-full animate-pulse border border-white/20 shadow-xl"
           >
             🔊 Haz clic para escuchar
           </button>
