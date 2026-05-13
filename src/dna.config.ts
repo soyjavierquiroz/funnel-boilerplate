@@ -42,24 +42,24 @@ function normalizeColorValue(value: string) {
 export const DNA = {
   theme: 'expert',
   colors: {
-    primary: '242 169 167',
-    accent: '109 89 122',
-    cta: '255 221 153',
-    ctaHover: '255 210 120',
-    surface: '255 245 245',
+    primary: '31 41 55',
+    accent: '75 85 99',
+    cta: '17 24 39',
+    ctaHover: '0 0 0',
+    surface: '249 250 251',
   },
-  vslVideoId: 'https://vz-1623229a-088.b-cdn.net/f9a1fb53-dd48-46b2-bea3-275cdc7d8b16/playlist.m3u8',
+  vslVideoId: import.meta.env.VITE_VSL_VIDEO_ID ?? '',
   prices: {
-    main: '50',
-    bump: '80',
-    totalValue: '130',
-    regularPrice: '80',
+    main: '97',
+    bump: '0',
+    totalValue: '97',
+    regularPrice: '97',
   },
   copy: {
-    productName: 'Magia de la Abundancia',
-    headline: 'Activa el flujo de abundancia en tu vida',
-    ctaText: '¡RESERVAR MI LUGAR AHORA!',
-    orderBumpTitle: 'Activación energética guiada',
+    productName: 'Your Product',
+    headline: 'Your primary transformation headline',
+    ctaText: 'Get Instant Access',
+    orderBumpTitle: 'Add the premium bonus',
   },
 } as const satisfies {
   theme: DnaTheme;

@@ -148,7 +148,7 @@ export const pricingProductKeys = {
 
 export const funnelConfig: FunnelConfig = {
   brandName: DNA.copy.productName,
-  domain: 'magiadelaabundancia.com',
+  domain: import.meta.env.VITE_DOMAIN ?? 'localhost',
   theme: resolveDnaFunnelTheme(),
   media: {
     heroVideo: {
