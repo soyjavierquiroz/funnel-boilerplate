@@ -3,7 +3,6 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { DNA, resolveDnaDocumentTheme } from './dna.config';
 import analytics from './core/services/analytics';
 import { ExpertTheme } from './components/themes/expert/ExpertTheme';
-import { PandaTheme } from './components/themes/panda/PandaTheme';
 import { Success } from './pages/Success';
 
 function RoutedApp() {
@@ -30,7 +29,7 @@ function RoutedApp() {
 
   return (
     <Routes>
-      <Route path="/" element={DNA.theme === 'expert' ? <ExpertTheme /> : <PandaTheme />} />
+      <Route path="/" element={<ExpertTheme />} />
       <Route path="/confirmacion" element={<Success />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
