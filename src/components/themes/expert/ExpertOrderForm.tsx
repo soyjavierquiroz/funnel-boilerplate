@@ -2,7 +2,7 @@ import { startTransition, useState } from 'react';
 import { ChevronLeft, Lock, MapPin, ShieldCheck, Sparkles } from 'lucide-react';
 import type { Country } from 'react-phone-number-input';
 import { useNavigate } from 'react-router-dom';
-import { DNA } from '../../../dna.config';
+import { DNA, dnaNumericPrices } from '../../../dna.config';
 import funnelConfig from '../../../core/config/funnel.config';
 import analytics from '../../../core/services/analytics';
 import { useVisitor } from '../../../core/visitor/VisitorContext';
@@ -65,11 +65,13 @@ function resolveDefaultPhoneCountry(countryCode?: string): Country {
 }
 
 const fieldClassName =
-  'bg-white border border-[rgb(var(--color-brand-accent)/0.18)] text-gray-900 rounded-xl focus:ring-2 focus:ring-brand-accent shadow-sm';
+  'bg-white border border-black/20 text-gray-900 rounded-sm focus:ring-2 focus:ring-brand-accent';
 
 export function ExpertOrderForm() {
   const navigate = useNavigate();
   const { visitorData } = useVisitor();
+  const checkoutAmount = dnaNumericPrices.main;
+  const checkoutPriceLabel = `$${DNA.prices.main}`;
 
   const [step, setStep] = useState<1 | 2>(1);
   const [eventMode, setEventMode] = useState<EventMode | ''>('');
@@ -117,7 +119,7 @@ export function ExpertOrderForm() {
         product_name: DNA.copy.productName,
         event_mode: selectedEvent.id,
         event_label: selectedEvent.label,
-        amount_bs: selectedEvent.amountBs,
+        amount_bs: checkoutAmount,
         country_code: visitorData?.country_code?.toUpperCase() ?? 'BO',
       });
     } catch (trackingError) {
@@ -149,7 +151,7 @@ export function ExpertOrderForm() {
       event: {
         mode: selectedEvent.id,
         label: selectedEvent.label,
-        amount_bs: selectedEvent.amountBs,
+        amount_bs: checkoutAmount,
         schedule: selectedEvent.schedule,
         location: selectedEvent.location,
       },
@@ -216,7 +218,7 @@ export function ExpertOrderForm() {
   return (
     <aside
       id="checkout"
-      className="overflow-hidden rounded-[32px] border border-white/15 bg-white/95 text-[#2f2535] shadow-[0_30px_80px_rgba(14,10,18,0.36)] backdrop-blur"
+      className="overflow-hidden rounded-sm border-[4px] border-[#111] bg-white text-[#2f2535] shadow-2xl"
     >
       <div className="grid grid-cols-2 border-b border-[rgb(var(--color-brand-accent)/0.12)]">
         <div className={`px-4 py-4 text-center transition-colors ${step === 1 ? 'bg-[#3b2d42] text-white' : 'bg-[#f6eef5] text-[#6b5a72]'}`}>
@@ -234,7 +236,7 @@ export function ExpertOrderForm() {
       </div>
 
       <div className="px-5 pb-6 pt-5 sm:px-6">
-        <div className="rounded-[24px] bg-[linear-gradient(180deg,#fff7f7_0%,#f7eef5_100%)] px-5 py-5 shadow-[0_18px_40px_rgba(80,56,89,0.08)]">
+        <div className="rounded-sm border border-black/10 bg-white px-5 py-5">
           <div className="flex items-start gap-3">
             <Sparkles className="mt-1 h-6 w-6 shrink-0 text-brand-primary" />
             <div>
@@ -250,7 +252,7 @@ export function ExpertOrderForm() {
 
         {step === 1 ? (
           <div className="mt-5 space-y-4">
-            <div className="rounded-[24px] border border-[rgb(var(--color-brand-accent)/0.1)] bg-[#fffaf8] p-4">
+            <div className="rounded-sm border border-black/10 bg-white p-4">
               <p className="expert-headline text-[1.05rem] font-bold text-[#3b2d42]">Selecciona la ceremonia a la que asistiras</p>
               <div className="mt-3 grid gap-3">
                 {magiaEventOptions.map((option) => {
@@ -259,9 +261,9 @@ export function ExpertOrderForm() {
                   return (
                     <label
                       key={option.id}
-                      className={`block cursor-pointer rounded-[22px] border px-4 py-4 transition ${
+                      className={`block cursor-pointer rounded-sm border px-4 py-4 transition ${
                         isSelected
-                          ? 'border-brand-primary bg-[rgb(var(--color-brand-primary)/0.1)] shadow-[0_12px_30px_rgba(112,69,90,0.12)]'
+                          ? 'border-brand-primary bg-[rgb(var(--color-brand-primary)/0.08)]'
                           : 'border-[rgb(var(--color-brand-accent)/0.12)] bg-white hover:border-brand-accent/40'
                       }`}
                     >
@@ -282,8 +284,8 @@ export function ExpertOrderForm() {
                           <p className="expert-body mt-1 text-sm leading-6 text-[#5f4f65]">{option.schedule}</p>
                           <p className="expert-body mt-1 text-xs uppercase tracking-[0.18em] text-brand-accent">{option.location}</p>
                         </div>
-                        <div className="rounded-full bg-[rgb(var(--color-surface-bump))] px-4 py-2">
-                          <p className="expert-headline text-[1rem] font-extrabold text-brand-primary">Bs {option.amountBs}</p>
+                        <div className="rounded-sm border border-black/10 bg-white px-4 py-2">
+                          <p className="expert-headline text-[1rem] font-extrabold text-brand-primary">{checkoutPriceLabel}</p>
                         </div>
                       </div>
                     </label>
@@ -354,7 +356,7 @@ export function ExpertOrderForm() {
               errorTextClassName="mt-1.5 text-xs text-brand-primary"
             />
 
-            <div className="rounded-[20px] bg-[#f7f1f8] px-4 py-4">
+            <div className="rounded-sm border border-black/10 bg-white px-4 py-4">
               <div className="flex gap-3">
                 <MapPin className="mt-1 h-5 w-5 shrink-0 text-brand-accent" />
                 <p className="expert-body text-sm leading-6 text-[#5f4f65]">
@@ -374,7 +376,7 @@ export function ExpertOrderForm() {
           </div>
         ) : (
           <div className="mt-5 space-y-4">
-            <div className="rounded-[24px] border border-[rgb(var(--color-brand-accent)/0.12)] bg-[#fff9fb] px-5 py-5">
+            <div className="rounded-sm border border-black/10 bg-white px-5 py-5">
               <div className="flex items-start gap-3">
                 <ShieldCheck className="mt-1 h-6 w-6 shrink-0 text-brand-primary" />
                 <div>
@@ -387,7 +389,7 @@ export function ExpertOrderForm() {
             </div>
 
             {selectedEvent ? (
-              <div className="rounded-[24px] bg-[linear-gradient(180deg,#fff7f7_0%,#f6eef5_100%)] px-5 py-5 shadow-[0_18px_40px_rgba(80,56,89,0.08)]">
+              <div className="rounded-sm border border-black/10 bg-white px-5 py-5">
                 <p className="expert-body text-xs uppercase tracking-[0.22em] text-brand-accent">Modalidad seleccionada</p>
                 <p className="expert-headline mt-2 text-[1.7rem] leading-tight text-[#3b2d42]">{selectedEvent.label}</p>
                 <p className="expert-body mt-2 text-sm leading-6 text-[#5f4f65]">
@@ -395,9 +397,9 @@ export function ExpertOrderForm() {
                   <br />
                   {selectedEvent.location}
                 </p>
-                <div className="mt-4 rounded-[20px] bg-white px-4 py-4">
+                <div className="mt-4 rounded-sm border border-black/10 bg-[#fafafa] px-4 py-4">
                   <p className="expert-body text-xs uppercase tracking-[0.22em] text-brand-accent">Monto a pagar</p>
-                  <p className="expert-headline mt-2 text-[2.3rem] leading-none text-brand-primary">Bs {selectedEvent.amountBs}</p>
+                  <p className="expert-headline mt-2 text-[2.3rem] leading-none text-brand-primary">{checkoutPriceLabel}</p>
                   <p className="expert-body mt-2 text-sm leading-6 text-[#5f4f65]">
                     Deposito o QR a nombre de {magiaPayment.holder}. Luego envia tu comprobante al WhatsApp {magiaPayment.whatsapp}.
                   </p>
@@ -405,7 +407,7 @@ export function ExpertOrderForm() {
               </div>
             ) : null}
 
-            <div className="rounded-[24px] border border-[rgb(var(--color-brand-accent)/0.12)] bg-white px-5 py-5">
+            <div className="rounded-sm border border-black/10 bg-white px-5 py-5">
               <p className="expert-headline text-[1.05rem] font-bold text-[#3b2d42]">Resumen del registro</p>
               <p className="expert-body mt-3 text-sm leading-7 text-[#5f4f65]">
                 {firstName} {lastName}
@@ -417,7 +419,7 @@ export function ExpertOrderForm() {
             </div>
 
             {submitError ? (
-              <p className="rounded-[18px] bg-[rgb(var(--color-brand-primary)/0.08)] px-4 py-3 text-sm text-brand-primary">
+              <p className="rounded-sm border border-brand-primary/20 bg-[rgb(var(--color-brand-primary)/0.08)] px-4 py-3 text-sm text-brand-primary">
                 {submitError}
               </p>
             ) : null}
@@ -426,7 +428,7 @@ export function ExpertOrderForm() {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="inline-flex min-h-[60px] items-center justify-center gap-2 rounded-[18px] border border-[rgb(var(--color-brand-accent)/0.14)] bg-white px-5 py-4 text-sm font-semibold text-[#4b3d53] transition hover:bg-[#f7f1f8]"
+                className="inline-flex min-h-[60px] items-center justify-center gap-2 rounded-sm border border-black/15 bg-white px-5 py-4 text-sm font-semibold text-[#4b3d53] transition hover:bg-[#f7f1f8]"
               >
                 <ChevronLeft className="h-4 w-4" />
                 Editar

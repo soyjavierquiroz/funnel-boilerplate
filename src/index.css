@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap');
 @import 'plyr/dist/plyr.css';
 
 @tailwind base;
@@ -7,16 +7,16 @@
 
 @layer base {
   :root[data-theme='theme-expert'] {
-    --color-page: 255 248 249;
+    --color-page: 255 255 255;
     --color-surface: 255 255 255;
-    --color-primary: 242 169 167;
-    --color-secondary: 109 89 122;
-    --color-accent: 255 221 153;
-    --color-border-subtle: 221 204 214;
-    --color-text-main: 58 42 64;
-    --color-text-muted: 106 88 117;
-    --font-sans: 'Manrope', 'Segoe UI', sans-serif;
-    --font-serif: 'Instrument Serif', Georgia, serif;
+    --color-primary: 107 67 155;
+    --color-secondary: 216 99 184;
+    --color-accent: 216 99 184;
+    --color-border-subtle: 207 197 220;
+    --color-text-main: 45 32 61;
+    --color-text-muted: 95 74 115;
+    --font-sans: 'Montserrat', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
   }
 
   :root[data-theme='theme-panda'],
@@ -29,8 +29,8 @@
     --color-border-subtle: 71 85 105;
     --color-text-main: 248 250 252;
     --color-text-muted: 148 163 184;
-    --font-sans: 'Manrope', 'Segoe UI', sans-serif;
-    --font-serif: 'Instrument Serif', Georgia, serif;
+    --font-sans: 'Montserrat', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
   }
 
   body,
@@ -43,12 +43,12 @@
   }
 
   .theme-expert {
-    --color-brand-primary: 242 169 167;
-    --color-brand-accent: 109 89 122;
-    --color-cta-base: 255 221 153;
-    --color-cta-hover: 255 210 120;
-    --color-surface-bump: 255 245 245;
-    font-family: var(--font-sans);
+    --color-brand-primary: 107 67 155;
+    --color-brand-accent: 216 99 184;
+    --color-cta-base: 216 99 184;
+    --color-cta-hover: 194 76 163;
+    --color-surface-bump: 255 255 255;
+    font-family: var(--font-body);
   }
 
   .theme-panda {
@@ -57,22 +57,23 @@
     --color-cta-base: 6 182 212;
     --color-cta-hover: 8 145 178;
     --color-surface-bump: 11 17 32;
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
   }
 
   .theme-expert .expert-headline {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
+    font-weight: 800;
   }
 
   .theme-expert .expert-body,
   .theme-expert .expert-input,
   .theme-expert .PhoneInput,
   .theme-expert .PhoneInputInput {
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
   }
 
   .theme-panda .panda-display {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
   }
 
   .plyr {

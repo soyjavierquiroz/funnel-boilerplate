@@ -1,19 +1,19 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+set -e
 
-APP="/opt/webs/boilerplate"
+echo "🚀 Iniciando despliegue de Sensorial..."
 
-cd "$APP"
-
-if git remote get-url origin >/dev/null 2>&1; then
-  echo "==> Pull..."
-  git pull --rebase || true
-fi
-
-echo "==> Install deps..."
-npm ci || npm install
-
-echo "==> Build..."
+echo "📦 1. Compilando el nuevo ADN..."
 npm run build
 
-echo "✅ Build listo para Docker Swarm: $APP/dist ($(date))"
+echo "🔄 2. Sincronizando y destruyendo zombies..."
+rsync -avz --delete dist/ ../public_html/
+
+echo "🔐 3. Saneando permisos..."
+chown -R nobody:nogroup ../public_html/
+
+echo "🧹 4. Purgando caché nuclear de LiteSpeed..."
+rm -rf /usr/local/lsws/cachedata/*
+systemctl restart lsws
+
+echo "✅ ¡Despliegue completado con éxito!"

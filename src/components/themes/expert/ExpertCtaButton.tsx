@@ -19,7 +19,7 @@ interface ExpertCtaButtonProps {
 
 const sharedClassName = [
   'animate-shimmer relative inline-flex min-h-[62px] items-center justify-center overflow-hidden rounded-md',
-  'border border-cta-hover border-b-4 border-b-cta-hover bg-cta px-6 py-4 text-center text-black',
+  'border border-cta-hover border-b-4 border-b-cta-hover bg-cta px-6 py-4 text-center text-[rgb(var(--color-cta-text))]',
   'shadow-[0_18px_32px_rgb(var(--color-cta-base)/0.28)] transition duration-200 hover:-translate-y-0.5 hover:bg-cta-hover',
   'focus:outline-none focus:ring-4 focus:ring-cta/60 disabled:cursor-not-allowed disabled:opacity-60',
 ].join(' ');
@@ -45,7 +45,7 @@ export function ExpertCtaButton({
         <ArrowRight className="h-5 w-5 shrink-0" strokeWidth={2.5} />
       </span>
       {subLabel ? (
-        <span className="relative z-[1] mt-1 block text-[0.72rem] font-semibold uppercase tracking-[0.06em] text-black/75 sm:text-[0.8rem]">
+        <span className="relative z-[1] mt-1 block text-[0.72rem] font-semibold uppercase tracking-[0.06em] text-[rgb(var(--color-cta-text)/0.82)] sm:text-[0.8rem]">
           {subLabel}
         </span>
       ) : null}

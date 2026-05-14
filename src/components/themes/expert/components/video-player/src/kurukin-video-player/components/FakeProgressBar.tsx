@@ -10,20 +10,11 @@ function clamp(value: number, min: number, max: number) {
 
 function getPsychologicalProgress(currentTime: number, duration: number) {
   const safeCurrentTime = Number.isFinite(currentTime) ? Math.max(currentTime, 0) : 0;
-  const safeDuration = duration > 0 ? duration : 1000;
-  let progress = 0;
+  const safeDuration = duration > 0 ? duration : 1;
+  const normalizedProgress = clamp(safeCurrentTime / safeDuration, 0, 1);
+  const fakeProgress = Math.pow(normalizedProgress, 0.4) * 100;
 
-  if (safeCurrentTime <= 20) {
-    progress = (safeCurrentTime / 20) * 30;
-  } else if (safeCurrentTime <= safeDuration * 0.5) {
-    const middlePhaseDuration = Math.max(safeDuration * 0.5 - 20, 1);
-    progress = 30 + ((safeCurrentTime - 20) / middlePhaseDuration) * 40;
-  } else {
-    const finalPhaseDuration = Math.max(safeDuration * 0.5, 1);
-    progress = 70 + ((safeCurrentTime - safeDuration * 0.5) / finalPhaseDuration) * 28;
-  }
-
-  return clamp(progress, 0, 98);
+  return clamp(fakeProgress, 0, 98);
 }
 
 export function FakeProgressBar({ color, currentTime, duration }: FakeProgressBarProps) {

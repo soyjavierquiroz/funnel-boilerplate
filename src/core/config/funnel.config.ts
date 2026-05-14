@@ -39,6 +39,7 @@ export interface HeroVideoConfig {
   enabled: boolean;
   provider: VideoProvider;
   videoId: string;
+  revealAtSeconds?: number;
   vslMode?: boolean;
   autoplay?: boolean;
   muted?: boolean;
@@ -155,6 +156,7 @@ export const funnelConfig: FunnelConfig = {
       enabled: true,
       provider: 'bunnynet',
       videoId: DNA.vslVideoId,
+      revealAtSeconds: 10, //vv
       vslMode: false,
       resumePlayback: true,
       smartPoster: {

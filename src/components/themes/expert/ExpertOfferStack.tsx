@@ -1,13 +1,6 @@
 import { Check, CreditCard, Lock, ShieldCheck } from 'lucide-react';
 import { DNA } from '../../../dna.config';
 
-const offerItems = [
-  { id: 'kurukin-core', name: DNA.copy.productName, value: `$${DNA.prices.regularPrice}` },
-  { id: 'autonomous-prospecting', name: 'El Sistema Autónomo de Prospección', value: '$997' },
-  { id: 'team-duplication', name: 'Plantillas de Duplicación de Equipo', value: '$497' },
-  { id: 'closing-masterclass', name: 'Masterclass: Cierre Sin Resistencia', value: '$297' },
-] as const;
-
 const certaintyItems = [
   { id: 'secure-payment', label: 'Pago 100% Seguro', icon: Lock },
   { id: 'guarantee', label: 'Garantía de 30 Días', icon: ShieldCheck },
@@ -17,23 +10,21 @@ const certaintyItems = [
 export function ExpertOfferStack() {
   return (
     <section className="px-4 py-12 sm:px-6 sm:py-16">
-      <div className="max-w-4xl mx-auto rounded-xl border-4 border-dashed border-brand-primary bg-white p-8 shadow-2xl md:p-12">
+      <div className="max-w-4xl mx-auto rounded-sm border-4 border-dashed border-brand-primary bg-white p-8 shadow-2xl md:p-12">
         <h2 className="mb-8 text-center text-4xl font-black uppercase text-gray-900">
-          LO QUE TE LLEVAS HOY...
+          {DNA.copy.offerStackTitle}
         </h2>
 
         <ul className="space-y-4">
-          {offerItems.map((item) => (
+          {DNA.copy.modules.map((module) => (
             <li
-              key={item.id}
-              className="flex items-start gap-3 rounded-lg border border-gray-100 bg-gray-50 px-4 py-4 shadow-sm sm:items-center"
+              key={`${module.title}-${module.value}`}
+              className="flex items-start gap-3 rounded-sm border border-gray-200 bg-gray-50 px-4 py-4 shadow-sm sm:items-center"
             >
               <Check className="mt-1 h-6 w-6 shrink-0 text-green-500 sm:mt-0" strokeWidth={3} aria-hidden="true" />
               <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <span className="text-lg font-extrabold text-gray-900 sm:text-xl">{item.name}</span>
-                <span className="text-lg font-extrabold text-gray-700 sm:text-right sm:text-xl">
-                  Valor: <span className="text-brand-primary line-through">{item.value}</span>
-                </span>
+                <span className="text-lg font-extrabold text-gray-900 sm:text-xl">{module.title}</span>
+                <span className="text-lg font-extrabold text-brand-primary sm:text-right sm:text-xl">{module.value}</span>
               </div>
             </li>
           ))}
@@ -50,7 +41,7 @@ export function ExpertOfferStack() {
         <div className="mt-8">
           <a
             href="#checkout"
-            className="block w-full rounded bg-cta py-6 text-center text-2xl font-black uppercase text-black shadow-[0_5px_0_rgb(202,138,4)] transition-all transform hover:translate-y-1 hover:bg-cta-hover hover:shadow-none"
+            className="block w-full rounded-sm bg-cta py-6 text-center text-2xl font-black uppercase text-[rgb(var(--color-cta-text))] shadow-[0_5px_0_rgb(var(--color-brand-primary))] transition-all transform hover:translate-y-1 hover:bg-cta-hover hover:shadow-none"
           >
             {`¡SÍ, QUIERO ACTIVAR ${DNA.copy.productName.toUpperCase()}!`}
           </a>

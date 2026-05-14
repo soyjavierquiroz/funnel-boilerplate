@@ -5,22 +5,26 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}', '!./src/**/node_modules/**/*'],
   theme: {
     extend: {
+      fontFamily: {
+        sans: [DNA.fonts.sans, 'sans-serif'],
+        body: [DNA.fonts.body, 'sans-serif'],
+      },
       colors: {
-        primary: DNA.colors.primary,
+        primary: 'rgb(var(--color-primary) / <alpha-value>)',
         secondary: 'rgb(var(--color-secondary) / <alpha-value>)',
-        accent: DNA.colors.accent,
+        accent: 'rgb(var(--color-accent) / <alpha-value>)',
         page: 'rgb(var(--color-page) / <alpha-value>)',
         surface: {
           DEFAULT: 'rgb(var(--color-surface) / <alpha-value>)',
-          bump: DNA.colors.surface,
+          bump: 'rgb(var(--color-surface-bump) / <alpha-value>)',
         },
         brand: {
-          primary: DNA.colors.primary,
-          accent: DNA.colors.accent,
+          primary: 'rgb(var(--color-brand-primary) / <alpha-value>)',
+          accent: 'rgb(var(--color-brand-accent) / <alpha-value>)',
         },
         cta: {
-          DEFAULT: DNA.colors.cta,
-          hover: DNA.colors.ctaHover,
+          DEFAULT: 'rgb(var(--color-cta-base) / <alpha-value>)',
+          hover: 'rgb(var(--color-cta-hover) / <alpha-value>)',
         },
         'border-subtle': 'rgb(var(--color-border-subtle) / <alpha-value>)',
         'text-main': 'rgb(var(--color-text-main) / <alpha-value>)',

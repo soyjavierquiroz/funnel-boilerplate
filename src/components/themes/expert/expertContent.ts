@@ -12,16 +12,6 @@ export interface ExpertBonusItem {
   imageAlt: string;
 }
 
-export interface ExpertLetterSection {
-  id: string;
-  title?: string;
-  subtitle?: string;
-  imageUrl?: string;
-  imageAlt?: string;
-  paragraphs: string[];
-  bullets?: string[];
-}
-
 export interface ExpertTestimonialItem {
   id: string;
   name: string;
@@ -43,8 +33,6 @@ export const expertBrandAssets = {
     'https://images.clickfunnels.com/cdn-cgi/image/width=1000px,fit=scale-down,f=auto,q=100/dc/e1fe2157c14702a24c7321c5ae9a4f/send-me-your-address-min.png',
   bundleWideUrl:
     'https://images.clickfunnels.com/cdn-cgi/image/width=1000px,fit=scale-down,f=auto,q=80/https://statics.myclickfunnels.com/workspace/Jnbkrx/image/11224689/file/60a032d6eca2036c7807edad220a283a.png',
-  portraitUrl:
-    'https://images.clickfunnels.com/cdn-cgi/image/width=1000px,fit=scale-down,f=auto,q=80/https://statics.myclickfunnels.com/workspace/Jnbkrx/image/15165218/file/1fb196013477925b89f6fdefa66bdf64.webp',
   logosUrl:
     'https://images.clickfunnels.com/cdn-cgi/image/width=1000px,fit=scale-down,f=auto,q=100/24/c168e0f5b24f2f8b64364680f8621a/as-seen-on-logos.jpg',
   audiobookUrl:
@@ -133,61 +121,6 @@ export const expertBonusItems: ExpertBonusItem[] = [
     imageUrl: expertBrandAssets.bundleUrl,
     imageAlt: '30 Day Expert Secrets Challenge bonus mockup',
   },
-];
-
-export const expertLetterSections: ExpertLetterSection[] = [
-  {
-    id: 'intro',
-    title: 'What If People Would Actually Pay You For Your Advice...?',
-    subtitle: 'From: Russell Brunson\nBoise, Idaho',
-    imageUrl: expertBrandAssets.portraitUrl,
-    imageAlt: 'Portrait of Russell Brunson',
-    paragraphs: [
-      'Do you have a message you want to share with the world?',
-      'Do you have specialized knowledge that could help change someone else’s life?',
-      'Would you like to get paid for your advice?',
-      'The impact that the right message can have on someone at the right time in their life is immeasurable. It can save marriages, repair families, change someone’s health, grow a company, and restore confidence where people feel stuck.',
-      'Your message really can change someone’s life, but only if you know how to get it into the hands of the people you have been called to serve.',
-    ],
-  },
-  {
-    id: 'proof',
-    paragraphs: [
-      'That is the gap this book helps close. Expert Secrets shows you how to package your story, create belief, and move people from passive interest into committed action.',
-      'This is the exact framework behind presentations, webinars, VSLs, books, and movements that turn knowledge into revenue.',
-      'If you have ever struggled to explain what makes your offer matter, this gives you the structure for doing it clearly and repeatedly.',
-    ],
-    bullets: [
-      'Find the message that people instantly understand',
-      'Build a tribe around the belief behind your offer',
-      'Turn stories into sales without sounding manipulative',
-      'Create offers people feel compelled to buy now',
-    ],
-  },
-  {
-    id: 'authority',
-    paragraphs: [
-      'As you can see, this is not just another “marketing” book. It is a playbook for turning your expertise into a business asset that keeps working for you.',
-      'Inside, I walk through the belief patterns, stories, and offer architecture that let ordinary experts create extraordinary momentum.',
-      'When you understand how to lead belief, you stop trying to convince everyone and start attracting the right people naturally.',
-    ],
-  },
-  {
-    id: 'close',
-    paragraphs: [
-      'This is truly a limited offer, so claim your free copy now before the inventory for this run is gone.',
-      'Thanks for taking the time to read this letter. I hope the book helps you clarify your message, serve more people, and build the movement you were meant to lead.',
-      'Thanks,\nRussell Brunson',
-    ],
-  },
-];
-
-export const expertPostscript = [
-  'In case you are one of those people who skips to the end of the letter, here is the deal:',
-  'I am mailing you a hardcover copy of “Expert Secrets - The Underground Playbook For Converting Your Online Visitors Into Lifelong Customers” for FREE.',
-  'There is no catch, no gimmick, and no continuity trap. You only cover shipping and handling: $9.95 in the U.S. or $19.95 internationally.',
-  'If you do not love the book, I will even refund your shipping costs and you do not have to send the book back.',
-  'Click the button below to reserve your free copy now.',
 ];
 
 export const expertTestimonials: ExpertTestimonialItem[] = [
