@@ -76,6 +76,7 @@ interface PreparedUserData {
 }
 
 interface CapiPayload {
+  siteId: string;
   provider: 'agnostic';
   event_name: string;
   event_id: string;
@@ -593,6 +594,7 @@ const buildCapiPayload = ({
   eventTime: number;
   preparedUserData: PreparedUserData;
 }): CapiPayload => ({
+  siteId: funnelConfig.integrations.siteId,
   provider: 'agnostic',
   event_name: eventName,
   event_id: eventId,
@@ -725,5 +727,5 @@ const analytics = {
   trackEvent,
 };
 
-export { trackEvent };
+export { trackEvent, analytics };
 export default analytics;

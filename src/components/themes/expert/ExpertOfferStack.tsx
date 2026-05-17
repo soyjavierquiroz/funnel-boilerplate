@@ -43,7 +43,7 @@ export function ExpertOfferStack() {
             href="#checkout"
             className="block w-full rounded-sm bg-cta py-6 text-center text-2xl font-black uppercase text-[rgb(var(--color-cta-text))] shadow-[0_5px_0_rgb(var(--color-brand-primary))] transition-all transform hover:translate-y-1 hover:bg-cta-hover hover:shadow-none"
           >
-            {`¡SÍ, QUIERO ACTIVAR ${DNA.copy.productName.toUpperCase()}!`}
+            {`¡SÍ, QUIERO SER PARTE!`}
           </a>
 
           <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-sm font-bold text-gray-600">

@@ -40,3 +40,27 @@ El artefacto listo para publicar queda en `dist/`.
 - `src/App.tsx` renderiza directamente el tema definido en `DNA.theme`.
 - `src/components/themes/panda/` y `src/components/themes/expert/` comparten la misma base de DNA.
 - `src/core/config/funnel.config.ts` consume `DNA.copy`, `DNA.prices` y `DNA.vslVideoId` para mantener el funnel alineado con el clon.
+
+## Estado Actual
+
+### CAPI / Tracking
+
+- Connected to `kurukin-relay` via `VITE_CAPI_RELAY_URL`.
+- Payload structure updated with `siteId: "SENSORIAL"` at the root level.
+- Live events: `PageView` on load and `InitiateCheckout` on CTA click with `value` and `currency`.
+
+### Checkout Routing
+
+- Hotmart URL centralized in `DNA.checkoutUrl`.
+- `ExpertCtaButton` intercepts `href="#checkout"` and auto-injects the live checkout URL.
+
+### UI / CRO
+
+- Added 60-minute reactive countdown timers with `animate-pulse` in Offer Breakdown and Bonus Stack.
+- Removed hardcoded `"Modulo X"` strings to reduce cognitive friction.
+- Activated `ExpertTestimonials` via DNA-driven content.
+
+### SEO
+
+- Global product name updated to `"Mi Primer Libro Sensorial"`.
+- `index.html` rewritten with complete OG/Twitter tags pointing to `curso.webp`.

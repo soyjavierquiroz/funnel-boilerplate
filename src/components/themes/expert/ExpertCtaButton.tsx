@@ -1,76 +1,68 @@
-import { ArrowRight, ShoppingCart } from 'lucide-react';
-import type { MouseEventHandler, ReactNode } from 'react';
+import type { ComponentPropsWithoutRef, MouseEvent } from 'react';
+import { DNA, dnaNumericPrices } from '../../../dna.config';
+import { analytics } from '../../../core/services/analytics';
 
-function joinClassNames(...classNames: Array<string | false | null | undefined>) {
-  return classNames.filter(Boolean).join(' ');
-}
-
-interface ExpertCtaButtonProps {
+interface ExpertCtaButtonProps extends ComponentPropsWithoutRef<'a'> {
   label: string;
   subLabel?: string;
-  href?: string;
-  onClick?: MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
-  type?: 'button' | 'submit';
   fullWidth?: boolean;
-  disabled?: boolean;
-  icon?: ReactNode;
-  className?: string;
 }
-
-const sharedClassName = [
-  'animate-shimmer relative inline-flex min-h-[62px] items-center justify-center overflow-hidden rounded-md',
-  'border border-cta-hover border-b-4 border-b-cta-hover bg-cta px-6 py-4 text-center text-[rgb(var(--color-cta-text))]',
-  'shadow-[0_18px_32px_rgb(var(--color-cta-base)/0.28)] transition duration-200 hover:-translate-y-0.5 hover:bg-cta-hover',
-  'focus:outline-none focus:ring-4 focus:ring-cta/60 disabled:cursor-not-allowed disabled:opacity-60',
-].join(' ');
 
 export function ExpertCtaButton({
   label,
   subLabel,
-  href,
-  onClick,
-  type = 'button',
   fullWidth = false,
-  disabled = false,
-  icon,
-  className,
+  href,
+  className = '',
+  onClick,
+  ...props
 }: ExpertCtaButtonProps) {
-  const content = (
-    <>
-      <span className="relative z-[1] flex items-center gap-2">
-        {icon ?? <ShoppingCart className="h-5 w-5 shrink-0" strokeWidth={2.5} />}
-        <span className="text-[1.02rem] font-extrabold uppercase leading-5 tracking-[-0.01em] sm:text-[1.18rem]">
-          {label}
-        </span>
-        <ArrowRight className="h-5 w-5 shrink-0" strokeWidth={2.5} />
-      </span>
-      {subLabel ? (
-        <span className="relative z-[1] mt-1 block text-[0.72rem] font-semibold uppercase tracking-[0.06em] text-[rgb(var(--color-cta-text)/0.82)] sm:text-[0.8rem]">
-          {subLabel}
-        </span>
-      ) : null}
-    </>
-  );
+  // LOGICA ARQUITECTÓNICA: Si apunta al checkout, le inyectamos la variable del DNA
+  const finalHref = href === '#checkout' ? DNA.checkoutUrl : href;
 
-  const resolvedClassName = joinClassNames(sharedClassName, fullWidth && 'w-full', className);
+  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    void analytics.trackEvent('InitiateCheckout', {
+      content_name: DNA.copy.productName,
+      currency: 'USD',
+      value: dnaNumericPrices.main,
+      checkout_url: finalHref,
+    });
 
-  if (href) {
-    return (
-      <a
-        href={href}
-        onClick={onClick}
-        className={resolvedClassName}
-        aria-disabled={disabled}
-      >
-        <span className="flex flex-col items-center">{content}</span>
-      </a>
-    );
-  }
+    onClick?.(event);
+  };
 
   return (
-    <button type={type} onClick={onClick} className={resolvedClassName} disabled={disabled}>
-      <span className="flex flex-col items-center">{content}</span>
-    </button>
+    <a
+      href={finalHref}
+      target={finalHref?.startsWith('http') ? '_blank' : undefined}
+      rel={finalHref?.startsWith('http') ? 'noopener noreferrer' : undefined}
+      onClick={handleClick}
+      className={`
+        expert-headline relative inline-flex flex-col items-center justify-center 
+        rounded-[15px] px-8 py-4 text-center text-lg font-black uppercase 
+        tracking-wide text-white shadow-[0_12px_40px_rgba(var(--color-cta-base),0.3)] 
+        transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] 
+        hover:shadow-[0_18px_50px_rgba(var(--color-cta-base),0.45)] 
+        active:translate-y-0 active:scale-100
+        ${fullWidth ? 'w-full' : ''}
+        ${className}
+      `}
+      style={{
+        backgroundColor: 'rgb(var(--color-cta-base))',
+      }}
+      {...props}
+    >
+      {/* Brillo sutil de acción premium */}
+      <div className="absolute inset-0 rounded-[15px] bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+      
+      <span className="relative z-10">{label}</span>
+      
+      {subLabel && (
+        <span className="expert-body mt-1 relative z-10 text-xs font-bold uppercase tracking-widest text-white/80">
+          {subLabel}
+        </span>
+      )}
+    </a>
   );
 }
 

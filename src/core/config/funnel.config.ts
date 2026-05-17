@@ -117,6 +117,7 @@ export interface FunnelPricingConfig {
 }
 
 export interface FunnelIntegrationsConfig {
+  siteId: string;
   metaPixelId: string;
   tiktokPixelId: string;
   capiWebhookUrl: string;
@@ -246,9 +247,10 @@ export const funnelConfig: FunnelConfig = {
     },
   },
   integrations: {
-    metaPixelId: 'TU_PIXEL_ID',
-    tiktokPixelId: 'TU_TIKTOK_ID',
-    capiWebhookUrl: 'https://n8n.tu-server.com/webhook/capi-in',
+    siteId: import.meta.env.VITE_SITE_ID || 'SENSORIAL',
+    capiWebhookUrl: import.meta.env.VITE_CAPI_RELAY_URL || '',
+    metaPixelId: import.meta.env.VITE_META_PIXEL_ID || '',
+    tiktokPixelId: import.meta.env.VITE_TIKTOK_PIXEL_ID || '',
   },
 };
 

@@ -1,143 +1,70 @@
-import { useEffect, useState } from 'react';
-import { Play, X } from 'lucide-react';
-import { KurukinPlayer as ExpertVideoPlayer } from './components/video-player/src/kurukin-video-player';
-import type { ExpertTestimonialItem } from './expertContent';
+import { DNA } from '../../../dna.config';
+import { ExpertCtaButton } from './ExpertCtaButton';
 
-interface ExpertTestimonialsProps {
-  items: ExpertTestimonialItem[];
-}
-
-function extractYouTubeVideoId(videoUrl: string) {
-  try {
-    const url = new URL(videoUrl);
-    const watchId = url.searchParams.get('v');
-
-    if (watchId) {
-      return watchId;
-    }
-
-    const segments = url.pathname.split('/').filter(Boolean);
-    return segments[segments.length - 1] ?? '';
-  } catch {
-    return '';
-  }
-}
-
-export function ExpertTestimonials({ items }: ExpertTestimonialsProps) {
-  const [activeItem, setActiveItem] = useState<ExpertTestimonialItem | null>(null);
-
-  useEffect(() => {
-    if (!activeItem) {
-      return;
-    }
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setActiveItem(null);
-      }
-    };
-
-    window.addEventListener('keydown', handleEscape);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener('keydown', handleEscape);
-    };
-  }, [activeItem]);
-
-  const activeVideoId = activeItem ? extractYouTubeVideoId(activeItem.videoUrl) : '';
+export function ExpertTestimonials() {
+  if (!DNA.copy.testimonials?.items?.length) return null;
 
   return (
-    <>
-      <section className="px-4 py-10 sm:px-6">
-        <div className="mx-auto max-w-[1080px]">
-          <div className="text-center">
-            <p className="expert-body text-sm font-bold uppercase tracking-[0.28em] text-brand-accent">Success Stories</p>
-            <h2 className="expert-headline mt-3 text-[2rem] font-black leading-none tracking-[-0.05em] text-[#2d2d2d] sm:text-[2.85rem]">
-              Hear How Readers Use Expert Secrets In The Real World
-            </h2>
-          </div>
-
-          <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
-            {items.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => setActiveItem(item)}
-                className="group overflow-hidden rounded-[18px] border border-brand-accent/10 bg-white text-left shadow-[0_20px_45px_rgba(17,17,17,0.08)] transition-transform duration-200 hover:-translate-y-1"
-              >
-                <div className="relative aspect-video overflow-hidden bg-[#111]">
-                  <img
-                    src={item.thumbnailUrl}
-                    alt={item.thumbnailAlt}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/30" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="flex h-20 w-20 items-center justify-center rounded-full bg-white/14 text-white/85 backdrop-blur-sm">
-                      <Play className="ml-1 h-10 w-10 fill-current" />
-                    </span>
-                  </div>
-                </div>
-
-                <div className="px-5 py-5">
-                  <p className="expert-headline text-[1.12rem] font-extrabold text-[#2d2d2d]">{item.name}</p>
-                  <p className="expert-body mt-1 text-sm font-semibold uppercase tracking-[0.12em] text-brand-accent">{item.title}</p>
-                  <p className="expert-body mt-3 text-[0.98rem] leading-7 text-[#2d2d2d]">{item.quote}</p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {activeItem && activeVideoId ? (
-        <div
-          className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setActiveItem(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-label={`Testimonio de ${activeItem.name}`}
-        >
-          <div
-            className="relative w-full max-w-[1120px]"
-            onClick={(event) => event.stopPropagation()}
+    <section className="border-t border-gray-100 bg-gray-50 px-4 py-16 sm:px-6">
+      <div className="mx-auto max-w-[1100px]">
+        <div className="mb-14 text-center">
+          <h2
+            className="text-3xl font-black leading-tight tracking-tight md:text-5xl"
+            style={{ color: 'rgb(var(--color-text-main))' }}
           >
-            <button
-              type="button"
-              onClick={() => setActiveItem(null)}
-              className="absolute right-3 top-3 z-[110] flex h-11 w-11 items-center justify-center rounded-full bg-black/55 text-white shadow-lg ring-1 ring-white/15 transition hover:bg-black/75"
-              aria-label="Cerrar testimonio"
+            {DNA.copy.testimonials.headline}
+          </h2>
+          <p
+            className="mx-auto mt-6 max-w-3xl text-xl font-medium leading-relaxed md:text-2xl"
+            style={{ color: 'rgb(var(--color-text-muted))' }}
+          >
+            {DNA.copy.testimonials.subtitle}
+          </p>
+        </div>
+
+        <div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {DNA.copy.testimonials.items.map((testimonial, idx) => (
+            <div
+              key={idx}
+              className="flex flex-col items-center rounded-3xl border border-gray-100 bg-white p-6 text-center shadow-xl transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl"
             >
-              <X className="h-5 w-5" />
-            </button>
-
-            <ExpertVideoPlayer
-              key={activeVideoId}
-              provider="youtube"
-              videoId={activeVideoId}
-              vslMode={false}
-              autoplay={true}
-              muted={false}
-              idleHideControls={true}
-              allowFullscreen={true}
-              hideYoutubeUi={true}
-              className="aspect-[3/4] max-h-[82svh] rounded-[22px] border border-white/10 shadow-[0_35px_90px_rgba(0,0,0,0.55)] md:aspect-video [&_iframe]:h-full [&_iframe]:w-full [&_video]:object-cover"
-            />
-
-            <div className="mt-4 px-1 text-white">
-              <p className="expert-headline text-[1.2rem] font-extrabold">{activeItem.name}</p>
-              <p className="expert-body mt-1 text-sm uppercase tracking-[0.14em] text-white/70">{activeItem.title}</p>
-              <p className="expert-body mt-3 max-w-[760px] text-[1rem] leading-7 text-white/84">{activeItem.quote}</p>
+              <div className="mb-6 flex w-full items-center justify-center overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
+                <img
+                  src={testimonial.image}
+                  alt={`Testimonio de ${testimonial.name}`}
+                  className="h-auto w-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+              <h3
+                className="mb-3 text-xl font-black uppercase tracking-wide"
+                style={{ color: 'rgb(var(--color-text-main))' }}
+              >
+                {testimonial.name}
+              </h3>
+              <p
+                className="text-base font-bold italic"
+                style={{ color: 'rgb(var(--color-brand-primary))' }}
+              >
+                {testimonial.quote}
+              </p>
             </div>
+          ))}
+        </div>
+
+        <div className="mx-auto max-w-md text-center">
+          <div className="mb-4">
+            <ExpertCtaButton href="#checkout" label={DNA.copy.ctaText} fullWidth={true} />
+          </div>
+          <div
+            className="font-mono text-sm font-bold uppercase tracking-wide"
+            style={{ color: 'rgb(var(--color-text-muted))' }}
+          >
+            {DNA.copy.specialOfferGuarantee}
           </div>
         </div>
-      ) : null}
-    </>
+      </div>
+    </section>
   );
 }
 

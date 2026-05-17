@@ -18,12 +18,9 @@ function RoutedApp() {
     document.documentElement.setAttribute('data-theme', documentTheme);
     document.title = nextTitle;
 
-    void analytics.trackEvent('ThemeView', {
-      active_theme: DNA.theme,
-      page_title: nextTitle,
-      brand_name: DNA.copy.productName,
-      page_path: window.location.pathname,
-      page_url: window.location.href,
+    void analytics.trackEvent('PageView', {
+      source: 'AppLoad',
+      theme: DNA.theme,
     });
   }, [isSuccessRoute, location.pathname]);
 

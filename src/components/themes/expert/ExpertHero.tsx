@@ -36,8 +36,8 @@ export function ExpertHero({ onReveal }: ExpertHeroProps) {
         </div>
 
         <div className="mx-auto mt-[10px] flex max-w-[850px] flex-col items-center md:mt-6">
-          <div>
-            <div className="rounded-2xl overflow-hidden shadow-2xl border-[4px] md:border-[6px] border-brand-primary flex flex-col bg-black">
+          <div className="w-full">
+            <div className="relative flex w-full flex-col overflow-hidden rounded-2xl border-[4px] border-brand-primary bg-gray-900 shadow-2xl md:border-[6px]">
               <div className="flex items-center justify-center gap-[5px] bg-brand-accent px-[5px] py-[11px] text-center text-white">
                 <Volume2 className="h-4 w-4 shrink-0" />
                 <p className="font-sans text-[12px] font-bold uppercase tracking-[0.08em] leading-[1.3] sm:text-[16px] sm:leading-none">
@@ -45,26 +45,28 @@ export function ExpertHero({ onReveal }: ExpertHeroProps) {
                 </p>
               </div>
 
-              <div className="w-full aspect-video relative bg-black overflow-hidden">
+              <div className="relative w-full aspect-video overflow-hidden bg-gray-900">
                 {heroVideo.enabled ? (
-                  <ExpertVideoPlayer
-                    provider={heroVideo.provider}
-                    videoId={heroVideo.videoId}
-                    vslMode={true}
-                    autoplay={true}
-                    muted={true}
-                    idleHideControls={true}
-                    allowFullscreen={false}
-                    resumePlayback={heroVideo.resumePlayback}
-                    lazyLoadYoutube={heroVideo.lazyLoadYoutube}
-                    hideYoutubeUi={heroVideo.hideYoutubeUi}
-                    smartPoster={heroVideo.smartPoster}
-                    vslProgressBarColor={heroVideo.vslProgressBarColor}
-                    onTimeUpdate={handleRevealAtTime}
-                    className="h-full w-full"
-                  />
+                  <div className="absolute inset-0 h-full w-full">
+                    <ExpertVideoPlayer
+                      provider={heroVideo.provider}
+                      videoId={heroVideo.videoId}
+                      vslMode={true}
+                      autoplay={true}
+                      muted={true}
+                      idleHideControls={true}
+                      allowFullscreen={false}
+                      resumePlayback={heroVideo.resumePlayback}
+                      lazyLoadYoutube={heroVideo.lazyLoadYoutube}
+                      hideYoutubeUi={heroVideo.hideYoutubeUi}
+                      smartPoster={heroVideo.smartPoster}
+                      vslProgressBarColor={heroVideo.vslProgressBarColor}
+                      onTimeUpdate={handleRevealAtTime}
+                      className="h-full w-full"
+                    />
+                  </div>
                 ) : (
-                  <div className="flex h-full w-full aspect-video items-center justify-center bg-gray-900 text-white/50">
+                  <div className="flex h-full w-full items-center justify-center bg-gray-900 text-white/50">
                     Video Placeholder
                   </div>
                 )}

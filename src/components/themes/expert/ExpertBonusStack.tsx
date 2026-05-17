@@ -1,4 +1,5 @@
-import { Check } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Check, Clock } from 'lucide-react';
 import { DNA } from '../../../dna.config';
 import { ExpertCtaButton } from './ExpertCtaButton';
 import type { ExpertBonusItem } from './expertContent';
@@ -18,39 +19,78 @@ function formatUsd(value: number) {
 }
 
 export function ExpertBonusStack({ bonuses }: ExpertBonusStackProps) {
+  // Inicializamos el contador en 60 minutos (3600 segundos)
+  const [timeLeft, setTimeLeft] = useState(3600);
+
+  useEffect(() => {
+    if (timeLeft <= 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  // Formateador matemático para pasar segundos a formato MM:SS
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
   return (
     <section className="px-4 py-12 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-[1040px] rounded-[26px] bg-white px-4 py-8 shadow-[0_26px_70px_rgba(17,17,17,0.08)] sm:px-8">
-        <div className="text-center">
+        
+        <div className="text-center mb-8">
           <p className="expert-headline text-[1.35rem] font-semibold italic text-brand-accent sm:text-[1.65rem]">
-            Let Me Show You EVERYTHING
+            {DNA.copy.fastActionBonus.timeLimit}
           </p>
           <h2 className="expert-headline mt-2 text-[2rem] font-black uppercase leading-none tracking-[-0.05em] text-[#2d2d2d] sm:text-[3rem]">
             Todo Lo Que Recibes Con "{DNA.copy.productName}" Hoy
           </h2>
         </div>
 
+        {/* CONTADOR REGRESIVO ULTRA PERSUASIVO */}
+        <div 
+          className="mb-8 mx-auto max-w-xl rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-center gap-4 border-2 shadow-sm animate-pulse"
+          style={{ 
+            borderColor: 'rgba(var(--color-brand-primary), 0.2)',
+            backgroundColor: 'rgba(var(--color-brand-primary), 0.02)'
+          }}
+        >
+          <div className="flex items-center gap-2 font-bold text-lg" style={{ color: 'rgb(var(--color-brand-primary))' }}>
+            <Clock className="h-6 w-6 shrink-0" />
+            <span>LA OFERTA VENCE EN:</span>
+          </div>
+          <div 
+            className="font-mono text-3xl font-black px-4 py-1 rounded-xl text-white tracking-widest shadow-inner"
+            style={{ backgroundColor: 'rgb(var(--color-brand-primary))' }}
+          >
+            {formattedTime}
+          </div>
+        </div>
+
         <div className="mt-8 overflow-hidden rounded-[18px] border border-surface-bump bg-surface-bump px-5 py-6 sm:px-8 sm:py-10">
           <img
             src={expertBrandAssets.bundleWideUrl}
-            alt="Expert Secrets bundle with bonuses"
+            alt="Paquete completo de libros sensoriales con bonos incluidos"
             className="mx-auto w-full max-w-[760px]"
             loading="lazy"
           />
 
           <div className="mt-8 grid gap-4 rounded-[16px] bg-white px-5 py-5 text-center shadow-[0_18px_50px_rgba(17,17,17,0.08)] sm:grid-cols-3 sm:text-left">
             <div>
-              <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Total Value</p>
+              <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Valor Total</p>
               <p className="expert-headline mt-2 text-[2rem] font-extrabold text-brand-primary sm:text-[2.35rem]">
                 <span className="line-through">${DNA.prices.totalValue}</span>
               </p>
             </div>
             <div>
-              <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Today</p>
+              <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Precio de Hoy</p>
               <p className="expert-headline mt-2 text-[2rem] font-extrabold text-[#2d2d2d] sm:text-[2.35rem]">${DNA.prices.main}</p>
             </div>
             <div>
-              <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Regular</p>
+              <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Precio Regular</p>
               <p className="expert-headline mt-2 text-[1.3rem] font-extrabold leading-tight text-[#2d2d2d] sm:text-[1.55rem]">
                 ${DNA.prices.regularPrice}
               </p>
@@ -71,7 +111,7 @@ export function ExpertBonusStack({ bonuses }: ExpertBonusStackProps) {
               <div>
                 <p className="expert-body inline-flex items-center gap-2 rounded-full bg-brand-accent/5 px-3 py-1 text-xs font-bold uppercase tracking-[0.22em] text-brand-accent">
                   <Check className="h-3.5 w-3.5" />
-                  Included Free
+                  Incluido Gratis
                 </p>
                 <h3 className="expert-headline mt-3 text-[1.45rem] font-black leading-tight text-[#2d2d2d] sm:text-[1.7rem]">
                   {bonus.title}
@@ -80,7 +120,7 @@ export function ExpertBonusStack({ bonuses }: ExpertBonusStackProps) {
               </div>
 
               <div className="text-left sm:text-right">
-                <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Value</p>
+                <p className="expert-body text-xs font-bold uppercase tracking-[0.24em] text-brand-accent">Valor Real</p>
                 <p className="expert-headline mt-2 text-[1.5rem] font-extrabold text-brand-primary sm:text-[1.8rem]">
                   {formatUsd(bonus.valueUSD)}
                 </p>
@@ -93,7 +133,7 @@ export function ExpertBonusStack({ bonuses }: ExpertBonusStackProps) {
           <ExpertCtaButton
             href="#checkout"
             label={`Sí, quiero activar ${DNA.copy.productName}`}
-            subLabel={`Hoy por $${DNA.prices.main} con order bump de $${DNA.prices.bump}`}
+            subLabel={`Hoy por $${DNA.prices.main} • Acceso inmediato y seguro`}
             fullWidth
           />
         </div>

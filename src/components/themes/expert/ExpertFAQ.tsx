@@ -1,65 +1,88 @@
 import { useState } from 'react';
 import { Minus, Plus } from 'lucide-react';
-import type { ExpertFaqItem } from './expertContent';
+import { DNA } from '../../../dna.config';
 import { ExpertCtaButton } from './ExpertCtaButton';
 
-interface ExpertFAQProps {
-  items: ExpertFaqItem[];
-}
-
-export function ExpertFAQ({ items }: ExpertFAQProps) {
+export function ExpertFAQ() {
   const [openIndex, setOpenIndex] = useState(0);
 
+  // Si no hay FAQs en el DNA, no renderizamos el bloque
+  if (!DNA.copy.faq?.items?.length) return null;
+
   return (
-    <section className="bg-brand-accent/10 px-4 py-6 sm:px-6 sm:py-9">
-      <div className="mx-auto max-w-[935px]">
-        <div className="mb-8 flex items-center gap-6">
-          <h2 className="expert-headline text-[2rem] font-black leading-none tracking-[-0.05em] text-[#2d2d2d] sm:text-[2.5rem]">
-            Frequently Asked Questions
+    <section 
+      className="px-4 py-16 sm:px-6 sm:py-20" 
+      style={{ backgroundColor: 'rgba(var(--color-brand-accent), 0.05)' }}
+    >
+      <div className="mx-auto max-w-[900px]">
+        
+        {/* Encabezado */}
+        <div className="mb-10 flex items-center gap-6">
+          <h2 
+            className="text-[2rem] font-black leading-none tracking-tight sm:text-[2.5rem] uppercase"
+            style={{ color: 'rgb(var(--color-text-main))' }}
+          >
+            {DNA.copy.faq.title}
           </h2>
-          <div className="h-1 flex-1 bg-brand-accent" />
+          <div className="h-1 flex-1 rounded-full" style={{ backgroundColor: 'rgb(var(--color-brand-accent))' }} />
         </div>
 
-        <div className="space-y-3">
-          {items.map((item, index) => {
+        {/* Acordeón de Preguntas */}
+        <div className="space-y-4">
+          {DNA.copy.faq.items.map((item, index) => {
             const isOpen = openIndex === index;
 
             return (
               <div
-                key={item.question}
-                className="rounded-[5px] border-l-4 border-l-brand-accent bg-white px-4 py-4 shadow-[0_10px_25px_rgba(17,17,17,0.05)]"
+                key={index}
+                className="rounded-xl border-l-4 bg-white px-6 py-5 shadow-sm transition-all duration-200 hover:shadow-md"
+                style={{ borderLeftColor: 'rgb(var(--color-brand-accent))' }}
               >
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? -1 : index)}
-                  className="flex w-full items-start justify-between gap-4 text-left"
+                  className="flex w-full items-center justify-between gap-4 text-left focus:outline-none"
                 >
-                  <span className="expert-headline text-[1.08rem] font-bold leading-6 text-[#141414] sm:text-[1.3rem]">
+                  <span 
+                    className="text-[1.1rem] font-bold leading-snug sm:text-[1.3rem]"
+                    style={{ color: 'rgb(var(--color-text-main))' }}
+                  >
                     {item.question}
                   </span>
-                  <span className="mt-0.5 shrink-0 text-brand-accent">
-                    {isOpen ? <Minus className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
+                  <span className="shrink-0 transition-transform duration-300" style={{ color: 'rgb(var(--color-brand-accent))' }}>
+                    {isOpen ? <Minus className="h-6 w-6" /> : <Plus className="h-6 w-6" />}
                   </span>
                 </button>
 
-                {isOpen ? (
-                  <p className="expert-body mt-3 pr-2 text-base leading-7 text-[#141414]">
-                    {item.answer}
-                  </p>
-                ) : null}
+                {isOpen && (
+                  <div 
+                    className="mt-4 pr-8 text-base leading-relaxed"
+                    style={{ color: 'rgb(var(--color-text-muted))' }}
+                    dangerouslySetInnerHTML={{ __html: item.answer }}
+                  />
+                )}
               </div>
             );
           })}
         </div>
 
-        <div className="mx-auto mt-8 max-w-[599px]">
-          <ExpertCtaButton
-            href="#checkout"
-            label="Yes! Reserve My Free Copy Now!"
-            subLabel="You pay only $9.95 for shipping and handling in US ($19.95 intl)"
-            fullWidth
-          />
+        {/* Cierre y CTA */}
+        <div className="mx-auto mt-12 max-w-md text-center">
+          <div className="mb-4">
+            <ExpertCtaButton
+              href="#checkout"
+              label={DNA.copy.ctaText}
+              fullWidth={true}
+            />
+          </div>
+          <div 
+            className="font-mono text-sm uppercase tracking-wide font-bold" 
+            style={{ color: 'rgb(var(--color-text-muted))' }}
+          >
+            {DNA.copy.specialOfferGuarantee}
+          </div>
         </div>
+        
       </div>
     </section>
   );

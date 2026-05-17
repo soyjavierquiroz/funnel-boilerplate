@@ -1,9 +1,31 @@
+import { useState, useEffect } from 'react';
+import { Clock } from 'lucide-react';
 import { DNA } from '../../../dna.config';
 
 export function ExpertOfferBreakdown() {
+  // Inicializamos el contador en 60 minutos (3600 segundos)
+  const [timeLeft, setTimeLeft] = useState(3600);
+
+  useEffect(() => {
+    if (timeLeft <= 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  // Formateador para pasar los segundos a formato MM:SS
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
   return (
     <section className="px-4 py-16 sm:px-6" style={{ backgroundColor: 'rgba(var(--color-primary), 0.03)' }}>
       <div className="mx-auto max-w-[1000px]">
+        
+        {/* Entregables del Paquete */}
         <div className="space-y-8">
           {DNA.copy.modules.map((module, index) => (
             <div
@@ -14,18 +36,11 @@ export function ExpertOfferBreakdown() {
                 <img
                   src={module.image}
                   alt={module.title}
-                  /* AÑADIDO: rounded-2xl para esquinas suaves y shadow-sm para separarlo sutilmente del fondo blanco */
                   className="relative z-10 h-auto w-full rounded-2xl shadow-sm object-contain transition-transform duration-500 hover:scale-105"
                 />
               </div>
 
               <div className="flex flex-col justify-center p-8 md:w-3/5">
-                <div
-                  className="mb-2 text-sm font-black uppercase tracking-widest"
-                  style={{ color: 'rgb(var(--color-brand-primary))' }}
-                >
-                  Módulo {index + 1}
-                </div>
                 <h3
                   className="mb-3 text-2xl font-black leading-tight"
                   style={{ color: 'rgb(var(--color-text-main))' }}
@@ -52,6 +67,7 @@ export function ExpertOfferBreakdown() {
           ))}
         </div>
 
+        {/* Bloque de Bono de Acción Rápida con CONTADOR REGRESIVO INTEGRADO */}
         {DNA.copy.fastActionBonus && (
           <div
             className="relative mt-16 overflow-hidden rounded-3xl border-2 p-8 text-center shadow-2xl transition-transform hover:-translate-y-1 md:p-12"
@@ -71,18 +87,38 @@ export function ExpertOfferBreakdown() {
             >
               {DNA.copy.fastActionBonus.timeLimit}
             </p>
+            
             <h3
               className="mb-3 text-[1.8rem] font-black leading-tight md:text-[2.5rem]"
               style={{ color: 'rgb(var(--color-text-main))' }}
             >
               {DNA.copy.fastActionBonus.title}
             </h3>
+            
             <p
-              className="text-xl font-medium md:text-2xl"
+              className="text-xl font-medium md:text-2xl mb-8"
               style={{ color: 'rgb(var(--color-brand-primary))' }}
             >
               {DNA.copy.fastActionBonus.subtitle}
             </p>
+
+            {/* RELOJ REGRESIVO DE IMPACTO */}
+            <div 
+              className="inline-flex flex-col sm:flex-row items-center justify-center gap-3 px-6 py-3 rounded-2xl border shadow-inner bg-gray-50/50 animate-pulse"
+              style={{ borderColor: 'rgba(var(--color-brand-primary), 0.15)' }}
+            >
+              <div className="flex items-center gap-2 font-black text-xs md:text-sm uppercase tracking-wider" style={{ color: 'rgb(var(--color-text-main))' }}>
+                <Clock className="h-5 w-5" style={{ color: 'rgb(var(--color-brand-primary))' }} />
+                <span>Esta oportunidad expira en:</span>
+              </div>
+              <div 
+                className="font-mono text-2xl font-black px-4 py-1 rounded-xl text-white tracking-widest shadow-md"
+                style={{ backgroundColor: 'rgb(var(--color-brand-primary))' }}
+              >
+                {formattedTime}
+              </div>
+            </div>
+
           </div>
         )}
       </div>

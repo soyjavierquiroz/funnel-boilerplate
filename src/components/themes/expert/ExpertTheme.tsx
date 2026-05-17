@@ -1,15 +1,17 @@
 import { useCallback, useState, type CSSProperties } from 'react';
 import { DNA, resolveDnaThemeStyle } from '../../../dna.config';
 import funnelConfig from '../../../core/config/funnel.config';
-import { expertFaqItems } from './expertContent';
 import { ExpertCtaButton } from './ExpertCtaButton';
+import { ExpertConfidenceBooster } from './ExpertConfidenceBooster';
 import { ExpertFAQ } from './ExpertFAQ';
 import { ExpertHero } from './ExpertHero';
 import { ExpertOfferBreakdown } from './ExpertOfferBreakdown';
 import { ExpertOfferStack } from './ExpertOfferStack';
+import { ExpertPainPoints } from './ExpertPainPoints';
 import { ExpertProductPresentation } from './ExpertProductPresentation';
 import { ExpertSalesLetter } from './ExpertSalesLetter';
 import { ExpertSpecialOffer } from './ExpertSpecialOffer';
+import { ExpertTestimonials } from './ExpertTestimonials';
 
 export function ExpertTheme() {
   const revealAtSeconds = funnelConfig.media.heroVideo.revealAtSeconds ?? 292;
@@ -32,9 +34,13 @@ export function ExpertTheme() {
             <ExpertSpecialOffer />
             <ExpertProductPresentation />
             <ExpertOfferBreakdown />
+            <ExpertConfidenceBooster />
+            <ExpertPainPoints />
             <ExpertSalesLetter />
-            <ExpertFAQ items={expertFaqItems} />
+            {/* El componente ahora es 100% autónomo y lee del DNA */}
+            <ExpertFAQ />
             <ExpertOfferStack />
+            <ExpertTestimonials />
 
             <footer className="border-t border-black/10 bg-white px-4 py-8 text-center sm:px-6">
               <p className="expert-body text-sm font-semibold uppercase tracking-[0.12em] text-[#4b3d53]">
