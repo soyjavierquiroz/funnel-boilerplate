@@ -23,7 +23,19 @@ Actualiza al menos estos bloques antes de tu primer build:
 
 Todo el baseline productivo toma esos valores para renderizar el tema activo, aplicar colores de marca y alimentar el pricing principal del funnel.
 
-3. Genera el build con Docker y sube `dist/` al server.
+3. Genera el build y publica el artefacto estatico.
+
+En el servidor CyberPanel actual, el flujo verificado es:
+
+```bash
+npm ci
+npm run build
+./deploy.sh
+```
+
+`deploy.sh` sincroniza `dist/` hacia `../public_html/`, que es el webroot runtime del dominio. Ejecutalo solo desde el servidor correcto, porque usa `rsync --delete`, purga cache de LiteSpeed y reinicia `lsws`.
+
+Si necesitas un build reproducible sin instalar Node localmente, tambien puedes generar `dist/` con Docker:
 
 ```bash
 docker run --rm \
@@ -38,14 +50,16 @@ El artefacto listo para publicar queda en `dist/`.
 ## Notas Operativas
 
 - `src/App.tsx` renderiza directamente el tema definido en `DNA.theme`.
-- `src/components/themes/panda/` y `src/components/themes/expert/` comparten la misma base de DNA.
+- El tema activo confirmado en el arbol actual es `src/components/themes/expert/`.
+- Todavia existen referencias legacy a `panda` en tipos/CSS/docs, pero no existe `src/components/themes/panda/`.
 - `src/core/config/funnel.config.ts` consume `DNA.copy`, `DNA.prices` y `DNA.vslVideoId` para mantener el funnel alineado con el clon.
+- Ver `CLEANUP_AUDIT.md` antes de eliminar artefactos como `dist/`, `public_html/` o stacks Docker antiguos.
 
 ## Estado Actual
 
 ### CAPI / Tracking
 
-- Connected to `kurukin-relay` via `VITE_CAPI_RELAY_URL`.
+- Connected to the configured CAPI relay via `VITE_CAPI_RELAY_URL`.
 - Payload structure updated with `siteId: "SENSORIAL"` at the root level.
 - Live events: `PageView` on load and `InitiateCheckout` on CTA click with `value` and `currency`.
 
