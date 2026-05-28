@@ -35,11 +35,11 @@ function isValidEmail(value: string): boolean {
 }
 
 function resolveSuccessRedirectUrl() {
-  const { successRedirectType, successRedirectUrl } = funnelConfig.forms.capture;
+  const { successRedirectType, successRedirectUrl, whatsappRedirectBaseUrl } = funnelConfig.forms.capture;
 
   if (successRedirectType === 'whatsapp' && !/^https?:\/\//i.test(successRedirectUrl)) {
     const normalizedPhone = successRedirectUrl.replace(/\D/g, '');
-    return `https://wa.me/${normalizedPhone}`;
+    return `${whatsappRedirectBaseUrl.replace(/\/$/, '')}/${normalizedPhone}`;
   }
 
   return successRedirectUrl;

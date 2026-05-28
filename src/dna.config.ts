@@ -1,4 +1,5 @@
 export type DnaTheme = 'expert' | 'panda';
+export type DnaFunnelType = 'vsl' | 'event' | 'tripwire';
 
 const runtimeEnv = ((import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env ?? {});
 
@@ -9,6 +10,7 @@ function readEnv(name: string, fallback = '') {
 
 export interface DnaConfig {
   theme: DnaTheme;
+  funnelType: DnaFunnelType;
   productName: string;
   domain: string;
   siteId: string;
@@ -93,11 +95,30 @@ export interface DnaConfig {
     bonusImage: string;
     bundleWideImage: string;
     socialImage: string;
+    event: {
+      insecureDriverImage: string;
+      confidentDriverImage: string;
+      parkedCarImage: string;
+      motherWithChildrenImage: string;
+      expertTeachingImage: string;
+    };
   };
   forms: {
     captureWebhookUrl: string;
     successRedirectType: 'url' | 'whatsapp';
     successRedirectUrl: string;
+    whatsappRedirectBaseUrl: string;
+    captureFields: {
+      firstName: boolean;
+      lastName: boolean;
+      email: boolean;
+      whatsapp: boolean;
+    };
+    captureTracking: {
+      eventName: string;
+      formId: string;
+      status: string;
+    };
   };
   copy: {
     productName: string;
@@ -206,6 +227,24 @@ export interface DnaConfig {
       submitLabel: string;
       submittingLabel: string;
     };
+    event: {
+      registrationAnchorId: string;
+      hero: {
+        eyebrow: string;
+        headline: string;
+        subheadline: string;
+        imageAlt: string;
+        primaryCtaLabel: string;
+        secondaryCtaLabel: string;
+      };
+      foundation: {
+        sectionEyebrow: string;
+        sectionTitle: string;
+        sectionText: string;
+        cardTitle: string;
+        cardText: string;
+      };
+    };
     pricingCard: {
       eyebrow: string;
       title: string;
@@ -306,6 +345,7 @@ const vslVideoId = readEnv('VITE_VSL_VIDEO_ID', 'REPLACE_WITH_VSL_VIDEO_ID');
 
 export const DNA = {
   theme: 'expert',
+  funnelType: 'event',
   productName,
   domain,
   siteId,
@@ -348,10 +388,10 @@ export const DNA = {
     ),
   },
   seo: {
-    title: readEnv('VITE_SITE_TITLE', `${productName} | Funnel VSL`),
+    title: readEnv('VITE_SITE_TITLE', `${productName} | Maneja Sin Miedo`),
     description: readEnv(
       'VITE_SITE_DESCRIPTION',
-      'Boilerplate VSL configurable para presentar una oferta, reproducir el video y enviar el trafico al checkout definido.',
+      'Evento gratuito online para ganar confianza al volante y manejar con mayor seguridad.',
     ),
     socialImage: readEnv('VITE_SOCIAL_IMAGE', `https://${domain}/assets/funnel-placeholder.svg`),
   },
@@ -396,11 +436,30 @@ export const DNA = {
     bonusImage: '/assets/funnel-placeholder.svg',
     bundleWideImage: '/assets/funnel-placeholder.svg',
     socialImage: '/assets/funnel-placeholder.svg',
+    event: {
+      insecureDriverImage: '/assets/funnel-placeholder.svg',
+      confidentDriverImage: '/assets/funnel-placeholder.svg',
+      parkedCarImage: '/assets/funnel-placeholder.svg',
+      motherWithChildrenImage: '/assets/funnel-placeholder.svg',
+      expertTeachingImage: '/assets/funnel-placeholder.svg',
+    },
   },
   forms: {
     captureWebhookUrl: readEnv('VITE_CAPTURE_WEBHOOK_URL'),
     successRedirectType: 'url',
     successRedirectUrl: '/confirmacion',
+    whatsappRedirectBaseUrl: readEnv('VITE_WHATSAPP_REDIRECT_BASE_URL', 'https://wa.me'),
+    captureFields: {
+      firstName: true,
+      lastName: false,
+      email: true,
+      whatsapp: false,
+    },
+    captureTracking: {
+      eventName: 'Lead',
+      formId: 'expert_event_registration_form',
+      status: 'submitted',
+    },
   },
   copy: {
     productName,
@@ -548,6 +607,26 @@ export const DNA = {
       submitError: 'No pudimos procesar tu solicitud en este momento. Intentalo nuevamente.',
       submitLabel: 'Validar y enviar',
       submittingLabel: 'Enviando...',
+    },
+    event: {
+      registrationAnchorId: 'registro-evento',
+      hero: {
+        eyebrow: 'Evento Gratuito Online',
+        headline: 'MANEJA SIN MIEDO',
+        subheadline:
+          'Descubre cómo ganar confianza al volante y manejar con seguridad… aunque hoy sientas miedo, ansiedad o inseguridad al conducir.',
+        imageAlt: 'Persona al volante recuperando confianza para manejar',
+        primaryCtaLabel: 'QUIERO MANEJAR SIN MIEDO',
+        secondaryCtaLabel: 'Ver base visual',
+      },
+      foundation: {
+        sectionEyebrow: 'Base visual',
+        sectionTitle: 'Un sistema cálido para hablar de confianza, seguridad e independencia.',
+        sectionText:
+          'Esta primera versión define ritmo, aire visual, tarjetas, CTAs y superficies para construir luego las secciones del evento sin acoplarlas al VSL.',
+        cardTitle: 'Foundation de evento',
+        cardText: 'Preparado para countdown, agenda, autoridad y formulario en iteraciones futuras.',
+      },
     },
     pricingCard: {
       eyebrow: 'Oferta especial',

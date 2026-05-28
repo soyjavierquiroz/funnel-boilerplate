@@ -3,22 +3,36 @@
 ## Runtime flow
 
 - `src/main.tsx` mounts React, Router and visitor context.
-- `src/App.tsx` applies the document theme and routes `/` plus `/confirmacion`.
+- `src/App.tsx` applies the document theme, resolves the home funnel variant and routes `/` plus `/confirmacion`.
 - `src/components/themes/expert/ExpertTheme.tsx` renders the VSL, reveal gate, offer sections, FAQ, testimonials and sticky CTA.
+- `src/components/themes/expert/event/ExpertEventTheme.tsx` renders the Expert event visual foundation without changing `ExpertTheme`.
 - `src/components/themes/expert/ExpertHero.tsx` uses the local `KurukinPlayer` source without changing player behavior.
 - `src/core/services/analytics.ts` emits browser/CAPI events using `funnelConfig.integrations`, which is derived from `DNA.tracking`.
 
 ## Configuration layers
 
-- `src/dna.config.ts` is the clone DNA and owns product identity, domain, checkout, video, pricing, copy, tracking, assets and theme tokens.
-- `src/core/config/funnel.config.ts` adapts DNA into runtime structures for video, forms, pricing and integrations.
+- `src/dna.config.ts` is the clone DNA and owns product identity, domain, checkout, video, pricing, copy, tracking, assets, theme family, funnel variant and theme tokens.
+- `src/core/config/funnel.config.ts` adapts DNA into runtime structures for video, forms, pricing, integrations and variant-specific content.
 - `.env` is for runtime/build values that differ by deployment, such as public metadata, checkout URL, video ID and tracking IDs.
 - `src/index.css` defines CSS variables and global player styling.
-- `tailwind.config.js` exposes semantic classes such as `brand-primary`, `cta`, `surface-muted`, `text-main`, `success`, `warning` and `error`.
+- `tailwind.config.js` exposes semantic classes such as `brand-primary`, `cta`, `surface-muted`, `text-main`, `success`, `warning`, `error` and event-specific aliases under `event.*`.
+
+## Theme family + funnel variant
+
+Use `theme` for the visual family and `funnelType` for the conversion flow:
+
+```ts
+theme: 'expert',
+funnelType: 'event',
+```
+
+The Expert event implementation lives under `src/components/themes/expert/event/`. Do not create sibling theme families such as `expert-event` for this path unless the current architecture cannot support the paired convention.
+
+This keeps the path open for combinations such as `expert/tripwire`, `panda/event` and `panda/tripwire`. If a temporary single-key theme is ever needed, document the migration back to `theme + funnelType` in this file before shipping.
 
 ## Clone boundaries
 
-Components should consume `DNA` or `funnelConfig`; they should not contain product names, checkout URLs, tracking IDs, testimonials, guarantee text or brand colors.
+Components should consume `DNA` or `funnelConfig`; they should not contain product names, checkout URLs, dates, CTA copy, tracking IDs, testimonials, guarantee text or brand colors.
 
 Allowed component classes are structural utilities such as layout, spacing, borders, shadows, responsive sizing and typography scale. Brand and state colors should use semantic tokens.
 

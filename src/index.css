@@ -65,6 +65,36 @@
     font-family: var(--font-body);
   }
 
+  .theme-expert-event {
+    --color-page: 245 233 220;
+    --color-surface: 255 255 255;
+    --color-surface-muted: 247 240 232;
+    --color-surface-bump: 255 255 255;
+    --color-primary: 13 59 102;
+    --color-secondary: 77 168 218;
+    --color-accent: 232 140 140;
+    --color-highlight: 77 168 218;
+    --color-border-subtle: 13 59 102;
+    --color-text-main: 17 17 17;
+    --color-text-muted: 72 82 92;
+    --color-text-subtle: 104 112 120;
+    --color-text-inverse: 255 255 255;
+    --color-brand-primary: 13 59 102;
+    --color-brand-accent: 232 140 140;
+    --color-cta-base: 232 140 140;
+    --color-cta-hover: 210 117 117;
+    --color-event-page: 245 233 220;
+    --color-event-surface: 255 255 255;
+    --color-event-surface-soft: 247 240 232;
+    --color-event-card: 255 255 255;
+    --color-event-ink: 17 17 17;
+    --color-event-muted: 72 82 92;
+    --color-event-navy: 13 59 102;
+    --color-event-sky: 77 168 218;
+    --color-event-coral: 232 140 140;
+    --color-event-highlight: 245 233 220;
+  }
+
   .theme-panda {
     --color-brand-primary: 37 99 235;
     --color-brand-accent: 8 13 25;
@@ -84,6 +114,11 @@
   .theme-expert .PhoneInput,
   .theme-expert .PhoneInputInput {
     font-family: var(--font-body);
+  }
+
+  .theme-expert-event .expert-event-kicker {
+    font-family: var(--font-body);
+    letter-spacing: 0.14em;
   }
 
   .theme-panda .panda-display {

@@ -2,6 +2,7 @@ import { DNA, dnaNumericPrices, resolveDnaFunnelTheme } from '../../dna.config';
 
 export type VideoProvider = 'youtube' | 'bunnynet' | 'vimeo' | 'wistia' | 'html5';
 export type OverlayPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
+export type FunnelType = 'vsl' | 'event' | 'tripwire';
 
 export interface MutedPreviewConfig {
   enabled: boolean;
@@ -92,6 +93,7 @@ export interface BonusStackConfig {
 export interface FunnelContentConfig {
   mainVsl: MainVslContentConfig;
   bonusStack: BonusStackConfig;
+  event: EventFunnelContentConfig;
 }
 
 export interface CaptureFormConfig {
@@ -99,6 +101,18 @@ export interface CaptureFormConfig {
   webhookUrl: string;
   successRedirectType: FunnelFormSuccessRedirectType;
   successRedirectUrl: string;
+  whatsappRedirectBaseUrl: string;
+  fields: {
+    firstName: boolean;
+    lastName: boolean;
+    email: boolean;
+    whatsapp: boolean;
+  };
+  tracking: {
+    eventName: string;
+    formId: string;
+    status: string;
+  };
 }
 
 export interface FunnelFormsConfig {
@@ -128,11 +142,38 @@ export interface FunnelConfig {
   brandName: string;
   domain: string;
   theme: FunnelTheme;
+  funnelType: FunnelType;
   media: FunnelMediaConfig;
   content: FunnelContentConfig;
   forms: FunnelFormsConfig;
   pricing: FunnelPricingConfig;
   integrations: FunnelIntegrationsConfig;
+}
+
+export interface EventFunnelContentConfig {
+  registrationAnchorId: string;
+  assets: {
+    insecureDriverImage: string;
+    confidentDriverImage: string;
+    parkedCarImage: string;
+    motherWithChildrenImage: string;
+    expertTeachingImage: string;
+  };
+  hero: {
+    eyebrow: string;
+    headline: string;
+    subheadline: string;
+    imageAlt: string;
+    primaryCtaLabel: string;
+    secondaryCtaLabel: string;
+  };
+  foundation: {
+    sectionEyebrow: string;
+    sectionTitle: string;
+    sectionText: string;
+    cardTitle: string;
+    cardText: string;
+  };
 }
 
 export interface ResolvedPricingProduct {
@@ -153,6 +194,7 @@ export const funnelConfig: FunnelConfig = {
   brandName: DNA.productName,
   domain: DNA.domain,
   theme: resolveDnaFunnelTheme(),
+  funnelType: DNA.funnelType,
   media: {
     heroVideo: {
       enabled: true,
@@ -203,6 +245,12 @@ export const funnelConfig: FunnelConfig = {
         valueUSD: Number(module.value.replace(/[^\d.]/g, '')) || 0,
       })),
     },
+    event: {
+      registrationAnchorId: DNA.copy.event.registrationAnchorId,
+      assets: DNA.assets.event,
+      hero: DNA.copy.event.hero,
+      foundation: DNA.copy.event.foundation,
+    },
   },
   forms: {
     capture: {
@@ -210,6 +258,9 @@ export const funnelConfig: FunnelConfig = {
       webhookUrl: DNA.forms.captureWebhookUrl,
       successRedirectType: DNA.forms.successRedirectType,
       successRedirectUrl: DNA.forms.successRedirectUrl,
+      whatsappRedirectBaseUrl: DNA.forms.whatsappRedirectBaseUrl,
+      fields: DNA.forms.captureFields,
+      tracking: DNA.forms.captureTracking,
     },
   },
   pricing: {

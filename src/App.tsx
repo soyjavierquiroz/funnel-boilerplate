@@ -3,7 +3,16 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { DNA, resolveDnaDocumentTheme } from './dna.config';
 import analytics from './core/services/analytics';
 import { ExpertTheme } from './components/themes/expert/ExpertTheme';
+import { ExpertEventTheme } from './components/themes/expert/event/ExpertEventTheme';
 import { Success } from './pages/Success';
+
+function resolveHomeTheme() {
+  if (DNA.theme === 'expert' && DNA.funnelType === 'event') {
+    return <ExpertEventTheme />;
+  }
+
+  return <ExpertTheme />;
+}
 
 function RoutedApp() {
   const location = useLocation();
@@ -21,12 +30,13 @@ function RoutedApp() {
     void analytics.trackEvent('PageView', {
       source: 'AppLoad',
       theme: DNA.theme,
+      funnel_type: DNA.funnelType,
     });
   }, [isSuccessRoute, location.pathname]);
 
   return (
     <Routes>
-      <Route path="/" element={<ExpertTheme />} />
+      <Route path="/" element={resolveHomeTheme()} />
       <Route path="/confirmacion" element={<Success />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
