@@ -21,13 +21,17 @@ export function CallToActionOverlay({ callToAction, onDismiss }: CallToActionOve
           </button>
         ) : null}
 
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-300/80">Oferta activa</p>
+        {callToAction.eyebrow ? (
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[rgb(var(--color-highlight))]/80">
+            {callToAction.eyebrow}
+          </p>
+        ) : null}
         <h3 className="mt-3 text-2xl font-bold leading-tight">{callToAction.headline}</h3>
         <a
           href={callToAction.buttonUrl}
           target="_blank"
           rel="noreferrer"
-          className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 py-3 text-base font-semibold text-black transition hover:bg-emerald-300"
+          className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-cta px-6 py-3 text-base font-semibold text-[rgb(var(--color-cta-text))] transition hover:bg-cta-hover"
         >
           {callToAction.buttonText}
           <ExternalLink className="h-4 w-4" />

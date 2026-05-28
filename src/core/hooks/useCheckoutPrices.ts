@@ -7,39 +7,39 @@ type CatalogCountryPrice = {
   taxRate: number | null;
 };
 
-type HotmartCatalogResponse = Record<string, Record<string, CatalogCountryPrice>>;
+type CheckoutCatalogResponse = Record<string, Record<string, CatalogCountryPrice>>;
 
 export type PricingScrapedData = Record<string, { total: string; tax?: string }>;
 export type PricingLoadStatus = 'loading' | 'ready' | 'error';
 
-let hotmartCatalogPromise: Promise<HotmartCatalogResponse> | null = null;
+let checkoutCatalogPromise: Promise<CheckoutCatalogResponse> | null = null;
 
-async function loadHotmartCatalog() {
-  const catalogUrl = import.meta.env.VITE_HOTPRICES_API_URL;
+async function loadCheckoutCatalog() {
+  const catalogUrl = import.meta.env.VITE_CHECKOUT_PRICES_API_URL;
 
   if (!catalogUrl) {
-    throw new Error('Missing VITE_HOTPRICES_API_URL environment variable.');
+    throw new Error('Missing VITE_CHECKOUT_PRICES_API_URL environment variable.');
   }
 
-  if (!hotmartCatalogPromise) {
-    hotmartCatalogPromise = fetch(catalogUrl).then(async (response) => {
+  if (!checkoutCatalogPromise) {
+    checkoutCatalogPromise = fetch(catalogUrl).then(async (response) => {
       if (!response.ok) {
-        console.error('[useHotmartPrices] HotPrices request failed', {
+        console.error('[useCheckoutPrices] checkout prices request failed', {
           url: catalogUrl,
           status: response.status,
           statusText: response.statusText,
         });
-        throw new Error(`HotPrices responded with ${response.status}`);
+        throw new Error(`Checkout prices responded with ${response.status}`);
       }
 
       return response.json();
     });
   }
 
-  return hotmartCatalogPromise;
+  return checkoutCatalogPromise;
 }
 
-export function useHotmartPrices(productKey: string) {
+export function useCheckoutPrices(productKey: string) {
   const [scrapedData, setScrapedData] = useState<PricingScrapedData>();
   const [isLoadingPrices, setIsLoadingPrices] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -48,7 +48,7 @@ export function useHotmartPrices(productKey: string) {
     () => resolvePricingProduct(productKey),
     [productKey],
   );
-  const hotmartProductId = product.hotmartProductId;
+  const checkoutProductId = product.checkoutProductId;
 
   useEffect(() => {
     let isCancelled = false;
@@ -74,12 +74,12 @@ export function useHotmartPrices(productKey: string) {
       }
 
       try {
-        const catalog = await loadHotmartCatalog();
-        const productCatalog = catalog[hotmartProductId];
+        const catalog = await loadCheckoutCatalog();
+        const productCatalog = catalog[checkoutProductId];
 
         if (!productCatalog) {
           if (!isCancelled) {
-            setError(new Error(`HotPrices catalog is missing Hotmart product "${hotmartProductId}".`));
+            setError(new Error(`Checkout prices catalog is missing product "${checkoutProductId}".`));
             setStatus('error');
             setIsLoadingPrices(false);
           }
@@ -97,9 +97,9 @@ export function useHotmartPrices(productKey: string) {
         }
       } catch (error) {
         if (!isCancelled) {
-          const nextError = error instanceof Error ? error : new Error('Unknown Hotmart pricing error.');
-          console.error('[useHotmartPrices] Failed to load HotPrices catalog', {
-            url: import.meta.env.VITE_HOTPRICES_API_URL,
+          const nextError = error instanceof Error ? error : new Error('Unknown checkout pricing error.');
+          console.error('[useCheckoutPrices] Failed to load checkout prices catalog', {
+            url: import.meta.env.VITE_CHECKOUT_PRICES_API_URL,
             message: nextError.message,
             likelyCorsOrNetwork: nextError instanceof TypeError,
           });
@@ -118,7 +118,7 @@ export function useHotmartPrices(productKey: string) {
     return () => {
       isCancelled = true;
     };
-  }, [hasRequestedProduct, hotmartProductId, requestedProductKey, resolvedProductKey]);
+  }, [hasRequestedProduct, checkoutProductId, requestedProductKey, resolvedProductKey]);
 
   return {
     scrapedData,

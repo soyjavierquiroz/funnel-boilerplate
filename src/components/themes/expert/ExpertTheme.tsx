@@ -23,7 +23,7 @@ export function ExpertTheme() {
 
   return (
     <div
-      className="theme-expert min-h-screen bg-page text-[#141414]"
+      className="theme-expert min-h-screen bg-page text-text-main"
       style={resolveDnaThemeStyle() as CSSProperties}
     >
       <ExpertHero onReveal={handleReveal} />
@@ -37,28 +37,29 @@ export function ExpertTheme() {
             <ExpertConfidenceBooster />
             <ExpertPainPoints />
             <ExpertSalesLetter />
-            {/* El componente ahora es 100% autónomo y lee del DNA */}
             <ExpertFAQ />
             <ExpertOfferStack />
             <ExpertTestimonials />
 
-            <footer className="border-t border-black/10 bg-white px-4 py-8 text-center sm:px-6">
-              <p className="expert-body text-sm font-semibold uppercase tracking-[0.12em] text-[#4b3d53]">
+            <footer className="border-t border-border-subtle/20 bg-surface px-4 py-8 text-center sm:px-6">
+              <p className="expert-body text-sm font-semibold uppercase tracking-[0.12em] text-text-muted">
                 {DNA.copy.productName}
               </p>
             </footer>
           </div>
 
-          <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-gray-200 bg-white p-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+          <div className="fixed bottom-0 left-0 right-0 z-[9999] border-t border-border-subtle/20 bg-surface p-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
             <div className="mx-auto flex max-w-[850px] items-center justify-between gap-4">
               <div className="hidden sm:block">
-                <p className="font-bold leading-tight text-gray-900">¡La oferta está disponible!</p>
-                <p className="text-sm font-semibold text-brand-primary">Precio especial: ${DNA.prices.main}</p>
+                <p className="font-bold leading-tight text-text-main">{DNA.copy.offerSummary.offerAvailableLabel}</p>
+                <p className="text-sm font-semibold text-brand-primary">
+                  {DNA.copy.offerSummary.specialPriceLabel.replace('{price}', DNA.prices.main)}
+                </p>
               </div>
               <div className="w-full flex-1 sm:w-auto sm:flex-none">
                 <ExpertCtaButton
                   href="#checkout"
-                  label={DNA.copy.ctaText || "¡Estoy lista para empezar!"}
+                  label={DNA.copy.ctaText}
                   fullWidth
                 />
               </div>

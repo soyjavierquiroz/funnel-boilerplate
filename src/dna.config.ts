@@ -1,25 +1,76 @@
 export type DnaTheme = 'expert' | 'panda';
 
+const runtimeEnv = ((import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env ?? {});
+
+function readEnv(name: string, fallback = '') {
+  const value = runtimeEnv[name]?.trim();
+  return value && value.length > 0 ? value : fallback;
+}
+
 export interface DnaConfig {
   theme: DnaTheme;
+  productName: string;
+  domain: string;
+  siteId: string;
   fonts: {
     sans: string;
     body: string;
   };
+  checkoutUrl: string;
+  checkout: {
+    providerName: string;
+    productIds: {
+      main: string;
+      bump: string;
+      continuity: string;
+      vip: string;
+    };
+    successPath: string;
+  };
   vslVideoId: string;
-  checkoutUrl: string; // VARIABLE GLOBAL DE PASARELA
+  videos: {
+    vsl: {
+      provider: 'youtube' | 'bunnynet' | 'vimeo' | 'wistia' | 'html5';
+      videoId: string;
+      revealAtSeconds: number;
+      progressBarColor: string;
+      posterImage: string;
+      ctaDisplayAtSeconds: number;
+    };
+  };
+  tracking: {
+    siteId: string;
+    metaPixelId: string;
+    tiktokPixelId: string;
+    capiWebhookUrl: string;
+    visitorApiUrl: string;
+    metaPixelScriptUrl: string;
+    tiktokPixelScriptBaseUrl: string;
+  };
+  seo: {
+    title: string;
+    description: string;
+    socialImage: string;
+  };
   colors: {
     primary: string;
     accent: string;
     highlight: string;
+    success: string;
+    warning: string;
+    error: string;
   };
   surface: {
     page: string;
     panel: string;
+    muted: string;
+    bump: string;
   };
   text: {
     main: string;
     muted: string;
+    subtle: string;
+    inverse: string;
     onPrimary: string;
     onAccent: string;
   };
@@ -34,6 +85,19 @@ export interface DnaConfig {
     totalValue: string;
     regular: string;
     regularPrice: string;
+    vip: string;
+  };
+  assets: {
+    productImage: string;
+    salesLetterImage: string;
+    bonusImage: string;
+    bundleWideImage: string;
+    socialImage: string;
+  };
+  forms: {
+    captureWebhookUrl: string;
+    successRedirectType: 'url' | 'whatsapp';
+    successRedirectUrl: string;
   };
   copy: {
     productName: string;
@@ -41,6 +105,7 @@ export interface DnaConfig {
     headlineHighlight: string;
     subheadline: string;
     ctaText: string;
+    checkoutCtaText: string;
     orderBumpTitle: string;
     salesLetter: {
       title: string;
@@ -62,8 +127,10 @@ export interface DnaConfig {
       headline: string;
       paragraphs: string[];
       bullets: string[];
+      includedLabel: string;
     };
     sewingBonus: {
+      eyebrow: string;
       title: string;
       image: string;
       description: string;
@@ -84,6 +151,88 @@ export interface DnaConfig {
       timeLimit: string;
       title: string;
       subtitle: string;
+    };
+    offerSummary: {
+      title: string;
+      countdownLabel: string;
+      opportunityExpiresLabel: string;
+      bundleImageAlt: string;
+      totalValueLabel: string;
+      todayPriceLabel: string;
+      regularPriceLabel: string;
+      includedBadgeLabel: string;
+      realValueLabel: string;
+      ctaLabel: string;
+      ctaSubLabel: string;
+      offerAvailableLabel: string;
+      specialPriceLabel: string;
+      todayOnlyLabel: string;
+      originalPriceLabel: string;
+      valuedAtLabel: string;
+    };
+    certaintyItems: Array<{
+      id: string;
+      label: string;
+    }>;
+    orderForm: {
+      eyebrow: string;
+      description: string;
+    };
+    successPage: {
+      eyebrow: string;
+      title: string;
+      description: string;
+      backLabel: string;
+    };
+    captureForm: {
+      eyebrow: string;
+      headlineFallback: string;
+      headlineWithLocation: string;
+      description: string;
+      firstNameLabel: string;
+      firstNamePlaceholder: string;
+      lastNameLabel: string;
+      lastNamePlaceholder: string;
+      emailLabel: string;
+      emailPlaceholder: string;
+      whatsappLabel: string;
+      whatsappPlaceholder: string;
+      requiredError: string;
+      emailRequiredError: string;
+      invalidEmailError: string;
+      whatsappRequiredError: string;
+      invalidWhatsappError: string;
+      submitError: string;
+      submitLabel: string;
+      submittingLabel: string;
+    };
+    pricingCard: {
+      eyebrow: string;
+      title: string;
+      baseValueLabel: string;
+      basePriceLabel: string;
+      subtotalLabel: string;
+      localTaxesLabel: string;
+      includedTaxesLabel: string;
+      checkoutTotalLabel: string;
+      equivalentLabel: string;
+      internationalPriceLabel: string;
+      buyButtonLabel: string;
+      unavailableLabel: string;
+      securePaymentLabel: string;
+      processedByLabel: string;
+      immediateAccessLabel: string;
+    };
+    video: {
+      smartPosterEyebrow: string;
+      smartPosterTitle: string;
+      smartPosterDescription: string;
+      smartPosterButtonText: string;
+      ctaEyebrow: string;
+      ctaHeadline: string;
+      ctaButtonText: string;
+      soundPrompt: string;
+      placeholderText: string;
     };
     testimonials: {
       headline: string;
@@ -149,262 +298,321 @@ function toRgbTriplet(value: string) {
   return triplet.trim();
 }
 
+const productName = 'Aprender Motores';
+const domain = readEnv('VITE_DOMAIN', 'aprendermotores.com');
+const siteId = readEnv('VITE_SITE_ID', 'APRENDER_MOTORES');
+const checkoutUrl = readEnv('VITE_CHECKOUT_URL', 'https://example.com/replace-with-checkout-url');
+const vslVideoId = readEnv('VITE_VSL_VIDEO_ID', 'REPLACE_WITH_VSL_VIDEO_ID');
+
 export const DNA = {
   theme: 'expert',
+  productName,
+  domain,
+  siteId,
   fonts: {
     sans: 'Montserrat',
     body: 'Open Sans',
   },
-  vslVideoId: import.meta.env.VITE_VSL_VIDEO_ID ?? '',
-  // ENLACE GLOBAL CONECTADO DIRECTO A HOTMART
-  checkoutUrl: 'https://pay.hotmart.com/D75923457J?off=cir53koj&checkoutMode=10',
+  checkoutUrl,
+  checkout: {
+    providerName: readEnv('VITE_CHECKOUT_PROVIDER_NAME', 'Checkout'),
+    productIds: {
+      main: 'APRENDER_MOTORES_MAIN',
+      bump: 'APRENDER_MOTORES_BUMP',
+      continuity: 'APRENDER_MOTORES_CONTINUITY',
+      vip: 'APRENDER_MOTORES_VIP',
+    },
+    successPath: '/confirmacion',
+  },
+  vslVideoId,
+  videos: {
+    vsl: {
+      provider: 'bunnynet',
+      videoId: vslVideoId,
+      revealAtSeconds: 10,
+      progressBarColor: '#2f6f73',
+      posterImage: '',
+      ctaDisplayAtSeconds: 10,
+    },
+  },
+  tracking: {
+    siteId,
+    metaPixelId: readEnv('VITE_META_PIXEL_ID'),
+    tiktokPixelId: readEnv('VITE_TIKTOK_PIXEL_ID'),
+    capiWebhookUrl: readEnv('VITE_CAPI_RELAY_URL'),
+    visitorApiUrl: readEnv('VITE_VISITOR_API_URL', 'https://ipapi.co/json/'),
+    metaPixelScriptUrl: readEnv('VITE_META_PIXEL_SCRIPT_URL', 'https://connect.facebook.net/en_US/fbevents.js'),
+    tiktokPixelScriptBaseUrl: readEnv(
+      'VITE_TIKTOK_PIXEL_SCRIPT_BASE_URL',
+      'https://analytics.tiktok.com/i18n/pixel/events.js',
+    ),
+  },
+  seo: {
+    title: readEnv('VITE_SITE_TITLE', `${productName} | Funnel VSL`),
+    description: readEnv(
+      'VITE_SITE_DESCRIPTION',
+      'Boilerplate VSL configurable para presentar una oferta, reproducir el video y enviar el trafico al checkout definido.',
+    ),
+    socialImage: readEnv('VITE_SOCIAL_IMAGE', `https://${domain}/assets/funnel-placeholder.svg`),
+  },
   colors: {
-    primary: '107 67 155',
-    accent: '216 99 184',
-    highlight: '255 215 0',
+    primary: '47 111 115',
+    accent: '214 101 64',
+    highlight: '241 184 77',
+    success: '49 151 112',
+    warning: '191 128 38',
+    error: '190 58 58',
   },
   surface: {
-    page: '255 255 255',
+    page: '250 250 247',
     panel: '255 255 255',
+    muted: '244 241 235',
+    bump: '255 255 255',
   },
   text: {
-    main: '45 32 61',
-    muted: '95 74 115',
+    main: '31 37 44',
+    muted: '86 94 104',
+    subtle: '122 130 139',
+    inverse: '255 255 255',
     onPrimary: '255 255 255',
     onAccent: '255 255 255',
   },
   cta: {
-    bg: '216 99 184',
+    bg: '214 101 64',
     text: '255 255 255',
-    hoverBg: '216 99 184 / 90%',
+    hoverBg: '190 80 49',
   },
   prices: {
-    main: '27',
+    main: '0',
     bump: '0',
-    totalValue: '60',
-    regular: '60',
-    regularPrice: '60',
+    totalValue: '0',
+    regular: '0',
+    regularPrice: '0',
+    vip: '0',
+  },
+  assets: {
+    productImage: '/assets/funnel-placeholder.svg',
+    salesLetterImage: '/assets/funnel-placeholder.svg',
+    bonusImage: '/assets/funnel-placeholder.svg',
+    bundleWideImage: '/assets/funnel-placeholder.svg',
+    socialImage: '/assets/funnel-placeholder.svg',
+  },
+  forms: {
+    captureWebhookUrl: readEnv('VITE_CAPTURE_WEBHOOK_URL'),
+    successRedirectType: 'url',
+    successRedirectUrl: '/confirmacion',
   },
   copy: {
-    productName: 'Mi Primer Libro Sensorial',
-    headline: 'Crea tu primer libro sensorial y haz tu primera venta en 7 días',
-    headlineHighlight: 'aunque hoy no sepas por dónde empezar',
+    productName,
+    headline: 'Configura aqui el headline principal de tu VSL',
+    headlineHighlight: 'con una promesa clara para tu audiencia',
     subheadline:
-      'Descubre el método exacto que usan cientos de mamás para crear libros sensoriales desde cero y empezar a generar ingresos extra desde casa.',
-    ctaText: '¡Estoy lista para empezar!',
+      'Reemplaza este texto por la descripcion breve de la transformacion, el publico objetivo y el resultado esperado.',
+    ctaText: 'Quiero acceder ahora',
+    checkoutCtaText: 'Si, quiero acceder',
     orderBumpTitle: '',
     salesLetter: {
-      title: 'De la Confusión a tu Primera Venta',
+      title: 'Historia de transformacion',
       part1: [
-        'Cuando descubrí los libros sensoriales, pasé por lo mismo que tú…',
-        'Tenía ganas de emprender y hacer algo creativo desde casa, pero no sabía por dónde empezar. Guardaba ideas, veía videos, compraba materiales… y aun así seguía sintiéndome perdida.',
-        'No sabía qué actividades hacer.',
-        'No sabía qué materiales usar.',
-        'Y mucho menos cómo convertir eso en algo realmente vendible.',
-        'Como alguien que quería generar ingresos con algo que tuviera propósito, eso me frustraba muchísimo. Porque sentía que tenía creatividad… pero no dirección.',
+        'Usa este bloque para conectar con el problema actual de tu audiencia.',
+        'Mantén la estructura persuasiva y reemplaza el texto con la historia del nuevo funnel.',
       ],
-      highlight: 'Pero un día entendí algo que lo cambió todo.',
+      highlight: 'Despues, muestra el descubrimiento que cambia el camino.',
       part2: [
-        'No necesitaba empezar desde cero improvisando.',
-        'Necesitaba una ruta clara.',
-        'Modelos listos.',
-        'Y entender qué hace que un libro sensorial realmente se vea lindo, útil y vendible.',
-        'Ahí fue cuando dejé de solo guardar ideas… y empecé a crear libros sensoriales que las personas realmente querían comprar.',
-        'Pasé de sentirme confundida… a lograr mis primeras ventas y descubrir una oportunidad hermosa desde casa.',
-        'Y eso es exactamente lo que quiero enseñarte dentro de “Lánzate con tu Primer Libro Sensorial”.',
+        'Explica por que la oferta existe y como ayuda a avanzar con claridad.',
+        'Cierra el bloque invitando a tomar accion con el producto configurado.',
       ],
-      image: '/assets/familia-pame.jpg',
-      ctaText: '¡Estoy lista quiero acceder!',
+      image: '/assets/funnel-placeholder.svg',
+      ctaText: 'Quiero continuar',
     },
-    offerStackTitle: 'LO QUE TE LLEVAS HOY...',
-    specialOfferTitle: 'Oferta Especial',
-    specialOfferSubtitle: 'Genera tus <strong>primeros ingresos desde casa</strong> creando libros sensoriales para niños, incluso si hoy no tienes experiencia ni sabes por dónde empezar.',
-    specialOfferGuarantee: 'Pago 100% seguro • Acceso inmediato',
-    specialOfferImage: '/assets/pameflores.webp',
+    offerStackTitle: 'Lo que recibes hoy',
+    benefits: [
+      'Beneficio principal configurable',
+      'Resultado esperado configurable',
+      'Acceso a materiales configurables',
+      'Acompanamiento o soporte configurable',
+    ],
+    specialOfferTitle: 'Oferta especial',
+    specialOfferSubtitle:
+      'Reemplaza esta frase por el resumen de la oferta de <strong>Aprender Motores</strong> y el principal motivo para actuar hoy.',
+    specialOfferGuarantee: 'Pago seguro - Acceso inmediato',
+    specialOfferImage: '/assets/funnel-placeholder.svg',
     presentationPreTitle: 'Te presento:',
-    presentationTitle: '<span style="color: rgb(var(--color-brand-primary))">Lánzate</span> con tu primer<br/>libro sensorial',
+    presentationTitle: '<span style="color: rgb(var(--color-brand-primary))">Aprender Motores</span>',
     confidenceBooster: {
-      headline: '¿Miedo a no saber si vas por buen camino?',
+      headline: 'Refuerza la confianza antes de la decision',
       paragraphs: [
-        'No te preocupes aquí tienes la ruta exacta para crear tu primer libro sensorial y llevarlo a tu primera venta sin perder tiempo ni dudar en el proceso.',
-        'Será como si me tuvieras a tu lado acompañándote en cada etapa…',
-        'Para que avances con total seguridad: sin dudas, sin perder tiempo y trabajando desde el día 1 como una experta',
+        'Explica por que la persona puede avanzar aunque empiece desde cero.',
+        'Muestra que el proceso esta ordenado y que cada paso tiene una razon.',
       ],
       bullets: [
-        'Checklist de verificación en cada etapa',
-        'Videos guía para romper miedos y resolver dudas mientras avanzas',
+        'Checklist o guia configurable',
+        'Recursos de apoyo configurables',
       ],
+      includedLabel: 'Incluye:',
     },
     sewingBonus: {
-      title: 'Bono de principiante a experta cosiendo',
-      image: '/assets/de_principiante_a_experta_cosiendo.webp',
-      description:
-        'Si no sabes coser o no tienes máquina, te incluyo un bono Principiante a experta cosiendo, para que puedas empezar sin problema con puntadas sencillas y fáciles',
+      eyebrow: 'Bono configurable',
+      title: 'Bono configurable',
+      image: '/assets/funnel-placeholder.svg',
+      description: 'Describe aqui el bono que aumenta el valor percibido de la oferta.',
     },
     painPoints: {
       headline: '¿Te suena familiar?',
-      subtitle:
-        'Esto es lo que viven muchas mujeres cuando quieren empezar a vender libros sensoriales…',
+      subtitle: 'Configura aqui los puntos de dolor reales del nuevo mercado.',
       bullets: [
-        'Tienes ideas hermosas… pero no sabes por dónde empezar.',
-        'Compras cursos o guardas ideas… pero nunca logras pasar a la acción.',
-        'Sientes miedo de mostrar lo que haces porque piensas que “aún no está perfecto”.',
-        'Te frustras porque no sabes qué materiales usar ni cómo hacer libros realmente lindos y vendibles.',
-        'Te da miedo cobrar por tu trabajo porque no sabes cuánto vale realmente.',
-        'Sientes que podrías crear algo hermoso… pero terminas paralizada sin saber qué hacer primero.',
-        'Quieres generar ingresos desde casa con algo que tenga propósito… pero no encuentras una oportunidad clara.',
-        'Te emociona la idea de emprender con algo creativo y relacionado con niños… pero sientes que te falta guía.',
+        'Punto de dolor configurable 1.',
+        'Punto de dolor configurable 2.',
+        'Punto de dolor configurable 3.',
+        'Punto de dolor configurable 4.',
       ],
-      transitionText: 'Entonces empieza ahora con Lánzate con tu Primer Libro Sensorial',
+      transitionText: 'Entonces este puede ser el siguiente paso.',
     },
-    benefits: [
-      'Crea tu primer libro sensorial paso a paso',
-      'Logra tu primera venta en pocos días',
-      'Aprende cómo hacer libros lindos, útiles y vendibles',
-      'Descubre cómo cobrar sin miedo y vender con seguridad',
-      'Empieza un proyecto creativo con propósito desde casa',
-      'Trabaja con modelos listos para crear y vender',
-    ],
     modules: [
       {
-        title: 'Masterclass: De 0 a tu primera venta',
-        value: '$97',
-        description:
-          'Descubrirás mi estrategia probada de cómo lograr tu primera venta de libros sensoriales en pocos días sin perder tiempo dudando ni pensando qué hacer.',
-        image: '/assets/masterclass_de_cero_tu_primera_venta.webp',
+        title: 'Modulo configurable 1',
+        value: '$0',
+        description: 'Describe el primer entregable del producto.',
+        image: '/assets/funnel-placeholder.svg',
       },
       {
-        title: '3 modelos probados para que no tengas que empezar desde cero y puedas vender más rápido',
-        value: '$97',
-        description:
-          'Arranca con modelos de libros sensoriales lindos, atractivos y vendibles con mi método AES y el paso a paso que puedes replicar fácilmente para empezar. No empiezas de cero, empiezas con modelos listos para vender.',
-        image: '/assets/3libros_sensoriales.webp',
+        title: 'Modulo configurable 2',
+        value: '$0',
+        description: 'Describe el segundo entregable del producto.',
+        image: '/assets/funnel-placeholder.svg',
       },
       {
-        title: '2 kits adicionales con diseños novedosos',
-        value: '$47',
-        description:
-          'Diferénciate y aumenta tus ingresos con 2 kits adicionales listos para crear y vender. Tendrás más opciones para ofrecer and más oportunidades de generar ingresos con libros sensoriales tiernos, atractivos y vendibles.',
-        image: '/assets/2proyectos_de_juguetes_didacticos.webp',
-      },
-      {
-        title: 'Mensajes listos para responder clientes y cerrar tus primeras ventas aunque te dé pena vender',
-        value: '$47',
-        description:
-          'Genera ventas en pocos días sabiendo qué decir, cómo responder y cómo cerrar sin sentirte incómoda. Obtén claridad absoluta con esta herramienta.',
-        image: '/assets/plantillas_para_vender_whatsApp_.webp',
-      },
-      {
-        title: 'Cómo poner precios justos sin complicarte',
-        value: '$97',
-        description:
-          'Mi fórmula mágica para no regalar tu trabajo, cobrar bien por tu trabajo con precios justos. Pierde el miedo a cobrar definitivamente.',
-        image: '/assets/precios_sin_dramas.webp',
-      },
-      {
-        title: 'Fotos y videos que venden',
-        value: '$47',
-        description:
-          'Mis técnicas para tomar fotos y videos que venden libros sensoriales, para que generen interés y te escriban diciendo “quiero uno”, usando solo tu celular.',
-        image: '/assets/fotos_y_videos_que_venden.webp',
-      },
-      {
-        title: 'La lista exacta de materiales para evitar compras innecesarias y ahorrar dinero desde el inicio',
-        value: '$27',
-        description:
-          'Mis secretos para elegir materiales lindos y funcionales para que sepas exactamente qué usar sin gastar de más ni confundirte.',
-        image: '/assets/guia_maestra_de_materiales.webp',
-      },
-      {
-        title: 'Envío perfecto',
-        value: '$47',
-        description:
-          'Conquista a tus clientes para que te compren una y otra vez con ideas de empaques lindos, económicos y prácticos. Para que enamores a tus clientes y aumenten el valor percibido.',
-        image: '/assets/kit_envIo_perfecto.webp',
+        title: 'Bono configurable',
+        value: '$0',
+        description: 'Describe un bono o recurso adicional.',
+        image: '/assets/funnel-placeholder.svg',
       },
     ],
     fastActionBonus: {
-      timeLimit: 'Si te inscribes en los próximos 60 minutos',
-      title: '🚀 Sistema Lánzate en 7 días',
-      subtitle: 'Crea y valida tu primer libro sensorial paso a paso',
+      timeLimit: 'Si tomas accion en los proximos 60 minutos',
+      title: 'Bono de accion rapida',
+      subtitle: 'Configura aqui el beneficio de actuar ahora.',
+    },
+    offerSummary: {
+      title: 'Todo lo que recibes con {productName} hoy',
+      countdownLabel: 'La oferta vence en:',
+      opportunityExpiresLabel: 'Esta oportunidad expira en:',
+      bundleImageAlt: 'Paquete completo de la oferta con bonos incluidos',
+      totalValueLabel: 'Valor total',
+      todayPriceLabel: 'Precio de hoy',
+      regularPriceLabel: 'Precio regular',
+      includedBadgeLabel: 'Incluido gratis',
+      realValueLabel: 'Valor real',
+      ctaLabel: 'Si, quiero activar {productName}',
+      ctaSubLabel: 'Hoy por ${price} - Acceso inmediato y seguro',
+      offerAvailableLabel: 'La oferta esta disponible',
+      specialPriceLabel: 'Precio especial: ${price}',
+      todayOnlyLabel: 'Hoy solo',
+      originalPriceLabel: 'Precio original',
+      valuedAtLabel: 'Valorado en',
+    },
+    certaintyItems: [
+      { id: 'secure-payment', label: 'Pago seguro' },
+      { id: 'guarantee', label: 'Garantia configurable' },
+      { id: 'ssl', label: 'Checkout protegido' },
+    ],
+    orderForm: {
+      eyebrow: 'Checkout placeholder',
+      description:
+        'Este bloque se conserva como placeholder temporal. El CTA principal usa la URL de checkout definida en DNA.',
+    },
+    successPage: {
+      eyebrow: 'Confirmacion',
+      title: 'Registro recibido',
+      description: 'Tu solicitud fue recibida correctamente. Configura aqui el mensaje posterior a la conversion.',
+      backLabel: 'Volver al inicio',
+    },
+    captureForm: {
+      eyebrow: 'Formulario enriquecido',
+      headlineFallback: 'Tambien puedes participar desde tu ciudad',
+      headlineWithLocation: 'Tambien puedes participar desde {city} y pagar en {currency}',
+      description: 'Completa tus datos para continuar con {productName} y conservar el contexto de tu pais.',
+      firstNameLabel: 'Nombre',
+      firstNamePlaceholder: 'Tu nombre',
+      lastNameLabel: 'Apellido',
+      lastNamePlaceholder: 'Tu apellido',
+      emailLabel: 'Email',
+      emailPlaceholder: 'tu@email.com',
+      whatsappLabel: 'WhatsApp',
+      whatsappPlaceholder: '79790873',
+      requiredError: 'Completa este campo.',
+      emailRequiredError: 'Por favor, ingresa tu email.',
+      invalidEmailError: 'Ingresa un email valido.',
+      whatsappRequiredError: 'Por favor, ingresa tu WhatsApp.',
+      invalidWhatsappError: 'Ingresa un numero de WhatsApp valido en formato internacional.',
+      submitError: 'No pudimos procesar tu solicitud en este momento. Intentalo nuevamente.',
+      submitLabel: 'Validar y enviar',
+      submittingLabel: 'Enviando...',
+    },
+    pricingCard: {
+      eyebrow: 'Oferta especial',
+      title: 'Activa {productName} hoy mismo',
+      baseValueLabel: 'Valor base',
+      basePriceLabel: 'Precio base',
+      subtotalLabel: 'Subtotal',
+      localTaxesLabel: 'Impuestos locales',
+      includedTaxesLabel: 'Incluidos',
+      checkoutTotalLabel: 'Total final en {providerName}',
+      equivalentLabel: 'Equivalente a {price} USD. Impuestos incluidos',
+      internationalPriceLabel: 'Precio internacional directo.',
+      buyButtonLabel: 'Comprar ahora',
+      unavailableLabel: 'Producto no disponible',
+      securePaymentLabel: 'Pago seguro',
+      processedByLabel: 'Procesado por {providerName}',
+      immediateAccessLabel: 'Acceso inmediato',
+    },
+    video: {
+      smartPosterEyebrow: productName,
+      smartPosterTitle: `Mira la presentacion de ${productName}`,
+      smartPosterDescription: 'Configura aqui la descripcion del video principal.',
+      smartPosterButtonText: 'Ver video',
+      ctaEyebrow: 'Oferta activa',
+      ctaHeadline: 'La oferta ya esta disponible',
+      ctaButtonText: 'Ir al checkout',
+      soundPrompt: 'Enciende tus parlantes',
+      placeholderText: 'Video placeholder',
     },
     testimonials: {
-      headline: 'Ellas también pensaban que “no podían”',
-      subtitle:
-        'Hoy ya están creando libros sensoriales, vendiendo sus productos y construyendo algo propio desde casa.',
+      headline: 'Testimonios configurables',
+      subtitle: 'Reemplaza estos placeholders por testimonios reales del nuevo funnel.',
       items: [
         {
-          name: 'Marisol Guzmán',
-          quote: '“Convirtió sus manualidades en una nueva oportunidad de vida”',
-          image: '/assets/testimonio1.webp',
+          name: 'Cliente 1',
+          quote: 'Testimonio placeholder 1.',
+          image: '/assets/funnel-placeholder.svg',
         },
         {
-          name: 'Andrea Garzón',
-          quote: '“Pasó de crear por hobby… a pensar como emprendedora”',
-          image: '/assets/testimonio2.webp',
+          name: 'Cliente 2',
+          quote: 'Testimonio placeholder 2.',
+          image: '/assets/funnel-placeholder.svg',
         },
         {
-          name: 'Aly Barrera',
-          quote: '“Corrigió errores en su negocio y logró sus primeras ventas”',
-          image: '/assets/testimonio3.webp',
-        },
-        {
-          name: 'Maleja Riaño',
-          quote: '“Encontró una comunidad y una habilidad que le quedará para siempre”',
-          image: '/assets/testimonio4.webp',
-        },
-        {
-          name: 'Aliz Rguez',
-          quote: '“Empezó sin saber cómo… y hoy tiene una ruta clara para cumplir su sueño”',
-          image: '/assets/testimonio5.webp',
+          name: 'Cliente 3',
+          quote: 'Testimonio placeholder 3.',
+          image: '/assets/funnel-placeholder.svg',
         },
       ],
     },
     faq: {
-      title: 'PREGUNTAS FRECUENTES',
+      title: 'Preguntas frecuentes',
       items: [
         {
-          question: '¿Necesito experiencia previa?',
-          answer: 'No.<br/><br/>Este programa está diseñado para principiantes completas. Vas a aprender paso a paso cómo crear, diseñar y vender tu primer libro sensorial aunque hoy sientas que “no eres creativa”.'
+          question: '¿Que debo configurar antes de publicar?',
+          answer:
+            'Actualiza el video, checkout, tracking, precios, garantias, testimonios, assets y copy desde <code>src/dna.config.ts</code> y las variables de entorno necesarias.',
         },
         {
-          question: '¿Cuándo puedo empezar?',
-          answer: 'Inmediatamente después de tu compra.<br/><br/>Recibirás acceso automático al curso para que puedas comenzar hoy mismo y avanzar a tu ritmo.'
+          question: '¿El acceso al checkout esta activo?',
+          answer:
+            'No por defecto. El valor inicial es un placeholder seguro. Reemplazalo por la URL real del procesador de pago del nuevo funnel.',
         },
-        {
-          question: '¿En cuánto tiempo puedo crear mi primer libro sensorial?',
-          answer: 'Muchas alumnas crean su primer libro en pocos días siguiendo el sistema paso a paso.<br/><br/>La velocidad dependerá del tiempo que le dediques, pero el objetivo es ayudarte a pasar de “no sé cómo empezar” a tener tu primer libro listo lo más rápido posible.'
-        },
-        {
-          question: '¿Qué incluye exactamente el programa?',
-          answer: 'Tendrás acceso a:<br/><br/>• Clases paso a paso<br/>• Modelos de libros listos para usar<br/>• Plantillas<br/>• Guías de materiales<br/>• Fotos y mockups<br/>• Estrategias para vender<br/>• Comunidad privada de apoyo<br/><br/>Todo pensado para que no tengas que empezar desde cero.'
-        },
-        {
-          question: '¿Voy a tener ayuda si me bloqueo o tengo dudas?',
-          answer: 'Sí.<br/><br/>Tendrás acceso a una comunidad privada donde podrás resolver dudas, compartir avances y recibir apoyo durante tu proceso.'
-        },
-        {
-          question: '¿Desde qué dispositivos puedo ver el curso?',
-          answer: 'Desde celular, tablet o computadora.<br/><br/>Puedes avanzar desde donde quieras y cuando quieras.'
-        },
-        {
-          question: '¿El acceso es para siempre?',
-          answer: 'Sí.<br/><br/>Pagas una sola vez y tendrás acceso ilimitado al contenido para revisarlo las veces que necesites.'
-        },
-        {
-          question: '¿El pago es seguro?',
-          answer: 'Sí.<br/><br/>La compra se procesa a través de Hotmart, una plataforma internacional utilizada por millones de personas y con sistemas de pago 100% seguros.'
-        },
-        {
-          question: '¿Qué métodos de pago aceptan?',
-          answer: 'Puedes pagar con tarjeta, PayPal y métodos locales disponibles en tu país.<br/><br/>Al hacer clic en el botón de acceso, verás automáticamente las opciones disponibles para ti.'
-        },
-        {
-          question: '¿Y si hoy siento que esto “no es para mí”?',
-          answer: 'Perfecto.<br/><br/>La mayoría de las alumnas también empezó con dudas, miedo o sin experiencia.<br/><br/>Por eso este programa existe: para darte un sistema claro y simple que te ayude a crear algo hermoso y empezar aunque hoy no sepas por dónde comenzar.'
-        }
-      ]
-    }
+      ],
+    },
   },
 } as const satisfies DnaConfig;
 
@@ -414,6 +622,7 @@ export const dnaNumericPrices = {
   totalValue: parsePrice(DNA.prices.totalValue),
   regular: parsePrice(DNA.prices.regular),
   regularPrice: parsePrice(DNA.prices.regularPrice),
+  vip: parsePrice(DNA.prices.vip),
 } as const;
 
 export function resolveDnaDocumentTheme(theme: DnaTheme = DNA.theme) {
@@ -430,18 +639,24 @@ export function resolveDnaThemeStyle() {
     '--font-body': `'${DNA.fonts.body}', sans-serif`,
     '--color-page': toRgbTriplet(DNA.surface.page),
     '--color-surface': toRgbTriplet(DNA.surface.panel),
+    '--color-surface-muted': toRgbTriplet(DNA.surface.muted),
     '--color-primary': toRgbTriplet(DNA.colors.primary),
     '--color-secondary': toRgbTriplet(DNA.colors.accent),
     '--color-highlight': toRgbTriplet(DNA.colors.highlight),
+    '--color-success': toRgbTriplet(DNA.colors.success),
+    '--color-warning': toRgbTriplet(DNA.colors.warning),
+    '--color-error': toRgbTriplet(DNA.colors.error),
     '--color-accent': toRgbTriplet(DNA.cta.bg),
-    '--color-border-subtle': toRgbTriplet(DNA.text.main),
+    '--color-border-subtle': toRgbTriplet(DNA.text.subtle),
     '--color-text-main': toRgbTriplet(DNA.text.main),
     '--color-text-muted': toRgbTriplet(DNA.text.muted),
+    '--color-text-subtle': toRgbTriplet(DNA.text.subtle),
+    '--color-text-inverse': toRgbTriplet(DNA.text.inverse),
     '--color-brand-primary': toRgbTriplet(DNA.colors.primary),
     '--color-brand-accent': toRgbTriplet(DNA.colors.accent),
     '--color-cta-base': toRgbTriplet(DNA.cta.bg),
     '--color-cta-hover': toRgbTriplet(DNA.cta.hoverBg),
     '--color-cta-text': toRgbTriplet(DNA.cta.text),
-    '--color-surface-bump': toRgbTriplet(DNA.surface.panel),
+    '--color-surface-bump': toRgbTriplet(DNA.surface.bump),
   } as const;
 }

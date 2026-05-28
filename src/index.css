@@ -9,12 +9,19 @@
   :root[data-theme='theme-expert'] {
     --color-page: 255 255 255;
     --color-surface: 255 255 255;
-    --color-primary: 107 67 155;
-    --color-secondary: 216 99 184;
-    --color-accent: 216 99 184;
-    --color-border-subtle: 207 197 220;
-    --color-text-main: 45 32 61;
-    --color-text-muted: 95 74 115;
+    --color-surface-muted: 244 241 235;
+    --color-primary: 47 111 115;
+    --color-secondary: 214 101 64;
+    --color-accent: 214 101 64;
+    --color-highlight: 241 184 77;
+    --color-success: 49 151 112;
+    --color-warning: 191 128 38;
+    --color-error: 190 58 58;
+    --color-border-subtle: 122 130 139;
+    --color-text-main: 31 37 44;
+    --color-text-muted: 86 94 104;
+    --color-text-subtle: 122 130 139;
+    --color-text-inverse: 255 255 255;
     --font-sans: 'Montserrat', sans-serif;
     --font-body: 'Open Sans', sans-serif;
   }
@@ -23,12 +30,19 @@
   :root[data-theme='light-clean'] {
     --color-page: 4 5 12;
     --color-surface: 11 17 32;
+    --color-surface-muted: 20 28 45;
     --color-primary: 37 99 235;
     --color-secondary: 8 13 25;
     --color-accent: 6 182 212;
+    --color-highlight: 125 211 252;
+    --color-success: 34 197 94;
+    --color-warning: 245 158 11;
+    --color-error: 239 68 68;
     --color-border-subtle: 71 85 105;
     --color-text-main: 248 250 252;
     --color-text-muted: 148 163 184;
+    --color-text-subtle: 100 116 139;
+    --color-text-inverse: 15 23 42;
     --font-sans: 'Montserrat', sans-serif;
     --font-body: 'Open Sans', sans-serif;
   }
@@ -43,10 +57,10 @@
   }
 
   .theme-expert {
-    --color-brand-primary: 107 67 155;
-    --color-brand-accent: 216 99 184;
-    --color-cta-base: 216 99 184;
-    --color-cta-hover: 194 76 163;
+    --color-brand-primary: 47 111 115;
+    --color-brand-accent: 214 101 64;
+    --color-cta-base: 214 101 64;
+    --color-cta-hover: 190 80 49;
     --color-surface-bump: 255 255 255;
     font-family: var(--font-body);
   }

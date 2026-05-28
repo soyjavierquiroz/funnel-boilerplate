@@ -1,6 +1,7 @@
 import { ChangeEvent, FormEvent, useMemo, useState } from 'react';
 import { PricingCard } from './PricingCard';
 import { SmartPhoneInput } from './SmartPhoneInput';
+import { DNA } from '../../../dna.config';
 import funnelConfig, { pricingProductKeys } from '../../../core/config/funnel.config';
 import { useVisitor } from '../../../core/visitor/VisitorContext';
 import analytics from '../../../core/services/analytics';
@@ -55,15 +56,18 @@ export function AdvancedCaptureForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitError, setSubmitError] = useState('');
+  const formCopy = DNA.copy.captureForm;
 
   const dynamicHeadline = useMemo(() => {
     if (!isLoading && visitorData?.city && visitorData?.currency) {
       const friendlyCurrency = getFriendlyCurrencyName(visitorData.currency);
-      return `También puedes participar desde ${visitorData.city} y pagar en ${friendlyCurrency}`;
+      return formCopy.headlineWithLocation
+        .replace('{city}', visitorData.city)
+        .replace('{currency}', friendlyCurrency);
     }
 
-    return 'También puedes participar desde tu ciudad';
-  }, [isLoading, visitorData?.city, visitorData?.currency]);
+    return formCopy.headlineFallback;
+  }, [formCopy.headlineFallback, formCopy.headlineWithLocation, isLoading, visitorData?.city, visitorData?.currency]);
 
   const canSubmit = useMemo(() => {
     return (
@@ -92,23 +96,23 @@ export function AdvancedCaptureForm() {
     const nextErrors: FormErrors = {};
 
     if (!firstName.trim()) {
-      nextErrors.firstName = 'Completa este campo.';
+      nextErrors.firstName = formCopy.requiredError;
     }
 
     if (!lastName.trim()) {
-      nextErrors.lastName = 'Completa este campo.';
+      nextErrors.lastName = formCopy.requiredError;
     }
 
     if (!email.trim()) {
-      nextErrors.email = 'Por favor, ingresa tu email.';
+      nextErrors.email = formCopy.emailRequiredError;
     } else if (!isValidEmail(email.trim())) {
-      nextErrors.email = 'Ingresa un email valido.';
+      nextErrors.email = formCopy.invalidEmailError;
     }
 
     if (!whatsapp.trim()) {
-      nextErrors.whatsapp = 'Por favor, ingresa tu WhatsApp.';
+      nextErrors.whatsapp = formCopy.whatsappRequiredError;
     } else if (!isWhatsappValid) {
-      nextErrors.whatsapp = 'Ingresa un numero de WhatsApp valido en formato internacional.';
+      nextErrors.whatsapp = formCopy.invalidWhatsappError;
     }
 
     setErrors(nextErrors);
@@ -164,7 +168,7 @@ export function AdvancedCaptureForm() {
       window.location.assign(resolveSuccessRedirectUrl());
     } catch (error) {
       console.error('[AdvancedCaptureForm] webhook submission failed', error);
-      setSubmitError('No pudimos procesar tu solicitud en este momento. Inténtalo nuevamente.');
+      setSubmitError(formCopy.submitError);
     } finally {
       setIsSubmitting(false);
     }
@@ -174,10 +178,10 @@ export function AdvancedCaptureForm() {
     <section className="space-y-6">
       <section className="rounded-2xl border border-border-subtle bg-surface p-5 shadow-xl backdrop-blur md:p-7">
         <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Formulario enriquecido</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">{formCopy.eyebrow}</p>
           <h2 className="text-xl font-bold text-text-main md:text-2xl">{dynamicHeadline}</h2>
           <p className="text-sm text-text-muted">
-            Completa tus datos para continuar con {funnelConfig.brandName} y conservar el contexto de tu país.
+            {formCopy.description.replace('{productName}', funnelConfig.brandName)}
           </p>
         </div>
 
@@ -185,7 +189,7 @@ export function AdvancedCaptureForm() {
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <label htmlFor="video-first-name" className="mb-2 block text-sm font-medium text-text-main">
-                Nombre
+                {formCopy.firstNameLabel}
               </label>
               <input
                 id="video-first-name"
@@ -196,17 +200,17 @@ export function AdvancedCaptureForm() {
                   'h-11 w-full rounded-md border bg-page px-4 text-base text-text-main',
                   'placeholder:text-text-muted focus:outline-none focus:ring-2',
                   errors.firstName
-                    ? 'border-red-400 focus:border-red-500 focus:ring-red-500/30'
+                    ? 'border-error focus:border-error focus:ring-error/30'
                     : 'border-border-subtle focus:border-primary focus:ring-primary/20',
                 ].join(' ')}
-                placeholder="Tu nombre"
+                placeholder={formCopy.firstNamePlaceholder}
               />
-              {errors.firstName ? <p className="mt-2 text-xs text-red-400">{errors.firstName}</p> : null}
+              {errors.firstName ? <p className="mt-2 text-xs text-error">{errors.firstName}</p> : null}
             </div>
 
             <div>
               <label htmlFor="video-last-name" className="mb-2 block text-sm font-medium text-text-main">
-                Apellido
+                {formCopy.lastNameLabel}
               </label>
               <input
                 id="video-last-name"
@@ -217,18 +221,18 @@ export function AdvancedCaptureForm() {
                   'h-11 w-full rounded-md border bg-page px-4 text-base text-text-main',
                   'placeholder:text-text-muted focus:outline-none focus:ring-2',
                   errors.lastName
-                    ? 'border-red-400 focus:border-red-500 focus:ring-red-500/30'
+                    ? 'border-error focus:border-error focus:ring-error/30'
                     : 'border-border-subtle focus:border-primary focus:ring-primary/20',
                 ].join(' ')}
-                placeholder="Tu apellido"
+                placeholder={formCopy.lastNamePlaceholder}
               />
-              {errors.lastName ? <p className="mt-2 text-xs text-red-400">{errors.lastName}</p> : null}
+              {errors.lastName ? <p className="mt-2 text-xs text-error">{errors.lastName}</p> : null}
             </div>
           </div>
 
           <div>
             <label htmlFor="video-email" className="mb-2 block text-sm font-medium text-text-main">
-              Email
+              {formCopy.emailLabel}
             </label>
             <input
               id="video-email"
@@ -239,18 +243,18 @@ export function AdvancedCaptureForm() {
                 'h-11 w-full rounded-md border bg-page px-4 text-base text-text-main',
                 'placeholder:text-text-muted focus:outline-none focus:ring-2',
                 errors.email
-                  ? 'border-red-400 focus:border-red-500 focus:ring-red-500/30'
+                  ? 'border-error focus:border-error focus:ring-error/30'
                   : 'border-border-subtle focus:border-primary focus:ring-primary/20',
               ].join(' ')}
-              placeholder="tu@email.com"
+              placeholder={formCopy.emailPlaceholder}
             />
-            {errors.email ? <p className="mt-2 text-xs text-red-400">{errors.email}</p> : null}
+            {errors.email ? <p className="mt-2 text-xs text-error">{errors.email}</p> : null}
           </div>
 
           <SmartPhoneInput
             id="video-whatsapp"
             name="whatsapp"
-            label="WhatsApp"
+            label={formCopy.whatsappLabel}
             value={whatsapp}
             onChange={(nextValue) => {
               setWhatsapp(nextValue);
@@ -262,7 +266,7 @@ export function AdvancedCaptureForm() {
             required
             defaultCountry="BO"
             autoDetectCountry
-            placeholder="79790873"
+            placeholder={formCopy.whatsappPlaceholder}
           />
 
           <input type="hidden" name="visitor_ip" value={visitorData?.ip || ''} />
@@ -272,7 +276,7 @@ export function AdvancedCaptureForm() {
           <input type="hidden" name="visitor_currency" value={visitorData?.currency || ''} />
 
           {submitError ? (
-            <div className="rounded-lg border border-red-400/40 bg-red-500/10 p-3 text-sm text-red-300">{submitError}</div>
+            <div className="rounded-lg border border-error/40 bg-error/10 p-3 text-sm text-error">{submitError}</div>
           ) : null}
 
           <button
@@ -280,7 +284,7 @@ export function AdvancedCaptureForm() {
             disabled={!canSubmit}
             className="h-12 w-full rounded-xl bg-primary px-6 text-base font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isSubmitting ? 'Enviando...' : 'Validar y Enviar'}
+            {isSubmitting ? formCopy.submittingLabel : formCopy.submitLabel}
           </button>
         </form>
       </section>

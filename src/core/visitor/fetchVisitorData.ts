@@ -1,3 +1,4 @@
+import { DNA } from '../../dna.config';
 import type { VisitorData } from './types';
 
 const VISITOR_STORAGE_KEY = 'visitor_data';
@@ -47,7 +48,7 @@ export async function fetchVisitorData(): Promise<VisitorData | null> {
   }
 
   try {
-    const response = await fetch('https://ipapi.co/json/', {
+    const response = await fetch(DNA.tracking.visitorApiUrl, {
       method: 'GET',
       headers: {
         Accept: 'application/json',

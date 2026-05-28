@@ -16,6 +16,7 @@ export interface MutedPreviewConfig {
 export interface CallToActionConfig {
   enabled: boolean;
   displayAtSeconds: number;
+  eyebrow?: string;
   headline: string;
   buttonText: string;
   buttonUrl: string;
@@ -106,7 +107,7 @@ export interface FunnelFormsConfig {
 
 export interface FunnelPricingProductConfig {
   basePriceUSD: number;
-  hotmartProductId: string;
+  checkoutProductId: string;
   checkoutUrl: string;
 }
 
@@ -149,75 +150,66 @@ export const pricingProductKeys = {
 } as const;
 
 export const funnelConfig: FunnelConfig = {
-  brandName: DNA.copy.productName,
-  domain: import.meta.env.VITE_DOMAIN ?? 'localhost',
+  brandName: DNA.productName,
+  domain: DNA.domain,
   theme: resolveDnaFunnelTheme(),
   media: {
     heroVideo: {
       enabled: true,
-      provider: 'bunnynet',
-      videoId: DNA.vslVideoId,
-      revealAtSeconds: 10, //vv
+      provider: DNA.videos.vsl.provider,
+      videoId: DNA.videos.vsl.videoId,
+      revealAtSeconds: DNA.videos.vsl.revealAtSeconds,
       vslMode: false,
       resumePlayback: true,
       smartPoster: {
         enabled: false,
-        imageUrl: '',
-        eyebrow: DNA.copy.productName,
-        title: `Mira la presentacion de ${DNA.copy.productName}`,
-        description: 'Descubre la energia, las modalidades y la preparacion para vivir la ceremonia.',
-        buttonText: 'Ver video',
+        imageUrl: DNA.videos.vsl.posterImage,
+        eyebrow: DNA.copy.video.smartPosterEyebrow,
+        title: DNA.copy.video.smartPosterTitle,
+        description: DNA.copy.video.smartPosterDescription,
+        buttonText: DNA.copy.video.smartPosterButtonText,
       },
-      vslProgressBarColor: '#d6a7c8',
+      callToAction: {
+        enabled: false,
+        displayAtSeconds: DNA.videos.vsl.ctaDisplayAtSeconds,
+        eyebrow: DNA.copy.video.ctaEyebrow,
+        headline: DNA.copy.video.ctaHeadline,
+        buttonText: DNA.copy.video.ctaButtonText,
+        buttonUrl: DNA.checkoutUrl,
+        isDismissible: true,
+      },
+      vslProgressBarColor: DNA.videos.vsl.progressBarColor,
     },
   },
   content: {
     mainVsl: {
-      eyebrow: 'Ceremonia Blanca',
+      eyebrow: DNA.copy.productName,
       headline: DNA.copy.headline,
-      subheadline:
-        'Elige la modalidad ideal para ti, reserva tu espacio y recibe la guia de preparacion para la ceremonia.',
+      subheadline: DNA.copy.subheadline,
       ctaLabel: DNA.copy.ctaText,
       ctaHref: '#checkout',
-      certaintyText: 'Registro guiado en 2 pasos',
+      certaintyText: DNA.copy.specialOfferGuarantee,
     },
     bonusStack: {
-      eyebrow: 'Experiencia',
-      title: 'Lo que recibes al reservar tu lugar en la ceremonia.',
-      description:
-        'Preparacion previa, acceso a la experiencia elegida y seguimiento por WhatsApp para que llegues lista a vivir la activacion.',
+      eyebrow: DNA.copy.fastActionBonus.title,
+      title: DNA.copy.offerStackTitle,
+      description: DNA.copy.fastActionBonus.subtitle,
       pricingSourceProductKey: pricingProductKeys.ofertaPrincipal,
-      bonuses: [
-        {
-          id: 'bonus_01',
-          eyebrow: 'Incluye',
-          title: 'Videos de preparacion',
-          description: 'Contenido previo para abrir tu energia y llegar alineada a la ceremonia.',
-          valueUSD: 10,
-        },
-        {
-          id: 'bonus_02',
-          eyebrow: 'Incluye',
-          title: 'Acompanamiento por WhatsApp',
-          description: 'Indicaciones y detalles finales enviados al grupo oficial de la Magia.',
-          valueUSD: 15,
-        },
-        {
-          id: 'bonus_03',
-          eyebrow: 'Incluye',
-          title: 'Acceso a tu modalidad elegida',
-          description: 'Participacion virtual por Zoom o asistencia presencial en Cochabamba.',
-          valueUSD: 20,
-        },
-      ],
+      bonuses: DNA.copy.modules.map((module, index) => ({
+        id: `bonus_${index + 1}`,
+        eyebrow: DNA.copy.offerSummary.includedBadgeLabel,
+        title: module.title,
+        description: module.description,
+        valueUSD: Number(module.value.replace(/[^\d.]/g, '')) || 0,
+      })),
     },
   },
   forms: {
     capture: {
       enabled: true,
-      webhookUrl: 'https://hook.us1.make.com/test-webhook-url',
-      successRedirectType: 'url',
-      successRedirectUrl: '/confirmacion',
+      webhookUrl: DNA.forms.captureWebhookUrl,
+      successRedirectType: DNA.forms.successRedirectType,
+      successRedirectUrl: DNA.forms.successRedirectUrl,
     },
   },
   pricing: {
@@ -226,31 +218,31 @@ export const funnelConfig: FunnelConfig = {
     products: {
       [pricingProductKeys.ofertaPrincipal]: {
         basePriceUSD: dnaNumericPrices.main,
-        hotmartProductId: 'MAGIA_VIRTUAL',
-        checkoutUrl: '/confirmacion',
+        checkoutProductId: DNA.checkout.productIds.main,
+        checkoutUrl: DNA.checkoutUrl,
       },
       [pricingProductKeys.orderBump]: {
         basePriceUSD: dnaNumericPrices.bump,
-        hotmartProductId: 'MAGIA_PRESENCIAL',
-        checkoutUrl: '/confirmacion',
+        checkoutProductId: DNA.checkout.productIds.bump,
+        checkoutUrl: DNA.checkoutUrl,
       },
       [pricingProductKeys.upsellContinuidad]: {
         basePriceUSD: dnaNumericPrices.main,
-        hotmartProductId: 'MAGIA_PREPARACION',
-        checkoutUrl: '/confirmacion',
+        checkoutProductId: DNA.checkout.productIds.continuity,
+        checkoutUrl: DNA.checkoutUrl,
       },
       [pricingProductKeys.upsellVip]: {
-        basePriceUSD: 197,
-        hotmartProductId: 'MAGIA_VIP',
-        checkoutUrl: '/confirmacion',
+        basePriceUSD: dnaNumericPrices.vip,
+        checkoutProductId: DNA.checkout.productIds.vip,
+        checkoutUrl: DNA.checkoutUrl,
       },
     },
   },
   integrations: {
-    siteId: import.meta.env.VITE_SITE_ID || 'SENSORIAL',
-    capiWebhookUrl: import.meta.env.VITE_CAPI_RELAY_URL || '',
-    metaPixelId: import.meta.env.VITE_META_PIXEL_ID || '',
-    tiktokPixelId: import.meta.env.VITE_TIKTOK_PIXEL_ID || '',
+    siteId: DNA.tracking.siteId,
+    capiWebhookUrl: DNA.tracking.capiWebhookUrl,
+    metaPixelId: DNA.tracking.metaPixelId,
+    tiktokPixelId: DNA.tracking.tiktokPixelId,
   },
 };
 

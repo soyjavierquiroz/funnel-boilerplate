@@ -1,4 +1,5 @@
 import funnelConfig from '../config/funnel.config';
+import { DNA } from '../../dna.config';
 
 type AnalyticsPrimitive = string | number | boolean | null | undefined;
 
@@ -114,9 +115,9 @@ declare global {
 }
 
 const META_PIXEL_SCRIPT_ID = 'boilerplate-meta-pixel-script';
-const META_PIXEL_SCRIPT_URL = 'https://connect.facebook.net/en_US/fbevents.js';
+const META_PIXEL_SCRIPT_URL = DNA.tracking.metaPixelScriptUrl;
 const TIKTOK_PIXEL_SCRIPT_ID = 'boilerplate-tiktok-pixel-script';
-const TIKTOK_PIXEL_SCRIPT_BASE_URL = 'https://analytics.tiktok.com/i18n/pixel/events.js';
+const TIKTOK_PIXEL_SCRIPT_BASE_URL = DNA.tracking.tiktokPixelScriptBaseUrl;
 const ANALYTICS_STORAGE_PREFIX = 'boilerplate.analytics';
 const ATTRIBUTION_STORAGE_KEY = `${ANALYTICS_STORAGE_PREFIX}.attribution`;
 const ANONYMOUS_ID_STORAGE_KEY = `${ANALYTICS_STORAGE_PREFIX}.anonymous_id`;

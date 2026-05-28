@@ -7,7 +7,6 @@ export function ExpertProductPresentation() {
       style={{ backgroundColor: 'rgb(var(--color-page))' }}
     >
       <div className="mx-auto max-w-[1000px]">
-        {/* Pre-Título */}
         <h2 
           className="text-xl md:text-2xl font-bold uppercase tracking-widest mb-2"
           style={{ color: 'rgb(var(--color-text-muted))' }}
@@ -15,7 +14,6 @@ export function ExpertProductPresentation() {
           {DNA.copy.presentationPreTitle}
         </h2>
         
-        {/* Título Principal Inyectado */}
         <h1 
           className="text-[2rem] md:text-[3.5rem] font-black mb-10 leading-tight uppercase" 
           style={{ 
@@ -25,15 +23,13 @@ export function ExpertProductPresentation() {
           dangerouslySetInnerHTML={{ __html: DNA.copy.presentationTitle }}
         />
         
-        {/* Mockup del Producto */}
         <div className="relative mx-auto w-full max-w-[850px] mt-8">
-          {/* Glow usando el color primario del DNA */}
           <div 
             className="absolute inset-0 blur-[100px] opacity-15 rounded-full"
             style={{ backgroundColor: 'rgb(var(--color-brand-primary))' }}
           ></div>
           <img 
-            src="/assets/curso.webp" 
+            src={DNA.assets.productImage}
             alt={DNA.copy.productName}
             className="relative z-10 w-full h-auto drop-shadow-2xl hover:scale-[1.02] transition-transform duration-500"
           />

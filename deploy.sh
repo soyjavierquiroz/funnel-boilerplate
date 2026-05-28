@@ -1,19 +1,21 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Iniciando despliegue de Sensorial..."
+DOMAIN="${VITE_DOMAIN:-aprendermotores.com}"
 
-echo "📦 1. Compilando el nuevo ADN..."
+echo "Iniciando despliegue de ${DOMAIN}..."
+
+echo "1. Compilando el nuevo ADN..."
 npm run build
 
-echo "🔄 2. Sincronizando y destruyendo zombies..."
+echo "2. Sincronizando dist/ hacia public_html/..."
 rsync -avz --delete dist/ ../public_html/
 
-echo "🔐 3. Saneando permisos..."
+echo "3. Saneando permisos..."
 chown -R nobody:nogroup ../public_html/
 
-echo "🧹 4. Purgando caché nuclear de LiteSpeed..."
+echo "4. Purgando cache de LiteSpeed..."
 rm -rf /usr/local/lsws/cachedata/*
 systemctl restart lsws
 
-echo "✅ ¡Despliegue completado con éxito!"
+echo "Despliegue completado."

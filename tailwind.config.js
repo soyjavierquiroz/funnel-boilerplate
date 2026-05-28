@@ -16,6 +16,7 @@ export default {
         page: 'rgb(var(--color-page) / <alpha-value>)',
         surface: {
           DEFAULT: 'rgb(var(--color-surface) / <alpha-value>)',
+          muted: 'rgb(var(--color-surface-muted) / <alpha-value>)',
           bump: 'rgb(var(--color-surface-bump) / <alpha-value>)',
         },
         brand: {
@@ -26,9 +27,14 @@ export default {
           DEFAULT: 'rgb(var(--color-cta-base) / <alpha-value>)',
           hover: 'rgb(var(--color-cta-hover) / <alpha-value>)',
         },
+        success: 'rgb(var(--color-success) / <alpha-value>)',
+        warning: 'rgb(var(--color-warning) / <alpha-value>)',
+        error: 'rgb(var(--color-error) / <alpha-value>)',
         'border-subtle': 'rgb(var(--color-border-subtle) / <alpha-value>)',
         'text-main': 'rgb(var(--color-text-main) / <alpha-value>)',
         'text-muted': 'rgb(var(--color-text-muted) / <alpha-value>)',
+        'text-subtle': 'rgb(var(--color-text-subtle) / <alpha-value>)',
+        'text-inverse': 'rgb(var(--color-text-inverse) / <alpha-value>)',
       },
     },
   },

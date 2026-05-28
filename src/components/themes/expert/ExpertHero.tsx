@@ -20,16 +20,16 @@ export function ExpertHero({ onReveal }: ExpertHeroProps) {
   };
 
   return (
-    <section className="border-b border-gray-200 bg-white pb-[60px]">
+    <section className="border-b border-border-subtle/20 bg-surface pb-[60px]">
       <div className="mx-auto max-w-[1225px] px-4 pt-4 sm:px-6">
         <div className="mx-auto mt-4 w-full max-w-[1200px] md:mt-8 xl:max-w-[1300px]">
-          <h1 className="font-sans mt-[20px] text-center text-[1.5rem] font-black uppercase leading-[1.1] tracking-[-0.02em] text-gray-900 sm:text-[2.4rem] lg:text-[3rem]">
+          <h1 className="font-sans mt-[20px] text-center text-[1.5rem] font-black uppercase leading-[1.1] text-text-main sm:text-[2.4rem] lg:text-[3rem]">
             {DNA.copy.headline}{' '}
             <span className="text-brand-primary">{DNA.copy.headlineHighlight}</span>
           </h1>
 
           {DNA.copy.subheadline && (
-            <p className="font-sans mx-auto mt-4 w-full text-center text-[1.1rem] font-medium leading-relaxed text-gray-700 sm:mt-6 sm:text-[1.3rem]">
+            <p className="font-sans mx-auto mt-4 w-full text-center text-[1.1rem] font-medium leading-relaxed text-text-muted sm:mt-6 sm:text-[1.3rem]">
               {DNA.copy.subheadline}
             </p>
           )}
@@ -37,15 +37,15 @@ export function ExpertHero({ onReveal }: ExpertHeroProps) {
 
         <div className="mx-auto mt-[10px] flex max-w-[850px] flex-col items-center md:mt-6">
           <div className="w-full">
-            <div className="relative flex w-full flex-col overflow-hidden rounded-2xl border-[4px] border-brand-primary bg-gray-900 shadow-2xl md:border-[6px]">
-              <div className="flex items-center justify-center gap-[5px] bg-brand-accent px-[5px] py-[11px] text-center text-white">
+            <div className="relative flex w-full flex-col overflow-hidden rounded-2xl border-[4px] border-brand-primary bg-text-main shadow-2xl md:border-[6px]">
+              <div className="flex items-center justify-center gap-[5px] bg-brand-accent px-[5px] py-[11px] text-center text-text-inverse">
                 <Volume2 className="h-4 w-4 shrink-0" />
                 <p className="font-sans text-[12px] font-bold uppercase tracking-[0.08em] leading-[1.3] sm:text-[16px] sm:leading-none">
-                  Enciende tus parlantes
+                  {DNA.copy.video.soundPrompt}
                 </p>
               </div>
 
-              <div className="relative w-full aspect-video overflow-hidden bg-gray-900">
+              <div className="relative w-full aspect-video overflow-hidden bg-text-main">
                 {heroVideo.enabled ? (
                   <div className="absolute inset-0 h-full w-full">
                     <ExpertVideoPlayer
@@ -66,8 +66,8 @@ export function ExpertHero({ onReveal }: ExpertHeroProps) {
                     />
                   </div>
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-gray-900 text-white/50">
-                    Video Placeholder
+                  <div className="flex h-full w-full items-center justify-center bg-text-main text-text-inverse/50">
+                    {DNA.copy.video.placeholderText}
                   </div>
                 )}
               </div>

@@ -3,7 +3,6 @@ import { Clock } from 'lucide-react';
 import { DNA } from '../../../dna.config';
 
 export function ExpertOfferBreakdown() {
-  // Inicializamos el contador en 60 minutos (3600 segundos)
   const [timeLeft, setTimeLeft] = useState(3600);
 
   useEffect(() => {
@@ -16,7 +15,6 @@ export function ExpertOfferBreakdown() {
     return () => clearInterval(timer);
   }, [timeLeft]);
 
-  // Formateador para pasar los segundos a formato MM:SS
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
   const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
@@ -25,7 +23,6 @@ export function ExpertOfferBreakdown() {
     <section className="px-4 py-16 sm:px-6" style={{ backgroundColor: 'rgba(var(--color-primary), 0.03)' }}>
       <div className="mx-auto max-w-[1000px]">
         
-        {/* Entregables del Paquete */}
         <div className="space-y-8">
           {DNA.copy.modules.map((module, index) => (
             <div
@@ -60,14 +57,13 @@ export function ExpertOfferBreakdown() {
                     color: 'rgb(var(--color-brand-accent))',
                   }}
                 >
-                  Valorado en {module.value}
+                  {DNA.copy.offerSummary.valuedAtLabel} {module.value}
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Bloque de Bono de Acción Rápida con CONTADOR REGRESIVO INTEGRADO */}
         {DNA.copy.fastActionBonus && (
           <div
             className="relative mt-16 overflow-hidden rounded-3xl border-2 p-8 text-center shadow-2xl transition-transform hover:-translate-y-1 md:p-12"
@@ -102,14 +98,13 @@ export function ExpertOfferBreakdown() {
               {DNA.copy.fastActionBonus.subtitle}
             </p>
 
-            {/* RELOJ REGRESIVO DE IMPACTO */}
             <div 
               className="inline-flex flex-col sm:flex-row items-center justify-center gap-3 px-6 py-3 rounded-2xl border shadow-inner bg-gray-50/50 animate-pulse"
               style={{ borderColor: 'rgba(var(--color-brand-primary), 0.15)' }}
             >
               <div className="flex items-center gap-2 font-black text-xs md:text-sm uppercase tracking-wider" style={{ color: 'rgb(var(--color-text-main))' }}>
                 <Clock className="h-5 w-5" style={{ color: 'rgb(var(--color-brand-primary))' }} />
-                <span>Esta oportunidad expira en:</span>
+                <span>{DNA.copy.offerSummary.opportunityExpiresLabel}</span>
               </div>
               <div 
                 className="font-mono text-2xl font-black px-4 py-1 rounded-xl text-white tracking-widest shadow-md"

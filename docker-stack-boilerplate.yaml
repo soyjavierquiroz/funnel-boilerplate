@@ -1,10 +1,12 @@
 version: "3.8"
 
+# LEGACY: kept only for older Docker Swarm deployments. The active CyberPanel
+# flow builds dist/ and syncs it to public_html/ with deploy.sh.
 services:
   boilerplate-v1:
     image: nginx:1.27-alpine
     volumes:
-      - /opt/webs/boilerplate/dist:/usr/share/nginx/html:ro
+      - /opt/webs/${FUNNEL_DOMAIN:-aprendermotores.com}/dist:/usr/share/nginx/html:ro
     command:
       - /bin/sh
       - -c
@@ -41,7 +43,7 @@ services:
         - "traefik.enable=true"
         - "traefik.docker.network=traefik_public"
         - "traefik.http.services.boilerplate_v1.loadbalancer.server.port=80"
-        - "traefik.http.routers.boilerplate_v1.rule=Host(`javierquiroz.com`) || Host(`www.javierquiroz.com`)"
+        - "traefik.http.routers.boilerplate_v1.rule=Host(`${FUNNEL_DOMAIN:-aprendermotores.com}`) || Host(`www.${FUNNEL_DOMAIN:-aprendermotores.com}`)"
         - "traefik.http.routers.boilerplate_v1.entrypoints=websecure"
         - "traefik.http.routers.boilerplate_v1.tls=true"
         - "traefik.http.routers.boilerplate_v1.tls.certresolver=le"

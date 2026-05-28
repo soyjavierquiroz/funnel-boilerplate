@@ -15,6 +15,7 @@ export interface MutedPreviewConfig {
 export interface CallToActionConfig {
   enabled: boolean;
   displayAtSeconds: number;
+  eyebrow?: string;
   headline: string;
   buttonText: string;
   buttonUrl: string;

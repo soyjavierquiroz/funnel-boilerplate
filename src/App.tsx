@@ -12,8 +12,8 @@ function RoutedApp() {
   useEffect(() => {
     const documentTheme = resolveDnaDocumentTheme();
     const nextTitle = isSuccessRoute
-      ? `${DNA.copy.productName} - Confirmacion`
-      : `${DNA.copy.productName} - Registro`;
+      ? `${DNA.copy.productName} - ${DNA.copy.successPage.eyebrow}`
+      : DNA.seo.title;
 
     document.documentElement.setAttribute('data-theme', documentTheme);
     document.title = nextTitle;

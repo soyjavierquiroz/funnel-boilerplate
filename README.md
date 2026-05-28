@@ -1,80 +1,42 @@
-# Factory Boilerplate
+# VSL Funnel Boilerplate
 
-Boilerplate para clonar funnels VSL donde el tema visual, el pricing, el copy y el video principal se gobiernan desde `src/dna.config.ts`.
+Boilerplate limpio para clonar funnels VSL sin arrastrar identidad, checkout, tracking, copy o estilos del proyecto anterior.
 
-## Protocolo de Clonación Chilita
+## Configuracion principal
 
-1. Clona el boilerplate.
+- `src/dna.config.ts`: identidad, dominio, producto, checkout, video, pricing, copy, tracking, assets y theme.
+- `.env.example`: variables necesarias para build/runtime. Copialas a `.env` en cada clon.
+- `src/index.css`: tokens CSS base y ajustes globales.
+- `tailwind.config.js`: tokens semanticos consumidos por componentes.
 
-```bash
-git clone git@github.com:soyjavierquiroz/boilerplate.git
-cd boilerplate
-```
+Valores seguros actuales:
 
-2. Edita `src/dna.config.ts`.
+- `productName`: `Aprender Motores`
+- `domain`: `aprendermotores.com`
+- `siteId`: `APRENDER_MOTORES`
+- `checkoutUrl`: placeholder editable
+- `vslVideoId`: placeholder editable
 
-Actualiza al menos estos bloques antes de tu primer build:
-
-- `theme`
-- `colors`
-- `copy`
-- `prices`
-- `vslVideoId`
-
-Todo el baseline productivo toma esos valores para renderizar el tema activo, aplicar colores de marca y alimentar el pricing principal del funnel.
-
-3. Genera el build y publica el artefacto estatico.
-
-En el servidor CyberPanel actual, el flujo verificado es:
+## Scripts
 
 ```bash
-npm ci
+npm run typecheck
 npm run build
-./deploy.sh
+npm run lint
 ```
 
-`deploy.sh` sincroniza `dist/` hacia `../public_html/`, que es el webroot runtime del dominio. Ejecutalo solo desde el servidor correcto, porque usa `rsync --delete`, purga cache de LiteSpeed y reinicia `lsws`.
+No ejecutes `npm audit fix` como parte de la clonacion.
 
-Si necesitas un build reproducible sin instalar Node localmente, tambien puedes generar `dist/` con Docker:
+## Clonar un nuevo funnel
 
-```bash
-docker run --rm \
-  -v "$PWD":/app \
-  -w /app \
-  node:20-alpine \
-  sh -lc 'npm ci && npm run build'
-```
+1. Actualiza `src/dna.config.ts` con producto, copy, precios, assets, checkout y video.
+2. Copia `.env.example` a `.env` y completa dominio, metadata, tracking y URLs runtime.
+3. Reemplaza `public/assets/funnel-placeholder.svg` por los assets reales o agrega nuevas rutas en `DNA.assets`.
+4. Ajusta colores en `DNA.colors`, `DNA.surface`, `DNA.text` y `DNA.cta`.
+5. Valida con `npm run typecheck`, `npm run build` y `npm run lint`.
 
-El artefacto listo para publicar queda en `dist/`.
+## Deploy
 
-## Notas Operativas
+`dist/` es un artefacto generado y no debe editarse a mano. En CyberPanel/LiteSpeed, `public/.htaccess` queda trackeado para fallback SPA.
 
-- `src/App.tsx` renderiza directamente el tema definido en `DNA.theme`.
-- El tema activo confirmado en el arbol actual es `src/components/themes/expert/`.
-- Todavia existen referencias legacy a `panda` en tipos/CSS/docs, pero no existe `src/components/themes/panda/`.
-- `src/core/config/funnel.config.ts` consume `DNA.copy`, `DNA.prices` y `DNA.vslVideoId` para mantener el funnel alineado con el clon.
-- Ver `CLEANUP_AUDIT.md` antes de eliminar artefactos como `dist/`, `public_html/` o stacks Docker antiguos.
-
-## Estado Actual
-
-### CAPI / Tracking
-
-- Connected to the configured CAPI relay via `VITE_CAPI_RELAY_URL`.
-- Payload structure updated with `siteId: "SENSORIAL"` at the root level.
-- Live events: `PageView` on load and `InitiateCheckout` on CTA click with `value` and `currency`.
-
-### Checkout Routing
-
-- Hotmart URL centralized in `DNA.checkoutUrl`.
-- `ExpertCtaButton` intercepts `href="#checkout"` and auto-injects the live checkout URL.
-
-### UI / CRO
-
-- Added 60-minute reactive countdown timers with `animate-pulse` in Offer Breakdown and Bonus Stack.
-- Removed hardcoded `"Modulo X"` strings to reduce cognitive friction.
-- Activated `ExpertTestimonials` via DNA-driven content.
-
-### SEO
-
-- Global product name updated to `"Mi Primer Libro Sensorial"`.
-- `index.html` rewritten with complete OG/Twitter tags pointing to `curso.webp`.
+`docker-stack-boilerplate.yaml` se conserva solo como referencia legacy de Docker Swarm; el flujo recomendado es build de Vite y sincronizacion de `dist/` al hosting.

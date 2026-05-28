@@ -36,10 +36,13 @@ export function ExpertSpecialOffer() {
 
             <div className="mb-8">
               <span className="mb-1 block text-lg text-gray-300 line-through">
-                Precio original US${DNA.prices.regular}
+                {DNA.copy.offerSummary.originalPriceLabel} US${DNA.prices.regular}
               </span>
               <div className="text-3xl font-bold text-white">
-                Hoy solo <span className="text-4xl font-black" style={{ color: 'rgb(var(--color-highlight))' }}>US${DNA.prices.main}</span>
+                {DNA.copy.offerSummary.todayOnlyLabel}{' '}
+                <span className="text-4xl font-black" style={{ color: 'rgb(var(--color-highlight))' }}>
+                  US${DNA.prices.main}
+                </span>
               </div>
             </div>
 

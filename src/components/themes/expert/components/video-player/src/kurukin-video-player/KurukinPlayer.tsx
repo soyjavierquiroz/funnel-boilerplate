@@ -166,7 +166,7 @@ export function KurukinPlayer({
       await activeProvider.play();
       setShowPoster(false);
       setAutoplayBlocked(false);
-    } catch (error) {
+    } catch {
       activeProvider.pause();
       setShowPoster(!isVslMode);
       setShowMutedPreviewOverlay(false);

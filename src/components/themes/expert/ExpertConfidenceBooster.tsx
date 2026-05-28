@@ -4,7 +4,7 @@ import { ExpertCtaButton } from './ExpertCtaButton';
 
 export function ExpertConfidenceBooster() {
   return (
-    <section className="bg-white px-4 py-16 sm:px-6">
+    <section className="bg-surface px-4 py-16 sm:px-6">
       <div className="mx-auto max-w-[800px]">
         <div className="mb-12 text-center">
           <h2
@@ -22,12 +22,12 @@ export function ExpertConfidenceBooster() {
             ))}
           </div>
 
-          <div className="inline-block w-full rounded-2xl border border-gray-100 bg-gray-50 p-6 text-left shadow-sm">
+          <div className="inline-block w-full rounded-2xl border border-border-subtle/20 bg-surface-muted p-6 text-left shadow-sm">
             <p
               className="mb-4 text-sm font-bold uppercase tracking-wider"
               style={{ color: 'rgb(var(--color-text-muted))' }}
             >
-              Incluye:
+              {DNA.copy.confidenceBooster.includedLabel}
             </p>
             <ul className="space-y-3">
               {DNA.copy.confidenceBooster.bullets.map((bullet, index) => (
@@ -47,8 +47,8 @@ export function ExpertConfidenceBooster() {
           </div>
         </div>
 
-        <div className="mb-16 flex flex-col overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-2xl transition-transform hover:-translate-y-1 md:flex-row">
-          <div className="relative flex items-center justify-center bg-gray-50 p-6 md:w-2/5">
+        <div className="mb-16 flex flex-col overflow-hidden rounded-3xl border border-border-subtle/20 bg-surface shadow-2xl transition-transform hover:-translate-y-1 md:flex-row">
+          <div className="relative flex items-center justify-center bg-surface-muted p-6 md:w-2/5">
             <img
               src={DNA.copy.sewingBonus.image}
               alt={DNA.copy.sewingBonus.title}
@@ -63,7 +63,7 @@ export function ExpertConfidenceBooster() {
                 color: 'rgb(var(--color-text-main))',
               }}
             >
-              Bono Exclusivo
+              {DNA.copy.sewingBonus.eyebrow}
             </div>
             <h3
               className="mb-4 text-2xl font-black leading-tight md:text-3xl"
@@ -81,18 +81,18 @@ export function ExpertConfidenceBooster() {
         </div>
 
         <div
-          className="rounded-3xl border-2 bg-gray-50 p-8 text-center md:p-12"
+          className="rounded-3xl border-2 bg-surface-muted p-8 text-center md:p-12"
           style={{ borderColor: 'rgba(var(--color-brand-primary), 0.1)' }}
         >
           <div className="mb-6">
-            <span className="mb-1 block text-xl font-medium text-gray-400 line-through">
-              Precio original US${DNA.prices.regular}
+            <span className="mb-1 block text-xl font-medium text-text-subtle line-through">
+              {DNA.copy.offerSummary.originalPriceLabel} US${DNA.prices.regular}
             </span>
             <div
               className="text-4xl font-black md:text-5xl"
               style={{ color: 'rgb(var(--color-text-main))' }}
             >
-              Hoy solo{' '}
+              {DNA.copy.offerSummary.todayOnlyLabel}{' '}
               <span style={{ color: 'rgb(var(--color-brand-primary))' }}>
                 US${DNA.prices.main}
               </span>
@@ -101,7 +101,7 @@ export function ExpertConfidenceBooster() {
           <div className="mx-auto mb-6 max-w-md">
             <ExpertCtaButton
               href="#checkout"
-              label="¡Quiero Comprar ahora!"
+              label={DNA.copy.checkoutCtaText}
               fullWidth={true}
             />
           </div>

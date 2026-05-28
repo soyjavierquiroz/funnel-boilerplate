@@ -5,7 +5,7 @@ export function ExpertTestimonials() {
   if (!DNA.copy.testimonials?.items?.length) return null;
 
   return (
-    <section className="border-t border-gray-100 bg-gray-50 px-4 py-16 sm:px-6">
+    <section className="border-t border-border-subtle/20 bg-surface-muted px-4 py-16 sm:px-6">
       <div className="mx-auto max-w-[1100px]">
         <div className="mb-14 text-center">
           <h2
@@ -26,9 +26,9 @@ export function ExpertTestimonials() {
           {DNA.copy.testimonials.items.map((testimonial, idx) => (
             <div
               key={idx}
-              className="flex flex-col items-center rounded-3xl border border-gray-100 bg-white p-6 text-center shadow-xl transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl"
+              className="flex flex-col items-center rounded-3xl border border-border-subtle/20 bg-surface p-6 text-center shadow-xl transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl"
             >
-              <div className="mb-6 flex w-full items-center justify-center overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
+              <div className="mb-6 flex w-full items-center justify-center overflow-hidden rounded-xl border border-border-subtle/20 bg-surface-muted">
                 <img
                   src={testimonial.image}
                   alt={`Testimonio de ${testimonial.name}`}
