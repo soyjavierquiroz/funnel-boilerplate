@@ -8,13 +8,13 @@ export function ExpertEventFinalCta() {
   const content = funnelConfig.content.event;
 
   return (
-    <ExpertEventSection tone="soft" width="content">
-      <ExpertEventCard className="p-6 text-center sm:p-10">
-        <p className="expert-body mx-auto max-w-[700px] text-lg font-semibold leading-8 text-event-muted">
+    <ExpertEventSection tone="soft" width="content" className="md:py-28">
+      <ExpertEventCard className="p-7 text-center sm:p-12">
+        <p className="expert-headline mx-auto max-w-[760px] text-3xl leading-[1.05] text-event-ink sm:text-5xl">
           {content.finalCta.text}
         </p>
 
-        <div className="mx-auto mt-8 max-w-[520px]">
+        <div className="mx-auto mt-10 max-w-[520px]">
           <ExpertEventCountdown />
         </div>
 

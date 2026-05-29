@@ -29,7 +29,7 @@ export function ExpertEventSection({
   const Component = as ?? 'section';
 
   return (
-    <Component className={['px-5 py-14 sm:px-6 md:py-20', toneClasses[tone], className].join(' ')} {...props}>
+    <Component className={['px-5 py-16 sm:px-6 md:py-24', toneClasses[tone], className].join(' ')} {...props}>
       <div className={['mx-auto w-full', widthClasses[width]].join(' ')}>{children}</div>
     </Component>
   );

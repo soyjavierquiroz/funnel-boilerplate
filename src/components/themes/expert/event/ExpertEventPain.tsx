@@ -8,28 +8,28 @@ export function ExpertEventPain() {
   const content = funnelConfig.content.event;
 
   return (
-    <ExpertEventSection tone="page" width="wide">
-      <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-        <div className="space-y-6">
+    <ExpertEventSection tone="page" width="wide" className="md:py-28">
+      <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+        <div className="space-y-8">
           <div>
             <AlertCircle className="h-9 w-9 text-event-coral" aria-hidden="true" />
-            <h2 className="expert-headline mt-4 text-4xl leading-[0.98] text-event-ink sm:text-5xl">
+            <h2 className="expert-headline mt-5 text-[2.9rem] leading-[0.9] text-event-ink sm:text-[4.8rem]">
               {content.pain.title}
             </h2>
-            <p className="expert-body mt-5 text-lg font-bold text-event-muted">{content.pain.intro}</p>
+            <p className="expert-body mt-6 text-xl font-bold text-event-navy">{content.pain.intro}</p>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
             {content.pain.bullets.map((bullet) => (
-              <ExpertEventCard key={bullet} className="p-4" tone="soft">
-                <p className="expert-body text-base font-semibold leading-7 text-event-muted">{bullet}</p>
-              </ExpertEventCard>
+              <p key={bullet} className="expert-body border-b border-event-navy/10 pb-4 text-base font-semibold leading-7 text-event-muted">
+                {bullet}
+              </p>
             ))}
           </div>
 
-          <ExpertEventCard tone="accent">
+          <ExpertEventCard tone="accent" className="p-6 sm:p-8">
             {content.pain.phrases.map((phrase) => (
-              <p key={phrase} className="expert-headline text-2xl leading-tight text-event-ink">
+              <p key={phrase} className="expert-headline text-3xl leading-[1.02] text-event-ink sm:text-4xl">
                 {phrase}
               </p>
             ))}
@@ -39,10 +39,10 @@ export function ExpertEventPain() {
         </div>
 
         <div className="grid gap-4">
-          <div className="overflow-hidden rounded-[28px] border border-event-navy/12 bg-event-surface shadow-[0_22px_60px_rgb(var(--color-event-navy)/0.1)]">
+          <div className="overflow-hidden rounded-[34px] bg-event-surface shadow-[0_24px_70px_rgb(var(--color-event-navy)/0.1)]">
             <img src={content.assets.parkedCarImage} alt="" className="aspect-[4/3] w-full object-cover" />
           </div>
-          <div className="overflow-hidden rounded-[28px] border border-event-navy/12 bg-event-surface shadow-[0_22px_60px_rgb(var(--color-event-navy)/0.1)]">
+          <div className="ml-auto w-[82%] overflow-hidden rounded-[30px] bg-event-surface shadow-[0_20px_58px_rgb(var(--color-event-navy)/0.09)]">
             <img src={content.assets.motherWithChildrenImage} alt="" className="aspect-[16/9] w-full object-cover" />
           </div>
         </div>

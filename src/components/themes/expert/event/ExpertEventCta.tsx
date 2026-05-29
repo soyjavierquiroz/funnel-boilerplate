@@ -9,9 +9,9 @@ interface ExpertEventCtaProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 
 const variantClasses: Record<ExpertEventCtaVariant, string> = {
   primary:
-    'bg-cta text-[rgb(var(--color-cta-text))] shadow-[0_14px_36px_rgb(var(--color-event-coral)/0.24)] hover:bg-cta-hover',
+    'bg-cta text-[rgb(var(--color-cta-text))] shadow-[0_18px_44px_rgb(var(--color-event-coral)/0.28)] hover:bg-cta-hover hover:shadow-[0_22px_52px_rgb(var(--color-event-coral)/0.34)]',
   secondary:
-    'border border-event-navy/20 bg-event-surface text-event-navy hover:border-event-navy/35 hover:bg-event-soft',
+    'border border-event-navy/20 bg-transparent text-event-navy hover:border-event-navy/35 hover:bg-event-surface/70',
 };
 
 export function ExpertEventCta({
@@ -23,8 +23,8 @@ export function ExpertEventCta({
   return (
     <a
       className={[
-        'expert-headline inline-flex min-h-12 items-center justify-center rounded-[14px] px-6 py-3',
-        'text-center text-sm font-black uppercase tracking-wide transition',
+        'expert-headline inline-flex min-h-14 items-center justify-center rounded-full px-7 py-4',
+        'text-center text-sm font-black uppercase tracking-wide transition duration-300',
         'hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-event-coral/35',
         variantClasses[variant],
         className,

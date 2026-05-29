@@ -8,19 +8,19 @@ export function ExpertEventAuthority() {
   const content = funnelConfig.content.event;
 
   return (
-    <ExpertEventSection tone="surface" width="wide">
-      <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-        <div className="overflow-hidden rounded-[28px] border border-event-navy/12 bg-event-soft shadow-[0_22px_60px_rgb(var(--color-event-navy)/0.1)]">
+    <ExpertEventSection tone="surface" width="wide" className="md:py-28">
+      <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+        <div className="overflow-hidden rounded-[36px] bg-event-soft shadow-[0_24px_70px_rgb(var(--color-event-navy)/0.1)]">
           <img src={content.assets.expertTeachingImage} alt="" className="aspect-[4/5] w-full object-cover" />
         </div>
 
-        <div className="space-y-5">
-          <GraduationCap className="h-10 w-10 text-event-navy" aria-hidden="true" />
-          <h2 className="expert-headline text-4xl leading-[0.98] text-event-ink sm:text-5xl">
+        <div className="space-y-6">
+          <GraduationCap className="h-10 w-10 text-event-coral" aria-hidden="true" />
+          <h2 className="expert-headline text-[2.85rem] leading-[0.92] text-event-ink sm:text-[4.5rem]">
             {content.authority.title}
           </h2>
-          <p className="expert-headline text-3xl leading-tight text-event-navy">{content.authority.intro}</p>
-          <p className="expert-body text-lg font-semibold leading-8 text-event-muted">{content.authority.bio}</p>
+          <p className="expert-headline text-3xl leading-tight text-event-navy sm:text-4xl">{content.authority.intro}</p>
+          <p className="expert-body text-xl font-semibold leading-9 text-event-muted">{content.authority.bio}</p>
 
           {content.authority.paragraphs.map((paragraph) => (
             <p key={paragraph} className="expert-body text-base leading-8 text-event-muted">
@@ -28,8 +28,8 @@ export function ExpertEventAuthority() {
             </p>
           ))}
 
-          <ExpertEventCard tone="accent">
-            <p className="expert-headline text-2xl leading-tight text-event-ink">{content.authority.quote}</p>
+          <ExpertEventCard tone="accent" className="p-6 sm:p-8">
+            <p className="expert-headline text-3xl leading-[1.02] text-event-ink sm:text-4xl">{content.authority.quote}</p>
           </ExpertEventCard>
 
           <ExpertEventCta href={`#${content.registrationAnchorId}`}>{content.authority.ctaLabel}</ExpertEventCta>

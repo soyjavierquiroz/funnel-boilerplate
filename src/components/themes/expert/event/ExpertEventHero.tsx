@@ -4,7 +4,6 @@ import { DNA } from '../../../../dna.config';
 import funnelConfig from '../../../../core/config/funnel.config';
 import analytics from '../../../../core/services/analytics';
 import { useVisitor } from '../../../../core/visitor/VisitorContext';
-import { ExpertEventCard } from './ExpertEventCard';
 import { ExpertEventCountdown } from './ExpertEventCountdown';
 import { ExpertEventCta } from './ExpertEventCta';
 import { ExpertEventSection } from './ExpertEventSection';
@@ -129,42 +128,33 @@ export function ExpertEventHero() {
   };
 
   return (
-    <ExpertEventSection className="min-h-screen pb-10 pt-8 md:pb-14 md:pt-12" width="wide">
-      <div className="grid min-h-[calc(100vh-96px)] items-center gap-8 lg:grid-cols-[1fr_430px] lg:gap-12">
-        <div className="space-y-7">
-          <div className="space-y-5">
-            <p className="expert-event-kicker inline-flex rounded-full border border-event-navy/15 bg-event-surface px-4 py-2 text-xs font-bold uppercase text-event-navy">
+    <ExpertEventSection className="overflow-hidden pb-12 pt-8 md:pb-18 md:pt-12" width="wide">
+      <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_410px] lg:gap-14">
+        <div className="space-y-8">
+          <div className="space-y-6">
+            <p className="expert-event-kicker inline-flex rounded-full bg-event-surface px-4 py-2 text-[0.68rem] font-bold uppercase text-event-navy shadow-[0_12px_34px_rgb(var(--color-event-navy)/0.06)]">
               {content.hero.eyebrow}
             </p>
 
-            <h1 className="expert-headline max-w-[760px] text-[3.35rem] uppercase leading-[0.88] text-event-ink sm:text-[5.25rem] lg:text-[6.6rem]">
+            <h1 className="expert-headline max-w-[780px] text-[4rem] uppercase leading-[0.82] text-event-ink sm:text-[6.2rem] lg:text-[7.4rem]">
               {content.hero.headline}
             </h1>
 
-            <p className="expert-body max-w-[680px] text-lg font-semibold leading-8 text-event-muted sm:text-xl">
+            <p className="expert-body max-w-[650px] text-xl font-semibold leading-9 text-event-muted sm:text-2xl sm:leading-10">
               {content.hero.subheadline}
             </p>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-[1fr_230px]">
-            <div className="overflow-hidden rounded-[28px] border border-event-navy/12 bg-event-surface shadow-[0_22px_60px_rgb(var(--color-event-navy)/0.12)]">
+          <div className="relative">
+            <div className="overflow-hidden rounded-[34px] bg-event-surface shadow-[0_28px_80px_rgb(var(--color-event-navy)/0.12)]">
               <img
                 src={content.assets.insecureDriverImage}
                 alt={content.hero.imageAlt}
-                className="aspect-[16/10] w-full object-cover"
+                className="aspect-[5/4] w-full object-cover sm:aspect-[16/9]"
               />
             </div>
-
-            <div className="space-y-4">
+            <div className="mt-4 max-w-[520px] sm:absolute sm:bottom-5 sm:left-5 sm:mt-0">
               <ExpertEventCountdown />
-              <ExpertEventCard tone="accent" className="p-4">
-                <div className="flex gap-3">
-                  <ShieldCheck className="mt-1 h-6 w-6 shrink-0 text-event-navy" aria-hidden="true" />
-                  <p className="expert-body text-sm font-semibold leading-6 text-event-muted">
-                    {content.foundation.cardText}
-                  </p>
-                </div>
-              </ExpertEventCard>
             </div>
           </div>
 
@@ -176,12 +166,25 @@ export function ExpertEventHero() {
           </div>
         </div>
 
-        <ExpertEventCard id={content.registrationAnchorId} tone="plain" className="p-5 sm:p-7">
-          <h2 className="expert-headline text-center text-2xl leading-tight text-event-ink">
+        <div
+          id={content.registrationAnchorId}
+          className="rounded-[32px] bg-event-surface p-5 shadow-[0_30px_90px_rgb(var(--color-event-navy)/0.12)] sm:p-7"
+        >
+          <div className="mb-5 flex items-start gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-event-coral/15">
+              <ShieldCheck className="h-5 w-5 text-event-navy" aria-hidden="true" />
+            </div>
+            <div>
+              <h2 className="expert-headline text-2xl leading-tight text-event-ink">
             {content.hero.formTitle}
-          </h2>
+              </h2>
+              <p className="expert-body mt-2 text-sm font-semibold leading-6 text-event-muted">
+                {content.foundation.cardText}
+              </p>
+            </div>
+          </div>
 
-          <form className="mt-6 space-y-4" onSubmit={handleSubmit} noValidate>
+          <form className="space-y-4" onSubmit={handleSubmit} noValidate>
             <div>
               <label htmlFor="event-first-name" className="expert-body mb-2 block text-sm font-bold text-event-ink">
                 {formCopy.firstNameLabel}
@@ -192,7 +195,7 @@ export function ExpertEventHero() {
                 value={firstName}
                 onChange={(nextEvent) => handleInputChange(setFirstName, 'firstName', nextEvent)}
                 className={[
-                  'expert-input h-12 w-full rounded-[12px] border bg-event-soft px-4 text-base text-event-ink',
+                  'expert-input h-[52px] w-full rounded-[16px] border bg-event-soft px-4 text-base text-event-ink',
                   'placeholder:text-event-muted focus:outline-none focus:ring-2',
                   errors.firstName
                     ? 'border-error focus:border-error focus:ring-error/30'
@@ -213,7 +216,7 @@ export function ExpertEventHero() {
                 value={email}
                 onChange={(nextEvent) => handleInputChange(setEmail, 'email', nextEvent)}
                 className={[
-                  'expert-input h-12 w-full rounded-[12px] border bg-event-soft px-4 text-base text-event-ink',
+                  'expert-input h-[52px] w-full rounded-[16px] border bg-event-soft px-4 text-base text-event-ink',
                   'placeholder:text-event-muted focus:outline-none focus:ring-2',
                   errors.email
                     ? 'border-error focus:border-error focus:ring-error/30'
@@ -239,12 +242,12 @@ export function ExpertEventHero() {
             <button
               type="submit"
               disabled={!canSubmit}
-              className="expert-headline min-h-14 w-full rounded-[14px] bg-cta px-6 py-4 text-center text-base font-black uppercase tracking-wide text-[rgb(var(--color-cta-text))] shadow-[0_14px_36px_rgb(var(--color-event-coral)/0.24)] transition hover:-translate-y-0.5 hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-event-coral/35 disabled:cursor-not-allowed disabled:opacity-50"
+              className="expert-headline min-h-14 w-full rounded-full bg-cta px-6 py-4 text-center text-base font-black uppercase tracking-wide text-[rgb(var(--color-cta-text))] shadow-[0_18px_44px_rgb(var(--color-event-coral)/0.28)] transition duration-300 hover:-translate-y-0.5 hover:bg-cta-hover hover:shadow-[0_22px_52px_rgb(var(--color-event-coral)/0.34)] focus:outline-none focus:ring-2 focus:ring-event-coral/35 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? content.hero.submittingLabel : content.hero.primaryCtaLabel}
             </button>
           </form>
-        </ExpertEventCard>
+        </div>
       </div>
     </ExpertEventSection>
   );

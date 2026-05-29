@@ -49,18 +49,18 @@ export function ExpertEventCountdown() {
   ];
 
   return (
-    <div className="rounded-[18px] border border-event-navy/10 bg-event-surface p-4">
-      <p className="expert-event-kicker text-center text-xs font-bold uppercase text-event-navy">
+    <div className="rounded-[24px] bg-event-surface/95 p-4 shadow-[0_18px_45px_rgb(var(--color-event-navy)/0.08)]">
+      <p className="expert-event-kicker text-center text-[0.68rem] font-bold uppercase text-event-navy">
         {hasExpired ? countdown.expiredLabel : countdown.label}
       </p>
 
       <div className="mt-4 grid grid-cols-4 gap-2" aria-live="polite">
         {items.map((item) => (
-          <div key={item.label} className="rounded-[13px] bg-event-soft px-2 py-3 text-center">
-            <div className="expert-headline text-2xl leading-none text-event-ink sm:text-3xl">
+          <div key={item.label} className="rounded-[17px] bg-event-soft px-2 py-3 text-center">
+            <div className="expert-headline text-[1.7rem] leading-none text-event-ink sm:text-3xl">
               {String(item.value).padStart(2, '0')}
             </div>
-            <div className="expert-event-kicker mt-2 text-[0.62rem] font-bold uppercase text-event-muted">
+            <div className="expert-event-kicker mt-2 text-[0.58rem] font-bold uppercase text-event-muted">
               {item.label}
             </div>
           </div>

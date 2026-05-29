@@ -6,9 +6,9 @@ interface ExpertEventCardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const toneClasses = {
-  plain: 'border-event-navy/12 bg-event-card',
-  soft: 'border-event-navy/10 bg-event-soft',
-  accent: 'border-event-coral/30 bg-event-coral/10',
+  plain: 'border-transparent bg-event-card',
+  soft: 'border-transparent bg-event-soft',
+  accent: 'border-event-coral/20 bg-event-coral/10',
 };
 
 export function ExpertEventCard({
@@ -20,7 +20,7 @@ export function ExpertEventCard({
   return (
     <div
       className={[
-        'rounded-[22px] border p-5 shadow-[0_16px_42px_rgb(var(--color-event-navy)/0.08)]',
+        'rounded-[24px] border p-5 shadow-[0_18px_50px_rgb(var(--color-event-navy)/0.06)]',
         toneClasses[tone],
         className,
       ].join(' ')}
