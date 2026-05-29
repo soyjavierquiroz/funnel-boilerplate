@@ -71,15 +71,15 @@ export function ExpertEventCountdown({ variant = 'light' }: ExpertEventCountdown
   ];
 
   return (
-    <div className={['rounded-[24px] p-3 sm:p-4', classes.shell].join(' ')}>
+    <div className={['rounded-[16px] p-3 sm:p-4', classes.shell].join(' ')}>
       <p className={['expert-event-kicker text-center text-[0.66rem] font-bold uppercase', classes.label].join(' ')}>
         {hasExpired ? countdown.expiredLabel : countdown.label}
       </p>
 
       <div className="mt-3 grid grid-cols-4 gap-2" aria-live="polite">
         {items.map((item) => (
-          <div key={item.label} className={['rounded-[17px] px-2 py-3 text-center', classes.item].join(' ')}>
-            <div className={['expert-headline text-[1.5rem] leading-none sm:text-3xl', classes.value].join(' ')}>
+          <div key={item.label} className={['rounded-[12px] px-2 py-2.5 text-center', classes.item].join(' ')}>
+            <div className={['expert-headline text-[1.2rem] leading-none sm:text-[1.6rem]', classes.value].join(' ')}>
               {String(item.value).padStart(2, '0')}
             </div>
             <div className={['expert-event-kicker mt-2 text-[0.56rem] font-bold uppercase', classes.unit].join(' ')}>
