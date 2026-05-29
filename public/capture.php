@@ -20,6 +20,16 @@ function respond_json(int $statusCode, array $body): void
     exit;
 }
 
+function read_payload_string(array $payload, string $field): string
+{
+    return isset($payload[$field]) && is_string($payload[$field]) ? trim($payload[$field]) : '';
+}
+
+function read_nested_string(array $payload, string $field): string
+{
+    return isset($payload[$field]) && is_string($payload[$field]) ? trim($payload[$field]) : '';
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
     exit;
@@ -77,6 +87,36 @@ if (empty($payload['submitted_at']) || !is_string($payload['submitted_at'])) {
 if (empty($payload['page_url']) || !is_string($payload['page_url'])) {
     $payload['page_url'] = $_SERVER['HTTP_REFERER'] ?? '';
 }
+
+$visitor = isset($payload['visitor']) && is_array($payload['visitor']) ? $payload['visitor'] : [];
+$visitorFieldMap = [
+    'visitor_ip' => 'ip',
+    'visitor_city' => 'city',
+    'visitor_region' => 'region',
+    'visitor_country' => 'country',
+    'visitor_country_code' => 'country_code',
+    'visitor_timezone' => 'timezone',
+    'visitor_currency' => 'currency',
+    'visitor_country_calling_code' => 'country_calling_code',
+];
+$normalizedVisitor = [];
+
+foreach ($visitorFieldMap as $flatField => $nestedField) {
+    $value = read_payload_string($payload, $flatField);
+
+    if ($value === '') {
+        $value = read_nested_string($visitor, $nestedField);
+    }
+
+    if ($value === '' && $nestedField === 'country') {
+        $value = read_nested_string($visitor, 'country_name');
+    }
+
+    $payload[$flatField] = $value;
+    $normalizedVisitor[$nestedField] = $value;
+}
+
+$payload['visitor'] = array_merge($visitor, $normalizedVisitor);
 
 $encodedPayload = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 

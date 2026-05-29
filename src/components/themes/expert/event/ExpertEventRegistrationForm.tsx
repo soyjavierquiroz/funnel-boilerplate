@@ -3,13 +3,14 @@ import { DNA } from '../../../../dna.config';
 import funnelConfig from '../../../../core/config/funnel.config';
 import analytics from '../../../../core/services/analytics';
 import { useVisitor } from '../../../../core/visitor/VisitorContext';
+import { buildVisitorPayload, type VisitorPayload } from '../../../../core/visitor/visitorPayload';
 
 interface FormErrors {
   firstName?: string;
   email?: string;
 }
 
-interface MsmEventLeadPayload {
+interface MsmEventLeadPayload extends VisitorPayload {
   first_name: string;
   name: string;
   email: string;
@@ -103,6 +104,7 @@ export function ExpertEventRegistrationForm() {
 
     const submittedAt = new Date().toISOString();
     const pageUrl = window.location.href;
+    const visitorPayload = buildVisitorPayload(visitorData);
     const payload: MsmEventLeadPayload = {
       first_name: trimmedFirstName,
       name: trimmedFirstName,
@@ -112,12 +114,13 @@ export function ExpertEventRegistrationForm() {
       page_url: pageUrl,
       submitted_at: submittedAt,
       event_name: 'Maneja Sin Miedo',
+      ...visitorPayload,
       meta: {
-        ip: visitorData?.ip,
-        ciudad: visitorData?.city,
-        pais: visitorData?.country_name,
-        zona_horaria: visitorData?.timezone,
-        moneda: visitorData?.currency,
+        ip: visitorPayload.visitor_ip,
+        ciudad: visitorPayload.visitor_city,
+        pais: visitorPayload.visitor_country,
+        zona_horaria: visitorPayload.visitor_timezone,
+        moneda: visitorPayload.visitor_currency,
       },
     };
 
