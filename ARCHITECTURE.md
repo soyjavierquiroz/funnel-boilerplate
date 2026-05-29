@@ -5,7 +5,7 @@
 - `src/main.tsx` mounts React, Router and visitor context.
 - `src/App.tsx` applies the document theme, resolves the home funnel variant and routes `/` plus `/confirmacion`.
 - `src/components/themes/expert/ExpertTheme.tsx` renders the VSL, reveal gate, offer sections, FAQ, testimonials and sticky CTA.
-- `src/components/themes/expert/event/ExpertEventTheme.tsx` renders the Expert event visual foundation without changing `ExpertTheme`.
+- `src/components/themes/expert/event/ExpertEventTheme.tsx` renders the Expert event registration funnel without changing `ExpertTheme`.
 - `src/components/themes/expert/ExpertHero.tsx` uses the local `KurukinPlayer` source without changing player behavior.
 - `src/core/services/analytics.ts` emits browser/CAPI events using `funnelConfig.integrations`, which is derived from `DNA.tracking`.
 

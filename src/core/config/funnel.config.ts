@@ -152,6 +152,7 @@ export interface FunnelConfig {
 
 export interface EventFunnelContentConfig {
   registrationAnchorId: string;
+  startsAtIso: string;
   assets: {
     insecureDriverImage: string;
     confidentDriverImage: string;
@@ -164,8 +165,20 @@ export interface EventFunnelContentConfig {
     headline: string;
     subheadline: string;
     imageAlt: string;
+    formTitle: string;
     primaryCtaLabel: string;
     secondaryCtaLabel: string;
+    submittingLabel: string;
+  };
+  countdown: {
+    label: string;
+    expiredLabel: string;
+    units: {
+      days: string;
+      hours: string;
+      minutes: string;
+      seconds: string;
+    };
   };
   foundation: {
     sectionEyebrow: string;
@@ -173,6 +186,39 @@ export interface EventFunnelContentConfig {
     sectionText: string;
     cardTitle: string;
     cardText: string;
+  };
+  promise: {
+    title: string;
+    bullets: string[];
+    ctaLabel: string;
+  };
+  agenda: {
+    title: string;
+    items: Array<{
+      label: string;
+      title: string;
+      description: string;
+    }>;
+    ctaLabel: string;
+  };
+  pain: {
+    title: string;
+    intro: string;
+    bullets: string[];
+    phrases: string[];
+    ctaLabel: string;
+  };
+  authority: {
+    title: string;
+    intro: string;
+    bio: string;
+    paragraphs: string[];
+    quote: string;
+    ctaLabel: string;
+  };
+  finalCta: {
+    text: string;
+    ctaLabel: string;
   };
 }
 
@@ -247,9 +293,16 @@ export const funnelConfig: FunnelConfig = {
     },
     event: {
       registrationAnchorId: DNA.copy.event.registrationAnchorId,
+      startsAtIso: DNA.copy.event.startsAtIso,
       assets: DNA.assets.event,
       hero: DNA.copy.event.hero,
+      countdown: DNA.copy.event.countdown,
       foundation: DNA.copy.event.foundation,
+      promise: DNA.copy.event.promise,
+      agenda: DNA.copy.event.agenda,
+      pain: DNA.copy.event.pain,
+      authority: DNA.copy.event.authority,
+      finalCta: DNA.copy.event.finalCta,
     },
   },
   forms: {

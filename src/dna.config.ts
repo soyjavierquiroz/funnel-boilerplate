@@ -229,13 +229,26 @@ export interface DnaConfig {
     };
     event: {
       registrationAnchorId: string;
+      startsAtIso: string;
       hero: {
         eyebrow: string;
         headline: string;
         subheadline: string;
         imageAlt: string;
+        formTitle: string;
         primaryCtaLabel: string;
         secondaryCtaLabel: string;
+        submittingLabel: string;
+      };
+      countdown: {
+        label: string;
+        expiredLabel: string;
+        units: {
+          days: string;
+          hours: string;
+          minutes: string;
+          seconds: string;
+        };
       };
       foundation: {
         sectionEyebrow: string;
@@ -243,6 +256,39 @@ export interface DnaConfig {
         sectionText: string;
         cardTitle: string;
         cardText: string;
+      };
+      promise: {
+        title: string;
+        bullets: string[];
+        ctaLabel: string;
+      };
+      agenda: {
+        title: string;
+        items: Array<{
+          label: string;
+          title: string;
+          description: string;
+        }>;
+        ctaLabel: string;
+      };
+      pain: {
+        title: string;
+        intro: string;
+        bullets: string[];
+        phrases: string[];
+        ctaLabel: string;
+      };
+      authority: {
+        title: string;
+        intro: string;
+        bio: string;
+        paragraphs: string[];
+        quote: string;
+        ctaLabel: string;
+      };
+      finalCta: {
+        text: string;
+        ctaLabel: string;
       };
     };
     pricingCard: {
@@ -610,14 +656,27 @@ export const DNA = {
     },
     event: {
       registrationAnchorId: 'registro-evento',
+      startsAtIso: readEnv('VITE_EVENT_STARTS_AT', '2026-06-15T19:00:00-04:00'),
       hero: {
         eyebrow: 'Evento Gratuito Online',
         headline: 'MANEJA SIN MIEDO',
         subheadline:
           'Descubre cómo ganar confianza al volante y manejar con seguridad… aunque hoy sientas miedo, ansiedad o inseguridad al conducir.',
         imageAlt: 'Persona al volante recuperando confianza para manejar',
+        formTitle: 'Reserva tu cupo gratuito ahora',
         primaryCtaLabel: 'QUIERO MANEJAR SIN MIEDO',
-        secondaryCtaLabel: 'Ver base visual',
+        secondaryCtaLabel: 'Ver lo que descubrirás',
+        submittingLabel: 'Reservando...',
+      },
+      countdown: {
+        label: 'El evento comienza en:',
+        expiredLabel: 'El evento ya comenzó',
+        units: {
+          days: 'Días',
+          hours: 'Horas',
+          minutes: 'Min',
+          seconds: 'Seg',
+        },
       },
       foundation: {
         sectionEyebrow: 'Base visual',
@@ -626,6 +685,75 @@ export const DNA = {
           'Esta primera versión define ritmo, aire visual, tarjetas, CTAs y superficies para construir luego las secciones del evento sin acoplarlas al VSL.',
         cardTitle: 'Foundation de evento',
         cardText: 'Preparado para countdown, agenda, autoridad y formulario en iteraciones futuras.',
+      },
+      promise: {
+        title: 'Esto es lo que descubrirás en el evento:',
+        bullets: [
+          'Por qué el miedo al conducir NO significa que no seas capaz',
+          'El verdadero motivo por el que muchas mujeres nunca logran ganar confianza al volante',
+          'Cómo empezar a sentir seguridad al manejar incluso si llevas años evitándolo',
+          'Cómo dejar de depender de otros para movilizarte',
+        ],
+        ctaLabel: 'QUIERO RESERVAR MI CUPO GRATIS',
+      },
+      agenda: {
+        title: 'Lo que veremos durante el evento',
+        items: [
+          {
+            label: 'Clase 1',
+            title: 'Entender el miedo y recuperar confianza',
+            description:
+              'Por qué aparece el miedo al conducir, qué lo alimenta, y por qué muchas personas llevan años sin superarlo.',
+          },
+          {
+            label: 'Clase 2',
+            title: 'Los errores que mantienen el miedo vivo',
+            description:
+              'Los errores más comunes, qué cosas empeoran la inseguridad, y cómo empezar a cambiar tu relación con el volante.',
+          },
+          {
+            label: 'Clase 3',
+            title: 'El camino para manejar con seguridad',
+            description:
+              'Cómo empezar a recuperar independencia, cómo volver a confiar en ti, y cuál es el acompañamiento que he preparado para ayudarte en este proceso.',
+          },
+        ],
+        ctaLabel: 'RESERVAR MI CUPO GRATUITO',
+      },
+      pain: {
+        title: 'El miedo a conducir te está costando más de lo que crees…',
+        intro: 'Tal vez hoy:',
+        bullets: [
+          'Evitas salir sola',
+          'Dependes de alguien para movilizarte',
+          'Te pierdes actividades con tus hijos',
+          'Dices “otro día manejo”',
+          'Tu auto pasa parqueado',
+          'O simplemente sientes frustración cada vez que piensas en conducir',
+        ],
+        phrases: [
+          'No es solo manejar…',
+          'Es sentir que el miedo tiene el control.',
+          'Y eso puede cambiar.',
+        ],
+        ctaLabel: 'QUIERO RECUPERAR MI CONFIANZA',
+      },
+      authority: {
+        title: '¿Quién será tu guía en este proceso?',
+        intro: 'Hola, soy Darío Avila.',
+        bio:
+          'Educador automotriz y creador de contenido con miles de seguidores en redes sociales, especializado en enseñanza automotriz y conducción práctica.',
+        paragraphs: [
+          'Durante años he visto cómo muchas personas NO tienen problemas de capacidad… Tienen problemas de confianza.',
+          'Por eso creé “Maneja Sin Miedo”, un evento diseñado para ayudarte a recuperar seguridad al volante de forma práctica, emocional y progresiva.',
+        ],
+        quote: 'Porque manejar no debería sentirse como miedo… sino como libertad.',
+        ctaLabel: 'QUIERO ASISTIR GRATIS AL EVENTO',
+      },
+      finalCta: {
+        text:
+          'Este evento gratuito tendrá cupos limitados para garantizar una mejor experiencia. Reserva ahora tu acceso antes de que se completen los registros.',
+        ctaLabel: 'RESERVAR MI CUPO AHORA',
       },
     },
     pricingCard: {

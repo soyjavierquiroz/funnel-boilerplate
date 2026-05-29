@@ -28,9 +28,9 @@ theme: 'expert',
 funnelType: 'event',
 ```
 
-La base visual del evento vive en `src/components/themes/expert/event/` y mantiene el lenguaje visual de `ExpertTheme` sin modificar el VSL actual. Esta ruta deja espacio para variantes futuras como `theme: 'expert', funnelType: 'tripwire'`, `theme: 'panda', funnelType: 'event'` o `theme: 'panda', funnelType: 'tripwire'`.
+La landing de evento vive en `src/components/themes/expert/event/` y mantiene el lenguaje visual de `ExpertTheme` sin modificar el VSL actual. Esta ruta deja espacio para variantes futuras como `theme: 'expert', funnelType: 'tripwire'`, `theme: 'panda', funnelType: 'event'` o `theme: 'panda', funnelType: 'tripwire'`.
 
-El contenido editable de esta foundation, CTAs base y assets temporales se configura desde `src/dna.config.ts` y se adapta en `src/core/config/funnel.config.ts`. Countdown, agenda, autoridad, dolor y formularios avanzados quedan para iteraciones posteriores.
+El contenido editable del evento, countdown, CTAs, campos de captura y assets temporales se configura desde `src/dna.config.ts` y se adapta en `src/core/config/funnel.config.ts`.
 
 ## Scripts
 
