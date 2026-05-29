@@ -5,14 +5,20 @@ import { ExpertEventAuthority } from './ExpertEventAuthority';
 import { ExpertEventFinalCta } from './ExpertEventFinalCta';
 import { ExpertEventPain } from './ExpertEventPain';
 import { ExpertEventPromise } from './ExpertEventPromise';
+import { ExpertEventTestimonials } from './ExpertEventTestimonials';
+import { ExpertEventTransformation } from './ExpertEventTransformation';
+import { ExpertEventWhyFearPersists } from './ExpertEventWhyFearPersists';
 
 export function ExpertEventTheme() {
   return (
     <div className="theme-expert theme-expert-event min-h-screen bg-event-page text-event-ink">
       <ExpertEventHero />
       <ExpertEventPromise />
+      <ExpertEventTransformation />
       <ExpertEventAgenda />
+      <ExpertEventWhyFearPersists />
       <ExpertEventPain />
+      <ExpertEventTestimonials />
       <ExpertEventAuthority />
       <ExpertEventFinalCta />
 

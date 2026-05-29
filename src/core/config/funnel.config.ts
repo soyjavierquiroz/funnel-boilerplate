@@ -174,6 +174,7 @@ export interface EventFunnelContentConfig {
   };
   hero: {
     eyebrow: string;
+    eventName: string;
     headline: string;
     subheadline: string;
     imageAlt: string;
@@ -204,6 +205,14 @@ export interface EventFunnelContentConfig {
     bullets: string[];
     ctaLabel: string;
   };
+  transformation: {
+    eyebrow: string;
+    title: string;
+    beforeTitle: string;
+    afterTitle: string;
+    beforeItems: string[];
+    afterItems: string[];
+  };
   agenda: {
     title: string;
     items: Array<{
@@ -213,12 +222,28 @@ export interface EventFunnelContentConfig {
     }>;
     ctaLabel: string;
   };
+  whyFearPersists: {
+    eyebrow: string;
+    title: string;
+    paragraphs: string[];
+    highlights: string[];
+  };
   pain: {
     title: string;
     intro: string;
     bullets: string[];
     phrases: string[];
     ctaLabel: string;
+  };
+  testimonials: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    items: Array<{
+      name: string;
+      role: string;
+      quote: string;
+    }>;
   };
   authority: {
     title: string;
@@ -311,8 +336,11 @@ export const funnelConfig: FunnelConfig = {
       countdown: DNA.copy.event.countdown,
       foundation: DNA.copy.event.foundation,
       promise: DNA.copy.event.promise,
+      transformation: DNA.copy.event.transformation,
       agenda: DNA.copy.event.agenda,
+      whyFearPersists: DNA.copy.event.whyFearPersists,
       pain: DNA.copy.event.pain,
+      testimonials: DNA.copy.event.testimonials,
       authority: DNA.copy.event.authority,
       finalCta: DNA.copy.event.finalCta,
     },

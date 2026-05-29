@@ -144,7 +144,11 @@ export function ExpertEventHero() {
               {content.hero.eyebrow}
             </p>
 
-            <h1 className="expert-headline mt-5 max-w-[760px] text-[2.65rem] uppercase leading-[0.92] text-text-inverse sm:text-[5.2rem] sm:leading-[0.86] lg:text-[6.45rem]">
+            <p className="expert-headline mt-5 text-2xl leading-none text-event-sky sm:text-4xl">
+              {content.hero.eventName}
+            </p>
+
+            <h1 className="expert-headline mt-3 max-w-[800px] text-[2.45rem] uppercase leading-[0.94] text-text-inverse sm:text-[5.2rem] sm:leading-[0.86] lg:text-[6.35rem]">
               {content.hero.headline}
             </h1>
 

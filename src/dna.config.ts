@@ -244,6 +244,7 @@ export interface DnaConfig {
       startsAtIso: string;
       hero: {
         eyebrow: string;
+        eventName: string;
         headline: string;
         subheadline: string;
         imageAlt: string;
@@ -274,6 +275,14 @@ export interface DnaConfig {
         bullets: string[];
         ctaLabel: string;
       };
+      transformation: {
+        eyebrow: string;
+        title: string;
+        beforeTitle: string;
+        afterTitle: string;
+        beforeItems: string[];
+        afterItems: string[];
+      };
       agenda: {
         title: string;
         items: Array<{
@@ -283,12 +292,28 @@ export interface DnaConfig {
         }>;
         ctaLabel: string;
       };
+      whyFearPersists: {
+        eyebrow: string;
+        title: string;
+        paragraphs: string[];
+        highlights: string[];
+      };
       pain: {
         title: string;
         intro: string;
         bullets: string[];
         phrases: string[];
         ctaLabel: string;
+      };
+      testimonials: {
+        eyebrow: string;
+        title: string;
+        subtitle: string;
+        items: Array<{
+          name: string;
+          role: string;
+          quote: string;
+        }>;
       };
       authority: {
         title: string;
@@ -691,9 +716,10 @@ export const DNA = {
       startsAtIso: readEnv('VITE_EVENT_STARTS_AT', '2026-06-15T19:00:00-04:00'),
       hero: {
         eyebrow: 'Evento Gratuito Online',
-        headline: 'MANEJA SIN MIEDO',
+        eventName: 'Maneja Sin Miedo',
+        headline: '¿CANSADA DE DEPENDER DE OTROS?',
         subheadline:
-          'Descubre cómo ganar confianza al volante y manejar con seguridad… aunque hoy sientas miedo, ansiedad o inseguridad al conducir.',
+          'Descubre cómo recuperar confianza al volante para moverte sola, tomar decisiones con calma y volver a sentir que tu independencia también te pertenece.',
         imageAlt: 'Persona al volante recuperando confianza para manejar',
         formTitle: 'Reserva tu cupo gratuito ahora',
         primaryCtaLabel: 'QUIERO MANEJAR SIN MIEDO',
@@ -728,6 +754,24 @@ export const DNA = {
         ],
         ctaLabel: 'QUIERO RESERVAR MI CUPO GRATIS',
       },
+      transformation: {
+        eyebrow: 'Antes vs Después',
+        title: 'Imagina volver a subirte al auto sin sentir que el miedo decide por ti.',
+        beforeTitle: 'Antes del evento',
+        afterTitle: 'Después del evento',
+        beforeItems: [
+          'Evitas manejar aunque tengas ganas de intentarlo',
+          'Pides ayuda para trayectos que podrías hacer tú',
+          'Sientes ansiedad al pensar en tráfico, parqueo o calles nuevas',
+          'Te dices que no eres buena para manejar',
+        ],
+        afterItems: [
+          'Entiendes qué dispara tu miedo y cómo empezar a ordenarlo',
+          'Reconoces que tu capacidad no desapareció: necesita confianza',
+          'Ves un camino gradual para volver a practicar sin presión',
+          'Te imaginas recuperando independencia paso a paso',
+        ],
+      },
       agenda: {
         title: 'Lo que veremos durante el evento',
         items: [
@@ -752,6 +796,18 @@ export const DNA = {
         ],
         ctaLabel: 'RESERVAR MI CUPO GRATUITO',
       },
+      whyFearPersists: {
+        eyebrow: 'La raíz del bloqueo',
+        title: 'El problema no es que no puedas manejar. Es que tu confianza quedó golpeada.',
+        paragraphs: [
+          'Muchas mujeres creen que si sienten miedo al volante es porque no nacieron para conducir. Pero el miedo no prueba falta de capacidad; muchas veces solo muestra que hubo una experiencia, una crítica o una práctica mal acompañada que dejó una huella.',
+          'Cuando la confianza se rompe, el cuerpo intenta protegerte: aparece tensión, dudas, anticipación y ganas de evitar. Por eso repetir “solo maneja” no alcanza. Primero necesitas entender qué sostiene ese miedo y recuperar seguridad desde un proceso humano, práctico y progresivo.',
+        ],
+        highlights: [
+          'No necesitas empezar desde cero.',
+          'Necesitas volver a confiar en ti con pasos claros.',
+        ],
+      },
       pain: {
         title: 'El miedo a conducir te está costando más de lo que crees…',
         intro: 'Tal vez hoy:',
@@ -769,6 +825,31 @@ export const DNA = {
           'Y eso puede cambiar.',
         ],
         ctaLabel: 'QUIERO RECUPERAR MI CONFIANZA',
+      },
+      testimonials: {
+        eyebrow: 'Historias como la tuya',
+        title: 'Mujeres que empezaron a mirar el volante con otros ojos.',
+        subtitle: 'Estos testimonios son placeholders editables desde el DNA hasta incorporar historias reales del evento.',
+        items: [
+          {
+            name: 'Participante 1',
+            role: 'Placeholder editable',
+            quote:
+              'Antes sentía que manejar no era para mí. El enfoque me ayudó a entender que el miedo tenía explicación y que podía avanzar paso a paso.',
+          },
+          {
+            name: 'Participante 2',
+            role: 'Placeholder editable',
+            quote:
+              'Me identifiqué mucho con la idea de depender de otros. Salí con más claridad para empezar a practicar sin exigirme hacerlo perfecto.',
+          },
+          {
+            name: 'Participante 3',
+            role: 'Placeholder editable',
+            quote:
+              'Lo que más me sirvió fue dejar de verme como incapaz. Entendí que necesitaba recuperar confianza, no pelear conmigo misma.',
+          },
+        ],
       },
       authority: {
         title: '¿Quién será tu guía en este proceso?',
