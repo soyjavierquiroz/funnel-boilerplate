@@ -41,11 +41,11 @@ export function ExpertEventHero() {
             {heroCopy.eyebrow}
           </p>
 
-          <p className="expert-headline mt-3 text-[1rem] leading-none text-event-sky sm:text-[1.12rem]">
+          <p className="expert-headline mt-3 text-[0.9rem] leading-none text-event-sky sm:text-[1rem]">
             {heroCopy.brand}
           </p>
 
-          <h1 className="expert-headline mt-4 text-[1.92rem] uppercase leading-[0.98] text-text-inverse sm:text-[2.7rem] sm:leading-[0.94] lg:mt-5 lg:text-[3.55rem] lg:leading-[0.93] xl:text-[3.95rem]">
+          <h1 className="expert-headline mt-4 text-[1.56rem] uppercase leading-[1.02] text-text-inverse sm:text-[2.2rem] sm:leading-[0.98] lg:mt-5 lg:text-[3.05rem] lg:leading-[0.95] xl:text-[3.4rem]">
             {heroCopy.headline}
           </h1>
 

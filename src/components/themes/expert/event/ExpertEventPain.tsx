@@ -1,6 +1,7 @@
 import { AlertCircle } from 'lucide-react';
 import funnelConfig from '../../../../core/config/funnel.config';
 import { ExpertEventCta } from './ExpertEventCta';
+import { ExpertEventImageFrame } from './ExpertEventImageFrame';
 import { ExpertEventSection } from './ExpertEventSection';
 
 export function ExpertEventPain() {
@@ -12,7 +13,7 @@ export function ExpertEventPain() {
         <div className="space-y-8">
           <div>
             <AlertCircle className="h-9 w-9 text-event-coral" aria-hidden="true" />
-            <h2 className="expert-headline mt-5 text-[2.35rem] leading-[0.98] text-event-ink sm:text-[4.55rem] sm:leading-[0.94]">
+            <h2 className="expert-headline mt-5 text-[1.9rem] leading-[1.02] text-event-ink sm:text-[3.65rem] sm:leading-[0.96] lg:text-[3.9rem]">
               {content.pain.title}
             </h2>
             <p className="expert-body mt-6 text-xl font-bold text-event-navy">{content.pain.intro}</p>
@@ -29,9 +30,9 @@ export function ExpertEventPain() {
             ))}
           </div>
 
-          <div className="rounded-[28px] bg-event-navy p-6 text-text-inverse shadow-[0_24px_70px_rgb(var(--color-event-navy)/0.18)] sm:p-8">
+          <div className="rounded-3xl bg-event-navy p-6 text-text-inverse shadow-[0_24px_70px_rgb(var(--color-event-navy)/0.18)] sm:p-8">
             {content.pain.phrases.map((phrase) => (
-              <p key={phrase} className="expert-headline text-3xl leading-[1.02] text-text-inverse sm:text-4xl">
+              <p key={phrase} className="expert-headline text-[1.6rem] leading-[1.06] text-text-inverse sm:text-[2rem]">
                 {phrase}
               </p>
             ))}
@@ -40,14 +41,12 @@ export function ExpertEventPain() {
           <ExpertEventCta href={`#${content.registrationAnchorId}`}>{content.pain.ctaLabel}</ExpertEventCta>
         </div>
 
-        <div className="overflow-hidden rounded-[36px] bg-event-navy p-3 shadow-[0_28px_82px_rgb(var(--color-event-navy)/0.18)]">
-          <img
-            src={content.assets.pain}
-            alt=""
-            loading="lazy"
-            className="aspect-[4/5] w-full rounded-[28px] object-cover sm:aspect-[4/3]"
-          />
-        </div>
+        <ExpertEventImageFrame
+          src={content.assets.pain}
+          alt=""
+          loading="lazy"
+          aspectClassName="aspect-[4/5] sm:aspect-[4/3]"
+        />
       </div>
     </ExpertEventSection>
   );

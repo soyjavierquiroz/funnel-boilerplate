@@ -10,12 +10,12 @@ export function ExpertEventWhyFearPersists() {
   return (
     <ExpertEventSection tone="page" width="wide" className="md:py-28">
       <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-        <div className="rounded-[34px] bg-event-navy p-6 text-text-inverse shadow-[0_30px_90px_rgb(var(--color-event-navy)/0.18)] sm:p-8">
+        <div className="rounded-3xl bg-event-navy p-6 text-text-inverse shadow-[0_30px_90px_rgb(var(--color-event-navy)/0.18)] sm:p-8">
           <HeartHandshake className="h-10 w-10 text-event-sky" aria-hidden="true" />
           <p className="expert-event-kicker mt-6 text-xs font-bold uppercase text-event-sky">
             {whyFearPersists.eyebrow}
           </p>
-          <h2 className="expert-headline mt-4 text-[2.25rem] leading-[0.98] text-text-inverse sm:text-[4.15rem] sm:leading-[0.94]">
+          <h2 className="expert-headline mt-4 text-[1.82rem] leading-[1.02] text-text-inverse sm:text-[3.35rem] sm:leading-[0.96] lg:text-[3.6rem]">
             {whyFearPersists.title}
           </h2>
         </div>
@@ -31,7 +31,7 @@ export function ExpertEventWhyFearPersists() {
             {whyFearPersists.highlights.map((highlight) => (
               <ExpertEventCard key={highlight} tone="soft" className="p-5">
                 <Sparkles className="h-6 w-6 text-event-coral" aria-hidden="true" />
-                <p className="expert-headline mt-4 text-2xl leading-tight text-event-navy">
+                <p className="expert-headline mt-4 text-[1.3rem] leading-tight text-event-navy sm:text-[1.4rem]">
                   {highlight}
                 </p>
               </ExpertEventCard>

@@ -1,6 +1,7 @@
 import { CheckCircle2 } from 'lucide-react';
 import funnelConfig from '../../../../core/config/funnel.config';
 import { ExpertEventCta } from './ExpertEventCta';
+import { ExpertEventImageFrame } from './ExpertEventImageFrame';
 import { ExpertEventSection } from './ExpertEventSection';
 
 export function ExpertEventPromise() {
@@ -9,17 +10,10 @@ export function ExpertEventPromise() {
   return (
     <ExpertEventSection id="event-promise" tone="surface" width="wide" className="md:py-28">
       <div className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
-        <div className="overflow-hidden rounded-[34px] bg-event-soft shadow-[0_24px_70px_rgb(var(--color-event-navy)/0.09)]">
-          <img
-            src={content.assets.agenda3}
-            alt=""
-            loading="lazy"
-            className="aspect-[4/3] w-full object-cover"
-          />
-        </div>
+        <ExpertEventImageFrame src={content.assets.agenda3} alt="" loading="lazy" />
 
         <div className="space-y-8">
-          <h2 className="expert-headline max-w-[760px] text-[2.4rem] leading-[0.98] text-event-ink sm:text-[4.5rem] sm:leading-[0.92]">
+          <h2 className="expert-headline max-w-[760px] text-[1.95rem] leading-[1.02] text-event-ink sm:text-[3.6rem] sm:leading-[0.96] lg:text-[3.85rem]">
             {content.promise.title}
           </h2>
 

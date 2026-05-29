@@ -1,6 +1,7 @@
 import funnelConfig from '../../../../core/config/funnel.config';
 import { CheckCircle2 } from 'lucide-react';
 import { ExpertEventCountdown } from './ExpertEventCountdown';
+import { ExpertEventImageFrame } from './ExpertEventImageFrame';
 import { ExpertEventRegistrationForm } from './ExpertEventRegistrationForm';
 import { ExpertEventSection } from './ExpertEventSection';
 
@@ -20,7 +21,7 @@ export function ExpertEventFinalCta() {
           <p className="expert-event-kicker text-[0.58rem] font-bold uppercase text-event-sky sm:text-[0.64rem]">
             Registro gratuito
           </p>
-          <h2 className="expert-headline mx-auto mt-3 max-w-[760px] text-[1.58rem] leading-[1.05] text-text-inverse sm:text-[2.7rem] sm:leading-[0.98] lg:mx-0 lg:text-[3.45rem] lg:leading-[0.94]">
+          <h2 className="expert-headline mx-auto mt-3 max-w-[760px] text-[1.3rem] leading-[1.08] text-text-inverse sm:text-[2.25rem] sm:leading-[1] lg:mx-0 lg:text-[2.95rem] lg:leading-[0.96]">
             {content.finalCta.headline}
           </h2>
           <p className="expert-body mx-auto mt-3 max-w-[680px] text-[0.93rem] font-semibold leading-6 text-text-inverse/[0.78] sm:text-base sm:leading-7 lg:mx-0">
@@ -41,14 +42,13 @@ export function ExpertEventFinalCta() {
             ))}
           </div>
 
-          <div className="mt-6 hidden overflow-hidden bg-text-inverse/[0.08] lg:block">
-            <img
-              src={content.assets.finalCta}
-              alt=""
-              loading="lazy"
-              className="aspect-[16/9] w-full object-cover"
-            />
-          </div>
+          <ExpertEventImageFrame
+            src={content.assets.finalCta}
+            alt=""
+            loading="lazy"
+            aspectClassName="aspect-[16/9]"
+            frameClassName="mx-auto mt-5 max-w-[390px] lg:mx-0 lg:mt-6 lg:max-w-none"
+          />
         </div>
 
         <div className="grid gap-3">

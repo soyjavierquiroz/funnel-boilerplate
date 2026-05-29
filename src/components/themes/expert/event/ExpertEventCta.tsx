@@ -23,7 +23,7 @@ export function ExpertEventCta({
   return (
     <a
       className={[
-        'expert-headline inline-flex min-h-[52px] items-center justify-center rounded-[10px] px-6 py-3.5',
+        'expert-headline inline-flex min-h-[52px] items-center justify-center rounded-xl px-6 py-3.5',
         'text-center text-[0.82rem] font-black uppercase tracking-wide transition duration-300',
         'hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-event-coral/35',
         variantClasses[variant],

@@ -13,7 +13,7 @@ export function ExpertEventTestimonials() {
         <p className="expert-event-kicker text-xs font-bold uppercase text-event-coral">
           {testimonials.eyebrow}
         </p>
-        <h2 className="expert-headline mt-4 text-[2.35rem] leading-[0.98] text-event-ink sm:text-[4.1rem] sm:leading-[0.94]">
+        <h2 className="expert-headline mt-4 text-[1.9rem] leading-[1.02] text-event-ink sm:text-[3.3rem] sm:leading-[0.96] lg:text-[3.55rem]">
           {testimonials.title}
         </h2>
         <p className="expert-body mx-auto mt-5 max-w-[660px] text-base font-semibold leading-8 text-event-muted sm:text-lg">
@@ -29,7 +29,7 @@ export function ExpertEventTestimonials() {
               "{item.quote}"
             </p>
             <div className="mt-7 border-t border-event-navy/10 pt-5">
-              <p className="expert-headline text-2xl leading-none text-event-navy">{item.name}</p>
+              <p className="expert-headline text-[1.3rem] leading-none text-event-navy sm:text-[1.4rem]">{item.name}</p>
               <p className="expert-body mt-2 text-sm font-bold uppercase text-event-muted">{item.role}</p>
             </div>
           </ExpertEventCard>
