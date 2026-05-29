@@ -30,6 +30,78 @@ function read_nested_string(array $payload, string $field): string
     return isset($payload[$field]) && is_string($payload[$field]) ? trim($payload[$field]) : '';
 }
 
+function is_field_name_literal(string $value, string $flatField, string $nestedField): bool
+{
+    return $value === $flatField || $value === $nestedField;
+}
+
+function truncate_for_log(string $value, int $maxLength = 4000): string
+{
+    if (strlen($value) <= $maxLength) {
+        return $value;
+    }
+
+    return substr($value, 0, $maxLength) . '... [truncated]';
+}
+
+function debug_log_json(string $label, array $payload): void
+{
+    $encodedPayload = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+    if ($encodedPayload === false) {
+        error_log('[capture.php] ' . $label . ': failed to encode debug payload');
+        return;
+    }
+
+    error_log('[capture.php] ' . $label . ': ' . truncate_for_log($encodedPayload));
+}
+
+function build_debug_payload_snapshot(array $payload): array
+{
+    $debugPayload = [];
+    $allowedFields = [
+        'email',
+        'list',
+        'lists',
+        'funnel_type',
+        'theme',
+        'landing_slug',
+        'ip',
+        'city',
+        'state',
+        'country',
+        'timezone',
+        'visitor_ip',
+        'visitor_city',
+        'visitor_region',
+        'visitor_country',
+        'visitor_country_code',
+        'visitor_timezone',
+        'visitor_currency',
+        'visitor_country_calling_code',
+    ];
+
+    foreach ($allowedFields as $field) {
+        if (array_key_exists($field, $payload)) {
+            $debugPayload[$field] = $payload[$field];
+        }
+    }
+
+    if (isset($payload['custom_values']) && is_array($payload['custom_values'])) {
+        $debugPayload['custom_values'] = $payload['custom_values'];
+    }
+
+    if (isset($payload['custom_fields']) && is_array($payload['custom_fields'])) {
+        $debugPayload['custom_fields'] = $payload['custom_fields'];
+    }
+
+    if (isset($payload['visitor']) && is_array($payload['visitor'])) {
+        $debugPayload['visitor'] = $payload['visitor'];
+    }
+
+    return $debugPayload;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
     exit;
@@ -52,6 +124,8 @@ if (!is_array($payload) || json_last_error() !== JSON_ERROR_NONE) {
         'error' => 'Invalid JSON payload',
     ]);
 }
+
+debug_log_json('received payload debug', build_debug_payload_snapshot($payload));
 
 $name = isset($payload['name']) && is_string($payload['name']) ? trim($payload['name']) : '';
 $firstName = isset($payload['first_name']) && is_string($payload['first_name']) ? trim($payload['first_name']) : '';
@@ -104,12 +178,24 @@ $normalizedVisitor = [];
 foreach ($visitorFieldMap as $flatField => $nestedField) {
     $value = read_payload_string($payload, $flatField);
 
+    if (is_field_name_literal($value, $flatField, $nestedField)) {
+        $value = '';
+    }
+
     if ($value === '') {
         $value = read_nested_string($visitor, $nestedField);
     }
 
+    if (is_field_name_literal($value, $flatField, $nestedField)) {
+        $value = '';
+    }
+
     if ($value === '' && $nestedField === 'country') {
         $value = read_nested_string($visitor, 'country_name');
+    }
+
+    if (is_field_name_literal($value, $flatField, $nestedField)) {
+        $value = '';
     }
 
     $payload[$flatField] = $value;
@@ -117,6 +203,48 @@ foreach ($visitorFieldMap as $flatField => $nestedField) {
 }
 
 $payload['visitor'] = array_merge($visitor, $normalizedVisitor);
+
+$standardFieldMap = [
+    'ip' => $payload['visitor_ip'],
+    'city' => $payload['visitor_city'],
+    'state' => $payload['visitor_region'],
+    'country' => $payload['visitor_country_code'] !== '' ? $payload['visitor_country_code'] : $payload['visitor_country'],
+    'timezone' => $payload['visitor_timezone'],
+];
+
+foreach ($standardFieldMap as $field => $value) {
+    if (read_payload_string($payload, $field) === '' && $value !== '') {
+        $payload[$field] = $value;
+    }
+}
+
+$attributionFields = [
+    'funnel_type',
+    'theme',
+    'landing_slug',
+];
+$customValueFields = array_merge(array_keys($visitorFieldMap), $attributionFields);
+$visitorCustomValues = [];
+
+foreach ($customValueFields as $field) {
+    if (read_payload_string($payload, $field) !== '') {
+        $visitorCustomValues[$field] = $payload[$field];
+    }
+}
+
+if ($visitorCustomValues !== []) {
+    $existingCustomValues = isset($payload['custom_values']) && is_array($payload['custom_values'])
+        ? $payload['custom_values']
+        : [];
+    $existingCustomFields = isset($payload['custom_fields']) && is_array($payload['custom_fields'])
+        ? $payload['custom_fields']
+        : [];
+
+    $payload['custom_values'] = array_merge($existingCustomValues, $visitorCustomValues);
+    $payload['custom_fields'] = array_merge($existingCustomFields, $visitorCustomValues);
+}
+
+debug_log_json('sent payload debug', build_debug_payload_snapshot($payload));
 
 $encodedPayload = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
@@ -162,6 +290,12 @@ $fluentcrmResponse = curl_exec($curl);
 $curlError = curl_error($curl);
 $fluentcrmStatus = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
 curl_close($curl);
+
+error_log('[capture.php] FluentCRM HTTP status: ' . $fluentcrmStatus);
+
+if (is_string($fluentcrmResponse)) {
+    error_log('[capture.php] FluentCRM response body: ' . truncate_for_log($fluentcrmResponse));
+}
 
 if ($fluentcrmResponse === false) {
     error_log('[capture.php] FluentCRM cURL error: ' . $curlError);

@@ -23,8 +23,10 @@ export interface VisitorPayload {
   visitor_country_calling_code: string;
 }
 
-function normalizeVisitorPayloadValue(value: string | undefined): string {
-  return value?.trim() ?? '';
+function normalizeVisitorPayloadValue(value: string | undefined, invalidLiterals: string[] = []): string {
+  const normalizedValue = value?.trim() ?? '';
+
+  return invalidLiterals.includes(normalizedValue) ? '' : normalizedValue;
 }
 
 export function buildVisitorPayload(visitorData: VisitorData | null | undefined): VisitorPayload {
@@ -36,7 +38,10 @@ export function buildVisitorPayload(visitorData: VisitorData | null | undefined)
     country_code: normalizeVisitorPayloadValue(visitorData?.country_code),
     timezone: normalizeVisitorPayloadValue(visitorData?.timezone),
     currency: normalizeVisitorPayloadValue(visitorData?.currency),
-    country_calling_code: normalizeVisitorPayloadValue(visitorData?.country_calling_code),
+    country_calling_code: normalizeVisitorPayloadValue(visitorData?.country_calling_code, [
+      'country_calling_code',
+      'visitor_country_calling_code',
+    ]),
   };
 
   return {

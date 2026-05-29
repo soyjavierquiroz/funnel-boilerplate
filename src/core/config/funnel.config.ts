@@ -1,4 +1,5 @@
 import { DNA, dnaNumericPrices, resolveDnaFunnelTheme } from '../../dna.config';
+import type { DnaTheme } from '../../dna.config';
 
 export type VideoProvider = 'youtube' | 'bunnynet' | 'vimeo' | 'wistia' | 'html5';
 export type OverlayPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
@@ -139,11 +140,18 @@ export interface FunnelIntegrationsConfig {
   capiWebhookUrl: string;
 }
 
+export interface FunnelAttributionConfig {
+  funnelType: FunnelType;
+  theme: DnaTheme;
+  landingSlug: string;
+}
+
 export interface FunnelConfig {
   brandName: string;
   domain: string;
   theme: FunnelTheme;
   funnelType: FunnelType;
+  attribution: FunnelAttributionConfig;
   media: FunnelMediaConfig;
   content: FunnelContentConfig;
   forms: FunnelFormsConfig;
@@ -282,6 +290,11 @@ export const funnelConfig: FunnelConfig = {
   domain: DNA.domain,
   theme: resolveDnaFunnelTheme(),
   funnelType: DNA.funnelType,
+  attribution: {
+    funnelType: DNA.funnelType,
+    theme: DNA.theme,
+    landingSlug: DNA.landingSlug,
+  },
   media: {
     heroVideo: {
       enabled: true,

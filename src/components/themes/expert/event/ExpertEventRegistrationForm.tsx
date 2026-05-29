@@ -16,6 +16,9 @@ interface MsmEventLeadPayload extends VisitorPayload {
   email: string;
   list: string;
   source: 'msm-event';
+  funnel_type: string;
+  theme: string;
+  landing_slug: string;
   page_url: string;
   submitted_at: string;
   event_name: 'Maneja Sin Miedo';
@@ -111,6 +114,9 @@ export function ExpertEventRegistrationForm() {
       email: trimmedEmail,
       list: capture.listSlug,
       source: 'msm-event',
+      funnel_type: funnelConfig.attribution.funnelType,
+      theme: funnelConfig.attribution.theme,
+      landing_slug: funnelConfig.attribution.landingSlug,
       page_url: pageUrl,
       submitted_at: submittedAt,
       event_name: 'Maneja Sin Miedo',

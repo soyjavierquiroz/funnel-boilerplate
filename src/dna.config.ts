@@ -11,6 +11,7 @@ function readEnv(name: string, fallback = '') {
 export interface DnaConfig {
   theme: DnaTheme;
   funnelType: DnaFunnelType;
+  landingSlug: string;
   productName: string;
   domain: string;
   siteId: string;
@@ -447,6 +448,7 @@ const msmEventAssets = {
 export const DNA = {
   theme: 'expert',
   funnelType: 'event',
+  landingSlug: readEnv('VITE_LANDING_SLUG', 'maneja-sin-miedo'),
   productName,
   domain,
   siteId,
