@@ -64,10 +64,10 @@ export function Success() {
 
   return (
     <div className="theme-expert theme-expert-event min-h-screen bg-event-navy text-text-inverse">
-      <main className="flex min-h-screen items-center px-4 py-10 sm:px-6">
+      <main className="flex min-h-screen items-center px-4 py-6 sm:px-6 sm:py-10">
         <section className="mx-auto flex w-full max-w-[620px] flex-col items-center text-center">
-          <div className="mb-7 h-16 w-16 rounded-full border border-event-sky/35 bg-event-sky/12 p-3 shadow-[0_18px_50px_rgb(var(--color-event-sky)/0.16)]">
-            <div className="flex h-full w-full items-center justify-center rounded-full bg-event-coral text-2xl font-black text-text-inverse">
+          <div className="mb-4 h-12 w-12 rounded-full border border-event-sky/35 bg-event-sky/12 p-2 shadow-[0_14px_36px_rgb(var(--color-event-sky)/0.14)] sm:mb-7 sm:h-16 sm:w-16 sm:p-3 sm:shadow-[0_18px_50px_rgb(var(--color-event-sky)/0.16)]">
+            <div className="flex h-full w-full items-center justify-center rounded-full bg-event-coral text-xl font-black text-text-inverse sm:text-2xl">
               1
             </div>
           </div>
@@ -75,25 +75,25 @@ export function Success() {
           <p className="expert-event-kicker text-xs font-bold uppercase text-event-sky">
             {DNA.copy.successPage.eyebrow}
           </p>
-          <h1 className="expert-headline mt-4 text-[2.45rem] leading-[1.02] text-text-inverse sm:text-[4rem]">
+          <h1 className="expert-headline mt-2 text-[2rem] leading-[1.02] text-text-inverse sm:mt-4 sm:text-[4rem]">
             {DNA.copy.successPage.title}
           </h1>
-          <p className="expert-body mx-auto mt-5 max-w-[540px] text-base leading-7 text-white/82 sm:text-lg sm:leading-8">
+          <p className="expert-body mx-auto mt-3 max-w-[540px] text-[0.95rem] leading-6 text-white/82 sm:mt-5 sm:text-lg sm:leading-8">
             {DNA.copy.successPage.description}
           </p>
 
-          <div className="mt-9 w-full rounded-2xl border border-white/12 bg-white/[0.07] p-5 shadow-[0_24px_70px_rgb(0_0_0/0.22)] sm:p-7">
+          <div className="mt-6 w-full rounded-2xl border border-white/12 bg-white/[0.07] p-4 shadow-[0_20px_54px_rgb(0_0_0/0.2)] sm:mt-9 sm:p-7 sm:shadow-[0_24px_70px_rgb(0_0_0/0.22)]">
             {hasWhatsappGroupUrl ? (
               <>
                 <p className="expert-body text-sm font-semibold text-white/78">
                   {DNA.copy.successPage.countdownLead}
                 </p>
-                <div className="mt-3 text-[4rem] font-black leading-none text-event-sky sm:text-[5rem]">
+                <div className="mt-2 text-[3.2rem] font-black leading-none text-event-sky sm:mt-3 sm:text-[5rem]">
                   {secondsRemaining}
                 </div>
 
                 <div
-                  className="mt-5 h-3 overflow-hidden rounded-full bg-white/14"
+                  className="mt-3 h-2.5 overflow-hidden rounded-full bg-white/14 sm:mt-5 sm:h-3"
                   role="progressbar"
                   aria-label="Progreso de redirección a WhatsApp"
                   aria-valuemin={0}
@@ -108,7 +108,7 @@ export function Success() {
 
                 <a
                   href={whatsappGroupUrl}
-                  className="mt-7 inline-flex min-h-14 w-full items-center justify-center rounded-full bg-[#25D366] px-6 text-base font-black text-[#062714] shadow-[0_16px_36px_rgb(37_211_102/0.24)] transition hover:bg-[#20bd5a] focus:outline-none focus:ring-4 focus:ring-[#25D366]/35 sm:w-auto sm:min-w-[260px]"
+                  className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[#25D366] px-5 text-sm font-black text-[#062714] shadow-[0_14px_30px_rgb(37_211_102/0.22)] transition hover:bg-[#20bd5a] focus:outline-none focus:ring-4 focus:ring-[#25D366]/35 sm:mt-7 sm:min-h-14 sm:w-auto sm:min-w-[260px] sm:px-6 sm:text-base sm:shadow-[0_16px_36px_rgb(37_211_102/0.24)]"
                 >
                   {DNA.copy.successPage.whatsappLabel}
                 </a>
@@ -121,7 +121,7 @@ export function Success() {
                 <button
                   type="button"
                   disabled
-                  className="mt-6 inline-flex min-h-14 w-full cursor-not-allowed items-center justify-center rounded-full bg-white/18 px-6 text-base font-black text-white/55 sm:w-auto sm:min-w-[260px]"
+                  className="mt-5 inline-flex min-h-12 w-full cursor-not-allowed items-center justify-center rounded-full bg-white/18 px-5 text-sm font-black text-white/55 sm:mt-6 sm:min-h-14 sm:w-auto sm:min-w-[260px] sm:px-6 sm:text-base"
                 >
                   {DNA.copy.successPage.whatsappLabel}
                 </button>
@@ -129,7 +129,7 @@ export function Success() {
             )}
           </div>
 
-          <p className="expert-body mt-6 text-xs font-semibold uppercase text-white/48">
+          <p className="expert-body mt-4 text-xs font-semibold uppercase text-white/48 sm:mt-6">
             {DNA.copy.productName}
           </p>
         </section>

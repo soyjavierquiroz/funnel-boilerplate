@@ -117,6 +117,7 @@ export interface DnaConfig {
   };
   forms: {
     captureWebhookUrl: string;
+    captureListSlug: string;
     successRedirectType: 'url' | 'whatsapp';
     successRedirectUrl: string;
     whatsappGroupUrl: string;
@@ -556,6 +557,7 @@ export const DNA = {
   },
   forms: {
     captureWebhookUrl: readEnv('VITE_CAPTURE_WEBHOOK_URL'),
+    captureListSlug: readEnv('VITE_CAPTURE_LIST_SLUG'),
     successRedirectType: 'url',
     successRedirectUrl: '/confirmacion',
     whatsappGroupUrl: readEnv('VITE_WHATSAPP_GROUP_URL'),

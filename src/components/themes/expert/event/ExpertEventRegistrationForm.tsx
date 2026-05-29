@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useMemo, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { DNA } from '../../../../dna.config';
 import funnelConfig from '../../../../core/config/funnel.config';
 import analytics from '../../../../core/services/analytics';
@@ -7,6 +7,24 @@ import { useVisitor } from '../../../../core/visitor/VisitorContext';
 interface FormErrors {
   firstName?: string;
   email?: string;
+}
+
+interface MsmEventLeadPayload {
+  first_name: string;
+  name: string;
+  email: string;
+  list: string;
+  source: 'msm-event';
+  page_url: string;
+  submitted_at: string;
+  event_name: 'Maneja Sin Miedo';
+  meta: {
+    ip?: string;
+    ciudad?: string;
+    pais?: string;
+    zona_horaria?: string;
+    moneda?: string;
+  };
 }
 
 function isValidEmail(value: string): boolean {
@@ -36,9 +54,7 @@ export function ExpertEventRegistrationForm() {
   const [submitError, setSubmitError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const canSubmit = useMemo(() => {
-    return !isSubmitting && firstName.trim().length > 0 && isValidEmail(email.trim());
-  }, [email, firstName, isSubmitting]);
+  const canSubmit = !isSubmitting;
 
   const handleInputChange = (
     setter: (value: string) => void,
@@ -53,15 +69,17 @@ export function ExpertEventRegistrationForm() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    const trimmedFirstName = firstName.trim();
+    const trimmedEmail = email.trim();
     const nextErrors: FormErrors = {};
 
-    if (!firstName.trim()) {
+    if (!trimmedFirstName) {
       nextErrors.firstName = formCopy.requiredError;
     }
 
-    if (!email.trim()) {
+    if (!trimmedEmail) {
       nextErrors.email = formCopy.emailRequiredError;
-    } else if (!isValidEmail(email.trim())) {
+    } else if (!isValidEmail(trimmedEmail)) {
       nextErrors.email = formCopy.invalidEmailError;
     }
 
@@ -72,13 +90,28 @@ export function ExpertEventRegistrationForm() {
       return;
     }
 
+    setFirstName(trimmedFirstName);
+    setEmail(trimmedEmail);
+
+    if (!capture.webhookUrl) {
+      console.error('[ExpertEventRegistrationForm] missing VITE_CAPTURE_WEBHOOK_URL configuration');
+      setSubmitError(formCopy.submitError);
+      return;
+    }
+
     setIsSubmitting(true);
 
-    const payload = {
-      lead: {
-        nombre: firstName.trim(),
-        email: email.trim(),
-      },
+    const submittedAt = new Date().toISOString();
+    const pageUrl = window.location.href;
+    const payload: MsmEventLeadPayload = {
+      first_name: trimmedFirstName,
+      name: trimmedFirstName,
+      email: trimmedEmail,
+      list: capture.listSlug,
+      source: 'msm-event',
+      page_url: pageUrl,
+      submitted_at: submittedAt,
+      event_name: 'Maneja Sin Miedo',
       meta: {
         ip: visitorData?.ip,
         ciudad: visitorData?.city,
@@ -104,8 +137,16 @@ export function ExpertEventRegistrationForm() {
 
       try {
         await analytics.trackEvent(capture.tracking.eventName, {
-          lead: payload.lead,
+          lead: {
+            nombre: payload.first_name,
+            email: payload.email,
+          },
           meta: payload.meta,
+          list: payload.list,
+          source: payload.source,
+          page_url: payload.page_url,
+          submitted_at: payload.submitted_at,
+          event_name: payload.event_name,
           form_id: capture.tracking.formId,
           content_name: funnelConfig.brandName,
           status: capture.tracking.status,

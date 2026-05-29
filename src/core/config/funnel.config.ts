@@ -99,6 +99,7 @@ export interface FunnelContentConfig {
 export interface CaptureFormConfig {
   enabled: boolean;
   webhookUrl: string;
+  listSlug: string;
   successRedirectType: FunnelFormSuccessRedirectType;
   successRedirectUrl: string;
   whatsappRedirectBaseUrl: string;
@@ -352,6 +353,7 @@ export const funnelConfig: FunnelConfig = {
     capture: {
       enabled: true,
       webhookUrl: DNA.forms.captureWebhookUrl,
+      listSlug: DNA.forms.captureListSlug,
       successRedirectType: DNA.forms.successRedirectType,
       successRedirectUrl: DNA.forms.successRedirectUrl,
       whatsappRedirectBaseUrl: DNA.forms.whatsappRedirectBaseUrl,
