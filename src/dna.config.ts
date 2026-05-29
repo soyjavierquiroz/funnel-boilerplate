@@ -119,6 +119,7 @@ export interface DnaConfig {
     captureWebhookUrl: string;
     successRedirectType: 'url' | 'whatsapp';
     successRedirectUrl: string;
+    whatsappGroupUrl: string;
     whatsappRedirectBaseUrl: string;
     captureFields: {
       firstName: boolean;
@@ -216,6 +217,9 @@ export interface DnaConfig {
       title: string;
       description: string;
       backLabel: string;
+      whatsappLabel: string;
+      countdownLead: string;
+      missingWhatsappUrlMessage: string;
     };
     captureForm: {
       eyebrow: string;
@@ -554,6 +558,7 @@ export const DNA = {
     captureWebhookUrl: readEnv('VITE_CAPTURE_WEBHOOK_URL'),
     successRedirectType: 'url',
     successRedirectUrl: '/confirmacion',
+    whatsappGroupUrl: readEnv('VITE_WHATSAPP_GROUP_URL'),
     whatsappRedirectBaseUrl: readEnv('VITE_WHATSAPP_REDIRECT_BASE_URL', 'https://wa.me'),
     captureFields: {
       firstName: true,
@@ -687,10 +692,14 @@ export const DNA = {
         'Este bloque se conserva como placeholder temporal. El CTA principal usa la URL de checkout definida en DNA.',
     },
     successPage: {
-      eyebrow: 'Confirmacion',
-      title: 'Registro recibido',
-      description: 'Tu solicitud fue recibida correctamente. Configura aqui el mensaje posterior a la conversion.',
+      eyebrow: 'REGISTRO CASI COMPLETO',
+      title: '¡Te falta un paso más!',
+      description:
+        'Ahora únete al grupo de WhatsApp del evento para recibir el acceso, recordatorios y materiales importantes.',
       backLabel: 'Volver al inicio',
+      whatsappLabel: 'Únete por WhatsApp',
+      countdownLead: 'Serás redirigido automáticamente en...',
+      missingWhatsappUrlMessage: 'El enlace de WhatsApp aún no está configurado.',
     },
     captureForm: {
       eyebrow: 'Formulario enriquecido',
