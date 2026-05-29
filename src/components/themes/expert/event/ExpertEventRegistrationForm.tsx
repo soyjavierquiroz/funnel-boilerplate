@@ -1,5 +1,4 @@
 import { ChangeEvent, FormEvent, useMemo, useState } from 'react';
-import { ShieldCheck } from 'lucide-react';
 import { DNA } from '../../../../dna.config';
 import funnelConfig from '../../../../core/config/funnel.config';
 import analytics from '../../../../core/services/analytics';
@@ -125,27 +124,10 @@ export function ExpertEventRegistrationForm() {
   };
 
   return (
-    <div
-      id={content.registrationAnchorId}
-      className="bg-event-surface p-5 shadow-[0_26px_80px_rgb(var(--color-event-ink)/0.18)] sm:p-7"
-    >
-      <div className="mb-5 flex items-start gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] bg-event-coral/15">
-          <ShieldCheck className="h-5 w-5 text-event-navy" aria-hidden="true" />
-        </div>
+    <div className="bg-event-surface p-4 shadow-[0_22px_62px_rgb(var(--color-event-ink)/0.22)] sm:p-6">
+      <form className="space-y-3.5" onSubmit={handleSubmit} aria-label={content.hero.formTitle} noValidate>
         <div>
-          <h2 className="expert-headline text-[1.55rem] leading-tight text-event-navy sm:text-[1.8rem]">
-            {content.hero.formTitle}
-          </h2>
-          <p className="expert-body mt-2 text-sm font-semibold leading-6 text-event-muted">
-            {content.foundation.cardText}
-          </p>
-        </div>
-      </div>
-
-      <form className="space-y-4" onSubmit={handleSubmit} noValidate>
-        <div>
-          <label htmlFor="event-first-name" className="expert-body mb-2 block text-sm font-bold text-event-ink">
+          <label htmlFor="event-first-name" className="sr-only">
             {formCopy.firstNameLabel}
           </label>
           <input
@@ -154,7 +136,7 @@ export function ExpertEventRegistrationForm() {
             value={firstName}
             onChange={(nextEvent) => handleInputChange(setFirstName, 'firstName', nextEvent)}
             className={[
-              'expert-input h-[50px] w-full rounded-[12px] border bg-event-soft px-4 text-base text-event-ink',
+              'expert-input h-[48px] w-full rounded-[10px] border bg-event-soft px-4 text-base text-event-ink sm:h-[52px]',
               'placeholder:text-event-muted focus:outline-none focus:ring-2',
               errors.firstName
                 ? 'border-error focus:border-error focus:ring-error/30'
@@ -166,7 +148,7 @@ export function ExpertEventRegistrationForm() {
         </div>
 
         <div>
-          <label htmlFor="event-email" className="expert-body mb-2 block text-sm font-bold text-event-ink">
+          <label htmlFor="event-email" className="sr-only">
             {formCopy.emailLabel}
           </label>
           <input
@@ -175,7 +157,7 @@ export function ExpertEventRegistrationForm() {
             value={email}
             onChange={(nextEvent) => handleInputChange(setEmail, 'email', nextEvent)}
             className={[
-              'expert-input h-[50px] w-full rounded-[12px] border bg-event-soft px-4 text-base text-event-ink',
+              'expert-input h-[48px] w-full rounded-[10px] border bg-event-soft px-4 text-base text-event-ink sm:h-[52px]',
               'placeholder:text-event-muted focus:outline-none focus:ring-2',
               errors.email
                 ? 'border-error focus:border-error focus:ring-error/30'
@@ -202,15 +184,15 @@ export function ExpertEventRegistrationForm() {
           type="submit"
           disabled={!canSubmit}
           className={[
-            'expert-headline min-h-[52px] w-full rounded-[14px] bg-cta px-6 py-4 text-center text-sm',
+            'expert-headline cta-pick-me min-h-[50px] w-full rounded-[9px] bg-cta px-5 py-3.5 text-center text-[0.82rem] sm:min-h-[54px] sm:px-6 sm:py-4 sm:text-sm',
             'font-black uppercase tracking-wide text-[rgb(var(--color-cta-text))]',
-            'shadow-[0_0_0_1px_rgb(var(--color-event-coral)/0.18),0_16px_42px_rgb(var(--color-event-coral)/0.32)]',
+            'shadow-[0_0_0_1px_rgb(var(--color-event-coral)/0.28),0_16px_42px_rgb(var(--color-event-coral)/0.42),0_0_34px_rgb(var(--color-event-coral)/0.2)]',
             'transition duration-300 hover:-translate-y-1 hover:bg-cta-hover',
-            'hover:shadow-[0_0_0_1px_rgb(var(--color-event-coral)/0.22),0_22px_54px_rgb(var(--color-event-coral)/0.38)]',
-            'focus:outline-none focus:ring-2 focus:ring-event-coral/35 disabled:cursor-not-allowed disabled:opacity-50',
+            'hover:shadow-[0_0_0_1px_rgb(var(--color-event-coral)/0.34),0_22px_54px_rgb(var(--color-event-coral)/0.48),0_0_46px_rgb(var(--color-event-coral)/0.28)]',
+            'focus:outline-none focus:ring-2 focus:ring-event-coral/35 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none',
           ].join(' ')}
         >
-          {isSubmitting ? content.hero.submittingLabel : content.hero.primaryCtaLabel}
+          {isSubmitting ? content.hero.submittingLabel : content.finalCta.ctaLabel}
         </button>
       </form>
     </div>

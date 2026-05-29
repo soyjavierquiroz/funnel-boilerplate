@@ -267,6 +267,14 @@
     animation: ctaShimmer 3s ease-in-out infinite;
   }
 
+  .cta-pick-me {
+    animation: ctaPickMe 2.4s ease-in-out infinite;
+  }
+
+  .cta-pick-me:disabled {
+    animation: none;
+  }
+
   .text-gradient {
     background-image: linear-gradient(135deg, rgb(var(--color-text-main) / 1), rgb(var(--color-accent) / 0.95));
     -webkit-background-clip: text;
@@ -370,6 +378,25 @@
   100% {
     transform: skewX(-22deg) translateX(420%);
     opacity: 0;
+  }
+}
+
+@keyframes ctaPickMe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow:
+      0 0 0 1px rgb(var(--color-event-coral) / 0.28),
+      0 16px 42px rgb(var(--color-event-coral) / 0.42),
+      0 0 34px rgb(var(--color-event-coral) / 0.2);
+  }
+
+  50% {
+    transform: translateY(-1px) scale(1.012);
+    box-shadow:
+      0 0 0 1px rgb(var(--color-event-coral) / 0.34),
+      0 20px 50px rgb(var(--color-event-coral) / 0.5),
+      0 0 50px rgb(var(--color-event-coral) / 0.3);
   }
 }
 

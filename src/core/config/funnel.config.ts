@@ -254,6 +254,9 @@ export interface EventFunnelContentConfig {
     ctaLabel: string;
   };
   finalCta: {
+    headline: string;
+    subheadline: string;
+    bullets: string[];
     text: string;
     ctaLabel: string;
   };

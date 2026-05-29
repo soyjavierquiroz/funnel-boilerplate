@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import funnelConfig from '../../../../core/config/funnel.config';
 
 interface ExpertEventCountdownProps {
+  size?: 'regular' | 'compact';
   variant?: 'light' | 'dark';
 }
 
@@ -46,10 +47,30 @@ const variantClasses = {
   },
 };
 
-export function ExpertEventCountdown({ variant = 'light' }: ExpertEventCountdownProps) {
+const sizeClasses = {
+  regular: {
+    shell: 'rounded-[16px] p-3 sm:p-4',
+    label: 'text-[0.66rem]',
+    grid: 'mt-3 gap-2',
+    item: 'rounded-[12px] px-2 py-2.5',
+    value: 'text-[1.2rem] sm:text-[1.6rem]',
+    unit: 'mt-2 text-[0.56rem]',
+  },
+  compact: {
+    shell: 'rounded-[10px] p-2.5 sm:p-3',
+    label: 'text-[0.52rem] sm:text-[0.56rem]',
+    grid: 'mt-2 gap-1 sm:gap-1.5',
+    item: 'rounded-[8px] px-1 py-1.5 sm:px-1.5',
+    value: 'text-[0.84rem] sm:text-[1rem]',
+    unit: 'mt-1 text-[0.44rem] sm:text-[0.48rem]',
+  },
+};
+
+export function ExpertEventCountdown({ size = 'regular', variant = 'light' }: ExpertEventCountdownProps) {
   const { startsAtIso, countdown } = funnelConfig.content.event;
   const [remaining, setRemaining] = useState(() => getRemainingTime(startsAtIso));
   const classes = variantClasses[variant];
+  const sizing = sizeClasses[size];
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -71,18 +92,18 @@ export function ExpertEventCountdown({ variant = 'light' }: ExpertEventCountdown
   ];
 
   return (
-    <div className={['rounded-[16px] p-3 sm:p-4', classes.shell].join(' ')}>
-      <p className={['expert-event-kicker text-center text-[0.66rem] font-bold uppercase', classes.label].join(' ')}>
+    <div className={[sizing.shell, classes.shell].join(' ')}>
+      <p className={['expert-event-kicker text-center font-bold uppercase', sizing.label, classes.label].join(' ')}>
         {hasExpired ? countdown.expiredLabel : countdown.label}
       </p>
 
-      <div className="mt-3 grid grid-cols-4 gap-2" aria-live="polite">
+      <div className={['grid grid-cols-4', sizing.grid].join(' ')} aria-live="polite">
         {items.map((item) => (
-          <div key={item.label} className={['rounded-[12px] px-2 py-2.5 text-center', classes.item].join(' ')}>
-            <div className={['expert-headline text-[1.2rem] leading-none sm:text-[1.6rem]', classes.value].join(' ')}>
+          <div key={item.label} className={[sizing.item, 'text-center', classes.item].join(' ')}>
+            <div className={['expert-headline leading-none', sizing.value, classes.value].join(' ')}>
               {String(item.value).padStart(2, '0')}
             </div>
-            <div className={['expert-event-kicker mt-2 text-[0.56rem] font-bold uppercase', classes.unit].join(' ')}>
+            <div className={['expert-event-kicker font-bold uppercase', sizing.unit, classes.unit].join(' ')}>
               {item.label}
             </div>
           </div>

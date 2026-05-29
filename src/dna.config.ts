@@ -324,6 +324,9 @@ export interface DnaConfig {
         ctaLabel: string;
       };
       finalCta: {
+        headline: string;
+        subheadline: string;
+        bullets: string[];
         text: string;
         ctaLabel: string;
       };
@@ -712,8 +715,8 @@ export const DNA = {
       submittingLabel: 'Enviando...',
     },
     event: {
-      registrationAnchorId: 'registro-evento',
-      startsAtIso: readEnv('VITE_EVENT_STARTS_AT', '2026-06-15T19:00:00-04:00'),
+      registrationAnchorId: 'final-registration',
+      startsAtIso: readEnv('VITE_EVENT_STARTS_AT', '2026-06-09T00:00:00-05:00'),
       hero: {
         eyebrow: 'Evento Gratuito Online',
         eventName: 'Maneja Sin Miedo',
@@ -727,7 +730,7 @@ export const DNA = {
         submittingLabel: 'Reservando...',
       },
       countdown: {
-        label: 'El evento comienza en:',
+        label: 'El evento inicia en:',
         expiredLabel: 'El evento ya comenzó',
         units: {
           days: 'Días',
@@ -742,7 +745,7 @@ export const DNA = {
         sectionText:
           'Esta primera versión define ritmo, aire visual, tarjetas, CTAs y superficies para construir luego las secciones del evento sin acoplarlas al VSL.',
         cardTitle: 'Foundation de evento',
-        cardText: 'Preparado para countdown, agenda, autoridad y formulario en iteraciones futuras.',
+        cardText: 'Reserva tu acceso gratuito y recibe los recordatorios del evento en tu correo.',
       },
       promise: {
         title: 'Esto es lo que descubrirás en el evento:',
@@ -864,9 +867,16 @@ export const DNA = {
         ctaLabel: 'QUIERO ASISTIR GRATIS AL EVENTO',
       },
       finalCta: {
+        headline: 'Reserva tu cupo gratuito y empieza a recuperar tu confianza al volante',
+        subheadline:
+          'En este evento online descubrirás por qué el miedo a conducir no significa que no seas capaz, y cómo empezar a manejar con más seguridad paso a paso.',
+        bullets: [
+          'Evento gratuito online',
+          'Cupos limitados',
+        ],
         text:
           'Este evento gratuito tendrá cupos limitados para garantizar una mejor experiencia. Reserva ahora tu acceso antes de que se completen los registros.',
-        ctaLabel: 'RESERVAR MI CUPO AHORA',
+        ctaLabel: 'RESERVAR MI CUPO GRATIS',
       },
     },
     pricingCard: {
