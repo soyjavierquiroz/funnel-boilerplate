@@ -4,7 +4,7 @@ interface ExpertEventSectionProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;
   children: ReactNode;
   width?: 'content' | 'wide';
-  tone?: 'page' | 'surface' | 'soft';
+  tone?: 'page' | 'surface' | 'soft' | 'navy';
 }
 
 const widthClasses = {
@@ -16,6 +16,7 @@ const toneClasses = {
   page: 'bg-event-page',
   surface: 'bg-event-surface',
   soft: 'bg-event-soft',
+  navy: 'bg-event-navy',
 };
 
 export function ExpertEventSection({

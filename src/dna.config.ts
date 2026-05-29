@@ -96,6 +96,18 @@ export interface DnaConfig {
     bundleWideImage: string;
     socialImage: string;
     event: {
+      hero: string;
+      agenda1: string;
+      agenda2: string;
+      agenda3: string;
+      pain: string;
+      authority: string;
+      finalCta: string;
+      heroImage: string;
+      agendaImages: string[];
+      painImage: string;
+      authorityImage: string;
+      finalCtaImage: string;
       insecureDriverImage: string;
       confidentDriverImage: string;
       parkedCarImage: string;
@@ -389,6 +401,16 @@ const siteId = readEnv('VITE_SITE_ID', 'APRENDER_MOTORES');
 const checkoutUrl = readEnv('VITE_CHECKOUT_URL', 'https://example.com/replace-with-checkout-url');
 const vslVideoId = readEnv('VITE_VSL_VIDEO_ID', 'REPLACE_WITH_VSL_VIDEO_ID');
 
+const msmEventAssets = {
+  hero: '/assets/msm/hero-main.webp',
+  agenda1: '/assets/msm/agenda-1.webp',
+  agenda2: '/assets/msm/agenda-2.webp',
+  agenda3: '/assets/msm/agenda-3.webp',
+  pain: '/assets/msm/pain-auto-parqueado.webp',
+  authority: '/assets/msm/authority-dario.webp',
+  finalCta: '/assets/msm/cta-final.webp',
+} as const;
+
 export const DNA = {
   theme: 'expert',
   funnelType: 'event',
@@ -483,11 +505,21 @@ export const DNA = {
     bundleWideImage: '/assets/funnel-placeholder.svg',
     socialImage: '/assets/funnel-placeholder.svg',
     event: {
-      insecureDriverImage: '/assets/funnel-placeholder.svg',
-      confidentDriverImage: '/assets/funnel-placeholder.svg',
-      parkedCarImage: '/assets/funnel-placeholder.svg',
-      motherWithChildrenImage: '/assets/funnel-placeholder.svg',
-      expertTeachingImage: '/assets/funnel-placeholder.svg',
+      ...msmEventAssets,
+      heroImage: msmEventAssets.hero,
+      agendaImages: [
+        msmEventAssets.agenda1,
+        msmEventAssets.agenda2,
+        msmEventAssets.agenda3,
+      ],
+      painImage: msmEventAssets.pain,
+      authorityImage: msmEventAssets.authority,
+      finalCtaImage: msmEventAssets.finalCta,
+      insecureDriverImage: msmEventAssets.hero,
+      confidentDriverImage: msmEventAssets.agenda3,
+      parkedCarImage: msmEventAssets.pain,
+      motherWithChildrenImage: msmEventAssets.finalCta,
+      expertTeachingImage: msmEventAssets.authority,
     },
   },
   forms: {

@@ -128,55 +128,58 @@ export function ExpertEventHero() {
   };
 
   return (
-    <ExpertEventSection className="overflow-hidden pb-12 pt-8 md:pb-18 md:pt-12" width="wide">
-      <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_410px] lg:gap-14">
-        <div className="space-y-8">
-          <div className="space-y-6">
-            <p className="expert-event-kicker inline-flex rounded-full bg-event-surface px-4 py-2 text-[0.68rem] font-bold uppercase text-event-navy shadow-[0_12px_34px_rgb(var(--color-event-navy)/0.06)]">
+    <ExpertEventSection className="overflow-hidden pb-12 pt-5 md:pb-16 md:pt-10" width="wide">
+      <div className="grid items-center gap-7 lg:grid-cols-[minmax(0,1fr)_390px] lg:gap-10">
+        <div className="relative isolate overflow-hidden rounded-[30px] bg-event-navy text-text-inverse shadow-[0_34px_90px_rgb(var(--color-event-navy)/0.24)] sm:rounded-[34px]">
+          <img
+            src={content.assets.hero}
+            alt={content.hero.imageAlt}
+            className="absolute inset-0 h-full w-full object-cover object-center opacity-[0.74]"
+          />
+          <div className="absolute inset-0 bg-event-navy/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-event-navy via-event-navy/70 to-event-navy/10" />
+
+          <div className="relative flex min-h-[550px] flex-col justify-end p-5 sm:min-h-[610px] sm:p-8 lg:min-h-[660px] lg:p-10">
+            <p className="expert-event-kicker inline-flex rounded-full bg-event-surface/95 px-4 py-2 text-[0.66rem] font-bold uppercase text-event-navy shadow-[0_12px_34px_rgb(var(--color-event-navy)/0.14)]">
               {content.hero.eyebrow}
             </p>
 
-            <h1 className="expert-headline max-w-[780px] text-[4rem] uppercase leading-[0.82] text-event-ink sm:text-[6.2rem] lg:text-[7.4rem]">
+            <h1 className="expert-headline mt-5 max-w-[760px] text-[2.65rem] uppercase leading-[0.92] text-text-inverse sm:text-[5.2rem] sm:leading-[0.86] lg:text-[6.45rem]">
               {content.hero.headline}
             </h1>
 
-            <p className="expert-body max-w-[650px] text-xl font-semibold leading-9 text-event-muted sm:text-2xl sm:leading-10">
+            <p className="expert-body mt-4 max-w-[640px] text-base font-semibold leading-7 text-text-inverse/90 sm:mt-5 sm:text-xl sm:leading-8">
               {content.hero.subheadline}
             </p>
-          </div>
 
-          <div className="relative">
-            <div className="overflow-hidden rounded-[34px] bg-event-surface shadow-[0_28px_80px_rgb(var(--color-event-navy)/0.12)]">
-              <img
-                src={content.assets.insecureDriverImage}
-                alt={content.hero.imageAlt}
-                className="aspect-[5/4] w-full object-cover sm:aspect-[16/9]"
-              />
+            <div className="mt-5 max-w-[500px] sm:mt-6">
+              <ExpertEventCountdown variant="dark" />
             </div>
-            <div className="mt-4 max-w-[520px] sm:absolute sm:bottom-5 sm:left-5 sm:mt-0">
-              <ExpertEventCountdown />
-            </div>
-          </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <ExpertEventCta href={`#${content.registrationAnchorId}`}>{content.hero.primaryCtaLabel}</ExpertEventCta>
-            <ExpertEventCta href="#event-promise" variant="secondary">
-              {content.hero.secondaryCtaLabel}
-            </ExpertEventCta>
+            <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row">
+              <ExpertEventCta href={`#${content.registrationAnchorId}`}>{content.hero.primaryCtaLabel}</ExpertEventCta>
+              <ExpertEventCta
+                href="#event-promise"
+                variant="secondary"
+                className="border-text-inverse/30 text-text-inverse hover:bg-text-inverse/10"
+              >
+                {content.hero.secondaryCtaLabel}
+              </ExpertEventCta>
+            </div>
           </div>
         </div>
 
         <div
           id={content.registrationAnchorId}
-          className="rounded-[32px] bg-event-surface p-5 shadow-[0_30px_90px_rgb(var(--color-event-navy)/0.12)] sm:p-7"
+          className="rounded-[28px] border border-event-navy/10 bg-event-surface p-5 shadow-[0_30px_90px_rgb(var(--color-event-navy)/0.12)] sm:rounded-[32px] sm:p-7"
         >
           <div className="mb-5 flex items-start gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-event-coral/15">
               <ShieldCheck className="h-5 w-5 text-event-navy" aria-hidden="true" />
             </div>
             <div>
-              <h2 className="expert-headline text-2xl leading-tight text-event-ink">
-            {content.hero.formTitle}
+              <h2 className="expert-headline text-2xl leading-tight text-event-navy">
+                {content.hero.formTitle}
               </h2>
               <p className="expert-body mt-2 text-sm font-semibold leading-6 text-event-muted">
                 {content.foundation.cardText}

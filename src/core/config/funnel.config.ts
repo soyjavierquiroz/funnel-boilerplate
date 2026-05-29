@@ -154,6 +154,18 @@ export interface EventFunnelContentConfig {
   registrationAnchorId: string;
   startsAtIso: string;
   assets: {
+    hero: string;
+    agenda1: string;
+    agenda2: string;
+    agenda3: string;
+    pain: string;
+    authority: string;
+    finalCta: string;
+    heroImage: string;
+    agendaImages: string[];
+    painImage: string;
+    authorityImage: string;
+    finalCtaImage: string;
     insecureDriverImage: string;
     confidentDriverImage: string;
     parkedCarImage: string;
