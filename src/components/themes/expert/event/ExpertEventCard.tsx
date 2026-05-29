@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react';
+import { expertEventSurface } from './ExpertEventTypography';
 
 interface ExpertEventCardProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
@@ -6,8 +7,8 @@ interface ExpertEventCardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const toneClasses = {
-  plain: 'border-transparent bg-event-card',
-  soft: 'border-transparent bg-event-soft',
+  plain: 'bg-event-card',
+  soft: 'bg-event-soft',
   accent: 'border-event-coral/20 bg-event-coral/10',
 };
 
@@ -20,7 +21,8 @@ export function ExpertEventCard({
   return (
     <div
       className={[
-        'rounded-[24px] border p-5 shadow-[0_18px_50px_rgb(var(--color-event-navy)/0.06)]',
+        expertEventSurface.card,
+        'p-5',
         toneClasses[tone],
         className,
       ].join(' ')}

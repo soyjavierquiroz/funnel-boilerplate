@@ -4,60 +4,58 @@ import { ExpertEventCountdown } from './ExpertEventCountdown';
 import { ExpertEventImageFrame } from './ExpertEventImageFrame';
 import { ExpertEventRegistrationForm } from './ExpertEventRegistrationForm';
 import { ExpertEventSection } from './ExpertEventSection';
+import { expertEventText } from './ExpertEventTypography';
 
 export function ExpertEventFinalCta() {
   const content = funnelConfig.content.event;
-  const compactBadges = content.finalCta.bullets.slice(0, 2);
+  const compactBenefits = ['Evento gratuito online', 'Cupos limitados'];
 
   return (
     <ExpertEventSection
       id={content.registrationAnchorId}
       tone="navy"
       width="wide"
-      className="!py-7 scroll-mt-0 text-text-inverse sm:!py-10 md:!py-16"
+      className="!py-6 scroll-mt-0 text-text-inverse sm:!py-8 md:!py-12"
     >
-      <div className="grid gap-5 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-8">
-        <div className="text-center lg:text-left">
-          <p className="expert-event-kicker text-[0.58rem] font-bold uppercase text-event-sky sm:text-[0.64rem]">
-            Registro gratuito
-          </p>
-          <h2 className="expert-headline mx-auto mt-3 max-w-[760px] text-[1.3rem] leading-[1.08] text-text-inverse sm:text-[2.25rem] sm:leading-[1] lg:mx-0 lg:text-[2.95rem] lg:leading-[0.96]">
-            {content.finalCta.headline}
-          </h2>
-          <p className="expert-body mx-auto mt-3 max-w-[680px] text-[0.93rem] font-semibold leading-6 text-text-inverse/[0.78] sm:text-base sm:leading-7 lg:mx-0">
-            {content.finalCta.subheadline}
-          </p>
+      <div className="mx-auto flex max-w-[760px] flex-col items-center text-center">
+        <p className={[expertEventText.eyebrow, 'text-event-sky'].join(' ')}>
+          Registro gratuito
+        </p>
 
-          <div className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start">
-            {compactBadges.map((badge) => (
-              <span
-                key={badge}
-                className="inline-flex items-center gap-1.5 border border-text-inverse/[0.14] bg-text-inverse/[0.07] px-3 py-1.5 text-left"
-              >
-                <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-event-sky" aria-hidden="true" />
-                <span className="expert-body text-[0.72rem] font-bold leading-none text-text-inverse/[0.86] sm:text-xs">
-                  {badge}
-                </span>
+        <h2 className={[expertEventText.editorialH2, 'mt-3 max-w-[760px] text-text-inverse'].join(' ')}>
+          {content.finalCta.headline}
+        </h2>
+
+        <p className={[expertEventText.body, 'mt-3 max-w-[680px] font-semibold text-text-inverse/[0.78]'].join(' ')}>
+          {content.finalCta.subheadline}
+        </p>
+
+        <div className="mt-4 flex flex-col items-center gap-1.5 sm:flex-row sm:gap-6">
+          {compactBenefits.map((benefit) => (
+            <span key={benefit} className="inline-flex items-center gap-1.5 text-left">
+              <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-event-sky" aria-hidden="true" />
+              <span className={[expertEventText.small, 'font-bold text-text-inverse/[0.9]'].join(' ')}>
+                {benefit}
               </span>
-            ))}
-          </div>
-
-          <ExpertEventImageFrame
-            src={content.assets.finalCta}
-            alt=""
-            loading="lazy"
-            aspectClassName="aspect-[16/9]"
-            frameClassName="mx-auto mt-5 max-w-[390px] lg:mx-0 lg:mt-6 lg:max-w-none"
-          />
+            </span>
+          ))}
         </div>
 
-        <div className="grid gap-3">
+        <div className="mt-5 w-full max-w-[520px] rounded-2xl border border-text-inverse/20 bg-text-inverse/[0.08] p-1.5 shadow-[0_22px_62px_rgb(var(--color-event-ink)/0.3),0_0_36px_rgb(var(--color-event-sky)/0.14)] sm:mt-6 sm:p-2">
           <ExpertEventRegistrationForm />
-
-          <div className="mx-auto w-full max-w-[440px]">
-            <ExpertEventCountdown variant="dark" size="compact" />
-          </div>
         </div>
+
+        <div className="mt-3 w-full max-w-[440px] rounded-2xl border border-text-inverse/15 bg-event-ink/25 p-1 shadow-[0_18px_46px_rgb(var(--color-event-ink)/0.24)]">
+          <ExpertEventCountdown variant="dark" size="compact" />
+        </div>
+
+        <ExpertEventImageFrame
+          src={content.assets.finalCta}
+          alt=""
+          loading="lazy"
+          aspectClassName="aspect-[16/9]"
+          frameClassName="mt-4 w-full max-w-[520px] sm:mt-5"
+        />
       </div>
     </ExpertEventSection>
   );

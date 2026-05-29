@@ -1,5 +1,6 @@
 import funnelConfig from '../../../../core/config/funnel.config';
 import { ExpertEventCta } from './ExpertEventCta';
+import { expertEventText } from './ExpertEventTypography';
 
 export function ExpertEventHero() {
   const content = funnelConfig.content.event;
@@ -37,19 +38,19 @@ export function ExpertEventHero() {
 
       <div className="relative mx-auto flex min-h-[700px] w-full max-w-[1320px] items-end sm:min-h-[720px] lg:min-h-[calc(clamp(760px,57vw,920px)-80px)] lg:items-center">
         <div className="ml-auto w-full max-w-[430px] pb-0 text-right sm:pb-2 lg:max-w-[440px] lg:pb-0 xl:max-w-[480px]">
-          <p className="expert-event-kicker text-[0.62rem] font-bold uppercase text-text-inverse/80">
+          <p className={[expertEventText.eyebrow, 'text-text-inverse/80'].join(' ')}>
             {heroCopy.eyebrow}
           </p>
 
-          <p className="expert-headline mt-3 text-[0.9rem] leading-none text-event-sky sm:text-[1rem]">
+          <p className={[expertEventText.heroBrand, 'mt-3'].join(' ')}>
             {heroCopy.brand}
           </p>
 
-          <h1 className="expert-headline mt-4 text-[1.56rem] uppercase leading-[1.02] text-text-inverse sm:text-[2.2rem] sm:leading-[0.98] lg:mt-5 lg:text-[3.05rem] lg:leading-[0.95] xl:text-[3.4rem]">
+          <h1 className={[expertEventText.heroH1, 'mt-4 lg:mt-5'].join(' ')}>
             {heroCopy.headline}
           </h1>
 
-          <p className="expert-body ml-auto mt-4 max-w-[430px] text-[0.98rem] font-semibold leading-7 text-text-inverse/80 sm:text-[1.05rem] sm:leading-8 lg:mt-5">
+          <p className={[expertEventText.body, 'ml-auto mt-4 max-w-[430px] font-semibold text-text-inverse/80 lg:mt-5'].join(' ')}>
             {heroCopy.subheadline}
           </p>
 

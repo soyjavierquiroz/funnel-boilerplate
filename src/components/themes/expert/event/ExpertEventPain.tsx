@@ -3,36 +3,39 @@ import funnelConfig from '../../../../core/config/funnel.config';
 import { ExpertEventCta } from './ExpertEventCta';
 import { ExpertEventImageFrame } from './ExpertEventImageFrame';
 import { ExpertEventSection } from './ExpertEventSection';
+import { expertEventSurface, expertEventText } from './ExpertEventTypography';
 
 export function ExpertEventPain() {
   const content = funnelConfig.content.event;
 
   return (
-    <ExpertEventSection tone="surface" width="wide" className="md:py-28">
+    <ExpertEventSection tone="surface" width="wide">
       <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <div className="space-y-8">
           <div>
             <AlertCircle className="h-9 w-9 text-event-coral" aria-hidden="true" />
-            <h2 className="expert-headline mt-5 text-[1.9rem] leading-[1.02] text-event-ink sm:text-[3.65rem] sm:leading-[0.96] lg:text-[3.9rem]">
+            <h2 className={[expertEventText.sectionH2, 'mt-5 text-event-ink'].join(' ')}>
               {content.pain.title}
             </h2>
-            <p className="expert-body mt-6 text-xl font-bold text-event-navy">{content.pain.intro}</p>
+            <p className={[expertEventText.bodyLarge, 'mt-6 font-bold text-event-navy'].join(' ')}>
+              {content.pain.intro}
+            </p>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
             {content.pain.bullets.map((bullet) => (
               <p
                 key={bullet}
-                className="expert-body rounded-[18px] border border-event-navy/10 bg-event-surface/70 p-4 text-base font-semibold leading-7 text-event-muted shadow-[0_14px_34px_rgb(var(--color-event-navy)/0.05)]"
+                className={[expertEventText.body, 'rounded-xl border border-event-navy/10 bg-event-surface/70 p-4 font-semibold text-event-muted shadow-[0_10px_26px_rgb(var(--color-event-navy)/0.05)]'].join(' ')}
               >
                 {bullet}
               </p>
             ))}
           </div>
 
-          <div className="rounded-3xl bg-event-navy p-6 text-text-inverse shadow-[0_24px_70px_rgb(var(--color-event-navy)/0.18)] sm:p-8">
+          <div className={[expertEventSurface.darkPanel, 'p-6 text-text-inverse sm:p-8'].join(' ')}>
             {content.pain.phrases.map((phrase) => (
-              <p key={phrase} className="expert-headline text-[1.6rem] leading-[1.06] text-text-inverse sm:text-[2rem]">
+              <p key={phrase} className={[expertEventText.editorialH2, 'text-text-inverse'].join(' ')}>
                 {phrase}
               </p>
             ))}

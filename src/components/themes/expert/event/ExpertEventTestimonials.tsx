@@ -2,21 +2,22 @@ import { Quote } from 'lucide-react';
 import funnelConfig from '../../../../core/config/funnel.config';
 import { ExpertEventCard } from './ExpertEventCard';
 import { ExpertEventSection } from './ExpertEventSection';
+import { expertEventText } from './ExpertEventTypography';
 
 export function ExpertEventTestimonials() {
   const content = funnelConfig.content.event;
   const { testimonials } = content;
 
   return (
-    <ExpertEventSection tone="soft" width="wide" className="md:py-28">
+    <ExpertEventSection tone="soft" width="wide">
       <div className="mx-auto max-w-[820px] text-center">
-        <p className="expert-event-kicker text-xs font-bold uppercase text-event-coral">
+        <p className={[expertEventText.eyebrow, 'text-event-coral'].join(' ')}>
           {testimonials.eyebrow}
         </p>
-        <h2 className="expert-headline mt-4 text-[1.9rem] leading-[1.02] text-event-ink sm:text-[3.3rem] sm:leading-[0.96] lg:text-[3.55rem]">
+        <h2 className={[expertEventText.sectionH2, 'mt-4 text-event-ink'].join(' ')}>
           {testimonials.title}
         </h2>
-        <p className="expert-body mx-auto mt-5 max-w-[660px] text-base font-semibold leading-8 text-event-muted sm:text-lg">
+        <p className={[expertEventText.body, 'mx-auto mt-5 max-w-[660px] font-semibold text-event-muted'].join(' ')}>
           {testimonials.subtitle}
         </p>
       </div>
@@ -25,12 +26,14 @@ export function ExpertEventTestimonials() {
         {testimonials.items.map((item) => (
           <ExpertEventCard key={item.name} className="flex min-h-[300px] flex-col p-6 sm:p-7">
             <Quote className="h-8 w-8 text-event-coral" aria-hidden="true" />
-            <p className="expert-body mt-6 flex-1 text-lg font-semibold leading-8 text-event-muted">
+            <p className={[expertEventText.bodyLarge, 'mt-6 flex-1 font-semibold text-event-muted'].join(' ')}>
               "{item.quote}"
             </p>
             <div className="mt-7 border-t border-event-navy/10 pt-5">
-              <p className="expert-headline text-[1.3rem] leading-none text-event-navy sm:text-[1.4rem]">{item.name}</p>
-              <p className="expert-body mt-2 text-sm font-bold uppercase text-event-muted">{item.role}</p>
+              <p className={[expertEventText.cardH3, 'text-event-navy'].join(' ')}>{item.name}</p>
+              <p className={[expertEventText.small, 'mt-2 font-bold uppercase text-event-muted'].join(' ')}>
+                {item.role}
+              </p>
             </div>
           </ExpertEventCard>
         ))}

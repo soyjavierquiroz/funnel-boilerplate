@@ -4,6 +4,7 @@ import { ExpertEventCard } from './ExpertEventCard';
 import { ExpertEventCta } from './ExpertEventCta';
 import { ExpertEventImageFrame } from './ExpertEventImageFrame';
 import { ExpertEventSection } from './ExpertEventSection';
+import { expertEventText } from './ExpertEventTypography';
 
 export function ExpertEventAgenda() {
   const content = funnelConfig.content.event;
@@ -13,7 +14,7 @@ export function ExpertEventAgenda() {
     <ExpertEventSection tone="soft" width="wide">
       <div className="mx-auto max-w-[780px] text-center">
         <CalendarDays className="mx-auto h-9 w-9 text-event-navy" aria-hidden="true" />
-        <h2 className="expert-headline mt-5 text-[2rem] leading-[1] text-event-ink sm:text-[3.45rem] lg:text-[3.75rem]">
+        <h2 className={[expertEventText.sectionH2, 'mt-5 text-event-ink'].join(' ')}>
           {content.agenda.title}
         </h2>
       </div>
@@ -28,9 +29,9 @@ export function ExpertEventAgenda() {
               frameClassName="m-3 mb-0 shadow-[0_16px_42px_rgb(var(--color-event-navy)/0.1)]"
             />
             <div className="p-6 sm:p-7">
-              <p className="expert-event-kicker text-[0.68rem] font-bold uppercase text-event-coral">{item.label}</p>
-              <h3 className="expert-headline mt-4 text-[1.48rem] leading-[1.08] text-event-navy sm:text-[1.55rem]">{item.title}</h3>
-              <p className="expert-body mt-4 text-base leading-8 text-event-muted">{item.description}</p>
+              <p className={[expertEventText.eyebrow, 'text-event-coral'].join(' ')}>{item.label}</p>
+              <h3 className={[expertEventText.cardH3, 'mt-4 text-event-navy'].join(' ')}>{item.title}</h3>
+              <p className={[expertEventText.body, 'mt-4 text-event-muted'].join(' ')}>{item.description}</p>
             </div>
           </ExpertEventCard>
         ))}

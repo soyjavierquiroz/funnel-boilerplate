@@ -2,18 +2,19 @@ import { ArrowRight, CheckCircle2, CircleDot } from 'lucide-react';
 import funnelConfig from '../../../../core/config/funnel.config';
 import { ExpertEventCard } from './ExpertEventCard';
 import { ExpertEventSection } from './ExpertEventSection';
+import { expertEventText } from './ExpertEventTypography';
 
 export function ExpertEventTransformation() {
   const content = funnelConfig.content.event;
   const { transformation } = content;
 
   return (
-    <ExpertEventSection tone="soft" width="wide" className="md:py-28">
+    <ExpertEventSection tone="soft" width="wide">
       <div className="mx-auto max-w-[860px] text-center">
-        <p className="expert-event-kicker text-xs font-bold uppercase text-event-coral">
+        <p className={[expertEventText.eyebrow, 'text-event-coral'].join(' ')}>
           {transformation.eyebrow}
         </p>
-        <h2 className="expert-headline mt-4 text-[1.9rem] leading-[1.02] text-event-ink sm:text-[3.45rem] sm:leading-[0.96] lg:text-[3.75rem]">
+        <h2 className={[expertEventText.sectionH2, 'mt-4 text-event-ink'].join(' ')}>
           {transformation.title}
         </h2>
       </div>
@@ -22,7 +23,7 @@ export function ExpertEventTransformation() {
         <ExpertEventCard className="p-6 sm:p-8">
           <div className="flex items-center gap-3">
             <CircleDot className="h-7 w-7 shrink-0 text-event-muted" aria-hidden="true" />
-            <h3 className="expert-headline text-[1.55rem] leading-none text-event-navy sm:text-[1.7rem]">
+            <h3 className={[expertEventText.cardH3, 'text-event-navy'].join(' ')}>
               {transformation.beforeTitle}
             </h3>
           </div>
@@ -31,7 +32,7 @@ export function ExpertEventTransformation() {
             {transformation.beforeItems.map((item) => (
               <p
                 key={item}
-                className="expert-body rounded-[18px] bg-event-soft px-4 py-3 text-base font-semibold leading-7 text-event-muted"
+                className={[expertEventText.body, 'rounded-xl bg-event-soft px-4 py-3 font-semibold text-event-muted'].join(' ')}
               >
                 {item}
               </p>
@@ -48,7 +49,7 @@ export function ExpertEventTransformation() {
         <ExpertEventCard tone="accent" className="p-6 sm:p-8">
           <div className="flex items-center gap-3">
             <CheckCircle2 className="h-7 w-7 shrink-0 text-event-coral" aria-hidden="true" />
-            <h3 className="expert-headline text-[1.55rem] leading-none text-event-navy sm:text-[1.7rem]">
+            <h3 className={[expertEventText.cardH3, 'text-event-navy'].join(' ')}>
               {transformation.afterTitle}
             </h3>
           </div>
@@ -57,7 +58,7 @@ export function ExpertEventTransformation() {
             {transformation.afterItems.map((item) => (
               <p
                 key={item}
-                className="expert-body rounded-[18px] bg-event-surface px-4 py-3 text-base font-bold leading-7 text-event-ink shadow-[0_12px_28px_rgb(var(--color-event-navy)/0.05)]"
+                className={[expertEventText.body, 'rounded-xl bg-event-surface px-4 py-3 font-bold text-event-ink shadow-[0_10px_24px_rgb(var(--color-event-navy)/0.05)]'].join(' ')}
               >
                 {item}
               </p>

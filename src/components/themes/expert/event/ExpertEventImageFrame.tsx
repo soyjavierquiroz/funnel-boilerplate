@@ -7,7 +7,7 @@ interface ExpertEventImageFrameProps extends Omit<ImgHTMLAttributes<HTMLImageEle
 }
 
 export const expertEventImageFrameClass =
-  'overflow-hidden rounded-2xl border border-event-navy/10 bg-event-surface/85 p-2 shadow-[0_22px_64px_rgb(var(--color-event-navy)/0.12)]';
+  'overflow-hidden rounded-2xl border border-event-navy/10 bg-event-surface/85 p-2 shadow-[0_18px_50px_rgb(var(--color-event-navy)/0.1)]';
 
 export function ExpertEventImageFrame({
   aspectClassName = 'aspect-[4/3]',
