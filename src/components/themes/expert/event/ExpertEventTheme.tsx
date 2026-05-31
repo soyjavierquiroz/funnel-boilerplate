@@ -14,17 +14,23 @@ export function ExpertEventTheme() {
     <div className="theme-expert theme-expert-event min-h-screen bg-event-page text-event-ink">
       <ExpertEventHero />
       <ExpertEventPromise />
+      <ExpertEventAuthority />
       <ExpertEventTransformation />
       <ExpertEventAgenda />
       <ExpertEventWhyFearPersists />
       <ExpertEventPain />
       <ExpertEventTestimonials />
-      <ExpertEventAuthority />
       <ExpertEventFinalCta />
 
       <footer className="border-t border-event-navy/10 bg-event-surface px-4 py-8 text-center sm:px-6">
+        <img
+          src={DNA.assets.event.logo}
+          alt="Maneja Sin Miedo"
+          loading="lazy"
+          className="mx-auto mb-4 h-auto w-[116px]"
+        />
         <p className="expert-event-kicker text-xs font-bold uppercase text-event-muted">
-          {DNA.copy.productName}
+          {DNA.copy.event.hero.eventName}
         </p>
       </footer>
     </div>

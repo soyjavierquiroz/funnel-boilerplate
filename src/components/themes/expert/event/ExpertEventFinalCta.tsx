@@ -51,7 +51,7 @@ export function ExpertEventFinalCta() {
 
         <ExpertEventImageFrame
           src={content.assets.finalCta}
-          alt=""
+          alt="Mujer conduciendo con más confianza después de reservar su cupo"
           loading="lazy"
           aspectClassName="aspect-[16/9]"
           frameClassName="mt-4 w-full max-w-[520px] sm:mt-5"

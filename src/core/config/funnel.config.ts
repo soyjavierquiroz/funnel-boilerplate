@@ -163,6 +163,7 @@ export interface EventFunnelContentConfig {
   registrationAnchorId: string;
   startsAtIso: string;
   assets: {
+    logo: string;
     hero: string;
     agenda1: string;
     agenda2: string;

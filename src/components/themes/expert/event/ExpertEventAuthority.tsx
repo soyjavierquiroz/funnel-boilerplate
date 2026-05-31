@@ -12,7 +12,12 @@ export function ExpertEventAuthority() {
   return (
     <ExpertEventSection tone="navy" width="wide" className="text-text-inverse">
       <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
-        <ExpertEventImageFrame src={content.assets.authority} alt="" loading="lazy" aspectClassName="aspect-[4/5]" />
+        <ExpertEventImageFrame
+          src={content.assets.authority}
+          alt="Darío Avila, guía del evento Maneja Sin Miedo"
+          loading="lazy"
+          aspectClassName="aspect-[4/5]"
+        />
 
         <div className="space-y-6">
           <GraduationCap className="h-10 w-10 text-event-sky" aria-hidden="true" />

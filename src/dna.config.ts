@@ -97,6 +97,7 @@ export interface DnaConfig {
     bundleWideImage: string;
     socialImage: string;
     event: {
+      logo: string;
       hero: string;
       agenda1: string;
       agenda2: string;
@@ -436,13 +437,14 @@ const checkoutUrl = readEnv('VITE_CHECKOUT_URL', 'https://example.com/replace-wi
 const vslVideoId = readEnv('VITE_VSL_VIDEO_ID', 'REPLACE_WITH_VSL_VIDEO_ID');
 
 const msmEventAssets = {
+  logo: '/assets/msm/logo-msm.webp',
   hero: '/assets/msm/hero-main.webp',
   agenda1: '/assets/msm/agenda-1.webp',
   agenda2: '/assets/msm/agenda-2.webp',
   agenda3: '/assets/msm/agenda-3.webp',
-  pain: '/assets/msm/pain-auto-parqueado.webp',
-  authority: '/assets/msm/authority-dario.webp',
-  finalCta: '/assets/msm/cta-final.webp',
+  pain: '/assets/msm/fear-block.webp',
+  authority: '/assets/msm/dario-authority.webp',
+  finalCta: '/assets/msm/final-cta.webp',
 } as const;
 
 export const DNA = {
@@ -735,7 +737,7 @@ export const DNA = {
         eventName: 'Maneja Sin Miedo',
         headline: '¿CANSADA DE DEPENDER DE OTROS?',
         subheadline:
-          'Descubre cómo recuperar confianza al volante para moverte sola, tomar decisiones con calma y volver a sentir que tu independencia también te pertenece.',
+          'Un evento gratuito online para mujeres que quieren recuperar confianza al volante, moverse solas y volver a sentir que su independencia también les pertenece.',
         imageAlt: 'Persona al volante recuperando confianza para manejar',
         formTitle: 'Reserva tu cupo gratuito ahora',
         primaryCtaLabel: 'QUIERO MANEJAR SIN MIEDO',
@@ -868,7 +870,7 @@ export const DNA = {
         ],
       },
       authority: {
-        title: '¿Quién será tu guía en este proceso?',
+        title: '¿Quién te acompañará en este proceso?',
         intro: 'Hola, soy Darío Avila.',
         bio:
           'Educador automotriz y creador de contenido con miles de seguidores en redes sociales, especializado en enseñanza automotriz y conducción práctica.',
