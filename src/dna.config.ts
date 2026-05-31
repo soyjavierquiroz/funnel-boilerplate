@@ -104,6 +104,7 @@ export interface DnaConfig {
       agenda3: string;
       pain: string;
       authority: string;
+      authorityCarousel: readonly string[];
       finalCta: string;
       heroImage: string;
       agendaImages: string[];
@@ -252,14 +253,17 @@ export interface DnaConfig {
       hero: {
         eyebrow: string;
         eventName: string;
+        dateLabel: string;
         headline: string;
         subheadline: string;
+        quickBenefits: string[];
         imageAlt: string;
         formTitle: string;
         primaryCtaLabel: string;
         secondaryCtaLabel: string;
         submittingLabel: string;
       };
+      socialProof: string;
       countdown: {
         label: string;
         expiredLabel: string;
@@ -327,6 +331,7 @@ export interface DnaConfig {
         intro: string;
         bio: string;
         paragraphs: string[];
+        badges: string[];
         quote: string;
         ctaLabel: string;
       };
@@ -445,6 +450,14 @@ const msmEventAssets = {
   pain: '/assets/msm/fear-block.webp',
   authority: '/assets/msm/dario-authority.webp',
   finalCta: '/assets/msm/final-cta.webp',
+  authorityCarousel: [
+    '/assets/msm/dario-authority.webp',
+    '/assets/msm/dario-authority-1.webp',
+    '/assets/msm/dario-authority-2.webp',
+    '/assets/msm/dario-authority-3.webp',
+    '/assets/msm/dario-authority-4.webp',
+    '/assets/msm/dario-authority-5.webp',
+  ],
 } as const;
 
 export const DNA = {
@@ -735,15 +748,21 @@ export const DNA = {
       hero: {
         eyebrow: 'Evento Gratuito Online',
         eventName: 'Maneja Sin Miedo',
+        dateLabel: '9, 10 y 11 DE JUNIO',
         headline: '¿CANSADA DE DEPENDER DE OTROS?',
-        subheadline:
-          'Un evento gratuito online para mujeres que quieren recuperar confianza al volante, moverse solas y volver a sentir que su independencia también les pertenece.',
+        subheadline: 'Recupera tu confianza al volante y vuelve a sentir tu libertad.',
+        quickBenefits: [
+          '100% online',
+          'Gratuito',
+          'En vivo con Darío',
+        ],
         imageAlt: 'Persona al volante recuperando confianza para manejar',
         formTitle: 'Reserva tu cupo gratuito ahora',
         primaryCtaLabel: 'QUIERO MANEJAR SIN MIEDO',
         secondaryCtaLabel: 'Ver lo que descubrirás',
         submittingLabel: 'Reservando...',
       },
+      socialProof: 'Miles de mujeres ya han recuperado su confianza al volante con Aprender Motores.',
       countdown: {
         label: 'El evento inicia en:',
         expiredLabel: 'El evento ya comenzó',
@@ -850,20 +869,20 @@ export const DNA = {
         subtitle: 'Estos testimonios son placeholders editables desde el DNA hasta incorporar historias reales del evento.',
         items: [
           {
-            name: 'Participante 1',
-            role: 'Placeholder editable',
+            name: 'Carolina M.',
+            role: 'Bogotá, Colombia',
             quote:
               'Antes sentía que manejar no era para mí. El enfoque me ayudó a entender que el miedo tenía explicación y que podía avanzar paso a paso.',
           },
           {
-            name: 'Participante 2',
-            role: 'Placeholder editable',
+            name: 'Andrea P.',
+            role: 'Quito, Ecuador',
             quote:
               'Me identifiqué mucho con la idea de depender de otros. Salí con más claridad para empezar a practicar sin exigirme hacerlo perfecto.',
           },
           {
-            name: 'Participante 3',
-            role: 'Placeholder editable',
+            name: 'Natalia R.',
+            role: 'Guadalajara, México',
             quote:
               'Lo que más me sirvió fue dejar de verme como incapaz. Entendí que necesitaba recuperar confianza, no pelear conmigo misma.',
           },
@@ -873,10 +892,14 @@ export const DNA = {
         title: '¿Quién te acompañará en este proceso?',
         intro: 'Hola, soy Darío Avila.',
         bio:
-          'Educador automotriz y creador de contenido con miles de seguidores en redes sociales, especializado en enseñanza automotriz y conducción práctica.',
+          'Educador automotriz especializado en ayudar a mujeres a recuperar seguridad al volante con un proceso práctico, humano y progresivo.',
         paragraphs: [
-          'Durante años he visto cómo muchas personas NO tienen problemas de capacidad… Tienen problemas de confianza.',
-          'Por eso creé “Maneja Sin Miedo”, un evento diseñado para ayudarte a recuperar seguridad al volante de forma práctica, emocional y progresiva.',
+          'Creé “Maneja Sin Miedo” para que vuelvas a manejar con claridad, calma y confianza, sin sentir que tienes que hacerlo perfecta desde el primer día.',
+        ],
+        badges: [
+          '+10 años enseñando conducción',
+          'Miles de alumnas acompañadas',
+          'Millones de visualizaciones',
         ],
         quote: 'Porque manejar no debería sentirse como miedo… sino como libertad.',
         ctaLabel: 'QUIERO ASISTIR GRATIS AL EVENTO',

@@ -170,6 +170,7 @@ export interface EventFunnelContentConfig {
     agenda3: string;
     pain: string;
     authority: string;
+    authorityCarousel: readonly string[];
     finalCta: string;
     heroImage: string;
     agendaImages: string[];
@@ -185,14 +186,17 @@ export interface EventFunnelContentConfig {
   hero: {
     eyebrow: string;
     eventName: string;
+    dateLabel: string;
     headline: string;
     subheadline: string;
+    quickBenefits: string[];
     imageAlt: string;
     formTitle: string;
     primaryCtaLabel: string;
     secondaryCtaLabel: string;
     submittingLabel: string;
   };
+  socialProof: string;
   countdown: {
     label: string;
     expiredLabel: string;
@@ -260,6 +264,7 @@ export interface EventFunnelContentConfig {
     intro: string;
     bio: string;
     paragraphs: string[];
+    badges: string[];
     quote: string;
     ctaLabel: string;
   };
@@ -351,6 +356,7 @@ export const funnelConfig: FunnelConfig = {
       startsAtIso: DNA.copy.event.startsAtIso,
       assets: DNA.assets.event,
       hero: DNA.copy.event.hero,
+      socialProof: DNA.copy.event.socialProof,
       countdown: DNA.copy.event.countdown,
       foundation: DNA.copy.event.foundation,
       promise: DNA.copy.event.promise,

@@ -1,8 +1,12 @@
 export const expertEventText = {
   eyebrow: 'expert-event-kicker text-[0.62rem] font-bold uppercase leading-[1.4] sm:text-[0.7rem]',
   heroBrand: 'expert-headline text-[0.98rem] leading-[1.1] text-event-sky sm:text-[1.08rem]',
+  heroEventLead:
+    'expert-headline text-[2.42rem] leading-[0.88] text-text-inverse sm:text-[4.45rem] lg:text-[5.6rem] xl:text-[6.4rem]',
+  heroEventRest:
+    'expert-headline text-[2.04rem] leading-[0.9] text-text-inverse sm:text-[3.75rem] lg:text-[4.65rem] xl:text-[5.25rem]',
   heroH1:
-    'expert-headline text-[1.48rem] uppercase leading-[1.1] text-text-inverse sm:text-[2.06rem] sm:leading-[1.06] lg:text-[2.78rem] lg:leading-[1.04] xl:text-[3rem]',
+    'expert-headline text-[1.16rem] uppercase leading-[1.12] text-text-inverse sm:text-[1.45rem] sm:leading-[1.08] lg:text-[1.62rem] lg:leading-[1.06]',
   sectionH2:
     'expert-headline text-[1.7rem] leading-[1.12] sm:text-[2.76rem] sm:leading-[1.07] lg:text-[3.08rem] lg:leading-[1.05]',
   editorialH2:

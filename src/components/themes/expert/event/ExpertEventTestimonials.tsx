@@ -30,8 +30,10 @@ export function ExpertEventTestimonials() {
               "{item.quote}"
             </p>
             <div className="mt-7 border-t border-event-navy/10 pt-5">
-              <p className={[expertEventText.cardH3, 'text-event-navy'].join(' ')}>{item.name}</p>
-              <p className={[expertEventText.small, 'mt-2 font-bold uppercase text-event-muted'].join(' ')}>
+              <p className={[expertEventText.cardH3, 'text-event-navy'].join(' ')}>
+                {item.name}
+              </p>
+              <p className={[expertEventText.small, 'mt-1.5 font-bold text-event-coral'].join(' ')}>
                 {item.role}
               </p>
             </div>

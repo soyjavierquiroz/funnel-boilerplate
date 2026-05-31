@@ -13,6 +13,11 @@ export function ExpertEventTheme() {
   return (
     <div className="theme-expert theme-expert-event min-h-screen bg-event-page text-event-ink">
       <ExpertEventHero />
+      <section className="border-y border-event-navy/10 bg-event-surface px-5 py-4 text-center sm:px-6">
+        <p className="expert-body mx-auto max-w-[860px] text-sm font-bold leading-6 text-event-navy sm:text-base">
+          {DNA.copy.event.socialProof}
+        </p>
+      </section>
       <ExpertEventPromise />
       <ExpertEventAuthority />
       <ExpertEventTransformation />
