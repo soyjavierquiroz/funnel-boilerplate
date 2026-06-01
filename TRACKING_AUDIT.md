@@ -6,9 +6,115 @@ Fecha: 2026-06-01
 
 El proyecto tiene un servicio central de tracking en `src/core/services/analytics.ts` que puede enviar eventos a Meta Pixel, TikTok Pixel y un relay CAPI/Events API agnostico. La deduplicacion Meta browser/server esta bien planteada a nivel tecnico porque cada llamada a `trackEvent()` crea un `eventId` unico y lo reutiliza en Meta Pixel como `eventID` y en CAPI como `event_id`.
 
-En el entorno actual, sin embargo, los pixels y CAPI estan apagados: `.env` solo define `VITE_WHATSAPP_GROUP_URL`, `VITE_CAPTURE_WEBHOOK_URL` y `VITE_CAPTURE_LIST_SLUG`. No hay valores para `VITE_META_PIXEL_ID`, `VITE_TIKTOK_PIXEL_ID` ni `VITE_CAPI_RELAY_URL`, y el bundle publicado tambien refleja esos valores vacios. Por eso hoy el formulario puede capturar leads via `/capture.php`, pero Meta Pixel, TikTok Pixel y CAPI no se envian.
+En el `.env` actual de `source_boilerplate`, Meta Pixel esta activo con `VITE_META_PIXEL_ID=1767372344644632`; TikTok Pixel y CAPI siguen apagados porque `VITE_TIKTOK_PIXEL_ID` y `VITE_CAPI_RELAY_URL` estan vacios. Por eso hoy el formulario puede capturar leads via `/capture.php` y enviar eventos Meta browser-side, pero no envia eventos CAPI/server-side.
 
-El mayor gap funcional es TikTok dedup: el `eventId` si viaja a CAPI, pero no se pasa explicitamente al evento browser de TikTok. En Meta si se comparte. Tambien hay riesgo de perdida de eventos en el click de WhatsApp/redireccion porque no se trackea ese paso y porque el tracking de `Lead` ocurre despues del webhook de captura.
+La separacion importante: `/capture.php` no es CAPI; es solo relay de captura hacia FluentCRM. CAPI depende exclusivamente de `VITE_CAPI_RELAY_URL` y, al estar vacio, `analytics.trackEvent()` retorna `capiSent: false` sin hacer ningun `fetch` server-side. Tambien hay riesgo de perdida de eventos en el click de WhatsApp/redireccion porque no se trackea ese paso y porque el tracking de `Lead` ocurre despues del webhook de captura.
+
+## CAPI relay actual y variables necesarias
+
+Estado de variables en `.env` actual:
+
+- `VITE_META_PIXEL_ID=1767372344644632`: activo; habilita Meta Pixel browser.
+- `VITE_TIKTOK_PIXEL_ID=`: vacio; TikTok Pixel no se carga ni envia eventos.
+- `VITE_CAPI_RELAY_URL=`: vacio; CAPI relay no se invoca.
+- `VITE_SITE_ID=MANEJARSINMIEDO`: se usa como `siteId` en el payload CAPI si se activa el relay.
+- `VITE_CAPTURE_WEBHOOK_URL=/capture.php`: solo FluentCRM/captura; no es CAPI.
+
+Como se envian hoy los eventos Meta browser:
+
+- `src/dna.config.ts` lee `VITE_META_PIXEL_ID` en `DNA.tracking.metaPixelId`.
+- `src/core/config/funnel.config.ts` lo expone como `funnelConfig.integrations.metaPixelId`.
+- `src/core/services/analytics.ts` normaliza ese valor en cada `trackEvent()`.
+- Si hay pixel ID y browser, carga `https://connect.facebook.net/en_US/fbevents.js`, inicializa `fbq('init', pixelId)` y envia `fbq('track', eventName, data, { eventID: eventId })` para eventos estandar de Meta. Para eventos no estandar usa `trackCustom`.
+- Cada evento genera un `eventId` unico; ese ID ya queda listo para deduplicacion browser/server si despues se activa CAPI.
+
+Como se enviaria CAPI si `VITE_CAPI_RELAY_URL` estuviera configurado:
+
+- `trackEvent()` resolveria `funnelConfig.integrations.capiWebhookUrl`.
+- Despues de intentar Meta/TikTok browser, armaria `buildCapiPayload()`.
+- Enviaria `fetch(capiWebhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(capiPayload), keepalive: true })`.
+- El resultado retornaria `capiSent: response.ok` y `capiStatus: response.status`.
+
+Payload que manda a CAPI:
+
+```json
+{
+  "siteId": "MANEJARSINMIEDO",
+  "provider": "agnostic",
+  "event_name": "Lead",
+  "event_id": "uuid",
+  "event_time": 1710000000,
+  "event_source_url": "https://aprendermotores.com/...",
+  "action_source": "website",
+  "anonymous_id": "uuid",
+  "integrations": {
+    "metaPixelId": "1767372344644632",
+    "tiktokPixelId": null
+  },
+  "attribution": {
+    "utm_source": null,
+    "utm_medium": null,
+    "utm_campaign": null,
+    "utm_term": null,
+    "utm_content": null,
+    "utm_id": null,
+    "fbclid": null,
+    "ttclid": null,
+    "landing_page": "/...",
+    "referrer": null,
+    "captured_at": "..."
+  },
+  "cookies": {
+    "_fbp": "fb.1...",
+    "_fbc": "fb.1...",
+    "ttclid": null
+  },
+  "data": {
+    "source": "AppLoad"
+  },
+  "user_data": {
+    "external_id": "uuid",
+    "client_user_agent": "...",
+    "fbp": "fb.1...",
+    "fbc": "fb.1...",
+    "ttclid": "...",
+    "em": "sha256",
+    "ph": "sha256",
+    "fn": "sha256",
+    "ln": "sha256"
+  }
+}
+```
+
+Notas sobre campos pedidos:
+
+- `event_name`: si, campo top-level.
+- `event_id`: si, campo top-level; es el mismo que Meta browser recibe como `eventID`.
+- `siteId`: si, campo top-level desde `VITE_SITE_ID`.
+- `user_data`: si, incluye `external_id`, `client_user_agent`, `fbp`, `fbc`, `ttclid` y datos personales hasheados si el evento los trae.
+- `custom_data`: no existe con ese nombre; el codigo manda el objeto del evento bajo `data`.
+- `page_url`: para CAPI siempre existe como `event_source_url`; en eventos `Lead` del formulario MSM tambien se manda dentro de `data.page_url`.
+- `fbp/fbc`: si existen en cookies se mandan; si falta `_fbp`, el helper crea uno; `_fbc` se crea solo si hay `fbclid`.
+
+Eventos que se disparan hoy con solo `VITE_META_PIXEL_ID`:
+
+- `PageView`: si, en `src/App.tsx` por cada cambio de ruta, incluido `/` y `/confirmacion`.
+- `Lead`: si aplica cuando el formulario MSM recibe OK de `/capture.php`; usa `capture.tracking.eventName`, actualmente `Lead`.
+- `CompleteRegistration`: si, en `/confirmacion`, una vez por sesion mediante `sessionStorage`.
+- CTA clicks del funnel event MSM: no hay tracking dedicado para clicks de anclas ni para el boton/link de WhatsApp. En componentes VSL/tripwire reutilizables si existen clicks `InitiateCheckout`, pero no son el flujo principal del evento MSM actual.
+
+Que no funciona con `VITE_CAPI_RELAY_URL` vacio:
+
+- No hay eventos Meta server-side.
+- No hay deduplicacion browser/server real en Meta porque falta el lado server.
+- No se hace `POST` a ningun relay CAPI.
+- `TrackEventResult.capiSent` queda `false` y `capiStatus` queda `null`.
+- `/capture.php` sigue funcionando solo como relay de FluentCRM, pero no reenvia eventos a Meta CAPI.
+
+Backend local de CAPI relay:
+
+- No se encontro endpoint local de CAPI relay en este repo. Las coincidencias locales son el cliente en `src/core/services/analytics.ts`, documentacion y `capture.php`.
+- Para activar CAPI se necesita configurar un endpoint externo en `VITE_CAPI_RELAY_URL`. Ese endpoint debe aceptar el JSON agnostico anterior, validar `siteId`, mapear `event_name`, `event_id`, `event_source_url`, `user_data` y `data` hacia Meta Conversions API, y autenticar contra Meta con el access token/pixel del servidor.
 
 ## Arquitectura actual
 
