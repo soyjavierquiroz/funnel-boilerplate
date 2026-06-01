@@ -33,12 +33,16 @@ interface TikTokTrackFunction extends Array<unknown> {
   setAndDefer?: (target: TikTokTrackFunction, method: string) => void;
   instance?: (instanceName?: string) => TikTokTrackFunction;
   load?: (pixelId: string, options?: Record<string, unknown>) => void;
-  page?: (payload?: Record<string, unknown>) => void;
-  track?: (eventName: string, payload?: Record<string, unknown>) => void;
+  page?: (payload?: Record<string, unknown>, options?: TikTokEventOptions) => void;
+  track?: (eventName: string, payload?: Record<string, unknown>, options?: TikTokEventOptions) => void;
   identify?: (payload: Record<string, string>) => void;
   _i?: Array<[string, Record<string, unknown>?]>;
   _t?: Record<string, number>;
   [key: string]: unknown;
+}
+
+interface TikTokEventOptions {
+  event_id: string;
 }
 
 interface TrackingCookies {
@@ -655,6 +659,7 @@ const trackEvent = async (eventName: string, data: Record<string, unknown> = {})
     try {
       await ensureTikTokReady(tiktokPixelId);
       const ttq = window.ttq;
+      const tiktokEventOptions: TikTokEventOptions = { event_id: eventId };
 
       if (preparedUserData.hashed.email || preparedUserData.hashed.phone) {
         ttq?.identify?.({
@@ -664,9 +669,9 @@ const trackEvent = async (eventName: string, data: Record<string, unknown> = {})
       }
 
       if (eventName === 'PageView') {
-        ttq?.page?.(data);
+        ttq?.page?.(data, tiktokEventOptions);
       } else {
-        ttq?.track?.(eventName, data);
+        ttq?.track?.(eventName, data, tiktokEventOptions);
       }
 
       tiktokBrowserSent = Boolean(ttq?.page || ttq?.track);
