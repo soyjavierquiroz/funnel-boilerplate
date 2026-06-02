@@ -12,7 +12,7 @@ interface FormErrors {
   email?: string;
 }
 
-interface MsmEventLeadPayload extends VisitorPayload {
+interface EventLeadPayload extends VisitorPayload {
   first_name: string;
   name: string;
   email: string;
@@ -20,13 +20,13 @@ interface MsmEventLeadPayload extends VisitorPayload {
   traffic_channel: TrafficChannel;
   capture_list_slug: string;
   confirmation_path: string;
-  source: 'msm-event';
+  source: string;
   funnel_type: string;
   theme: string;
   landing_slug: string;
   page_url: string;
   submitted_at: string;
-  event_name: 'Maneja Sin Miedo';
+  event_name: string;
   meta: {
     ip?: string;
     ciudad?: string;
@@ -107,7 +107,7 @@ export function ExpertEventRegistrationForm() {
     const submittedAt = new Date().toISOString();
     const pageUrl = window.location.href;
     const visitorPayload = buildVisitorPayload(visitorData);
-    const payload: MsmEventLeadPayload = {
+    const payload: EventLeadPayload = {
       first_name: trimmedFirstName,
       name: trimmedFirstName,
       email: trimmedEmail,
@@ -115,13 +115,13 @@ export function ExpertEventRegistrationForm() {
       traffic_channel: trafficChannel,
       capture_list_slug: captureListSlug,
       confirmation_path: channelConfig.confirmationPath,
-      source: 'msm-event',
+      source: capture.tracking.source,
       funnel_type: funnelConfig.attribution.funnelType,
       theme: funnelConfig.attribution.theme,
       landing_slug: funnelConfig.attribution.landingSlug,
       page_url: pageUrl,
       submitted_at: submittedAt,
-      event_name: 'Maneja Sin Miedo',
+      event_name: capture.tracking.payloadEventName,
       ...visitorPayload,
       meta: {
         ip: visitorPayload.visitor_ip,

@@ -136,6 +136,8 @@ export interface DnaConfig {
       eventName: string;
       formId: string;
       status: string;
+      source: string;
+      payloadEventName: string;
     };
   };
   success: {
@@ -259,6 +261,9 @@ export interface DnaConfig {
     event: {
       registrationAnchorId: string;
       startsAtIso: string;
+      footer: {
+        logoAlt: string;
+      };
       hero: {
         eyebrow: string;
         eventName: string;
@@ -320,6 +325,7 @@ export interface DnaConfig {
       };
       pain: {
         title: string;
+        imageAlt: string;
         intro: string;
         bullets: string[];
         phrases: string[];
@@ -337,6 +343,7 @@ export interface DnaConfig {
       };
       authority: {
         title: string;
+        imageAlt: string;
         intro: string;
         bio: string;
         paragraphs: string[];
@@ -345,7 +352,9 @@ export interface DnaConfig {
         ctaLabel: string;
       };
       finalCta: {
+        eyebrow: string;
         headline: string;
+        imageAlt: string;
         subheadline: string;
         bullets: string[];
         text: string;
@@ -445,12 +454,14 @@ function toRgbTriplet(value: string) {
 }
 
 const productName = 'Aprender Motores';
+const eventName = 'Maneja Sin Miedo';
+const eventCaptureSource = 'msm-event';
 const domain = readEnv('VITE_DOMAIN', 'aprendermotores.com');
 const siteId = readEnv('VITE_SITE_ID', 'APRENDER_MOTORES');
 const checkoutUrl = readEnv('VITE_CHECKOUT_URL', 'https://example.com/replace-with-checkout-url');
 const vslVideoId = readEnv('VITE_VSL_VIDEO_ID', 'REPLACE_WITH_VSL_VIDEO_ID');
 
-const msmEventAssets = {
+const eventAssets = {
   logo: '/assets/msm/logo-msm.webp',
   hero: '/assets/msm/hero-main.webp',
   agenda1: '/assets/msm/agenda-1.webp',
@@ -515,7 +526,7 @@ export const DNA = {
     ),
   },
   seo: {
-    title: readEnv('VITE_SITE_TITLE', `${productName} | Maneja Sin Miedo`),
+    title: readEnv('VITE_SITE_TITLE', `${productName} | ${eventName}`),
     description: readEnv(
       'VITE_SITE_DESCRIPTION',
       'Evento gratuito online para ganar confianza al volante y manejar con mayor seguridad.',
@@ -564,21 +575,21 @@ export const DNA = {
     bundleWideImage: '/assets/funnel-placeholder.svg',
     socialImage: '/assets/funnel-placeholder.svg',
     event: {
-      ...msmEventAssets,
-      heroImage: msmEventAssets.hero,
+      ...eventAssets,
+      heroImage: eventAssets.hero,
       agendaImages: [
-        msmEventAssets.agenda1,
-        msmEventAssets.agenda2,
-        msmEventAssets.agenda3,
+        eventAssets.agenda1,
+        eventAssets.agenda2,
+        eventAssets.agenda3,
       ],
-      painImage: msmEventAssets.pain,
-      authorityImage: msmEventAssets.authority,
-      finalCtaImage: msmEventAssets.finalCta,
-      insecureDriverImage: msmEventAssets.hero,
-      confidentDriverImage: msmEventAssets.agenda3,
-      parkedCarImage: msmEventAssets.pain,
-      motherWithChildrenImage: msmEventAssets.finalCta,
-      expertTeachingImage: msmEventAssets.authority,
+      painImage: eventAssets.pain,
+      authorityImage: eventAssets.authority,
+      finalCtaImage: eventAssets.finalCta,
+      insecureDriverImage: eventAssets.hero,
+      confidentDriverImage: eventAssets.agenda3,
+      parkedCarImage: eventAssets.pain,
+      motherWithChildrenImage: eventAssets.finalCta,
+      expertTeachingImage: eventAssets.authority,
     },
   },
   forms: {
@@ -598,6 +609,8 @@ export const DNA = {
       eventName: 'Lead',
       formId: 'expert_event_registration_form',
       status: 'submitted',
+      source: eventCaptureSource,
+      payloadEventName: eventName,
     },
   },
   success: {
@@ -762,9 +775,12 @@ export const DNA = {
     event: {
       registrationAnchorId: 'final-registration',
       startsAtIso: readEnv('VITE_EVENT_STARTS_AT', '2026-06-09T00:00:00-05:00'),
+      footer: {
+        logoAlt: eventName,
+      },
       hero: {
         eyebrow: 'Evento Gratuito Online',
-        eventName: 'Maneja Sin Miedo',
+        eventName,
         dateLabel: '9, 10 y 11 DE JUNIO',
         headline: '¿CANSADA DE DEPENDER DE OTROS?',
         subheadline: 'Recupera tu confianza al volante y vuelve a sentir tu libertad.',
@@ -864,6 +880,7 @@ export const DNA = {
       },
       pain: {
         title: 'El miedo a conducir te está costando más de lo que crees…',
+        imageAlt: 'Mujer sentada dentro del auto enfrentando inseguridad al manejar',
         intro: 'Tal vez hoy:',
         bullets: [
           'Evitas salir sola',
@@ -907,6 +924,7 @@ export const DNA = {
       },
       authority: {
         title: '¿Quién te acompañará en este proceso?',
+        imageAlt: 'Darío Avila, guía del evento Maneja Sin Miedo',
         intro: 'Hola, soy Darío Avila.',
         bio:
           'Educador automotriz especializado en ayudar a mujeres a recuperar seguridad al volante con un proceso práctico, humano y progresivo.',
@@ -922,7 +940,9 @@ export const DNA = {
         ctaLabel: 'QUIERO ASISTIR GRATIS AL EVENTO',
       },
       finalCta: {
+        eyebrow: 'Registro gratuito',
         headline: 'Reserva tu cupo gratuito y empieza a recuperar tu confianza al volante',
+        imageAlt: 'Mujer conduciendo con más confianza después de reservar su cupo',
         subheadline:
           'En este evento online descubrirás por qué el miedo a conducir no significa que no seas capaz, y cómo empezar a manejar con más seguridad paso a paso.',
         bullets: [

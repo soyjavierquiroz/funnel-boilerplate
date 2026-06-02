@@ -35,7 +35,7 @@ export function ExpertEventAuthority() {
               <img
                 key={imageSrc}
                 src={imageSrc}
-                alt={index === activeImageIndex ? 'Darío Avila, guía del evento Maneja Sin Miedo' : ''}
+                alt={index === activeImageIndex ? content.authority.imageAlt : ''}
                 loading={index === 0 ? 'eager' : 'lazy'}
                 className={[
                   'absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out',

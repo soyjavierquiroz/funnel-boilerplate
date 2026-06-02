@@ -8,7 +8,6 @@ import { expertEventText } from './ExpertEventTypography';
 
 export function ExpertEventFinalCta() {
   const content = funnelConfig.content.event;
-  const compactBenefits = ['Evento gratuito online', 'Cupos limitados'];
 
   return (
     <ExpertEventSection
@@ -19,7 +18,7 @@ export function ExpertEventFinalCta() {
     >
       <div className="mx-auto flex max-w-[760px] flex-col items-center text-center">
         <p className={[expertEventText.eyebrow, 'text-event-sky'].join(' ')}>
-          Registro gratuito
+          {content.finalCta.eyebrow}
         </p>
 
         <h2 className={[expertEventText.editorialH2, 'mt-3 max-w-[760px] text-text-inverse'].join(' ')}>
@@ -31,7 +30,7 @@ export function ExpertEventFinalCta() {
         </p>
 
         <div className="mt-4 flex flex-col items-center gap-1.5 sm:flex-row sm:gap-6">
-          {compactBenefits.map((benefit) => (
+          {content.finalCta.bullets.map((benefit) => (
             <span key={benefit} className="inline-flex items-center gap-1.5 text-left">
               <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-event-sky" aria-hidden="true" />
               <span className={[expertEventText.small, 'font-bold text-text-inverse/[0.9]'].join(' ')}>
@@ -51,7 +50,7 @@ export function ExpertEventFinalCta() {
 
         <ExpertEventImageFrame
           src={content.assets.finalCta}
-          alt="Mujer conduciendo con más confianza después de reservar su cupo"
+          alt={content.finalCta.imageAlt}
           loading="lazy"
           aspectClassName="aspect-[16/9]"
           frameClassName="mt-4 w-full max-w-[520px] sm:mt-5"

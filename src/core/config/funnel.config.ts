@@ -116,6 +116,8 @@ export interface CaptureFormConfig {
     eventName: string;
     formId: string;
     status: string;
+    source: string;
+    payloadEventName: string;
   };
 }
 
@@ -187,6 +189,9 @@ export interface FunnelConfig {
 export interface EventFunnelContentConfig {
   registrationAnchorId: string;
   startsAtIso: string;
+  footer: {
+    logoAlt: string;
+  };
   assets: {
     logo: string;
     hero: string;
@@ -269,6 +274,7 @@ export interface EventFunnelContentConfig {
   };
   pain: {
     title: string;
+    imageAlt: string;
     intro: string;
     bullets: string[];
     phrases: string[];
@@ -286,6 +292,7 @@ export interface EventFunnelContentConfig {
   };
   authority: {
     title: string;
+    imageAlt: string;
     intro: string;
     bio: string;
     paragraphs: string[];
@@ -294,7 +301,9 @@ export interface EventFunnelContentConfig {
     ctaLabel: string;
   };
   finalCta: {
+    eyebrow: string;
     headline: string;
+    imageAlt: string;
     subheadline: string;
     bullets: string[];
     text: string;
@@ -403,6 +412,7 @@ export const funnelConfig: FunnelConfig = {
     event: {
       registrationAnchorId: DNA.copy.event.registrationAnchorId,
       startsAtIso: DNA.copy.event.startsAtIso,
+      footer: DNA.copy.event.footer,
       assets: DNA.assets.event,
       hero: DNA.copy.event.hero,
       socialProof: DNA.copy.event.socialProof,

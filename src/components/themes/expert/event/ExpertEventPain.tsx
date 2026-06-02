@@ -46,7 +46,7 @@ export function ExpertEventPain() {
 
         <ExpertEventImageFrame
           src={content.assets.pain}
-          alt="Mujer sentada dentro del auto enfrentando inseguridad al manejar"
+          alt={content.pain.imageAlt}
           loading="lazy"
           aspectClassName="aspect-[4/5] sm:aspect-[4/3]"
         />

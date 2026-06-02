@@ -1,4 +1,4 @@
-import { DNA } from '../../../../dna.config';
+import funnelConfig from '../../../../core/config/funnel.config';
 import { ExpertEventHero } from './ExpertEventHero';
 import { ExpertEventAgenda } from './ExpertEventAgenda';
 import { ExpertEventAuthority } from './ExpertEventAuthority';
@@ -10,12 +10,14 @@ import { ExpertEventTransformation } from './ExpertEventTransformation';
 import { ExpertEventWhyFearPersists } from './ExpertEventWhyFearPersists';
 
 export function ExpertEventTheme() {
+  const content = funnelConfig.content.event;
+
   return (
     <div className="theme-expert theme-expert-event min-h-screen bg-event-page text-event-ink">
       <ExpertEventHero />
       <section className="border-y border-event-navy/10 bg-event-surface px-5 py-4 text-center sm:px-6">
         <p className="expert-body mx-auto max-w-[860px] text-sm font-bold leading-6 text-event-navy sm:text-base">
-          {DNA.copy.event.socialProof}
+          {content.socialProof}
         </p>
       </section>
       <ExpertEventPromise />
@@ -29,13 +31,13 @@ export function ExpertEventTheme() {
 
       <footer className="border-t border-event-navy/10 bg-event-surface px-4 py-8 text-center sm:px-6">
         <img
-          src={DNA.assets.event.logo}
-          alt="Maneja Sin Miedo"
+          src={content.assets.logo}
+          alt={content.footer.logoAlt}
           loading="lazy"
           className="mx-auto mb-4 h-auto w-[116px]"
         />
         <p className="expert-event-kicker text-xs font-bold uppercase text-event-muted">
-          {DNA.copy.event.hero.eventName}
+          {content.hero.eventName}
         </p>
       </footer>
     </div>
