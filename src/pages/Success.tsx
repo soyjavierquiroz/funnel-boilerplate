@@ -1,15 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import analytics from '../core/services/analytics';
 import funnelConfig from '../core/config/funnel.config';
 import { getTrafficChannel, type TrafficChannel } from '../core/routing/channel';
 import { DNA } from '../dna.config';
-
-const REDIRECT_DELAY_SECONDS = 10;
-
-function resolveWhatsappGroupUrl(channel: TrafficChannel) {
-  return funnelConfig.trafficChannels[channel].whatsappGroupUrl.trim();
-}
 
 function trackCompleteRegistrationOnce(channel: TrafficChannel) {
   const trackingKey = `${DNA.siteId}.${channel}.success.complete-registration`;
@@ -36,14 +30,13 @@ export function Success() {
   const location = useLocation();
   const trafficChannel = getTrafficChannel(location.pathname);
   const channelConfig = funnelConfig.trafficChannels[trafficChannel];
-  const [secondsRemaining, setSecondsRemaining] = useState(REDIRECT_DELAY_SECONDS);
-  const whatsappGroupUrl = useMemo(
-    () => resolveWhatsappGroupUrl(trafficChannel),
-    [trafficChannel],
-  );
-  const hasWhatsappGroupUrl = whatsappGroupUrl.length > 0;
+  const successConfig = channelConfig.success;
+  const redirectSeconds = Math.max(successConfig.redirectSeconds, 0);
+  const successAction = successConfig.action;
+  const hasFinalActionUrl = successAction.type !== 'none' && successAction.url.length > 0;
+  const [secondsRemaining, setSecondsRemaining] = useState(redirectSeconds);
   const progressPercent =
-    ((REDIRECT_DELAY_SECONDS - secondsRemaining) / REDIRECT_DELAY_SECONDS) * 100;
+    redirectSeconds > 0 ? ((redirectSeconds - secondsRemaining) / redirectSeconds) * 100 : 100;
 
   useEffect(() => {
     if (channelConfig.trackingEnabled) {
@@ -52,19 +45,22 @@ export function Success() {
   }, [channelConfig.trackingEnabled, trafficChannel]);
 
   useEffect(() => {
-    if (!hasWhatsappGroupUrl) {
-      const envVarName =
-        trafficChannel === 'ads' ? 'VITE_WHATSAPP_GROUP_URL' : 'VITE_ORGANIC_WHATSAPP_GROUP_URL';
+    setSecondsRemaining(redirectSeconds);
+  }, [redirectSeconds, trafficChannel]);
 
-      console.warn(
-        `[Success] ${envVarName} is not configured. WhatsApp redirect disabled.`,
-      );
+  useEffect(() => {
+    if (!hasFinalActionUrl) {
+      if (successAction.type !== 'none') {
+        console.warn(
+          `[Success] Final action URL is not configured for action type "${successAction.type}". Redirect disabled.`,
+        );
+      }
       return;
     }
 
     const redirectTimer = window.setTimeout(() => {
-      window.location.assign(whatsappGroupUrl);
-    }, REDIRECT_DELAY_SECONDS * 1000);
+      window.location.assign(successAction.url);
+    }, redirectSeconds * 1000);
 
     const countdownTimer = window.setInterval(() => {
       setSecondsRemaining((currentSeconds) => Math.max(currentSeconds - 1, 0));
@@ -74,7 +70,7 @@ export function Success() {
       window.clearTimeout(redirectTimer);
       window.clearInterval(countdownTimer);
     };
-  }, [hasWhatsappGroupUrl, trafficChannel, whatsappGroupUrl]);
+  }, [hasFinalActionUrl, redirectSeconds, successAction.type, successAction.url]);
 
   return (
     <div className="theme-expert theme-expert-event min-h-screen bg-event-navy text-text-inverse">
@@ -97,10 +93,10 @@ export function Success() {
           </p>
 
           <div className="mt-6 w-full rounded-2xl border border-white/12 bg-white/[0.07] p-4 shadow-[0_20px_54px_rgb(0_0_0/0.2)] sm:mt-9 sm:p-7 sm:shadow-[0_24px_70px_rgb(0_0_0/0.22)]">
-            {hasWhatsappGroupUrl ? (
+            {hasFinalActionUrl ? (
               <>
                 <p className="expert-body text-sm font-semibold text-white/78">
-                  {DNA.copy.successPage.countdownLead}
+                  {successConfig.countdownLead}
                 </p>
                 <div className="mt-2 text-[3.2rem] font-black leading-none text-event-sky sm:mt-3 sm:text-[5rem]">
                   {secondsRemaining}
@@ -109,10 +105,10 @@ export function Success() {
                 <div
                   className="mt-3 h-2.5 overflow-hidden rounded-full bg-white/14 sm:mt-5 sm:h-3"
                   role="progressbar"
-                  aria-label="Progreso de redirección a WhatsApp"
+                  aria-label={successConfig.progressAriaLabel}
                   aria-valuemin={0}
-                  aria-valuemax={REDIRECT_DELAY_SECONDS}
-                  aria-valuenow={REDIRECT_DELAY_SECONDS - secondsRemaining}
+                  aria-valuemax={redirectSeconds}
+                  aria-valuenow={redirectSeconds - secondsRemaining}
                 >
                   <div
                     className="h-full rounded-full bg-event-coral transition-[width] duration-500 ease-out"
@@ -121,23 +117,23 @@ export function Success() {
                 </div>
 
                 <a
-                  href={whatsappGroupUrl}
+                  href={successAction.url}
                   className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[#25D366] px-5 text-sm font-black text-[#062714] shadow-[0_14px_30px_rgb(37_211_102/0.22)] transition hover:bg-[#20bd5a] focus:outline-none focus:ring-4 focus:ring-[#25D366]/35 sm:mt-7 sm:min-h-14 sm:w-auto sm:min-w-[260px] sm:px-6 sm:text-base sm:shadow-[0_16px_36px_rgb(37_211_102/0.24)]"
                 >
-                  {DNA.copy.successPage.whatsappLabel}
+                  {successConfig.actionLabel}
                 </a>
               </>
             ) : (
               <>
                 <p className="expert-body text-base font-semibold leading-7 text-white/86">
-                  {DNA.copy.successPage.missingWhatsappUrlMessage}
+                  {successConfig.missingActionUrlMessage}
                 </p>
                 <button
                   type="button"
                   disabled
                   className="mt-5 inline-flex min-h-12 w-full cursor-not-allowed items-center justify-center rounded-full bg-white/18 px-5 text-sm font-black text-white/55 sm:mt-6 sm:min-h-14 sm:w-auto sm:min-w-[260px] sm:px-6 sm:text-base"
                 >
-                  {DNA.copy.successPage.whatsappLabel}
+                  {successConfig.actionLabel}
                 </button>
               </>
             )}

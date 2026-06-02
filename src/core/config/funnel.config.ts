@@ -1,10 +1,11 @@
 import { DNA, dnaNumericPrices, resolveDnaFunnelTheme } from '../../dna.config';
-import type { DnaTheme } from '../../dna.config';
+import type { DnaSuccessActionType, DnaTheme } from '../../dna.config';
 import type { TrafficChannel } from '../routing/channel';
 
 export type VideoProvider = 'youtube' | 'bunnynet' | 'vimeo' | 'wistia' | 'html5';
 export type OverlayPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
 export type FunnelType = 'vsl' | 'event' | 'tripwire';
+export type SuccessActionType = DnaSuccessActionType;
 
 export interface MutedPreviewConfig {
   enabled: boolean;
@@ -147,11 +148,26 @@ export interface FunnelAttributionConfig {
   landingSlug: string;
 }
 
+export interface SuccessActionConfig {
+  type: SuccessActionType;
+  url: string;
+}
+
+export interface SuccessConfig {
+  action: SuccessActionConfig;
+  redirectSeconds: number;
+  actionLabel: string;
+  countdownLead: string;
+  missingActionUrlMessage: string;
+  progressAriaLabel: string;
+}
+
 export interface TrafficChannelConfig {
   captureListSlug: string;
   whatsappGroupUrl: string;
   trackingEnabled: boolean;
   confirmationPath: string;
+  success: SuccessConfig;
 }
 
 export interface FunnelConfig {
@@ -300,6 +316,30 @@ export const pricingProductKeys = {
   upsellVip: 'upsell_vip',
 } as const;
 
+const organicWhatsappGroupUrl = import.meta.env.VITE_ORGANIC_WHATSAPP_GROUP_URL?.trim() ?? '';
+
+function resolveSuccessActionUrl(channelWhatsappGroupUrl: string) {
+  if (DNA.success.action.type === 'whatsapp') {
+    return channelWhatsappGroupUrl;
+  }
+
+  return DNA.success.action.url;
+}
+
+function resolveSuccessConfig(channelWhatsappGroupUrl: string): SuccessConfig {
+  return {
+    action: {
+      type: DNA.success.action.type,
+      url: resolveSuccessActionUrl(channelWhatsappGroupUrl).trim(),
+    },
+    redirectSeconds: DNA.success.redirectSeconds,
+    actionLabel: DNA.copy.successPage.whatsappLabel,
+    countdownLead: DNA.copy.successPage.countdownLead,
+    missingActionUrlMessage: DNA.copy.successPage.missingWhatsappUrlMessage,
+    progressAriaLabel: DNA.copy.successPage.progressAriaLabel,
+  };
+}
+
 export const funnelConfig: FunnelConfig = {
   brandName: DNA.productName,
   domain: DNA.domain,
@@ -396,12 +436,14 @@ export const funnelConfig: FunnelConfig = {
       whatsappGroupUrl: DNA.forms.whatsappGroupUrl,
       trackingEnabled: true,
       confirmationPath: '/a/confirmacion',
+      success: resolveSuccessConfig(DNA.forms.whatsappGroupUrl),
     },
     organic: {
       captureListSlug: import.meta.env.VITE_ORGANIC_CAPTURE_LIST_SLUG?.trim() ?? '',
-      whatsappGroupUrl: import.meta.env.VITE_ORGANIC_WHATSAPP_GROUP_URL?.trim() ?? '',
+      whatsappGroupUrl: organicWhatsappGroupUrl,
       trackingEnabled: false,
       confirmationPath: '/confirmacion',
+      success: resolveSuccessConfig(organicWhatsappGroupUrl),
     },
   },
   pricing: {

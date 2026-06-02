@@ -1,5 +1,6 @@
 export type DnaTheme = 'expert' | 'panda';
 export type DnaFunnelType = 'vsl' | 'event' | 'tripwire';
+export type DnaSuccessActionType = 'whatsapp' | 'url' | 'checkout' | 'zoom' | 'email' | 'none';
 
 const runtimeEnv = ((import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env ?? {});
 
@@ -137,6 +138,13 @@ export interface DnaConfig {
       status: string;
     };
   };
+  success: {
+    action: {
+      type: DnaSuccessActionType;
+      url: string;
+    };
+    redirectSeconds: number;
+  };
   copy: {
     productName: string;
     headline: string;
@@ -224,6 +232,7 @@ export interface DnaConfig {
       whatsappLabel: string;
       countdownLead: string;
       missingWhatsappUrlMessage: string;
+      progressAriaLabel: string;
     };
     captureForm: {
       eyebrow: string;
@@ -591,6 +600,13 @@ export const DNA = {
       status: 'submitted',
     },
   },
+  success: {
+    action: {
+      type: 'whatsapp',
+      url: readEnv('VITE_WHATSAPP_GROUP_URL'),
+    },
+    redirectSeconds: 10,
+  },
   copy: {
     productName,
     headline: 'Configura aqui el headline principal de tu VSL',
@@ -719,6 +735,7 @@ export const DNA = {
       whatsappLabel: 'Únete por WhatsApp',
       countdownLead: 'Serás redirigido automáticamente en...',
       missingWhatsappUrlMessage: 'El enlace de WhatsApp aún no está configurado.',
+      progressAriaLabel: 'Progreso de redirección a WhatsApp',
     },
     captureForm: {
       eyebrow: 'Formulario enriquecido',
