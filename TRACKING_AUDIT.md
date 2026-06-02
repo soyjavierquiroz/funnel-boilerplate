@@ -6,9 +6,9 @@ Fecha: 2026-06-01
 
 El proyecto tiene un servicio central de tracking en `src/core/services/analytics.ts` que puede enviar eventos a Meta Pixel, TikTok Pixel y un relay CAPI/Events API agnostico. La deduplicacion Meta browser/server esta bien planteada a nivel tecnico porque cada llamada a `trackEvent()` crea un `eventId` unico y lo reutiliza en Meta Pixel como `eventID` y en CAPI como `event_id`.
 
-En el `.env` actual de `source_boilerplate`, Meta Pixel esta activo con `VITE_META_PIXEL_ID=1767372344644632`; TikTok Pixel y CAPI siguen apagados porque `VITE_TIKTOK_PIXEL_ID` y `VITE_CAPI_RELAY_URL` estan vacios. Por eso hoy el formulario puede capturar leads via `/capture.php` y enviar eventos Meta browser-side, pero no envia eventos CAPI/server-side.
+En el `.env` actual de `source_boilerplate`, Meta Pixel esta activo con `VITE_META_PIXEL_ID=1767372344644632` y CAPI apunta a `https://relay.kuruk.in/v1/events`; TikTok Pixel sigue apagado porque `VITE_TIKTOK_PIXEL_ID` esta vacio. El frontend ya intenta usar el relay, pero el relay externo aun no permite `https://aprendermotores.com` como origin y no tiene configurado `MANEJARSINMIEDO`.
 
-La separacion importante: `/capture.php` no es CAPI; es solo relay de captura hacia FluentCRM. CAPI depende exclusivamente de `VITE_CAPI_RELAY_URL` y, al estar vacio, `analytics.trackEvent()` retorna `capiSent: false` sin hacer ningun `fetch` server-side. Tambien hay riesgo de perdida de eventos en el click de WhatsApp/redireccion porque no se trackea ese paso y porque el tracking de `Lead` ocurre despues del webhook de captura.
+La separacion importante: `/capture.php` no es CAPI; es solo relay de captura hacia FluentCRM. CAPI depende exclusivamente de `VITE_CAPI_RELAY_URL`; si esa variable esta vacia, `analytics.trackEvent()` retorna `capiSent: false` sin hacer ningun `fetch` server-side. En MSM la variable ya existe, pero el relay externo aun bloquea el origin/sitio. Tambien hay riesgo de perdida de eventos en el click de WhatsApp/redireccion porque no se trackea ese paso y porque el tracking de `Lead` ocurre despues del webhook de captura.
 
 ## CAPI relay actual y variables necesarias
 
@@ -16,7 +16,7 @@ Estado de variables en `.env` actual:
 
 - `VITE_META_PIXEL_ID=1767372344644632`: activo; habilita Meta Pixel browser.
 - `VITE_TIKTOK_PIXEL_ID=`: vacio; TikTok Pixel no se carga ni envia eventos.
-- `VITE_CAPI_RELAY_URL=`: vacio; CAPI relay no se invoca.
+- `VITE_CAPI_RELAY_URL=https://relay.kuruk.in/v1/events`: activo en frontend; requiere configuracion server-side del relay.
 - `VITE_SITE_ID=MANEJARSINMIEDO`: se usa como `siteId` en el payload CAPI si se activa el relay.
 - `VITE_CAPTURE_WEBHOOK_URL=/capture.php`: solo FluentCRM/captura; no es CAPI.
 
@@ -103,18 +103,18 @@ Eventos que se disparan hoy con solo `VITE_META_PIXEL_ID`:
 - `CompleteRegistration`: si, en `/confirmacion`, una vez por sesion mediante `sessionStorage`.
 - CTA clicks del funnel event MSM: no hay tracking dedicado para clicks de anclas ni para el boton/link de WhatsApp. En componentes VSL/tripwire reutilizables si existen clicks `InitiateCheckout`, pero no son el flujo principal del evento MSM actual.
 
-Que no funciona con `VITE_CAPI_RELAY_URL` vacio:
+Que no funciona mientras el relay externo no tenga `MANEJARSINMIEDO`:
 
-- No hay eventos Meta server-side.
+- No hay eventos Meta server-side para MSM.
 - No hay deduplicacion browser/server real en Meta porque falta el lado server.
-- No se hace `POST` a ningun relay CAPI.
-- `TrackEventResult.capiSent` queda `false` y `capiStatus` queda `null`.
+- El `POST` al relay falla hoy por CORS desde `https://aprendermotores.com`.
+- Si se prueba desde un origin permitido, `siteId=MANEJARSINMIEDO` devuelve `unknown_or_unconfigured_site`.
 - `/capture.php` sigue funcionando solo como relay de FluentCRM, pero no reenvia eventos a Meta CAPI.
 
 Backend local de CAPI relay:
 
 - No se encontro endpoint local de CAPI relay en este repo. Las coincidencias locales son el cliente en `src/core/services/analytics.ts`, documentacion y `capture.php`.
-- Para activar CAPI se necesita configurar un endpoint externo en `VITE_CAPI_RELAY_URL`. Ese endpoint debe aceptar el JSON agnostico anterior, validar `siteId`, mapear `event_name`, `event_id`, `event_source_url`, `user_data` y `data` hacia Meta Conversions API, y autenticar contra Meta con el access token/pixel del servidor.
+- Para activar CAPI se necesita configurar el endpoint externo en `https://relay.kuruk.in/v1/events`. Ese endpoint debe aceptar el JSON agnostico anterior, permitir `https://aprendermotores.com`, validar `siteId=MANEJARSINMIEDO`, mapear `event_name`, `event_id`, `event_source_url`, `user_data` y `data` hacia Meta Conversions API, y autenticar contra Meta con el access token/pixel del servidor.
 
 ## Arquitectura actual
 
@@ -144,9 +144,9 @@ Referencias principales:
 
 | Integracion | Existe codigo | Activa en `.env` actual | Notas |
 | --- | --- | --- | --- |
-| Meta Pixel | Si | No | Requiere `VITE_META_PIXEL_ID`. Carga `https://connect.facebook.net/en_US/fbevents.js`. |
+| Meta Pixel | Si | Si | Requiere `VITE_META_PIXEL_ID`. Carga `https://connect.facebook.net/en_US/fbevents.js`. |
 | TikTok Pixel | Si | No | Requiere `VITE_TIKTOK_PIXEL_ID`. Carga `https://analytics.tiktok.com/i18n/pixel/events.js`. |
-| CAPI relay | Si | No | Requiere `VITE_CAPI_RELAY_URL`. Payload agnostico via `fetch`. |
+| CAPI relay | Si | Configurado en frontend, bloqueado en relay | Requiere `VITE_CAPI_RELAY_URL`. Payload agnostico via `fetch`. |
 | Visitor API | Si | Si por fallback | Usa `VITE_VISITOR_API_URL` o `https://ipapi.co/json/`. |
 | FluentCRM capture | Si | Si | `/capture.php` recibe leads y los reenvia a CRM. No envia eventos Pixel/CAPI. |
 | Otros pixels | No | No | No se detectaron Google Analytics, Google Ads, GTM u otros tags. |

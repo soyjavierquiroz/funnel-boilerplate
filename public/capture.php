@@ -5,8 +5,9 @@ ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL);
 
-// Editar este valor por dominio/funnel o mover a variable de entorno del servidor.
-$FLUENTCRM_WEBHOOK_URL = 'https://crm.aprendermotores.com/?fluentcrm=1&route=contact&hash=5af34da0-2037-41e4-a42d-1283c6317183';
+// Editar estos valores por dominio/funnel o moverlos a variables de entorno del servidor.
+$FLUENTCRM_ADS_WEBHOOK_URL = 'https://crm.aprendermotores.com/?fluentcrm=1&route=contact&hash=5af34da0-2037-41e4-a42d-1283c6317183';
+$FLUENTCRM_ORGANIC_WEBHOOK_URL = 'https://crm.aprendermotores.com/?fluentcrm=1&route=contact&hash=a9c924a4-b755-46e0-8f02-a9e92ef7ac8f';
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -56,6 +57,18 @@ function debug_log_json(string $label, array $payload): void
     error_log('[capture.php] ' . $label . ': ' . truncate_for_log($encodedPayload));
 }
 
+function log_capture_routing(
+    string $trafficChannel,
+    string $captureRoute,
+    string $upstream
+): void {
+    debug_log_json('routing debug', [
+        'traffic_channel' => $trafficChannel,
+        'capture_route' => $captureRoute,
+        'upstream_selected' => $upstream,
+    ]);
+}
+
 function build_debug_payload_snapshot(array $payload): array
 {
     $debugPayload = [];
@@ -63,6 +76,12 @@ function build_debug_payload_snapshot(array $payload): array
         'email',
         'list',
         'lists',
+        'traffic_channel',
+        'capture_route',
+        'capture_list_slug',
+        'confirmation_path',
+        'source',
+        'page_url',
         'funnel_type',
         'theme',
         'landing_slug',
@@ -154,6 +173,29 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
 $payload['email'] = $email;
 
+$trafficChannel = strtolower(read_payload_string($payload, 'traffic_channel'));
+
+if ($trafficChannel === '') {
+    respond_json(422, [
+        'ok' => false,
+        'error' => 'Traffic channel is required',
+    ]);
+}
+
+if ($trafficChannel !== 'ads' && $trafficChannel !== 'organic') {
+    respond_json(422, [
+        'ok' => false,
+        'error' => 'Traffic channel is invalid',
+    ]);
+}
+
+$captureRoute = $trafficChannel;
+$fluentcrmWebhookUrl = $trafficChannel === 'ads'
+    ? $FLUENTCRM_ADS_WEBHOOK_URL
+    : $FLUENTCRM_ORGANIC_WEBHOOK_URL;
+$payload['traffic_channel'] = $trafficChannel;
+$payload['capture_route'] = $captureRoute;
+
 if (empty($payload['submitted_at']) || !is_string($payload['submitted_at'])) {
     $payload['submitted_at'] = gmdate('c');
 }
@@ -219,6 +261,12 @@ foreach ($standardFieldMap as $field => $value) {
 }
 
 $attributionFields = [
+    'traffic_channel',
+    'capture_route',
+    'capture_list_slug',
+    'confirmation_path',
+    'source',
+    'page_url',
     'funnel_type',
     'theme',
     'landing_slug',
@@ -244,6 +292,11 @@ if ($visitorCustomValues !== []) {
     $payload['custom_fields'] = array_merge($existingCustomFields, $visitorCustomValues);
 }
 
+log_capture_routing(
+    $trafficChannel,
+    $captureRoute,
+    $captureRoute
+);
 debug_log_json('sent payload debug', build_debug_payload_snapshot($payload));
 
 $encodedPayload = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
@@ -264,7 +317,7 @@ if (!function_exists('curl_init')) {
     ]);
 }
 
-$curl = curl_init($FLUENTCRM_WEBHOOK_URL);
+$curl = curl_init($fluentcrmWebhookUrl);
 
 if ($curl === false) {
     error_log('[capture.php] Failed to initialize cURL');
@@ -291,7 +344,12 @@ $curlError = curl_error($curl);
 $fluentcrmStatus = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
 curl_close($curl);
 
-error_log('[capture.php] FluentCRM HTTP status: ' . $fluentcrmStatus);
+error_log(sprintf(
+    '[capture.php] FluentCRM HTTP status: %d; traffic_channel=%s; upstream_selected=%s',
+    $fluentcrmStatus,
+    $trafficChannel,
+    $captureRoute
+));
 
 if (is_string($fluentcrmResponse)) {
     error_log('[capture.php] FluentCRM response body: ' . truncate_for_log($fluentcrmResponse));

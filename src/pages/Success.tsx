@@ -1,16 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import analytics from '../core/services/analytics';
+import funnelConfig from '../core/config/funnel.config';
+import { getTrafficChannel, type TrafficChannel } from '../core/routing/channel';
 import { DNA } from '../dna.config';
 
 const REDIRECT_DELAY_SECONDS = 10;
 
-function resolveWhatsappGroupUrl() {
-  const envUrl = import.meta.env.VITE_WHATSAPP_GROUP_URL?.trim();
-  return envUrl && envUrl.length > 0 ? envUrl : DNA.forms.whatsappGroupUrl;
+function resolveWhatsappGroupUrl(channel: TrafficChannel) {
+  return funnelConfig.trafficChannels[channel].whatsappGroupUrl.trim();
 }
 
-function trackCompleteRegistrationOnce() {
-  const trackingKey = `${DNA.siteId}.success.complete-registration`;
+function trackCompleteRegistrationOnce(channel: TrafficChannel) {
+  const trackingKey = `${DNA.siteId}.${channel}.success.complete-registration`;
 
   try {
     if (window.sessionStorage.getItem(trackingKey) === '1') {
@@ -26,24 +28,36 @@ function trackCompleteRegistrationOnce() {
     source: 'SuccessPage',
     funnel_type: DNA.funnelType,
     site_id: DNA.siteId,
+    traffic_channel: channel,
   });
 }
 
 export function Success() {
+  const location = useLocation();
+  const trafficChannel = getTrafficChannel(location.pathname);
+  const channelConfig = funnelConfig.trafficChannels[trafficChannel];
   const [secondsRemaining, setSecondsRemaining] = useState(REDIRECT_DELAY_SECONDS);
-  const whatsappGroupUrl = useMemo(resolveWhatsappGroupUrl, []);
+  const whatsappGroupUrl = useMemo(
+    () => resolveWhatsappGroupUrl(trafficChannel),
+    [trafficChannel],
+  );
   const hasWhatsappGroupUrl = whatsappGroupUrl.length > 0;
   const progressPercent =
     ((REDIRECT_DELAY_SECONDS - secondsRemaining) / REDIRECT_DELAY_SECONDS) * 100;
 
   useEffect(() => {
-    trackCompleteRegistrationOnce();
-  }, []);
+    if (channelConfig.trackingEnabled) {
+      trackCompleteRegistrationOnce(trafficChannel);
+    }
+  }, [channelConfig.trackingEnabled, trafficChannel]);
 
   useEffect(() => {
     if (!hasWhatsappGroupUrl) {
+      const envVarName =
+        trafficChannel === 'ads' ? 'VITE_WHATSAPP_GROUP_URL' : 'VITE_ORGANIC_WHATSAPP_GROUP_URL';
+
       console.warn(
-        '[Success] VITE_WHATSAPP_GROUP_URL is not configured. WhatsApp redirect disabled.',
+        `[Success] ${envVarName} is not configured. WhatsApp redirect disabled.`,
       );
       return;
     }
@@ -60,7 +74,7 @@ export function Success() {
       window.clearTimeout(redirectTimer);
       window.clearInterval(countdownTimer);
     };
-  }, [hasWhatsappGroupUrl, whatsappGroupUrl]);
+  }, [hasWhatsappGroupUrl, trafficChannel, whatsappGroupUrl]);
 
   return (
     <div className="theme-expert theme-expert-event min-h-screen bg-event-navy text-text-inverse">

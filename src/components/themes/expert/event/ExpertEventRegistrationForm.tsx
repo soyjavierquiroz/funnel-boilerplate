@@ -1,6 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { DNA } from '../../../../dna.config';
 import funnelConfig from '../../../../core/config/funnel.config';
+import { getTrafficChannel, type TrafficChannel } from '../../../../core/routing/channel';
 import analytics from '../../../../core/services/analytics';
 import { useVisitor } from '../../../../core/visitor/VisitorContext';
 import { buildVisitorPayload, type VisitorPayload } from '../../../../core/visitor/visitorPayload';
@@ -15,6 +17,9 @@ interface MsmEventLeadPayload extends VisitorPayload {
   name: string;
   email: string;
   list: string;
+  traffic_channel: TrafficChannel;
+  capture_list_slug: string;
+  confirmation_path: string;
   source: 'msm-event';
   funnel_type: string;
   theme: string;
@@ -35,18 +40,10 @@ function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-function resolveSuccessRedirectUrl() {
-  const { successRedirectType, successRedirectUrl, whatsappRedirectBaseUrl } = funnelConfig.forms.capture;
-
-  if (successRedirectType === 'whatsapp' && !/^https?:\/\//i.test(successRedirectUrl)) {
-    const normalizedPhone = successRedirectUrl.replace(/\D/g, '');
-    return `${whatsappRedirectBaseUrl.replace(/\/$/, '')}/${normalizedPhone}`;
-  }
-
-  return successRedirectUrl;
-}
-
 export function ExpertEventRegistrationForm() {
+  const location = useLocation();
+  const trafficChannel = getTrafficChannel(location.pathname);
+  const channelConfig = funnelConfig.trafficChannels[trafficChannel];
   const content = funnelConfig.content.event;
   const capture = funnelConfig.forms.capture;
   const formCopy = DNA.copy.captureForm;
@@ -103,6 +100,8 @@ export function ExpertEventRegistrationForm() {
       return;
     }
 
+    const captureListSlug = channelConfig.captureListSlug.trim();
+
     setIsSubmitting(true);
 
     const submittedAt = new Date().toISOString();
@@ -112,7 +111,10 @@ export function ExpertEventRegistrationForm() {
       first_name: trimmedFirstName,
       name: trimmedFirstName,
       email: trimmedEmail,
-      list: capture.listSlug,
+      list: captureListSlug,
+      traffic_channel: trafficChannel,
+      capture_list_slug: captureListSlug,
+      confirmation_path: channelConfig.confirmationPath,
       source: 'msm-event',
       funnel_type: funnelConfig.attribution.funnelType,
       theme: funnelConfig.attribution.theme,
@@ -144,27 +146,32 @@ export function ExpertEventRegistrationForm() {
         throw new Error(`Webhook responded with ${response.status}`);
       }
 
-      try {
-        await analytics.trackEvent(capture.tracking.eventName, {
-          lead: {
-            nombre: payload.first_name,
-            email: payload.email,
-          },
-          meta: payload.meta,
-          list: payload.list,
-          source: payload.source,
-          page_url: payload.page_url,
-          submitted_at: payload.submitted_at,
-          event_name: payload.event_name,
-          form_id: capture.tracking.formId,
-          content_name: funnelConfig.brandName,
-          status: capture.tracking.status,
-        });
-      } catch (trackingError) {
-        console.warn('[ExpertEventRegistrationForm] lead tracking failed', trackingError);
+      if (channelConfig.trackingEnabled) {
+        try {
+          await analytics.trackEvent(capture.tracking.eventName, {
+            lead: {
+              nombre: payload.first_name,
+              email: payload.email,
+            },
+            meta: payload.meta,
+            list: payload.list,
+            traffic_channel: payload.traffic_channel,
+            capture_list_slug: payload.capture_list_slug,
+            confirmation_path: payload.confirmation_path,
+            source: payload.source,
+            page_url: payload.page_url,
+            submitted_at: payload.submitted_at,
+            event_name: payload.event_name,
+            form_id: capture.tracking.formId,
+            content_name: funnelConfig.brandName,
+            status: capture.tracking.status,
+          });
+        } catch (trackingError) {
+          console.warn('[ExpertEventRegistrationForm] lead tracking failed', trackingError);
+        }
       }
 
-      window.location.assign(resolveSuccessRedirectUrl());
+      window.location.assign(channelConfig.confirmationPath);
     } catch (error) {
       console.error('[ExpertEventRegistrationForm] webhook submission failed', error);
       setSubmitError(formCopy.submitError);

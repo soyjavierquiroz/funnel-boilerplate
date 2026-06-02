@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { DNA, resolveDnaDocumentTheme } from './dna.config';
 import analytics from './core/services/analytics';
+import funnelConfig from './core/config/funnel.config';
+import { getTrafficChannel } from './core/routing/channel';
 import { ExpertTheme } from './components/themes/expert/ExpertTheme';
 import { ExpertEventTheme } from './components/themes/expert/event/ExpertEventTheme';
 import { Success } from './pages/Success';
@@ -16,7 +18,10 @@ function resolveHomeTheme() {
 
 function RoutedApp() {
   const location = useLocation();
-  const isSuccessRoute = location.pathname === '/confirmacion';
+  const trafficChannel = getTrafficChannel(location.pathname);
+  const channelConfig = funnelConfig.trafficChannels[trafficChannel];
+  const isSuccessRoute =
+    location.pathname === '/confirmacion' || location.pathname === '/a/confirmacion';
 
   useEffect(() => {
     const documentTheme = resolveDnaDocumentTheme();
@@ -27,17 +32,22 @@ function RoutedApp() {
     document.documentElement.setAttribute('data-theme', documentTheme);
     document.title = nextTitle;
 
-    void analytics.trackEvent('PageView', {
-      source: 'AppLoad',
-      theme: DNA.theme,
-      funnel_type: DNA.funnelType,
-    });
-  }, [isSuccessRoute, location.pathname]);
+    if (channelConfig.trackingEnabled) {
+      void analytics.trackEvent('PageView', {
+        source: 'AppLoad',
+        theme: DNA.theme,
+        funnel_type: DNA.funnelType,
+        traffic_channel: trafficChannel,
+      });
+    }
+  }, [channelConfig.trackingEnabled, isSuccessRoute, location.pathname, trafficChannel]);
 
   return (
     <Routes>
       <Route path="/" element={resolveHomeTheme()} />
+      <Route path="/a" element={resolveHomeTheme()} />
       <Route path="/confirmacion" element={<Success />} />
+      <Route path="/a/confirmacion" element={<Success />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

@@ -1,5 +1,6 @@
 import { DNA, dnaNumericPrices, resolveDnaFunnelTheme } from '../../dna.config';
 import type { DnaTheme } from '../../dna.config';
+import type { TrafficChannel } from '../routing/channel';
 
 export type VideoProvider = 'youtube' | 'bunnynet' | 'vimeo' | 'wistia' | 'html5';
 export type OverlayPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
@@ -146,6 +147,13 @@ export interface FunnelAttributionConfig {
   landingSlug: string;
 }
 
+export interface TrafficChannelConfig {
+  captureListSlug: string;
+  whatsappGroupUrl: string;
+  trackingEnabled: boolean;
+  confirmationPath: string;
+}
+
 export interface FunnelConfig {
   brandName: string;
   domain: string;
@@ -155,6 +163,7 @@ export interface FunnelConfig {
   media: FunnelMediaConfig;
   content: FunnelContentConfig;
   forms: FunnelFormsConfig;
+  trafficChannels: Record<TrafficChannel, TrafficChannelConfig>;
   pricing: FunnelPricingConfig;
   integrations: FunnelIntegrationsConfig;
 }
@@ -379,6 +388,20 @@ export const funnelConfig: FunnelConfig = {
       whatsappRedirectBaseUrl: DNA.forms.whatsappRedirectBaseUrl,
       fields: DNA.forms.captureFields,
       tracking: DNA.forms.captureTracking,
+    },
+  },
+  trafficChannels: {
+    ads: {
+      captureListSlug: DNA.forms.captureListSlug,
+      whatsappGroupUrl: DNA.forms.whatsappGroupUrl,
+      trackingEnabled: true,
+      confirmationPath: '/a/confirmacion',
+    },
+    organic: {
+      captureListSlug: import.meta.env.VITE_ORGANIC_CAPTURE_LIST_SLUG?.trim() ?? '',
+      whatsappGroupUrl: import.meta.env.VITE_ORGANIC_WHATSAPP_GROUP_URL?.trim() ?? '',
+      trackingEnabled: false,
+      confirmationPath: '/confirmacion',
     },
   },
   pricing: {
