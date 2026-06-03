@@ -297,6 +297,8 @@ export interface DnaConfig {
       };
       promise: {
         title: string;
+        image: string;
+        imageAlt: string;
         bullets: string[];
         ctaLabel: string;
       };
@@ -314,6 +316,8 @@ export interface DnaConfig {
           label: string;
           title: string;
           description: string;
+          image: string;
+          imageAlt: string;
         }>;
         ctaLabel: string;
       };
@@ -337,8 +341,11 @@ export interface DnaConfig {
         subtitle: string;
         items: Array<{
           name: string;
-          role: string;
+          location?: string;
+          role?: string;
           quote: string;
+          image?: string;
+          result?: string;
         }>;
       };
       authority: {
@@ -816,6 +823,8 @@ export const DNA = {
       },
       promise: {
         title: 'Esto es lo que descubrirás en el evento:',
+        image: eventAssets.agenda3,
+        imageAlt: 'Persona preparando el camino para manejar con seguridad',
         bullets: [
           'Por qué el miedo al conducir NO significa que no seas capaz',
           'El verdadero motivo por el que muchas mujeres nunca logran ganar confianza al volante',
@@ -850,18 +859,24 @@ export const DNA = {
             title: 'Entender el miedo y recuperar confianza',
             description:
               'Por qué aparece el miedo al conducir, qué lo alimenta, y por qué muchas personas llevan años sin superarlo.',
+            image: eventAssets.agenda1,
+            imageAlt: 'Participante entendiendo el miedo a conducir durante la primera clase',
           },
           {
             label: 'Clase 2',
             title: 'Los errores que mantienen el miedo vivo',
             description:
               'Los errores más comunes, qué cosas empeoran la inseguridad, y cómo empezar a cambiar tu relación con el volante.',
+            image: eventAssets.agenda2,
+            imageAlt: 'Participante revisando los errores que sostienen la inseguridad al manejar',
           },
           {
             label: 'Clase 3',
             title: 'El camino para manejar con seguridad',
             description:
               'Cómo empezar a recuperar independencia, cómo volver a confiar en ti, y cuál es el acompañamiento que he preparado para ayudarte en este proceso.',
+            image: eventAssets.agenda3,
+            imageAlt: 'Participante avanzando hacia manejar con mayor seguridad',
           },
         ],
         ctaLabel: 'RESERVAR MI CUPO GRATUITO',
@@ -904,19 +919,19 @@ export const DNA = {
         items: [
           {
             name: 'Carolina M.',
-            role: 'Bogotá, Colombia',
+            location: 'Bogotá, Colombia',
             quote:
               'Antes sentía que manejar no era para mí. El enfoque me ayudó a entender que el miedo tenía explicación y que podía avanzar paso a paso.',
           },
           {
             name: 'Andrea P.',
-            role: 'Quito, Ecuador',
+            location: 'Quito, Ecuador',
             quote:
               'Me identifiqué mucho con la idea de depender de otros. Salí con más claridad para empezar a practicar sin exigirme hacerlo perfecto.',
           },
           {
             name: 'Natalia R.',
-            role: 'Guadalajara, México',
+            location: 'Guadalajara, México',
             quote:
               'Lo que más me sirvió fue dejar de verme como incapaz. Entendí que necesitaba recuperar confianza, no pelear conmigo misma.',
           },

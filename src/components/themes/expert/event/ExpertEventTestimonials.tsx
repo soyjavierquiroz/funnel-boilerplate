@@ -23,22 +23,28 @@ export function ExpertEventTestimonials() {
       </div>
 
       <div className="mt-10 grid gap-5 lg:grid-cols-3">
-        {testimonials.items.map((item) => (
-          <ExpertEventCard key={item.name} className="flex min-h-[300px] flex-col p-6 sm:p-7">
-            <Quote className="h-8 w-8 text-event-coral" aria-hidden="true" />
-            <p className={[expertEventText.bodyLarge, 'mt-6 flex-1 font-semibold text-event-muted'].join(' ')}>
-              "{item.quote}"
-            </p>
-            <div className="mt-7 border-t border-event-navy/10 pt-5">
-              <p className={[expertEventText.cardH3, 'text-event-navy'].join(' ')}>
-                {item.name}
+        {testimonials.items.map((item) => {
+          const detail = item.location ?? item.result ?? item.role;
+
+          return (
+            <ExpertEventCard key={item.name} className="flex min-h-[300px] flex-col p-6 sm:p-7">
+              <Quote className="h-8 w-8 text-event-coral" aria-hidden="true" />
+              <p className={[expertEventText.bodyLarge, 'mt-6 flex-1 font-semibold text-event-muted'].join(' ')}>
+                "{item.quote}"
               </p>
-              <p className={[expertEventText.small, 'mt-1.5 font-bold text-event-coral'].join(' ')}>
-                {item.role}
-              </p>
-            </div>
-          </ExpertEventCard>
-        ))}
+              <div className="mt-7 border-t border-event-navy/10 pt-5">
+                <p className={[expertEventText.cardH3, 'text-event-navy'].join(' ')}>
+                  {item.name}
+                </p>
+                {detail ? (
+                  <p className={[expertEventText.small, 'mt-1.5 font-bold text-event-coral'].join(' ')}>
+                    {detail}
+                  </p>
+                ) : null}
+              </div>
+            </ExpertEventCard>
+          );
+        })}
       </div>
     </ExpertEventSection>
   );

@@ -8,7 +8,6 @@ import { expertEventText } from './ExpertEventTypography';
 
 export function ExpertEventAgenda() {
   const content = funnelConfig.content.event;
-  const agendaImages = [content.assets.agenda1, content.assets.agenda2, content.assets.agenda3];
 
   return (
     <ExpertEventSection tone="soft" width="wide">
@@ -20,11 +19,11 @@ export function ExpertEventAgenda() {
       </div>
 
       <div className="mt-12 grid gap-5 lg:grid-cols-3">
-        {content.agenda.items.map((item, index) => (
+        {content.agenda.items.map((item) => (
           <ExpertEventCard key={item.title} className="overflow-hidden p-0">
             <ExpertEventImageFrame
-              src={agendaImages[index] ?? agendaImages[0]}
-              alt=""
+              src={item.image}
+              alt={item.imageAlt}
               loading="lazy"
               frameClassName="m-3 mb-0 shadow-[0_16px_42px_rgb(var(--color-event-navy)/0.1)]"
             />

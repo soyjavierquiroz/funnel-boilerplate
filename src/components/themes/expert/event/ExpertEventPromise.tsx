@@ -11,7 +11,7 @@ export function ExpertEventPromise() {
   return (
     <ExpertEventSection id="event-promise" tone="surface" width="wide">
       <div className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
-        <ExpertEventImageFrame src={content.assets.agenda3} alt="" loading="lazy" />
+        <ExpertEventImageFrame src={content.promise.image} alt={content.promise.imageAlt} loading="lazy" />
 
         <div className="space-y-8">
           <h2 className={[expertEventText.sectionH2, 'max-w-[760px] text-event-ink'].join(' ')}>

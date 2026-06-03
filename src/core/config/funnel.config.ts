@@ -246,6 +246,8 @@ export interface EventFunnelContentConfig {
   };
   promise: {
     title: string;
+    image: string;
+    imageAlt: string;
     bullets: string[];
     ctaLabel: string;
   };
@@ -263,6 +265,8 @@ export interface EventFunnelContentConfig {
       label: string;
       title: string;
       description: string;
+      image: string;
+      imageAlt: string;
     }>;
     ctaLabel: string;
   };
@@ -286,8 +290,11 @@ export interface EventFunnelContentConfig {
     subtitle: string;
     items: Array<{
       name: string;
-      role: string;
+      location?: string;
+      role?: string;
       quote: string;
+      image?: string;
+      result?: string;
     }>;
   };
   authority: {
