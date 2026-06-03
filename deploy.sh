@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-DOMAIN="${VITE_DOMAIN:-aprendermotores.com}"
+DOMAIN="aprendermotores.com"
+CACHE_DIR="/usr/local/lsws/cachedata/aprendermotores.com"
 
 echo "Iniciando despliegue de ${DOMAIN}..."
 
@@ -15,7 +16,15 @@ echo "3. Saneando permisos..."
 chown -R nobody:nogroup ../public_html/
 
 echo "4. Purgando cache de LiteSpeed..."
-rm -rf /usr/local/lsws/cachedata/*
+if [ -d "$CACHE_DIR" ]; then
+  if rm -rf "$CACHE_DIR"; then
+    echo "Cache purgada: $CACHE_DIR"
+  else
+    echo "Advertencia: no se pudo purgar la cache en $CACHE_DIR; el deploy continua." >&2
+  fi
+else
+  echo "No hay cache de LiteSpeed para purgar en $CACHE_DIR."
+fi
 systemctl restart lsws
 
 echo "Despliegue completado."
