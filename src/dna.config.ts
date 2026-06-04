@@ -69,6 +69,14 @@ export interface DnaConfig {
       includes: string[];
       footerNote: string;
     };
+    offerBoxes: Array<{
+      eyebrow: string;
+      title: string;
+      summary: string;
+      includes: string[];
+      footerNote: string;
+      badge: string;
+    }>;
     credibility: {
       text: string;
       items: Array<{
@@ -81,6 +89,24 @@ export interface DnaConfig {
       title: string;
       paragraphs: string[];
       highlights: string[];
+    };
+    opportunity: {
+      eyebrow: string;
+      title: string;
+      intro: string;
+      paragraphs: string[];
+      bullets: string[];
+      callout: string;
+    };
+    identityShift: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      oldIdentityTitle: string;
+      newIdentityTitle: string;
+      oldItems: string[];
+      newItems: string[];
+      closing: string;
     };
     story: {
       eyebrow: string;
@@ -104,11 +130,41 @@ export interface DnaConfig {
         imageAlt: string;
       }>;
     };
+    proofWallLarge: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      featured: {
+        eyebrow: string;
+        title: string;
+        quote: string;
+        name: string;
+        detail: string;
+        image: string;
+        imageAlt: string;
+      };
+      items: Array<{
+        eyebrow: string;
+        title: string;
+        quote: string;
+        name: string;
+        detail: string;
+        image: string;
+        imageAlt: string;
+      }>;
+    };
     repeatedCtas: Array<{
       eyebrow: string;
       title: string;
       subtitle: string;
       priceLine: string;
+    }>;
+    repeatedOffers: Array<{
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      priceLine: string;
+      offerBoxIndex: number;
     }>;
     valueStack: {
       eyebrow: string;
@@ -118,6 +174,12 @@ export interface DnaConfig {
       totalValue: string;
       todayPriceLabel: string;
       includedLabel: string;
+      stackSections: Array<{
+        eyebrow: string;
+        title: string;
+        description: string;
+        items: string[];
+      }>;
       items: Array<{
         title: string;
         description: string;
@@ -145,6 +207,13 @@ export interface DnaConfig {
       eyebrow: string;
       title: string;
       description: string;
+    };
+    fascinations: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      items: string[];
+      closing: string;
     };
     faq: {
       eyebrow: string;
@@ -694,6 +763,50 @@ export const DNA = {
       ],
       footerNote: 'Sin formulario en esta página. El botón te lleva directo al checkout cuando esté configurado.',
     },
+    offerBoxes: [
+      {
+        eyebrow: 'Acceso completo hoy',
+        title: 'Maneja Sin Miedo',
+        summary:
+          'El paquete principal para entender tu miedo, preparar tus primeras prácticas y volver a tomar decisiones con más seguridad.',
+        includes: [
+          'Método principal de avance gradual',
+          'Kit de calma antes de manejar',
+          'Bonos prácticos incluidos',
+          'Acceso inmediato al completar checkout',
+        ],
+        footerNote: 'Sin formulario en esta página. El botón te lleva directo al checkout cuando esté configurado.',
+        badge: 'Oferta principal',
+      },
+      {
+        eyebrow: 'Resumen rápido',
+        title: 'Todo el paquete de confianza',
+        summary:
+          'Una combinación de guía, ejercicios y recursos para dejar de improvisar cada práctica y saber cuál es tu siguiente paso.',
+        includes: [
+          'Ruta paso a paso',
+          'Recursos descargables',
+          'Plan de primeros recorridos',
+          'Mapa de seguimiento semanal',
+        ],
+        footerNote: 'El precio y el checkout se controlan desde configuración.',
+        badge: 'Incluye bonos',
+      },
+      {
+        eyebrow: 'Decisión final',
+        title: 'Empieza con una ruta clara',
+        summary:
+          'Si el miedo te ha mantenido esperando el momento perfecto, este paquete está pensado para crear progreso desde pasos pequeños.',
+        includes: [
+          'Acceso al sistema completo',
+          'Bonos de práctica emocional',
+          'Herramientas de seguimiento',
+          'Pago seguro al checkout configurado',
+        ],
+        footerNote: 'Si falta la URL de checkout, el botón aparecerá deshabilitado.',
+        badge: 'Último recordatorio',
+      },
+    ],
     credibility: {
       text: 'Un enfoque práctico, humano y progresivo para volver a mirar el volante con calma.',
       items: [
@@ -722,6 +835,45 @@ export const DNA = {
         'No necesitas forzarte para demostrar nada.',
         'Necesitas un camino que convierta práctica en confianza.',
       ],
+    },
+    opportunity: {
+      eyebrow: 'La nueva oportunidad',
+      title: 'No tienes que esperar a sentirte valiente para volver a manejar.',
+      intro:
+        'La oportunidad real no es “perder el miedo” de golpe. Es tener un proceso que te permita actuar aunque todavía haya nervios.',
+      paragraphs: [
+        'La mayoría intenta resolverlo desde la fuerza: subirse al auto, aguantar la tensión y esperar que con repetición desaparezca. Pero cuando el cuerpo interpreta manejar como amenaza, repetir sin estructura puede reforzar el bloqueo.',
+        'La ruta correcta empieza antes del trayecto. Empieza con preparar tu estado, elegir una práctica posible, medir el avance correcto y cerrar cada experiencia sin convertirla en juicio personal.',
+      ],
+      bullets: [
+        'Dejas de depender de motivación momentánea.',
+        'Practicas con un criterio claro de dificultad.',
+        'Celebras avances pequeños sin minimizar su valor.',
+        'Vuelves a sentir que manejar puede ser una habilidad entrenable.',
+      ],
+      callout: 'La nueva oportunidad es recuperar agencia: saber qué hacer hoy, aunque aún no te sientas lista para todo.',
+    },
+    identityShift: {
+      eyebrow: 'Cambio de identidad',
+      title: 'La meta no es “ser una conductora perfecta”. La meta es dejar de verte como alguien que no puede.',
+      subtitle:
+        'Una sales letter clásica no solo vende información: mueve a la persona de una identidad antigua a una nueva forma de verse actuando.',
+      oldIdentityTitle: 'Antes del proceso',
+      newIdentityTitle: 'Después de empezar',
+      oldItems: [
+        '“Soy nerviosa, mejor no manejo”.',
+        '“Si me equivoco, confirmo que no puedo”.',
+        '“Necesito que alguien me rescate cada vez”.',
+        '“Un trayecto corto no cuenta como avance”.',
+      ],
+      newItems: [
+        '“Puedo practicar en una escala que mi cuerpo tolere”.',
+        '“Un error es información, no identidad”.',
+        '“Puedo pedir apoyo sin entregar el control”.',
+        '“Cada práctica bien diseñada vuelve a entrenar confianza”.',
+      ],
+      closing:
+        'Cuando cambia la identidad, el volante deja de ser una prueba de valor y vuelve a convertirse en una habilidad que puedes reconstruir.',
     },
     story: {
       eyebrow: 'La historia detrás del método',
@@ -802,6 +954,64 @@ export const DNA = {
         },
       ],
     },
+    proofWallLarge: {
+      eyebrow: 'Casos y señales de avance',
+      title: 'La prueba no tiene que verse perfecta. Tiene que verse real.',
+      subtitle:
+        'Este muro combina historias, capturas y mini resultados configurables para que la oferta se sienta vivida, no decorativa.',
+      featured: {
+        eyebrow: 'Caso destacado',
+        title: 'De evitar cada salida a planear un recorrido posible',
+        quote:
+          'Me di cuenta de que no necesitaba salir a una avenida enorme para demostrar algo. Empecé por una ruta pequeña, la repetí y por fin sentí que podía avanzar sin castigarme.',
+        name: 'Sofía L.',
+        detail: 'Caso placeholder configurable',
+        image: eventAssets.agenda3,
+        imageAlt: 'Caso destacado configurable de recuperación de confianza al volante',
+      },
+      items: [
+        {
+          eyebrow: 'Mensaje',
+          title: '“Ya no me subo al auto peleando conmigo”',
+          quote:
+            'La preparación previa cambió cómo llego a cada práctica. Sigo sintiendo nervios, pero ya sé qué hacer con ellos.',
+          name: 'Elena R.',
+          detail: 'Avance emocional',
+          image: eventAssets.agenda1,
+          imageAlt: 'Mensaje configurable de avance emocional',
+        },
+        {
+          eyebrow: 'Resultado',
+          title: 'Tres prácticas cortas en una semana',
+          quote:
+            'Antes esperaba semanas para intentarlo. Ahora puedo diseñar prácticas más pequeñas y cumplirlas.',
+          name: 'Valeria C.',
+          detail: 'Consistencia práctica',
+          image: eventAssets.agenda2,
+          imageAlt: 'Resultado configurable de prácticas cortas',
+        },
+        {
+          eyebrow: 'Cambio',
+          title: 'Menos vergüenza al pedir apoyo',
+          quote:
+            'Pude explicarle a mi familia qué tipo de apoyo necesitaba sin sentir que estaba fallando.',
+          name: 'Camila T.',
+          detail: 'Apoyo con límites',
+          image: eventAssets.finalCta,
+          imageAlt: 'Cambio configurable al pedir apoyo para conducir',
+        },
+        {
+          eyebrow: 'Hábito',
+          title: 'Un mapa claro antes del recorrido',
+          quote:
+            'Elegir la ruta antes y saber cómo cerrar la práctica me quitó mucha improvisación.',
+          name: 'Mónica A.',
+          detail: 'Planificación',
+          image: eventAssets.pain,
+          imageAlt: 'Hábito configurable de planificación de recorridos',
+        },
+      ],
+    },
     repeatedCtas: [
       {
         eyebrow: 'Acceso inmediato',
@@ -818,6 +1028,40 @@ export const DNA = {
         priceLine: 'Acceso especial {price}.',
       },
     ],
+    repeatedOffers: [
+      {
+        eyebrow: 'Oferta completa',
+        title: 'Accede al sistema y empieza con una práctica diseñada, no con presión.',
+        subtitle:
+          'Si el video ya te mostró el marco, este es el momento de tomar el paquete completo y convertirlo en acción.',
+        priceLine: 'Hoy {price}. Precio regular {regularPrice}.',
+        offerBoxIndex: 0,
+      },
+      {
+        eyebrow: 'Recordatorio importante',
+        title: 'No necesitas resolver todo tu miedo antes de comprar. Compras para tener el proceso.',
+        subtitle:
+          'La oferta existe para que dejes de improvisar y tengas una secuencia clara cada vez que practiques.',
+        priceLine: 'Acceso especial {price}.',
+        offerBoxIndex: 1,
+      },
+      {
+        eyebrow: 'Después del stack',
+        title: 'Todo esto está pensado para que no dependas de fuerza de voluntad.',
+        subtitle:
+          'Método, calma, recorridos, seguimiento y bonos trabajando juntos para que cada práctica tenga intención.',
+        priceLine: 'Valor total {regularPrice}. Hoy {price}.',
+        offerBoxIndex: 1,
+      },
+      {
+        eyebrow: 'Antes de seguir',
+        title: 'Si una sola idea de esta página te hizo sentir más posibilidad, conviértela en un plan.',
+        subtitle:
+          'El siguiente paso es sencillo: ir al checkout configurado y empezar con el material completo.',
+        priceLine: 'Acceso hoy {price}.',
+        offerBoxIndex: 2,
+      },
+    ],
     valueStack: {
       eyebrow: 'Lo que recibes',
       title: 'El stack completo para avanzar desde comprensión hasta práctica',
@@ -827,6 +1071,41 @@ export const DNA = {
       totalValue: '$221',
       todayPriceLabel: 'Precio de hoy',
       includedLabel: 'Incluido',
+      stackSections: [
+        {
+          eyebrow: 'Fase 1',
+          title: 'Entender el bloqueo',
+          description:
+            'Antes de practicar, necesitas entender por qué tu cuerpo responde con tensión y cómo dejar de interpretarlo como incapacidad.',
+          items: [
+            'Mapa del ciclo miedo-evitación',
+            'Reencuadre de errores y nervios',
+            'Preparación mental antes de entrar al auto',
+          ],
+        },
+        {
+          eyebrow: 'Fase 2',
+          title: 'Diseñar prácticas posibles',
+          description:
+            'La práctica deja de ser “sal y mira qué pasa” y se convierte en una secuencia con dificultad, objetivo y cierre.',
+          items: [
+            'Selección de rutas iniciales',
+            'Criterios para subir dificultad',
+            'Cómo repetir sin aburrirte ni frustrarte',
+          ],
+        },
+        {
+          eyebrow: 'Fase 3',
+          title: 'Sostener identidad de avance',
+          description:
+            'El seguimiento convierte pequeños recorridos en evidencia de que estás recuperando agencia.',
+          items: [
+            'Registro simple de progreso',
+            'Lectura de bloqueos recurrentes',
+            'Plan semanal de siguiente paso',
+          ],
+        },
+      ],
       items: [
         {
           title: 'Método principal Maneja Sin Miedo',
@@ -892,6 +1171,24 @@ export const DNA = {
       title: 'El precio especial depende de la configuración activa del checkout.',
       description:
         'Cuando el checkout esté publicado, esta página repetirá el mismo CTA en los momentos clave de la carta para que puedas decidir sin volver arriba.',
+    },
+    fascinations: {
+      eyebrow: 'Lo que descubrirás por dentro',
+      title: 'Pequeñas piezas que pueden cambiar la forma en que vuelves al volante.',
+      subtitle:
+        'Estas fascinaciones funcionan como bullets de carta de venta: concretas, densas y orientadas a curiosidad práctica.',
+      items: [
+        'Por qué esperar a “sentirte lista” puede mantener el miedo más fuerte de lo necesario.',
+        'La forma simple de elegir una ruta que rete tu confianza sin desbordar tu cuerpo.',
+        'Qué hacer justo antes de encender el auto para bajar tensión y recuperar presencia.',
+        'Cómo cerrar una práctica para que tu mente la registre como avance, no como amenaza.',
+        'La diferencia entre apoyo útil y apoyo que aumenta presión aunque tenga buena intención.',
+        'Cómo usar trayectos cortos para reconstruir identidad de conductora sin exponerte de más.',
+        'Qué señales muestran que puedes subir dificultad y cuáles indican que conviene repetir.',
+        'Por qué un error manejando no debe convertirse en una historia permanente sobre ti.',
+      ],
+      closing:
+        'No son trucos motivacionales. Son piezas prácticas para que cada contacto con el volante tenga una intención clara.',
     },
     faq: {
       eyebrow: 'Preguntas frecuentes',

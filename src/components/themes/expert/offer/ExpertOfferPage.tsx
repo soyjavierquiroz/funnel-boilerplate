@@ -6,19 +6,21 @@ import funnelConfig from '../../../../core/config/funnel.config';
 import { getTrafficChannel } from '../../../../core/routing/channel';
 import type { TrafficChannel } from '../../../../core/routing/channel';
 import { ExpertOfferAnnouncementBar } from './ExpertOfferAnnouncementBar';
-import { ExpertOfferBeliefShift } from './ExpertOfferBeliefShift';
 import { ExpertOfferBonuses } from './ExpertOfferBonuses';
 import { ExpertOfferCredibilityStrip } from './ExpertOfferCredibilityStrip';
 import { ExpertOfferFaq } from './ExpertOfferFaq';
 import { ExpertOfferFinalCta } from './ExpertOfferFinalCta';
 import { ExpertOfferGuarantee } from './ExpertOfferGuarantee';
 import { ExpertOfferPromiseHero } from './ExpertOfferPromiseHero';
-import { ExpertOfferRepeatedCta } from './ExpertOfferRepeatedCta';
-import { ExpertOfferScarcity } from './ExpertOfferScarcity';
 import { ExpertOfferStack } from './ExpertOfferStack';
 import { ExpertOfferStory } from './ExpertOfferStory';
 import { ExpertOfferTestimonials } from './ExpertOfferTestimonials';
 import { ExpertOfferVslOrder } from './ExpertOfferVslOrder';
+import { ExpertFascinationBullets } from './ExpertFascinationBullets';
+import { ExpertIdentityShift } from './ExpertIdentityShift';
+import { ExpertOpportunitySection } from './ExpertOpportunitySection';
+import { ExpertProofWallLarge } from './ExpertProofWallLarge';
+import { ExpertRepeatedOffer } from './ExpertRepeatedOffer';
 
 interface ExpertOfferBlockContext {
   offer: FunnelOfferConfig;
@@ -51,8 +53,22 @@ const expertOfferBlocks: ExpertOfferBlock[] = [
     render: ({ offer }) => <ExpertOfferCredibilityStrip offer={offer} />,
   },
   {
-    id: 'belief-shift',
-    render: ({ offer }) => <ExpertOfferBeliefShift offer={offer} />,
+    id: 'opportunity-section',
+    render: ({ offer }) => <ExpertOpportunitySection offer={offer} />,
+  },
+  {
+    id: 'identity-shift',
+    render: ({ offer }) => <ExpertIdentityShift offer={offer} />,
+  },
+  {
+    id: 'proof-wall-large',
+    render: ({ offer }) => <ExpertProofWallLarge offer={offer} />,
+  },
+  {
+    id: 'repeated-offer-1',
+    render: ({ offer, trackingEnabled, trafficChannel }) => (
+      <ExpertRepeatedOffer offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} index={0} />
+    ),
   },
   {
     id: 'story',
@@ -63,14 +79,9 @@ const expertOfferBlocks: ExpertOfferBlock[] = [
     render: ({ offer }) => <ExpertOfferTestimonials offer={offer} />,
   },
   {
-    id: 'mid-page-order-box',
+    id: 'repeated-offer-2',
     render: ({ offer, trackingEnabled, trafficChannel }) => (
-      <ExpertOfferRepeatedCta
-        offer={offer}
-        trackingEnabled={trackingEnabled}
-        trafficChannel={trafficChannel}
-        index={0}
-      />
+      <ExpertRepeatedOffer offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} index={1} />
     ),
   },
   {
@@ -84,14 +95,9 @@ const expertOfferBlocks: ExpertOfferBlock[] = [
     render: ({ offer }) => <ExpertOfferBonuses offer={offer} />,
   },
   {
-    id: 'late-order-box',
+    id: 'repeated-offer-3',
     render: ({ offer, trackingEnabled, trafficChannel }) => (
-      <ExpertOfferRepeatedCta
-        offer={offer}
-        trackingEnabled={trackingEnabled}
-        trafficChannel={trafficChannel}
-        index={1}
-      />
+      <ExpertRepeatedOffer offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} index={2} />
     ),
   },
   {
@@ -99,8 +105,14 @@ const expertOfferBlocks: ExpertOfferBlock[] = [
     render: ({ offer }) => <ExpertOfferGuarantee offer={offer} />,
   },
   {
-    id: 'scarcity-note',
-    render: ({ offer }) => <ExpertOfferScarcity offer={offer} />,
+    id: 'fascination-bullets',
+    render: ({ offer }) => <ExpertFascinationBullets offer={offer} />,
+  },
+  {
+    id: 'repeated-offer-4',
+    render: ({ offer, trackingEnabled, trafficChannel }) => (
+      <ExpertRepeatedOffer offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} index={3} />
+    ),
   },
   {
     id: 'faq',

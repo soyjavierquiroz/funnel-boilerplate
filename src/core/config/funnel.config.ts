@@ -131,6 +131,25 @@ export interface OfferValueStackItemConfig {
   value: string;
 }
 
+export interface OfferBoxConfig {
+  eyebrow: string;
+  title: string;
+  summary: string;
+  includes: string[];
+  footerNote: string;
+  badge?: string;
+}
+
+export interface OfferProofItemConfig {
+  eyebrow: string;
+  title: string;
+  quote: string;
+  name: string;
+  detail: string;
+  image: string;
+  imageAlt: string;
+}
+
 export interface FunnelOfferConfig {
   eyebrow: string;
   headline: string;
@@ -169,6 +188,7 @@ export interface FunnelOfferConfig {
     includes: string[];
     footerNote: string;
   };
+  offerBoxes: OfferBoxConfig[];
   credibility: {
     text: string;
     items: OfferCredibilityItemConfig[];
@@ -178,6 +198,24 @@ export interface FunnelOfferConfig {
     title: string;
     paragraphs: string[];
     highlights: string[];
+  };
+  opportunity: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    paragraphs: string[];
+    bullets: string[];
+    callout: string;
+  };
+  identityShift: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    oldIdentityTitle: string;
+    newIdentityTitle: string;
+    oldItems: string[];
+    newItems: string[];
+    closing: string;
   };
   story: {
     eyebrow: string;
@@ -193,11 +231,25 @@ export interface FunnelOfferConfig {
     subtitle: string;
     items: OfferTestimonialItemConfig[];
   };
+  proofWallLarge: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    featured: OfferProofItemConfig;
+    items: OfferProofItemConfig[];
+  };
   repeatedCtas: Array<{
     eyebrow: string;
     title: string;
     subtitle: string;
     priceLine: string;
+  }>;
+  repeatedOffers: Array<{
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    priceLine: string;
+    offerBoxIndex: number;
   }>;
   valueStack: {
     eyebrow: string;
@@ -207,6 +259,12 @@ export interface FunnelOfferConfig {
     totalValue: string;
     todayPriceLabel: string;
     includedLabel: string;
+    stackSections: Array<{
+      eyebrow: string;
+      title: string;
+      description: string;
+      items: string[];
+    }>;
     items: OfferValueStackItemConfig[];
   };
   bonuses: {
@@ -226,6 +284,13 @@ export interface FunnelOfferConfig {
     eyebrow: string;
     title: string;
     description: string;
+  };
+  fascinations: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    items: string[];
+    closing: string;
   };
   faq: {
     eyebrow: string;

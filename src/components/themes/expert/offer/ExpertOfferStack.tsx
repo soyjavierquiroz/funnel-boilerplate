@@ -27,7 +27,33 @@ export function ExpertOfferStack({ offer, trackingEnabled, trafficChannel }: Exp
               {valueStack.subtitle}
             </p>
 
-            <div className="mt-7 grid gap-3">
+            <div className="mt-7 grid gap-4">
+              {valueStack.stackSections.map((section) => (
+                <article
+                  key={section.title}
+                  className="border border-event-navy/10 bg-event-page p-5 shadow-[0_14px_34px_rgb(var(--color-event-navy)/0.06)]"
+                >
+                  <p className="expert-event-kicker text-[0.6rem] font-bold uppercase text-event-coral">
+                    {section.eyebrow}
+                  </p>
+                  <h3 className="expert-headline mt-2 text-[1.35rem] leading-tight text-event-navy">
+                    {section.title}
+                  </h3>
+                  <p className="expert-body mt-2 text-sm font-semibold leading-6 text-event-muted">
+                    {section.description}
+                  </p>
+                  <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                    {section.items.map((item) => (
+                      <p key={item} className="expert-body bg-event-soft p-3 text-xs font-bold leading-5 text-event-ink">
+                        {item}
+                      </p>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <div className="mt-8 grid gap-3">
               {offer.offerCard.includes.map((item) => (
                 <div
                   key={item}

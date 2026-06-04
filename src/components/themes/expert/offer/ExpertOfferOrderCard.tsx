@@ -1,5 +1,5 @@
 import { CheckCircle2 } from 'lucide-react';
-import type { FunnelOfferConfig } from '../../../../core/config/funnel.config';
+import type { FunnelOfferConfig, OfferBoxConfig } from '../../../../core/config/funnel.config';
 import type { TrafficChannel } from '../../../../core/routing/channel';
 import { ExpertOfferCta } from './ExpertOfferCta';
 import { isOfferCheckoutConfigured } from './offerUtils';
@@ -9,6 +9,7 @@ interface ExpertOfferOrderCardProps {
   trackingEnabled: boolean;
   trafficChannel: TrafficChannel;
   className?: string;
+  offerBox?: OfferBoxConfig;
 }
 
 export function ExpertOfferOrderCard({
@@ -16,9 +17,15 @@ export function ExpertOfferOrderCard({
   trackingEnabled,
   trafficChannel,
   className = '',
+  offerBox,
 }: ExpertOfferOrderCardProps) {
   const isCheckoutConfigured = isOfferCheckoutConfigured(offer.checkoutUrl);
-  const statusText = isCheckoutConfigured ? offer.offerCard.footerNote : offer.checkoutPendingMessage;
+  const fallbackOfferBox: OfferBoxConfig = {
+    ...offer.offerCard,
+    badge: '',
+  };
+  const content = offerBox ?? offer.offerBoxes[0] ?? fallbackOfferBox;
+  const statusText = isCheckoutConfigured ? content.footerNote : offer.checkoutPendingMessage;
 
   return (
     <aside
@@ -28,13 +35,18 @@ export function ExpertOfferOrderCard({
       ].join(' ')}
     >
       <p className="expert-event-kicker text-[0.64rem] font-bold uppercase text-event-coral">
-        {offer.offerCard.eyebrow}
+        {content.eyebrow}
       </p>
       <h2 className="expert-headline mt-2 text-[1.55rem] leading-tight text-event-navy">
-        {offer.offerCard.title}
+        {content.title}
       </h2>
+      {content.badge && (
+        <p className="expert-event-kicker mt-2 inline-flex rounded-sm bg-event-soft px-3 py-1 text-[0.58rem] font-bold uppercase text-event-navy">
+          {content.badge}
+        </p>
+      )}
       <p className="expert-body mt-3 text-sm font-semibold leading-6 text-event-muted">
-        {offer.offerCard.summary}
+        {content.summary}
       </p>
 
       <div className="mt-5 border-y border-event-navy/10 py-5">
@@ -52,7 +64,7 @@ export function ExpertOfferOrderCard({
       </div>
 
       <div className="mt-5 grid gap-3">
-        {offer.offerCard.includes.map((item) => (
+        {content.includes.map((item) => (
           <div key={item} className="flex gap-2">
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-event-coral" aria-hidden="true" />
             <p className="expert-body text-sm font-bold leading-5 text-event-ink">{item}</p>
