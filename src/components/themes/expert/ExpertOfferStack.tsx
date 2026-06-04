@@ -1,5 +1,5 @@
 import { Check, CreditCard, Lock, ShieldCheck } from 'lucide-react';
-import { DNA } from '../../../dna.config';
+import { DNA } from '../../../site/current';
 import { ExpertCtaButton } from './ExpertCtaButton';
 
 const certaintyIcons = [Lock, ShieldCheck, CreditCard] as const;

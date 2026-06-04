@@ -1,4 +1,4 @@
-import { DNA } from '../../../dna.config';
+import { DNA } from '../../../site/current';
 
 export interface ExpertFaqItem {
   question: string;

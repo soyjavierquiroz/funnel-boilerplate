@@ -1,5 +1,5 @@
 import { useCallback, useState, type CSSProperties } from 'react';
-import { DNA, resolveDnaThemeStyle } from '../../../dna.config';
+import { DNA, resolveDnaThemeStyle } from '../../../site/current';
 import funnelConfig from '../../../core/config/funnel.config';
 import { ExpertCtaButton } from './ExpertCtaButton';
 import { ExpertConfidenceBooster } from './ExpertConfidenceBooster';

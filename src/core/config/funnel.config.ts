@@ -1,5 +1,5 @@
-import { DNA, dnaNumericPrices, resolveDnaFunnelTheme } from '../../dna.config';
-import type { DnaSuccessActionType, DnaTheme } from '../../dna.config';
+import { DNA, dnaNumericPrices, resolveDnaFunnelTheme } from '../../site/current';
+import type { DnaSuccessActionType, DnaTheme } from '../../site/current';
 import type { TrafficChannel } from '../routing/channel';
 
 export type VideoProvider = 'youtube' | 'bunnynet' | 'vimeo' | 'wistia' | 'html5';

@@ -1,4 +1,4 @@
-import { DNA } from '../../dna.config';
+import { DNA } from '../../site/current';
 import type { VisitorData } from './types';
 
 const VISITOR_STORAGE_KEY = 'visitor_data';

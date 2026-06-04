@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { DNA } from '../../../../dna.config';
+import { DNA } from '../../../../site/current';
 import funnelConfig from '../../../../core/config/funnel.config';
 import { getTrafficChannel, type TrafficChannel } from '../../../../core/routing/channel';
 import analytics from '../../../../core/services/analytics';

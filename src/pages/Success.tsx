@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import analytics from '../core/services/analytics';
 import funnelConfig from '../core/config/funnel.config';
 import { getTrafficChannel, type TrafficChannel } from '../core/routing/channel';
-import { DNA } from '../dna.config';
+import { DNA } from '../site/current';
 
 function trackCompleteRegistrationOnce(channel: TrafficChannel) {
   const trackingKey = `${DNA.siteId}.${channel}.success.complete-registration`;

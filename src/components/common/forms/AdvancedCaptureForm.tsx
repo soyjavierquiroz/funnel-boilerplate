@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useMemo, useState } from 'react';
 import { PricingCard } from './PricingCard';
 import { SmartPhoneInput } from './SmartPhoneInput';
-import { DNA } from '../../../dna.config';
+import { DNA } from '../../../site/current';
 import funnelConfig, { pricingProductKeys } from '../../../core/config/funnel.config';
 import { useVisitor } from '../../../core/visitor/VisitorContext';
 import analytics from '../../../core/services/analytics';

@@ -1,6 +1,6 @@
 import { BadgeCheck, Lock, ShieldCheck } from 'lucide-react';
 import { useMemo } from 'react';
-import { DNA } from '../../../dna.config';
+import { DNA } from '../../../site/current';
 import funnelConfig from '../../../core/config/funnel.config';
 import { useVisitor } from '../../../core/visitor/VisitorContext';
 import { useCheckoutPrices } from '../../../core/hooks/useCheckoutPrices';

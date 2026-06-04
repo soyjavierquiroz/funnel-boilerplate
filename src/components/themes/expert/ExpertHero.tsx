@@ -1,5 +1,5 @@
 import { Volume2 } from 'lucide-react';
-import { DNA } from '../../../dna.config';
+import { DNA } from '../../../site/current';
 import funnelConfig from '../../../core/config/funnel.config';
 import { KurukinPlayer as ExpertVideoPlayer } from './components/video-player/src/kurukin-video-player';
 

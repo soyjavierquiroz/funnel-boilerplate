@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Check, Clock } from 'lucide-react';
-import { DNA } from '../../../dna.config';
+import { DNA } from '../../../site/current';
 import { ExpertCtaButton } from './ExpertCtaButton';
 import type { ExpertBonusItem } from './expertContent';
 

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { DNA, resolveDnaDocumentTheme } from './dna.config';
+import { DNA, resolveDnaDocumentTheme } from './site/current';
 import analytics from './core/services/analytics';
 import funnelConfig from './core/config/funnel.config';
 import { getTrafficChannel } from './core/routing/channel';

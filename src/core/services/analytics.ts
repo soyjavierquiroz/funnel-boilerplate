@@ -1,5 +1,5 @@
 import funnelConfig from '../config/funnel.config';
-import { DNA } from '../../dna.config';
+import { DNA } from '../../site/current';
 
 type AnalyticsPrimitive = string | number | boolean | null | undefined;
 

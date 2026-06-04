@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Clock } from 'lucide-react';
-import { DNA } from '../../../dna.config';
+import { DNA } from '../../../site/current';
 
 export function ExpertOfferBreakdown() {
   const [timeLeft, setTimeLeft] = useState(3600);

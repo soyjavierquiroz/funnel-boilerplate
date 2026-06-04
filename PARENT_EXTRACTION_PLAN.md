@@ -259,6 +259,7 @@ Se creo `src/site/` como frontera documental inicial entre core engine y configu
 
 ### Fase 2 - Extraer MSM sin cambiar imports publicos
 
+- Fase 2 implementada: core imports read from site boundary.
 - Crear `src/sites/msm/dna.config.ts` con los valores actuales.
 - Dejar `src/dna.config.ts` como facade que reexporta MSM/current.
 - Mantener las mismas rutas, valores, copy, colores, assets y tracking.

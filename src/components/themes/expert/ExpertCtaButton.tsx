@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, MouseEvent } from 'react';
-import { DNA, dnaNumericPrices } from '../../../dna.config';
+import { DNA, dnaNumericPrices } from '../../../site/current';
 import { analytics } from '../../../core/services/analytics';
 
 interface ExpertCtaButtonProps extends ComponentPropsWithoutRef<'a'> {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Minus, Plus } from 'lucide-react';
-import { DNA } from '../../../dna.config';
+import { DNA } from '../../../site/current';
 import { ExpertCtaButton } from './ExpertCtaButton';
 
 export function ExpertFAQ() {

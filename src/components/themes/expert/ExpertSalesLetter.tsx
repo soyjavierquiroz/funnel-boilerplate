@@ -1,4 +1,4 @@
-import { DNA } from '../../../dna.config';
+import { DNA } from '../../../site/current';
 import { ExpertCtaButton } from './ExpertCtaButton';
 
 export function ExpertSalesLetter() {

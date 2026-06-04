@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactElement } from 'react';
 import { useLocation } from 'react-router-dom';
-import { resolveDnaThemeStyle } from '../../../../dna.config';
+import { resolveDnaThemeStyle } from '../../../../site/current';
 import type { FunnelOfferConfig } from '../../../../core/config/funnel.config';
 import funnelConfig from '../../../../core/config/funnel.config';
 import { getTrafficChannel } from '../../../../core/routing/channel';
