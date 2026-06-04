@@ -6,28 +6,30 @@ interface ExpertOfferBonusesProps {
 }
 
 export function ExpertOfferBonuses({ offer }: ExpertOfferBonusesProps) {
+  const bonuses = offer.bonuses;
+
   return (
-    <section className="bg-event-page px-5 py-12 sm:px-6 sm:py-16 lg:py-20">
+    <section className="bg-event-surface px-5 py-12 sm:px-6 sm:py-16 lg:py-20">
       <div className="mx-auto w-full max-w-[1080px]">
-        <div className="max-w-[720px]">
+        <div className="mx-auto max-w-[780px] text-center">
           <p className="expert-event-kicker text-[0.68rem] font-bold uppercase text-event-coral">
-            {offer.bonusSection.eyebrow}
+            {bonuses.eyebrow}
           </p>
           <h2 className="expert-headline mt-3 text-[2rem] leading-tight text-event-ink sm:text-[3rem]">
-            {offer.bonusSection.title}
+            {bonuses.title}
           </h2>
           <p className="expert-body mt-4 text-base font-semibold leading-7 text-event-muted sm:text-[1.05rem]">
-            {offer.bonusSection.subtitle}
+            {bonuses.subtitle}
           </p>
         </div>
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {offer.bonuses.map((bonus) => (
+          {bonuses.items.map((bonus) => (
             <article
               key={bonus.title}
-              className="flex min-h-[260px] flex-col rounded-lg border border-event-navy/10 bg-event-surface p-5 shadow-[0_14px_34px_rgb(var(--color-event-navy)/0.06)]"
+              className="flex min-h-[260px] flex-col rounded-md border border-event-navy/10 bg-event-page p-5 shadow-[0_14px_34px_rgb(var(--color-event-navy)/0.06)]"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-event-coral/12 text-event-coral">
+              <div className="flex h-10 w-10 items-center justify-center rounded-md bg-event-coral/12 text-event-coral">
                 <Gift className="h-5 w-5" aria-hidden="true" />
               </div>
               <h3 className="expert-headline mt-5 text-[1.35rem] leading-tight text-event-navy">
@@ -38,7 +40,7 @@ export function ExpertOfferBonuses({ offer }: ExpertOfferBonusesProps) {
               </p>
               {bonus.value && (
                 <p className="expert-event-kicker mt-5 text-[0.64rem] font-bold uppercase text-event-coral">
-                  {offer.bonusSection.valueLabel}: {bonus.value}
+                  {bonuses.valueLabel}: {bonus.value}
                 </p>
               )}
             </article>

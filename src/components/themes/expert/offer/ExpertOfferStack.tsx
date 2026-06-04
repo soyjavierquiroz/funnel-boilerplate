@@ -18,20 +18,20 @@ export function ExpertOfferStack({ offer, trackingEnabled, trafficChannel }: Exp
         <div className="grid gap-8 lg:grid-cols-[0.92fr_0.62fr] lg:items-start">
           <div>
             <p className="expert-event-kicker text-[0.68rem] font-bold uppercase text-event-coral">
-              {offer.stack.eyebrow}
+              {valueStack.eyebrow}
             </p>
             <h2 className="expert-headline mt-3 text-[2rem] leading-tight text-event-ink sm:text-[3.1rem]">
-              {offer.stack.title}
+              {valueStack.title}
             </h2>
             <p className="expert-body mt-4 max-w-[720px] text-base font-semibold leading-7 text-event-muted sm:text-[1.05rem]">
-              {offer.stack.subtitle}
+              {valueStack.subtitle}
             </p>
 
             <div className="mt-7 grid gap-3">
-              {offer.includes.map((item) => (
+              {offer.offerCard.includes.map((item) => (
                 <div
                   key={item}
-                  className="flex gap-3 rounded-lg border border-event-navy/10 bg-event-soft p-4 shadow-[0_10px_28px_rgb(var(--color-event-navy)/0.05)]"
+                  className="flex gap-3 rounded-md border border-event-navy/10 bg-event-soft p-4 shadow-[0_10px_28px_rgb(var(--color-event-navy)/0.05)]"
                 >
                   <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-event-coral" aria-hidden="true" />
                   <p className="expert-body text-base font-bold leading-7 text-event-ink">{item}</p>
@@ -43,7 +43,7 @@ export function ExpertOfferStack({ offer, trackingEnabled, trafficChannel }: Exp
               {valueStack.items.map((item) => (
                 <article
                   key={item.title}
-                  className="grid gap-4 rounded-lg border border-event-navy/10 bg-event-page p-4 shadow-[0_14px_34px_rgb(var(--color-event-navy)/0.06)] sm:grid-cols-[1fr_120px] sm:items-center"
+                  className="grid gap-4 rounded-md border border-event-navy/10 bg-event-page p-4 shadow-[0_14px_34px_rgb(var(--color-event-navy)/0.06)] sm:grid-cols-[1fr_120px] sm:items-center"
                 >
                   <div className="flex gap-3">
                     <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-event-coral" aria-hidden="true" />
@@ -54,7 +54,7 @@ export function ExpertOfferStack({ offer, trackingEnabled, trafficChannel }: Exp
                       </p>
                     </div>
                   </div>
-                  <p className="expert-headline rounded-md bg-event-soft px-3 py-2 text-left text-[1.2rem] text-event-navy sm:text-center">
+                  <p className="expert-headline rounded-sm bg-event-soft px-3 py-2 text-left text-[1.2rem] text-event-navy sm:text-center">
                     {item.value}
                   </p>
                 </article>
@@ -62,7 +62,7 @@ export function ExpertOfferStack({ offer, trackingEnabled, trafficChannel }: Exp
             </div>
           </div>
 
-          <aside className="rounded-lg border border-event-navy/10 bg-event-page p-5 text-center shadow-[0_22px_64px_rgb(var(--color-event-navy)/0.1)] sm:p-6 lg:sticky lg:top-6">
+          <aside className="rounded-md border border-event-navy/10 bg-event-page p-5 text-center shadow-[0_22px_64px_rgb(var(--color-event-navy)/0.1)] sm:p-6 lg:sticky lg:top-6">
             <p className="expert-event-kicker text-[0.64rem] font-bold uppercase text-event-coral">
               {valueStack.totalValueLabel}
             </p>

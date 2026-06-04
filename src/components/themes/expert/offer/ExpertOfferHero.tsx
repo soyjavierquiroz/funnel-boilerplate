@@ -42,11 +42,11 @@ export function ExpertOfferHero({ offer, trackingEnabled, trafficChannel }: Expe
           </p>
 
           <h1 className="expert-headline mt-4 text-[2.35rem] leading-[0.96] text-text-inverse sm:text-[4rem] sm:leading-[0.92] lg:text-[5rem]">
-            {offer.title}
+            {offer.headline}
           </h1>
 
           <p className="expert-body mt-5 max-w-[620px] text-[1.02rem] font-semibold leading-7 text-text-inverse/82 sm:text-[1.18rem] sm:leading-8">
-            {offer.subtitle}
+            {offer.subheadline}
           </p>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -80,7 +80,7 @@ export function ExpertOfferHero({ offer, trackingEnabled, trafficChannel }: Expe
           </div>
 
           <p className="expert-body mt-3 text-sm font-semibold leading-6 text-event-muted">
-            {isCheckoutConfigured ? offer.guarantee : offer.checkoutPendingMessage}
+            {isCheckoutConfigured ? offer.guarantee.description : offer.checkoutPendingMessage}
           </p>
         </div>
       </div>

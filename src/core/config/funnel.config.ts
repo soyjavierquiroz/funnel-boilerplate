@@ -116,9 +116,13 @@ export interface OfferCredibilityItemConfig {
 }
 
 export interface OfferTestimonialItemConfig {
+  eyebrow: string;
+  title: string;
   name: string;
   detail: string;
   quote: string;
+  image: string;
+  imageAlt: string;
 }
 
 export interface OfferValueStackItemConfig {
@@ -129,8 +133,8 @@ export interface OfferValueStackItemConfig {
 
 export interface FunnelOfferConfig {
   eyebrow: string;
-  title: string;
-  subtitle: string;
+  headline: string;
+  subheadline: string;
   productName: string;
   price: string;
   regularPrice: string;
@@ -143,16 +147,27 @@ export interface FunnelOfferConfig {
   heroImage: string;
   heroImageAlt: string;
   bullets: string[];
+  announcement: {
+    text: string;
+  };
   video: {
     eyebrow: string;
     title: string;
     subtitle: string;
     provider: VideoProvider;
     videoId: string;
+    url: string;
     posterImage: string;
     progressBarColor: string;
     soundPrompt: string;
     placeholderText: string;
+  };
+  offerCard: {
+    eyebrow: string;
+    title: string;
+    summary: string;
+    includes: string[];
+    footerNote: string;
   };
   credibility: {
     text: string;
@@ -172,12 +187,18 @@ export interface FunnelOfferConfig {
     image: string;
     imageAlt: string;
   };
-  testimonials: {
+  proofGrid: {
     eyebrow: string;
     title: string;
     subtitle: string;
     items: OfferTestimonialItemConfig[];
   };
+  repeatedCtas: Array<{
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    priceLine: string;
+  }>;
   valueStack: {
     eyebrow: string;
     title: string;
@@ -188,24 +209,29 @@ export interface FunnelOfferConfig {
     includedLabel: string;
     items: OfferValueStackItemConfig[];
   };
-  stack: {
-    eyebrow: string;
-    title: string;
-    subtitle: string;
-  };
-  bonusSection: {
+  bonuses: {
     eyebrow: string;
     title: string;
     subtitle: string;
     valueLabel: string;
+    items: OfferBonusConfig[];
   };
-  includes: string[];
-  bonuses: OfferBonusConfig[];
-  guaranteeTitle: string;
-  guarantee: string;
-  faqEyebrow: string;
-  faqTitle: string;
-  faq: OfferFaqItemConfig[];
+  guarantee: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    bullets: string[];
+  };
+  scarcity: {
+    eyebrow: string;
+    title: string;
+    description: string;
+  };
+  faq: {
+    eyebrow: string;
+    title: string;
+    items: OfferFaqItemConfig[];
+  };
   finalCta: {
     eyebrow: string;
     title: string;

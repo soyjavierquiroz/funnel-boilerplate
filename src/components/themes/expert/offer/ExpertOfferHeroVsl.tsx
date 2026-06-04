@@ -14,7 +14,8 @@ interface ExpertOfferHeroVslProps {
 export function ExpertOfferHeroVsl({ offer, trackingEnabled, trafficChannel }: ExpertOfferHeroVslProps) {
   const video = offer.video;
   const isCheckoutConfigured = isOfferCheckoutConfigured(offer.checkoutUrl);
-  const hasVideo = video.videoId.trim().length > 0 && video.videoId !== 'REPLACE_WITH_VSL_VIDEO_ID';
+  const videoSource = video.url || video.videoId;
+  const hasVideo = videoSource.trim().length > 0 && videoSource !== 'REPLACE_WITH_VSL_VIDEO_ID';
 
   return (
     <section className="relative isolate overflow-hidden bg-event-navy px-5 pb-12 pt-8 text-text-inverse sm:px-6 sm:pb-16 sm:pt-10 lg:px-10 lg:pb-20">
@@ -37,10 +38,10 @@ export function ExpertOfferHeroVsl({ offer, trackingEnabled, trafficChannel }: E
             {offer.eyebrow}
           </p>
           <h1 className="expert-headline mt-4 text-[2.55rem] leading-[0.96] text-text-inverse sm:text-[4.3rem] sm:leading-[0.92] lg:text-[5.2rem]">
-            {offer.title}
+            {offer.headline}
           </h1>
           <p className="expert-body mx-auto mt-5 max-w-[720px] text-[1.02rem] font-semibold leading-7 text-text-inverse/82 sm:text-[1.18rem] sm:leading-8">
-            {offer.subtitle}
+            {offer.subheadline}
           </p>
         </div>
 
@@ -58,7 +59,7 @@ export function ExpertOfferHeroVsl({ offer, trackingEnabled, trafficChannel }: E
                 {hasVideo ? (
                   <KurukinPlayer
                     provider={video.provider}
-                    videoId={video.videoId}
+                    videoId={videoSource}
                     vslMode
                     autoplay={false}
                     muted={false}
@@ -116,7 +117,7 @@ export function ExpertOfferHeroVsl({ offer, trackingEnabled, trafficChannel }: E
             </div>
 
             <p className="expert-body mt-3 text-sm font-semibold leading-6 text-event-muted">
-              {isCheckoutConfigured ? offer.guarantee : offer.checkoutPendingMessage}
+              {isCheckoutConfigured ? offer.guarantee.description : offer.checkoutPendingMessage}
             </p>
           </aside>
         </div>

@@ -21,3 +21,7 @@ export function isOfferCheckoutConfigured(checkoutUrl: string): boolean {
     return false;
   }
 }
+
+export function formatOfferPriceLine(template: string, offer: { price: string; regularPrice: string }) {
+  return template.replace('{price}', offer.price).replace('{regularPrice}', offer.regularPrice);
+}

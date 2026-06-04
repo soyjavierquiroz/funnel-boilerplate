@@ -1,19 +1,24 @@
-import type { ReactElement } from 'react';
+import type { CSSProperties, ReactElement } from 'react';
 import { useLocation } from 'react-router-dom';
+import { resolveDnaThemeStyle } from '../../../../dna.config';
 import type { FunnelOfferConfig } from '../../../../core/config/funnel.config';
 import funnelConfig from '../../../../core/config/funnel.config';
 import { getTrafficChannel } from '../../../../core/routing/channel';
 import type { TrafficChannel } from '../../../../core/routing/channel';
+import { ExpertOfferAnnouncementBar } from './ExpertOfferAnnouncementBar';
 import { ExpertOfferBeliefShift } from './ExpertOfferBeliefShift';
 import { ExpertOfferBonuses } from './ExpertOfferBonuses';
 import { ExpertOfferCredibilityStrip } from './ExpertOfferCredibilityStrip';
 import { ExpertOfferFaq } from './ExpertOfferFaq';
 import { ExpertOfferFinalCta } from './ExpertOfferFinalCta';
 import { ExpertOfferGuarantee } from './ExpertOfferGuarantee';
-import { ExpertOfferHeroVsl } from './ExpertOfferHeroVsl';
+import { ExpertOfferPromiseHero } from './ExpertOfferPromiseHero';
+import { ExpertOfferRepeatedCta } from './ExpertOfferRepeatedCta';
+import { ExpertOfferScarcity } from './ExpertOfferScarcity';
 import { ExpertOfferStack } from './ExpertOfferStack';
 import { ExpertOfferStory } from './ExpertOfferStory';
 import { ExpertOfferTestimonials } from './ExpertOfferTestimonials';
+import { ExpertOfferVslOrder } from './ExpertOfferVslOrder';
 
 interface ExpertOfferBlockContext {
   offer: FunnelOfferConfig;
@@ -28,9 +33,17 @@ interface ExpertOfferBlock {
 
 const expertOfferBlocks: ExpertOfferBlock[] = [
   {
-    id: 'hero-vsl',
+    id: 'announcement-bar',
+    render: ({ offer }) => <ExpertOfferAnnouncementBar offer={offer} />,
+  },
+  {
+    id: 'big-promise-hero',
+    render: ({ offer }) => <ExpertOfferPromiseHero offer={offer} />,
+  },
+  {
+    id: 'vsl-order-card',
     render: ({ offer, trackingEnabled, trafficChannel }) => (
-      <ExpertOfferHeroVsl offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} />
+      <ExpertOfferVslOrder offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} />
     ),
   },
   {
@@ -46,11 +59,22 @@ const expertOfferBlocks: ExpertOfferBlock[] = [
     render: ({ offer }) => <ExpertOfferStory offer={offer} />,
   },
   {
-    id: 'testimonials',
+    id: 'proof-grid',
     render: ({ offer }) => <ExpertOfferTestimonials offer={offer} />,
   },
   {
-    id: 'offer-stack',
+    id: 'mid-page-order-box',
+    render: ({ offer, trackingEnabled, trafficChannel }) => (
+      <ExpertOfferRepeatedCta
+        offer={offer}
+        trackingEnabled={trackingEnabled}
+        trafficChannel={trafficChannel}
+        index={0}
+      />
+    ),
+  },
+  {
+    id: 'value-stack',
     render: ({ offer, trackingEnabled, trafficChannel }) => (
       <ExpertOfferStack offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} />
     ),
@@ -60,8 +84,23 @@ const expertOfferBlocks: ExpertOfferBlock[] = [
     render: ({ offer }) => <ExpertOfferBonuses offer={offer} />,
   },
   {
+    id: 'late-order-box',
+    render: ({ offer, trackingEnabled, trafficChannel }) => (
+      <ExpertOfferRepeatedCta
+        offer={offer}
+        trackingEnabled={trackingEnabled}
+        trafficChannel={trafficChannel}
+        index={1}
+      />
+    ),
+  },
+  {
     id: 'guarantee',
     render: ({ offer }) => <ExpertOfferGuarantee offer={offer} />,
+  },
+  {
+    id: 'scarcity-note',
+    render: ({ offer }) => <ExpertOfferScarcity offer={offer} />,
   },
   {
     id: 'faq',
@@ -86,7 +125,10 @@ export function ExpertOfferPage() {
   };
 
   return (
-    <div className="theme-expert theme-expert-event min-h-screen bg-event-page text-event-ink">
+    <div
+      className="theme-expert theme-expert-event min-h-screen bg-event-page text-event-ink"
+      style={resolveDnaThemeStyle() as CSSProperties}
+    >
       {expertOfferBlocks.map((block) => (
         <div key={block.id}>{block.render(blockContext)}</div>
       ))}

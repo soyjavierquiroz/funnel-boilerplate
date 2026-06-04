@@ -8,7 +8,8 @@ interface ExpertOfferVslProps {
 
 export function ExpertOfferVsl({ offer }: ExpertOfferVslProps) {
   const video = offer.video;
-  const hasVideo = video.videoId.trim().length > 0 && video.videoId !== 'REPLACE_WITH_VSL_VIDEO_ID';
+  const videoSource = video.url || video.videoId;
+  const hasVideo = videoSource.trim().length > 0 && videoSource !== 'REPLACE_WITH_VSL_VIDEO_ID';
 
   return (
     <section className="bg-event-page px-5 py-12 sm:px-6 sm:py-16 lg:py-20">
@@ -35,9 +36,9 @@ export function ExpertOfferVsl({ offer }: ExpertOfferVslProps) {
 
           <div className="relative aspect-video bg-event-ink">
             {hasVideo ? (
-              <KurukinPlayer
-                provider={video.provider}
-                videoId={video.videoId}
+                <KurukinPlayer
+                  provider={video.provider}
+                  videoId={videoSource}
                 vslMode
                 autoplay={false}
                 muted={false}
