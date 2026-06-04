@@ -50,6 +50,19 @@ No ejecutes `npm audit fix` como parte de la clonacion.
 4. Ajusta colores en `DNA.colors`, `DNA.surface`, `DNA.text` y `DNA.cta`.
 5. Valida con `npm run typecheck`, `npm run build` y `npm run lint`.
 
+## Clone Kit
+
+`CLONE_KIT/` contiene la documentacion operativa para convertir este repo en repo padre clonable:
+
+- `CLONE_KIT/README.md`: guia general del kit.
+- `CLONE_KIT/env.template`: variables de entorno para un clon nuevo.
+- `CLONE_KIT/assets-map.md`: mapa de assets reemplazables por sitio.
+- `CLONE_KIT/clone-checklist.md`: pasos para crear y configurar un clon.
+- `CLONE_KIT/launch-checklist.md`: validacion antes de publicar.
+- `CLONE_KIT/upstream-workflow.md`: flujo para traer cambios del repo padre a clones.
+
+La regla base: en clones se edita `.env`, `src/dna.config.ts` y `public/assets/...`; componentes, tracking core, `capture.php`, `Success.tsx` y `deploy.sh` se mantienen como base compartida salvo cambios agnosticos que deban subir al repo padre.
+
 ## Deploy
 
 `dist/` es un artefacto generado y no debe editarse a mano. En CyberPanel/LiteSpeed, `public/.htaccess` queda trackeado para fallback SPA.
