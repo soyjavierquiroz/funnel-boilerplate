@@ -99,6 +99,36 @@ export interface FunnelContentConfig {
   event: EventFunnelContentConfig;
 }
 
+export interface OfferBonusConfig {
+  title: string;
+  description: string;
+  value?: string;
+}
+
+export interface OfferFaqItemConfig {
+  question: string;
+  answer: string;
+}
+
+export interface FunnelOfferConfig {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  productName: string;
+  price: string;
+  regularPrice: string;
+  currency: string;
+  checkoutUrl: string;
+  ctaLabel: string;
+  heroImage: string;
+  heroImageAlt: string;
+  bullets: string[];
+  includes: string[];
+  bonuses: OfferBonusConfig[];
+  guarantee: string;
+  faq: OfferFaqItemConfig[];
+}
+
 export interface CaptureFormConfig {
   enabled: boolean;
   webhookUrl: string;
@@ -178,6 +208,7 @@ export interface FunnelConfig {
   theme: FunnelTheme;
   funnelType: FunnelType;
   attribution: FunnelAttributionConfig;
+  offer: FunnelOfferConfig;
   media: FunnelMediaConfig;
   content: FunnelContentConfig;
   forms: FunnelFormsConfig;
@@ -366,6 +397,7 @@ export const funnelConfig: FunnelConfig = {
     theme: DNA.theme,
     landingSlug: DNA.landingSlug,
   },
+  offer: DNA.offer,
   media: {
     heroVideo: {
       enabled: true,

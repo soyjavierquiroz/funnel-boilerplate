@@ -31,6 +31,31 @@ export interface DnaConfig {
     };
     successPath: string;
   };
+  offer: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    productName: string;
+    price: string;
+    regularPrice: string;
+    currency: string;
+    checkoutUrl: string;
+    ctaLabel: string;
+    heroImage: string;
+    heroImageAlt: string;
+    bullets: string[];
+    includes: string[];
+    bonuses: Array<{
+      title: string;
+      description: string;
+      value?: string;
+    }>;
+    guarantee: string;
+    faq: Array<{
+      question: string;
+      answer: string;
+    }>;
+  };
   vslVideoId: string;
   videos: {
     vsl: {
@@ -466,6 +491,7 @@ const eventCaptureSource = 'msm-event';
 const domain = readEnv('VITE_DOMAIN', 'aprendermotores.com');
 const siteId = readEnv('VITE_SITE_ID', 'APRENDER_MOTORES');
 const checkoutUrl = readEnv('VITE_CHECKOUT_URL', 'https://example.com/replace-with-checkout-url');
+const offerCheckoutUrl = readEnv('VITE_OFFER_CHECKOUT_URL', checkoutUrl);
 const vslVideoId = readEnv('VITE_VSL_VIDEO_ID', 'REPLACE_WITH_VSL_VIDEO_ID');
 
 const eventAssets = {
@@ -508,6 +534,63 @@ export const DNA = {
       vip: 'APRENDER_MOTORES_VIP',
     },
     successPath: '/confirmacion',
+  },
+  offer: {
+    eyebrow: 'Oferta de acceso inmediato',
+    title: 'Recupera tu confianza al volante con una guía paso a paso',
+    subtitle:
+      'Un acompañamiento práctico para empezar a manejar con más seguridad, calma e independencia.',
+    productName: eventName,
+    price: '$27',
+    regularPrice: '$97',
+    currency: 'USD',
+    checkoutUrl: offerCheckoutUrl,
+    ctaLabel: 'QUIERO ACCEDER AHORA',
+    heroImage: eventAssets.hero,
+    heroImageAlt: 'Persona al volante recuperando confianza para manejar con seguridad',
+    bullets: [
+      'Avanza con una ruta práctica y progresiva',
+      'Recupera calma antes y durante tus prácticas',
+      'Deja de depender de otros para trayectos que quieres hacer tú',
+    ],
+    includes: [
+      'Guía paso a paso para volver a manejar con seguridad',
+      'Ejercicios prácticos para ordenar el miedo al volante',
+      'Recursos de apoyo para practicar con más calma',
+      'Acceso inmediato al contenido principal',
+    ],
+    bonuses: [
+      {
+        title: 'Plan de práctica gradual',
+        description: 'Una estructura simple para retomar el volante sin exigirte hacerlo perfecto desde el primer día.',
+        value: '$37',
+      },
+      {
+        title: 'Checklist de seguridad emocional',
+        description: 'Un recurso rápido para prepararte antes de manejar y reconocer qué hacer cuando aparece la ansiedad.',
+        value: '$27',
+      },
+      {
+        title: 'Mapa de independencia',
+        description: 'Una guía para elegir tus primeros recorridos y convertirlos en pequeñas victorias sostenibles.',
+        value: '$33',
+      },
+    ],
+    guarantee: 'Pago seguro. Acceso inmediato. Si la configuración del checkout aún no está activa, el botón aparecerá deshabilitado.',
+    faq: [
+      {
+        question: '¿Cuándo recibo el acceso?',
+        answer: 'El acceso queda disponible después de completar el pago en el checkout configurado.',
+      },
+      {
+        question: '¿Necesito experiencia reciente manejando?',
+        answer: 'No. La guía está pensada para avanzar de forma progresiva, incluso si llevas tiempo evitando conducir.',
+      },
+      {
+        question: '¿Esto reemplaza clases prácticas de conducción?',
+        answer: 'No reemplaza una clase presencial ni requisitos legales de conducción. Es un acompañamiento práctico para recuperar confianza y ordenar tu proceso.',
+      },
+    ],
   },
   vslVideoId,
   videos: {
