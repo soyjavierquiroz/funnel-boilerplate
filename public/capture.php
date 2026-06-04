@@ -5,9 +5,50 @@ ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL);
 
-// Editar estos valores por dominio/funnel o moverlos a variables de entorno del servidor.
-$FLUENTCRM_ADS_WEBHOOK_URL = 'https://crm.aprendermotores.com/?fluentcrm=1&route=contact&hash=5af34da0-2037-41e4-a42d-1283c6317183';
-$FLUENTCRM_ORGANIC_WEBHOOK_URL = 'https://crm.aprendermotores.com/?fluentcrm=1&route=contact&hash=a9c924a4-b755-46e0-8f02-a9e92ef7ac8f';
+/*
+|--------------------------------------------------------------------------
+| SITE CAPTURE CONFIG
+|--------------------------------------------------------------------------
+| Para clonar este relay en un nuevo sitio, cambiar solo:
+| - webhooks_by_channel: URLs privadas de FluentCRM por canal.
+| - allowed_channels: canales que este sitio acepta en traffic_channel.
+| - log_labels: textos de logs temporales para identificar este relay.
+|
+| No exponer los webhooks al frontend, no moverlos a variables VITE y no
+| duplicarlos en React. El frontend solo debe apuntar a este capture.php.
+*/
+$CAPTURE_CHANNEL_ADS = 'ads';
+$CAPTURE_CHANNEL_ORGANIC = 'organic';
+
+$SITE_CAPTURE_CONFIG = [
+    'webhooks_by_channel' => [
+        $CAPTURE_CHANNEL_ADS => 'https://crm.aprendermotores.com/?fluentcrm=1&route=contact&hash=5af34da0-2037-41e4-a42d-1283c6317183',
+        $CAPTURE_CHANNEL_ORGANIC => 'https://crm.aprendermotores.com/?fluentcrm=1&route=contact&hash=a9c924a4-b755-46e0-8f02-a9e92ef7ac8f',
+    ],
+    'allowed_channels' => [
+        $CAPTURE_CHANNEL_ADS,
+        $CAPTURE_CHANNEL_ORGANIC,
+    ],
+    'log_labels' => [
+        'prefix' => '[capture.php]',
+        'received_payload_debug' => 'received payload debug',
+        'routing_debug' => 'routing debug',
+        'sent_payload_debug' => 'sent payload debug',
+        'debug_payload_encode_failed' => 'failed to encode debug payload',
+        'invalid_json_payload' => 'Invalid JSON payload',
+        'payload_encode_failed' => 'Failed to encode payload',
+        'curl_missing' => 'cURL extension is not available',
+        'curl_init_failed' => 'Failed to initialize cURL',
+        'fluentcrm_http_status' => 'FluentCRM HTTP status',
+        'fluentcrm_response_body' => 'FluentCRM response body',
+        'fluentcrm_curl_error' => 'FluentCRM cURL error',
+        'fluentcrm_http_response_error' => 'FluentCRM responded with HTTP',
+    ],
+];
+
+$CAPTURE_WEBHOOKS_BY_CHANNEL = $SITE_CAPTURE_CONFIG['webhooks_by_channel'];
+$CAPTURE_ALLOWED_CHANNELS = $SITE_CAPTURE_CONFIG['allowed_channels'];
+$CAPTURE_LOG_LABELS = $SITE_CAPTURE_CONFIG['log_labels'];
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -45,16 +86,30 @@ function truncate_for_log(string $value, int $maxLength = 4000): string
     return substr($value, 0, $maxLength) . '... [truncated]';
 }
 
+function capture_log_label(string $key): string
+{
+    global $CAPTURE_LOG_LABELS;
+
+    return isset($CAPTURE_LOG_LABELS[$key]) && is_string($CAPTURE_LOG_LABELS[$key])
+        ? $CAPTURE_LOG_LABELS[$key]
+        : $key;
+}
+
+function capture_error_log(string $message): void
+{
+    error_log(capture_log_label('prefix') . ' ' . $message);
+}
+
 function debug_log_json(string $label, array $payload): void
 {
     $encodedPayload = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
     if ($encodedPayload === false) {
-        error_log('[capture.php] ' . $label . ': failed to encode debug payload');
+        capture_error_log($label . ': ' . capture_log_label('debug_payload_encode_failed'));
         return;
     }
 
-    error_log('[capture.php] ' . $label . ': ' . truncate_for_log($encodedPayload));
+    capture_error_log($label . ': ' . truncate_for_log($encodedPayload));
 }
 
 function log_capture_routing(
@@ -62,7 +117,7 @@ function log_capture_routing(
     string $captureRoute,
     string $upstream
 ): void {
-    debug_log_json('routing debug', [
+    debug_log_json(capture_log_label('routing_debug'), [
         'traffic_channel' => $trafficChannel,
         'capture_route' => $captureRoute,
         'upstream_selected' => $upstream,
@@ -137,14 +192,14 @@ $rawInput = file_get_contents('php://input');
 $payload = json_decode($rawInput === false ? '' : $rawInput, true);
 
 if (!is_array($payload) || json_last_error() !== JSON_ERROR_NONE) {
-    error_log('[capture.php] Invalid JSON payload: ' . json_last_error_msg());
+    capture_error_log(capture_log_label('invalid_json_payload') . ': ' . json_last_error_msg());
     respond_json(400, [
         'ok' => false,
         'error' => 'Invalid JSON payload',
     ]);
 }
 
-debug_log_json('received payload debug', build_debug_payload_snapshot($payload));
+debug_log_json(capture_log_label('received_payload_debug'), build_debug_payload_snapshot($payload));
 
 $name = isset($payload['name']) && is_string($payload['name']) ? trim($payload['name']) : '';
 $firstName = isset($payload['first_name']) && is_string($payload['first_name']) ? trim($payload['first_name']) : '';
@@ -182,7 +237,7 @@ if ($trafficChannel === '') {
     ]);
 }
 
-if ($trafficChannel !== 'ads' && $trafficChannel !== 'organic') {
+if (!in_array($trafficChannel, $CAPTURE_ALLOWED_CHANNELS, true)) {
     respond_json(422, [
         'ok' => false,
         'error' => 'Traffic channel is invalid',
@@ -190,9 +245,7 @@ if ($trafficChannel !== 'ads' && $trafficChannel !== 'organic') {
 }
 
 $captureRoute = $trafficChannel;
-$fluentcrmWebhookUrl = $trafficChannel === 'ads'
-    ? $FLUENTCRM_ADS_WEBHOOK_URL
-    : $FLUENTCRM_ORGANIC_WEBHOOK_URL;
+$fluentcrmWebhookUrl = $CAPTURE_WEBHOOKS_BY_CHANNEL[$trafficChannel];
 $payload['traffic_channel'] = $trafficChannel;
 $payload['capture_route'] = $captureRoute;
 
@@ -297,12 +350,12 @@ log_capture_routing(
     $captureRoute,
     $captureRoute
 );
-debug_log_json('sent payload debug', build_debug_payload_snapshot($payload));
+debug_log_json(capture_log_label('sent_payload_debug'), build_debug_payload_snapshot($payload));
 
 $encodedPayload = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
 if ($encodedPayload === false) {
-    error_log('[capture.php] Failed to encode payload: ' . json_last_error_msg());
+    capture_error_log(capture_log_label('payload_encode_failed') . ': ' . json_last_error_msg());
     respond_json(500, [
         'ok' => false,
         'error' => 'Failed to prepare payload',
@@ -310,7 +363,7 @@ if ($encodedPayload === false) {
 }
 
 if (!function_exists('curl_init')) {
-    error_log('[capture.php] cURL extension is not available');
+    capture_error_log(capture_log_label('curl_missing'));
     respond_json(500, [
         'ok' => false,
         'error' => 'Server is missing cURL support',
@@ -320,7 +373,7 @@ if (!function_exists('curl_init')) {
 $curl = curl_init($fluentcrmWebhookUrl);
 
 if ($curl === false) {
-    error_log('[capture.php] Failed to initialize cURL');
+    capture_error_log(capture_log_label('curl_init_failed'));
     respond_json(500, [
         'ok' => false,
         'error' => 'Failed to initialize request',
@@ -345,18 +398,20 @@ $fluentcrmStatus = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
 curl_close($curl);
 
 error_log(sprintf(
-    '[capture.php] FluentCRM HTTP status: %d; traffic_channel=%s; upstream_selected=%s',
+    '%s %s: %d; traffic_channel=%s; upstream_selected=%s',
+    capture_log_label('prefix'),
+    capture_log_label('fluentcrm_http_status'),
     $fluentcrmStatus,
     $trafficChannel,
     $captureRoute
 ));
 
 if (is_string($fluentcrmResponse)) {
-    error_log('[capture.php] FluentCRM response body: ' . truncate_for_log($fluentcrmResponse));
+    capture_error_log(capture_log_label('fluentcrm_response_body') . ': ' . truncate_for_log($fluentcrmResponse));
 }
 
 if ($fluentcrmResponse === false) {
-    error_log('[capture.php] FluentCRM cURL error: ' . $curlError);
+    capture_error_log(capture_log_label('fluentcrm_curl_error') . ': ' . $curlError);
     respond_json(502, [
         'ok' => false,
         'error' => 'Upstream request failed',
@@ -364,7 +419,7 @@ if ($fluentcrmResponse === false) {
 }
 
 if ($fluentcrmStatus < 200 || $fluentcrmStatus >= 300) {
-    error_log(sprintf('[capture.php] FluentCRM responded with HTTP %d: %s', $fluentcrmStatus, $fluentcrmResponse));
+    capture_error_log(sprintf('%s %d: %s', capture_log_label('fluentcrm_http_response_error'), $fluentcrmStatus, $fluentcrmResponse));
     respond_json($fluentcrmStatus > 0 ? $fluentcrmStatus : 502, [
         'ok' => false,
         'error' => 'Upstream request failed',
