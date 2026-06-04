@@ -11,11 +11,14 @@ export function ExpertOfferBonuses({ offer }: ExpertOfferBonusesProps) {
       <div className="mx-auto w-full max-w-[1080px]">
         <div className="max-w-[720px]">
           <p className="expert-event-kicker text-[0.68rem] font-bold uppercase text-event-coral">
-            Bonos
+            {offer.bonusSection.eyebrow}
           </p>
           <h2 className="expert-headline mt-3 text-[2rem] leading-tight text-event-ink sm:text-[3rem]">
-            Recursos extra para practicar con más calma.
+            {offer.bonusSection.title}
           </h2>
+          <p className="expert-body mt-4 text-base font-semibold leading-7 text-event-muted sm:text-[1.05rem]">
+            {offer.bonusSection.subtitle}
+          </p>
         </div>
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -35,7 +38,7 @@ export function ExpertOfferBonuses({ offer }: ExpertOfferBonusesProps) {
               </p>
               {bonus.value && (
                 <p className="expert-event-kicker mt-5 text-[0.64rem] font-bold uppercase text-event-coral">
-                  Valor: {bonus.value}
+                  {offer.bonusSection.valueLabel}: {bonus.value}
                 </p>
               )}
             </article>

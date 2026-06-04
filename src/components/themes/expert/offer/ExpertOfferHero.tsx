@@ -71,7 +71,7 @@ export function ExpertOfferHero({ offer, trackingEnabled, trafficChannel }: Expe
               {offer.price}
             </span>
             <span className="expert-body pb-2 text-sm font-bold text-event-muted">
-              <span className="line-through">{offer.regularPrice}</span> regular
+              <span className="line-through">{offer.regularPrice}</span> {offer.regularPriceLabel}
             </span>
           </div>
 
@@ -80,7 +80,7 @@ export function ExpertOfferHero({ offer, trackingEnabled, trafficChannel }: Expe
           </div>
 
           <p className="expert-body mt-3 text-sm font-semibold leading-6 text-event-muted">
-            {isCheckoutConfigured ? offer.guarantee : 'Checkout pendiente de configurar.'}
+            {isCheckoutConfigured ? offer.guarantee : offer.checkoutPendingMessage}
           </p>
         </div>
       </div>

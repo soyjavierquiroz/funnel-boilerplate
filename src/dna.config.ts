@@ -41,20 +41,99 @@ export interface DnaConfig {
     currency: string;
     checkoutUrl: string;
     ctaLabel: string;
+    ctaPendingLabel: string;
+    regularPriceLabel: string;
+    checkoutPendingMessage: string;
     heroImage: string;
     heroImageAlt: string;
     bullets: string[];
+    video: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      provider: 'youtube' | 'bunnynet' | 'vimeo' | 'wistia' | 'html5';
+      videoId: string;
+      posterImage: string;
+      progressBarColor: string;
+      soundPrompt: string;
+      placeholderText: string;
+    };
+    credibility: {
+      text: string;
+      items: Array<{
+        value: string;
+        label: string;
+      }>;
+    };
+    beliefShift: {
+      eyebrow: string;
+      title: string;
+      paragraphs: string[];
+      highlights: string[];
+    };
+    story: {
+      eyebrow: string;
+      title: string;
+      paragraphs: string[];
+      highlight: string;
+      image: string;
+      imageAlt: string;
+    };
+    testimonials: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      items: Array<{
+        name: string;
+        detail: string;
+        quote: string;
+      }>;
+    };
+    valueStack: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      totalValueLabel: string;
+      totalValue: string;
+      todayPriceLabel: string;
+      includedLabel: string;
+      items: Array<{
+        title: string;
+        description: string;
+        value: string;
+      }>;
+    };
+    stack: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+    };
+    bonusSection: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      valueLabel: string;
+    };
     includes: string[];
     bonuses: Array<{
       title: string;
       description: string;
       value?: string;
     }>;
+    guaranteeTitle: string;
     guarantee: string;
+    faqEyebrow: string;
+    faqTitle: string;
     faq: Array<{
       question: string;
       answer: string;
     }>;
+    finalCta: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      priceLine: string;
+    };
   };
   vslVideoId: string;
   videos: {
@@ -546,6 +625,9 @@ export const DNA = {
     currency: 'USD',
     checkoutUrl: offerCheckoutUrl,
     ctaLabel: 'QUIERO ACCEDER AHORA',
+    ctaPendingLabel: 'CONFIGURACIÓN PENDIENTE',
+    regularPriceLabel: 'Precio regular',
+    checkoutPendingMessage: 'Checkout pendiente de configurar.',
     heroImage: eventAssets.hero,
     heroImageAlt: 'Persona al volante recuperando confianza para manejar con seguridad',
     bullets: [
@@ -553,6 +635,121 @@ export const DNA = {
       'Recupera calma antes y durante tus prácticas',
       'Deja de depender de otros para trayectos que quieres hacer tú',
     ],
+    video: {
+      eyebrow: 'Mira la presentación',
+      title: 'Antes de acceder, mira cómo funciona el proceso paso a paso',
+      subtitle:
+        'En esta explicación verás por qué el miedo al volante no se resuelve con presión, sino con una ruta clara para recuperar seguridad.',
+      provider: 'bunnynet',
+      videoId: vslVideoId,
+      posterImage: eventAssets.hero,
+      progressBarColor: '#e88c8c',
+      soundPrompt: 'Activa el sonido para ver la explicación',
+      placeholderText: 'Video de la oferta pendiente de configurar',
+    },
+    credibility: {
+      text: 'Un enfoque práctico, humano y progresivo para volver a mirar el volante con calma.',
+      items: [
+        {
+          value: '+10 años',
+          label: 'acompañando procesos de conducción',
+        },
+        {
+          value: 'Paso a paso',
+          label: 'sin presión ni exigencia de perfección',
+        },
+        {
+          value: 'Acceso inmediato',
+          label: 'para empezar cuando estés lista',
+        },
+      ],
+    },
+    beliefShift: {
+      eyebrow: 'Cambio de creencia',
+      title: 'El problema no es que no puedas manejar. Es que intentaste avanzar sin confianza suficiente.',
+      paragraphs: [
+        'Muchas personas creen que el miedo al volante significa incapacidad. Pero sentir ansiedad no borra lo que puedes aprender; solo muestra que necesitas practicar desde un lugar más ordenado y seguro.',
+        'Cuando el cuerpo asocia manejar con tensión, crítica o una mala experiencia, repetir “solo hazlo” suele empeorar el bloqueo. Primero hay que recuperar calma, claridad y pequeñas victorias.',
+      ],
+      highlights: [
+        'No necesitas forzarte.',
+        'Necesitas un camino gradual que vuelva a construir confianza.',
+      ],
+    },
+    story: {
+      eyebrow: 'La oportunidad',
+      title: 'Dejar de evitar el volante empieza con una decisión pequeña, pero bien acompañada.',
+      paragraphs: [
+        'Tal vez durante mucho tiempo has postergado manejar sola, has dependido de alguien más o has sentido frustración cada vez que piensas en practicar.',
+        'La oportunidad aquí no es convertirte en una conductora perfecta de un día para otro. Es recuperar una relación más tranquila con el volante y saber qué hacer en cada siguiente paso.',
+      ],
+      highlight: 'La seguridad se reconstruye con claridad, repetición y acompañamiento práctico.',
+      image: eventAssets.agenda3,
+      imageAlt: 'Persona avanzando hacia manejar con más seguridad y calma',
+    },
+    testimonials: {
+      eyebrow: 'Historias de avance',
+      title: 'Personas que empezaron a recuperar confianza paso a paso.',
+      subtitle: 'Estos testimonios son placeholders configurables hasta incorporar historias reales de la oferta.',
+      items: [
+        {
+          name: 'Carolina M.',
+          detail: 'Bogotá, Colombia',
+          quote:
+            'Me ayudó a entender que no tenía que hacerlo perfecto. Podía empezar con pasos pequeños y sentir más calma.',
+        },
+        {
+          name: 'Andrea P.',
+          detail: 'Quito, Ecuador',
+          quote:
+            'La idea de ordenar el miedo antes de practicar me cambió la forma de ver el proceso.',
+        },
+        {
+          name: 'Natalia R.',
+          detail: 'Guadalajara, México',
+          quote:
+            'Volví a imaginar trayectos que antes evitaba. Eso para mí ya fue un avance enorme.',
+        },
+      ],
+    },
+    valueStack: {
+      eyebrow: 'La oferta completa',
+      title: 'Todo lo que recibes hoy para empezar a recuperar confianza',
+      subtitle:
+        'Una combinación de guía, ejercicios y recursos pensados para pasar de la intención a la práctica.',
+      totalValueLabel: 'Valor total',
+      totalValue: '$194',
+      todayPriceLabel: 'Hoy',
+      includedLabel: 'Incluido',
+      items: [
+        {
+          title: 'Guía principal paso a paso',
+          description: 'La ruta para entender tu bloqueo, preparar prácticas y avanzar sin sentirte perdida.',
+          value: '$97',
+        },
+        {
+          title: 'Ejercicios de calma antes de manejar',
+          description: 'Recursos prácticos para bajar tensión y entrar al auto con más claridad.',
+          value: '$37',
+        },
+        {
+          title: 'Plan de primeros recorridos',
+          description: 'Una forma simple de elegir trayectos iniciales y convertirlos en victorias medibles.',
+          value: '$60',
+        },
+      ],
+    },
+    stack: {
+      eyebrow: 'Incluye',
+      title: 'Todo lo que necesitas para avanzar con claridad.',
+      subtitle: 'La oferta está organizada para que puedas empezar por pasos concretos y sostener el avance.',
+    },
+    bonusSection: {
+      eyebrow: 'Bonos',
+      title: 'Recursos extra para practicar con más calma.',
+      subtitle: 'Materiales complementarios para reforzar el avance y reducir la fricción al empezar.',
+      valueLabel: 'Valor',
+    },
     includes: [
       'Guía paso a paso para volver a manejar con seguridad',
       'Ejercicios prácticos para ordenar el miedo al volante',
@@ -576,7 +773,10 @@ export const DNA = {
         value: '$33',
       },
     ],
+    guaranteeTitle: 'Garantía y acceso',
     guarantee: 'Pago seguro. Acceso inmediato. Si la configuración del checkout aún no está activa, el botón aparecerá deshabilitado.',
+    faqEyebrow: 'Preguntas frecuentes',
+    faqTitle: 'Antes de acceder',
     faq: [
       {
         question: '¿Cuándo recibo el acceso?',
@@ -591,6 +791,13 @@ export const DNA = {
         answer: 'No reemplaza una clase presencial ni requisitos legales de conducción. Es un acompañamiento práctico para recuperar confianza y ordenar tu proceso.',
       },
     ],
+    finalCta: {
+      eyebrow: 'Acceso inmediato',
+      title: 'Empieza hoy a recuperar confianza al volante con un proceso claro.',
+      subtitle:
+        'Da el primer paso con una guía práctica diseñada para avanzar con calma, seguridad e independencia.',
+      priceLine: 'Precio especial {price}. Precio regular {regularPrice}.',
+    },
   },
   vslVideoId,
   videos: {

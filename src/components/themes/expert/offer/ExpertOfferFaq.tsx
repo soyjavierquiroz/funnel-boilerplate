@@ -10,10 +10,10 @@ export function ExpertOfferFaq({ offer }: ExpertOfferFaqProps) {
     <section className="bg-event-surface px-5 py-12 sm:px-6 sm:py-16 lg:py-20">
       <div className="mx-auto w-full max-w-[860px]">
         <p className="expert-event-kicker text-center text-[0.68rem] font-bold uppercase text-event-coral">
-          Preguntas frecuentes
+          {offer.faqEyebrow}
         </p>
         <h2 className="expert-headline mx-auto mt-3 max-w-[680px] text-center text-[2rem] leading-tight text-event-ink sm:text-[3rem]">
-          Antes de acceder
+          {offer.faqTitle}
         </h2>
 
         <div className="mt-8 grid gap-3">

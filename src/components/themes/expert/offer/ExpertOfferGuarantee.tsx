@@ -14,7 +14,7 @@ export function ExpertOfferGuarantee({ offer }: ExpertOfferGuaranteeProps) {
         </div>
         <div>
           <p className="expert-event-kicker text-[0.68rem] font-bold uppercase text-event-sky">
-            Garantía y acceso
+            {offer.guaranteeTitle}
           </p>
           <p className="expert-body mt-2 text-base font-semibold leading-7 text-text-inverse/82 sm:text-[1.08rem]">
             {offer.guarantee}

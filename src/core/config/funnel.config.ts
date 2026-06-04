@@ -110,6 +110,23 @@ export interface OfferFaqItemConfig {
   answer: string;
 }
 
+export interface OfferCredibilityItemConfig {
+  value: string;
+  label: string;
+}
+
+export interface OfferTestimonialItemConfig {
+  name: string;
+  detail: string;
+  quote: string;
+}
+
+export interface OfferValueStackItemConfig {
+  title: string;
+  description: string;
+  value: string;
+}
+
 export interface FunnelOfferConfig {
   eyebrow: string;
   title: string;
@@ -120,13 +137,81 @@ export interface FunnelOfferConfig {
   currency: string;
   checkoutUrl: string;
   ctaLabel: string;
+  ctaPendingLabel: string;
+  regularPriceLabel: string;
+  checkoutPendingMessage: string;
   heroImage: string;
   heroImageAlt: string;
   bullets: string[];
+  video: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    provider: VideoProvider;
+    videoId: string;
+    posterImage: string;
+    progressBarColor: string;
+    soundPrompt: string;
+    placeholderText: string;
+  };
+  credibility: {
+    text: string;
+    items: OfferCredibilityItemConfig[];
+  };
+  beliefShift: {
+    eyebrow: string;
+    title: string;
+    paragraphs: string[];
+    highlights: string[];
+  };
+  story: {
+    eyebrow: string;
+    title: string;
+    paragraphs: string[];
+    highlight: string;
+    image: string;
+    imageAlt: string;
+  };
+  testimonials: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    items: OfferTestimonialItemConfig[];
+  };
+  valueStack: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    totalValueLabel: string;
+    totalValue: string;
+    todayPriceLabel: string;
+    includedLabel: string;
+    items: OfferValueStackItemConfig[];
+  };
+  stack: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+  };
+  bonusSection: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    valueLabel: string;
+  };
   includes: string[];
   bonuses: OfferBonusConfig[];
+  guaranteeTitle: string;
   guarantee: string;
+  faqEyebrow: string;
+  faqTitle: string;
   faq: OfferFaqItemConfig[];
+  finalCta: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    priceLine: string;
+  };
 }
 
 export interface CaptureFormConfig {

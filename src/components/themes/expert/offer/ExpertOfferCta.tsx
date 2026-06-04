@@ -57,7 +57,7 @@ export function ExpertOfferCta({
         ].join(' ')}
       >
         <Lock className="h-4 w-4 shrink-0" aria-hidden="true" />
-        Configuración pendiente
+        {offer.ctaPendingLabel}
       </button>
     );
   }
