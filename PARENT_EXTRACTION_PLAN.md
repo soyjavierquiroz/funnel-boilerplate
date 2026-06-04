@@ -249,6 +249,14 @@ Meta/TikTok/CAPI:
 - Decidir si el padre exporta un `src/site/current.ts` apuntando a un sitio activo.
 - Documentar que los clones editan solo site config, env y assets.
 
+### Fase 1 implementada: src/site boundary
+
+Se creo `src/site/` como frontera documental inicial entre core engine y configuracion por sitio. Esta fase no mueve MSM ni cambia imports runtime.
+
+- `src/site/README.md` documenta que los clones futuros deberan concentrar aqui la configuracion activa del sitio, junto con env y assets.
+- `src/site/current.ts` re-exporta `DNA` desde `../dna.config`, por lo que MSM sigue usando la configuracion actual sin cambios de comportamiento.
+- No se modificaron componentes, core, rutas, tracking, diseno ni `public/capture.php`.
+
 ### Fase 2 - Extraer MSM sin cambiar imports publicos
 
 - Crear `src/sites/msm/dna.config.ts` con los valores actuales.
