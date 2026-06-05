@@ -2,6 +2,8 @@
 
 Use this kit to turn the parent boilerplate into a site-specific funnel.
 
+For new clones, start from `parent-clean-v1` when possible. See [`parent-clean-v1` release notes](../RELEASE_NOTES/parent-clean-v1.md).
+
 ## What To Edit
 
 - `.env`: public browser config such as domain, site id, checkout, pixels, and event dates.

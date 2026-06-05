@@ -14,6 +14,10 @@ Clean parent repo for cloning funnels without inheriting a child site's identity
 
 The parent does not include a site-specific deploy script or a legacy Docker stack. Child sites own their deployment path.
 
+## Releases
+
+- [`parent-clean-v1`](RELEASE_NOTES/parent-clean-v1.md): primer baseline limpio del padre para crear funnels hijos.
+
 ## Clone Surface
 
 For a new clone, edit:
