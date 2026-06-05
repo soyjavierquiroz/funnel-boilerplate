@@ -1,5 +1,6 @@
 import { DNA, dnaNumericPrices, resolveDnaFunnelTheme } from '../../site/current';
 import type { DnaSuccessActionType, DnaTheme } from '../../site/current';
+import { withAdsRoutePrefix } from '../routing/adsRoute';
 import type { TrafficChannel } from '../routing/channel';
 
 export type VideoProvider = 'youtube' | 'bunnynet' | 'vimeo' | 'wistia' | 'html5';
@@ -660,7 +661,7 @@ export const funnelConfig: FunnelConfig = {
       captureListSlug: DNA.forms.captureListSlug,
       whatsappGroupUrl: DNA.forms.whatsappGroupUrl,
       trackingEnabled: true,
-      confirmationPath: '/a/confirmacion',
+      confirmationPath: withAdsRoutePrefix('/confirmacion'),
       success: resolveSuccessConfig(DNA.forms.whatsappGroupUrl),
     },
     organic: {

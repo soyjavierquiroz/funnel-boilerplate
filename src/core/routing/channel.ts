@@ -1,7 +1,9 @@
+import { isAdsRoutePath } from './adsRoute';
+
 export type TrafficChannel = 'organic' | 'ads';
 
 export function isAdsRoute(pathname: string): boolean {
-  return pathname === '/a' || pathname.startsWith('/a/');
+  return isAdsRoutePath(pathname);
 }
 
 export function getTrafficChannel(pathname: string): TrafficChannel {

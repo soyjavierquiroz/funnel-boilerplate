@@ -10,6 +10,7 @@ Use this kit to turn the parent boilerplate into a site-specific funnel.
 - `public/assets/**`: clone-owned media.
 
 The parent default is a neutral example using `Example Funnel`, `Example Event`, `EXAMPLE_SITE`, and `/assets/funnel-placeholder.svg`.
+The default ads route prefix is `VITE_ADS_ROUTE_PREFIX=/x9m`. It is public, not secret, and separates ads routes from organic routes. Each clone may change it, but it must start with `/`, must not be `/`, and must not end with `/`.
 
 ## What Not To Assume
 
@@ -24,4 +25,4 @@ The parent default is a neutral example using `Example Funnel`, `Example Event`,
 2. Replace `src/site/dna.config.ts` content with the clone identity.
 3. Add clone-owned assets under `public/assets/**`.
 4. Configure `CAPTURE_*` on the server if capture is enabled.
-5. Run validation and route checks before launch.
+5. Run validation and route checks before launch using the configured ads route prefix.

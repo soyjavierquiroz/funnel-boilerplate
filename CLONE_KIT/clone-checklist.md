@@ -3,7 +3,7 @@
 ## Identity
 
 - [ ] Set real product and event names in `src/site/dna.config.ts`.
-- [ ] Set `VITE_DOMAIN`, `VITE_SITE_ID`, and route-related env values.
+- [ ] Set `VITE_DOMAIN`, `VITE_SITE_ID`, and `VITE_ADS_ROUTE_PREFIX`.
 - [ ] Replace placeholder headlines, offer copy, success copy, proof, FAQ, and testimonials.
 
 ## Assets
@@ -25,4 +25,5 @@
 - [ ] `npm run lint`
 - [ ] `npm run build`
 - [ ] `git diff --check`
-- [ ] Verify `/`, `/a`, `/oferta`, `/a/oferta`, `/confirmacion`, and `/a/confirmacion`.
+- [ ] Verify `/`, `/oferta`, and `/confirmacion`.
+- [ ] Verify ads-prefixed routes with the configured `VITE_ADS_ROUTE_PREFIX`; for `/x9m`, check `/x9m`, `/x9m/oferta`, and `/x9m/confirmacion`.

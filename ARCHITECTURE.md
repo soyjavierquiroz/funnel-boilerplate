@@ -6,6 +6,7 @@ This repository is a parent funnel boilerplate. Runtime code reads the active si
 
 - `src/site/dna.config.ts`: active clone-owned config, copy, prices, product ids, assets, tracking defaults, capture settings, offer copy, event copy, and success behavior.
 - `src/site/current.ts`: official import boundary for pages and components.
+- `src/core/routing/adsRoute.ts`: normalizes the public `VITE_ADS_ROUTE_PREFIX` and composes ads route paths.
 - `public/assets/funnel-placeholder.svg`: neutral default asset used by the parent.
 - `public/capture.php`: generic capture relay configured with `CAPTURE_*` server env only.
 
@@ -18,3 +19,5 @@ The parent intentionally does not ship a deploy script or Docker stack for a rea
 ## Clone Rule
 
 A child site owns identity, assets, env, checkout, capture destinations, tracking ids, and launch documentation. Shared engine code should remain product-agnostic.
+
+Ads and organic pages share the same visual routes, but ads routes are separated with `VITE_ADS_ROUTE_PREFIX`. The parent fallback is `/x9m`; clones may choose another public prefix that starts with `/`, is not `/`, and has no trailing slash.
