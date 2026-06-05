@@ -1,17 +1,20 @@
-# Funnel Boilerplate Parent Baseline
+# Parent Baseline
 
-Repo padre agnóstico para construir funnels clonables.
+This repository is now a neutral funnel boilerplate parent.
 
-Origen inicial:
-- Extraído desde MSM / aprendermotores.com
-- Rama base: prepare/funnel-boilerplate-parent
+## Baseline Identity
 
-Objetivo:
-- Mantener componentes, templates, themes, tracking, routing y Clone Kit.
-- Los sitios hijos deben personalizarse vía src/site/current.ts, DNA/config, .env y assets.
-- No usar este repo como sitio de negocio final.
+- Product: `Example Funnel`
+- Event: `Example Event`
+- Site id: `EXAMPLE_SITE`
+- Domain: `example.com`
+- Asset: `/assets/funnel-placeholder.svg`
 
-Validaciones:
-- npm run typecheck
-- npm run lint
-- npm run build
+## Removed From Parent
+
+- Child-site deploy assumptions.
+- Legacy Docker stack assumptions.
+- Child-site asset fixtures.
+- Root config facade.
+
+Child sites should preserve their own historical runtime outside this parent.

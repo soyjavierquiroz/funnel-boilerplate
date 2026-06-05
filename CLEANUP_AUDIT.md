@@ -2,37 +2,26 @@
 
 ## Scope
 
-Objetivo: convertir el clon en un boilerplate reutilizable para funnels VSL sin identidad, checkout, tracking, copy ni estilos de marca hardcodeados en componentes.
+Objetivo: mantener este repo como padre reutilizable para funnels sin identidad, checkout, tracking, copy, assets ni despliegue de un sitio hijo.
 
-## Hallazgos
+## Estado actual
 
-- Metadata HTML apuntaba al dominio y producto anteriores.
-- `src/dna.config.ts` contenia checkout real, copy completo, precios y assets del funnel anterior.
-- `src/core/config/funnel.config.ts` contenia IDs internos, copy de otro funnel y fallback de tracking no reutilizable.
-- Componentes activos tenian textos de CTA, garantia, precios, labels, placeholders y algunos colores de marca fuera de la configuracion.
-- El paquete local de video tenia colores de CTA del overlay definidos con clases de color concretas.
-- Habia assets binarios heredados en `public/assets`.
-- Habia un stack Docker Swarm especifico de otro dominio y un stack generico sin marcar como legacy.
-
-## Acciones aplicadas
-
-- `DNA` ahora contiene identidad, dominio, checkout, video, pricing, copy, tracking, assets, forms y theme.
+- `src/site/dna.config.ts` contiene un ejemplo neutral con `Example Funnel`, `Example Event`, `EXAMPLE_SITE` y `example.com`.
 - `funnel.config.ts` deriva checkout, video, forms, pricing e integrations desde `DNA`.
-- Componentes activos consumen copy/tokens desde `DNA` y usan clases semanticas.
-- Se reemplazaron assets heredados por `public/assets/funnel-placeholder.svg`.
-- Se agrego `.env.example` con variables de runtime/build.
-- Se agrego `public/.htaccess` para fallback SPA.
-- Se elimino el stack Docker especifico de otro funnel.
-- El stack Docker restante quedo marcado como legacy.
+- Componentes activos consumen copy/tokens desde el site boundary y usan clases semanticas.
+- Assets default apuntan a `public/assets/funnel-placeholder.svg`.
+- `.env.example` y templates del clone kit mantienen variables genericas.
+- `public/capture.php` se configura mediante server env `CAPTURE_*`.
+- No hay script de despliegue site-specific ni stack Docker legacy como baseline activo.
 
 ## Estado de artefactos
 
 - `dist/`: artefacto generado, ignorado por git.
 - `public_html/`: salida de hosting, no pertenece al repo fuente.
-- `public/.htaccess`: debe permanecer trackeado para CyberPanel/LiteSpeed.
+- `public/.htaccess`: debe permanecer trackeado para hosting con fallback SPA.
 
 ## Pendientes seguros
 
-- Reemplazar placeholders por copy, video, checkout, tracking, precios y assets reales antes de publicar.
+- Reemplazar placeholders por copy, video, checkout, tracking, precios y assets reales en cada clon.
 - Confirmar el proveedor de precios dinamicos si se usara `PricingCard`.
 - Validar el VSL real en navegador cuando exista un `VITE_VSL_VIDEO_ID`.

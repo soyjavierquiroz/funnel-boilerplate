@@ -1,68 +1,23 @@
 # Assets Map
 
-Usa este documento para reemplazar la identidad visual por sitio sin tocar componentes.
+The parent ships one neutral asset:
 
-## Ubicacion recomendada
+- `public/assets/funnel-placeholder.svg`
 
-Para un clon nuevo, crea una carpeta propia:
+A clone should add its own assets under `public/assets/**` and reference them from `src/site/**`, normally `src/site/dna.config.ts`.
 
-```text
-public/assets/<site-slug>/
-```
+## Common Fields
 
-Ejemplo:
+- `DNA.assets.productImage`
+- `DNA.assets.salesLetterImage`
+- `DNA.assets.bonusImage`
+- `DNA.assets.bundleWideImage`
+- `DNA.assets.socialImage`
+- `DNA.assets.event.*`
+- `DNA.offer.heroImage`
+- `DNA.offer.video.posterImage`
+- `DNA.seo.socialImage`
 
-```text
-public/assets/marca-demo/logo.webp
-public/assets/marca-demo/hero.webp
-public/assets/marca-demo/social.webp
-```
+## Launch Check
 
-Luego referencia esas rutas desde `src/site/**`, normalmente en `src/site/dna.config.ts`.
-
-## Assets principales
-
-| Uso | Config en DNA | Recomendacion |
-| --- | --- | --- |
-| Logo evento/sitio | `DNA.assets.event.logo` | WebP/PNG, fondo transparente si aplica |
-| Hero landing | `DNA.assets.event.hero` | WebP horizontal, buena lectura mobile |
-| Imagen social | `DNA.assets.socialImage` y `DNA.seo.socialImage` | 1200x630 |
-| Imagen sales letter | `DNA.assets.salesLetterImage` | Editorial, no stock generico |
-| Imagen bonus/producto | `DNA.assets.bonusImage` | Producto o recurso real |
-| Bundle oferta | `DNA.assets.bundleWideImage` | Composicion de producto/bonos |
-| Offer hero/poster | `DNA.offer.heroImage`, `DNA.offer.video.posterImage` | Poster claro para VSL |
-| Proof/testimonios | `DNA.offer.proofGrid.items`, `DNA.offer.proofWallLarge` | Imagenes o capturas reales cuando existan |
-| Evento agenda | `DNA.assets.event.agendaImages` | Una por bloque de agenda |
-| Autoridad | `DNA.assets.event.authorityImage`, `DNA.assets.event.authorityCarousel` | Fotos reales del experto |
-| CTA final | `DNA.assets.event.finalCtaImage` | Imagen asociada al resultado |
-
-## Assets existentes en el boilerplate
-
-Los assets actuales bajo `public/assets/msm/` son heredados del baseline historico Aprender Motores / Maneja Sin Miedo. En un clon:
-
-- Puedes dejarlos como referencia temporal.
-- No los uses como identidad final de otro sitio.
-- No cambies rutas en componentes; cambia rutas desde `src/site/**`.
-- Antes de publicar, confirma que `DNA.assets`, `DNA.assets.event`, `DNA.offer.heroImage`, `DNA.offer.video.posterImage`, `DNA.assets.socialImage` y `DNA.seo.socialImage` ya no apuntan a `public/assets/msm/` salvo que el clon sea MSM.
-- Lee tambien `public/assets/msm/README.md`.
-
-## Reglas de reemplazo
-
-- Prefiere WebP para imagenes grandes.
-- Evita nombres genericos como `image1.webp`; usa nombres de funcion: `hero-main.webp`, `authority.webp`, `proof-01.webp`.
-- Verifica mobile y desktop despues de reemplazar imagenes.
-- Si falta un asset, usa `public/assets/funnel-placeholder.svg` solo durante configuracion.
-- No guardes archivos pesados innecesarios en `public/assets`.
-
-## Checklist de assets
-
-- [ ] Logo actualizado.
-- [ ] Hero actualizado.
-- [ ] Poster de video actualizado.
-- [ ] Social image actualizado.
-- [ ] Imagenes de agenda/contenido actualizadas.
-- [ ] Imagenes de autoridad actualizadas.
-- [ ] Imagenes de proof/testimonios actualizadas.
-- [ ] Imagen final CTA actualizada.
-- [ ] `alt` text configurado en `DNA`.
-- [ ] No quedan assets MSM como identidad final de un clon no-MSM.
+Before publishing, confirm every visible image is either a clone-owned asset or the intentional neutral placeholder for an unfinished demo.
