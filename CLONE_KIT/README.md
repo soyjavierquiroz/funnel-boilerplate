@@ -12,6 +12,8 @@ Use this kit to turn the parent boilerplate into a site-specific funnel.
 The parent default is a neutral example using `Example Funnel`, `Example Event`, `EXAMPLE_SITE`, and `/assets/funnel-placeholder.svg`.
 The default ads route prefix is `VITE_ADS_ROUTE_PREFIX=/x9m`. It is public, not secret, and separates ads routes from organic routes. Each clone may change it, but it must start with `/`, must not be `/`, and must not end with `/`.
 
+Traffic attribution uses this priority: ads route prefix, `fbclid`, `ttclid`, `gclid`, `utm_medium=paid`, stored attribution, then organic/default. The prefix is still a strong ads signal, but click IDs can mark ads without the prefix. Paid attribution is stored in `localStorage` as `funnel_attribution` for 30 days to keep the paid channel through later navigation. This is not multi-touch attribution.
+
 ## What Not To Assume
 
 - No deploy script is included as the recommended flow.

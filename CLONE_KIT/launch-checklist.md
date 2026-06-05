@@ -16,6 +16,8 @@
 
 - [ ] Server `CAPTURE_*` env values point to the clone destination.
 - [ ] Pixel and relay env values belong to the clone.
+- [ ] Attribution behavior is verified: prefix routes, click IDs, `utm_medium=paid`, stored attribution, and organic/default fallback.
+- [ ] `localStorage.funnel_attribution` uses the expected 30 day TTL and is understood as single-touch attribution.
 - [ ] Deploy process is documented in the clone, not assumed from the parent.
 
 ## Final Checks

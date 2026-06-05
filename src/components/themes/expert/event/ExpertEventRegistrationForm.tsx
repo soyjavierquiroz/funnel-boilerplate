@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DNA } from '../../../../site/current';
 import funnelConfig from '../../../../core/config/funnel.config';
-import { getTrafficChannel, type TrafficChannel } from '../../../../core/routing/channel';
+import { resolveCurrentAttribution, type TrafficChannel } from '../../../../core/attribution';
 import analytics from '../../../../core/services/analytics';
 import { useVisitor } from '../../../../core/visitor/VisitorContext';
 import { buildVisitorPayload, type VisitorPayload } from '../../../../core/visitor/visitorPayload';
@@ -42,7 +42,8 @@ function isValidEmail(value: string): boolean {
 
 export function ExpertEventRegistrationForm() {
   const location = useLocation();
-  const trafficChannel = getTrafficChannel(location.pathname);
+  const attribution = resolveCurrentAttribution(location);
+  const trafficChannel = attribution.channel;
   const channelConfig = funnelConfig.trafficChannels[trafficChannel];
   const content = funnelConfig.content.event;
   const capture = funnelConfig.forms.capture;
@@ -146,7 +147,7 @@ export function ExpertEventRegistrationForm() {
         throw new Error(`Webhook responded with ${response.status}`);
       }
 
-      if (channelConfig.trackingEnabled) {
+      if (attribution.shouldTrackAds) {
         try {
           await analytics.trackEvent(capture.tracking.eventName, {
             lead: {

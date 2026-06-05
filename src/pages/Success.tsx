@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import analytics from '../core/services/analytics';
 import funnelConfig from '../core/config/funnel.config';
-import { getTrafficChannel, type TrafficChannel } from '../core/routing/channel';
+import { resolveCurrentAttribution, type TrafficChannel } from '../core/attribution';
 import { DNA } from '../site/current';
 
 function trackCompleteRegistrationOnce(channel: TrafficChannel) {
@@ -28,7 +28,8 @@ function trackCompleteRegistrationOnce(channel: TrafficChannel) {
 
 export function Success() {
   const location = useLocation();
-  const trafficChannel = getTrafficChannel(location.pathname);
+  const attribution = resolveCurrentAttribution(location);
+  const trafficChannel = attribution.channel;
   const channelConfig = funnelConfig.trafficChannels[trafficChannel];
   const successConfig = channelConfig.success;
   const redirectSeconds = Math.max(successConfig.redirectSeconds, 0);
@@ -39,10 +40,10 @@ export function Success() {
     redirectSeconds > 0 ? ((redirectSeconds - secondsRemaining) / redirectSeconds) * 100 : 100;
 
   useEffect(() => {
-    if (channelConfig.trackingEnabled) {
+    if (attribution.shouldTrackAds) {
       trackCompleteRegistrationOnce(trafficChannel);
     }
-  }, [channelConfig.trackingEnabled, trafficChannel]);
+  }, [attribution.shouldTrackAds, trafficChannel]);
 
   useEffect(() => {
     setSecondsRemaining(redirectSeconds);

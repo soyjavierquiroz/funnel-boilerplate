@@ -6,6 +6,7 @@ This repository is a parent funnel boilerplate. Runtime code reads the active si
 
 - `src/site/dna.config.ts`: active clone-owned config, copy, prices, product ids, assets, tracking defaults, capture settings, offer copy, event copy, and success behavior.
 - `src/site/current.ts`: official import boundary for pages and components.
+- `src/core/attribution`: pure traffic attribution resolver plus browser storage adapter.
 - `src/core/routing/adsRoute.ts`: normalizes the public `VITE_ADS_ROUTE_PREFIX` and composes ads route paths.
 - `public/assets/funnel-placeholder.svg`: neutral default asset used by the parent.
 - `public/capture.php`: generic capture relay configured with `CAPTURE_*` server env only.
@@ -21,3 +22,15 @@ The parent intentionally does not ship a deploy script or Docker stack for a rea
 A child site owns identity, assets, env, checkout, capture destinations, tracking ids, and launch documentation. Shared engine code should remain product-agnostic.
 
 Ads and organic pages share the same visual routes, but ads routes are separated with `VITE_ADS_ROUTE_PREFIX`. The parent fallback is `/x9m`; clones may choose another public prefix that starts with `/`, is not `/`, and has no trailing slash.
+
+Traffic channel is not route-only. `src/core/attribution` resolves channel with this priority:
+
+1. Ads route prefix.
+2. `fbclid`.
+3. `ttclid`.
+4. `gclid`.
+5. `utm_medium=paid`.
+6. Stored attribution.
+7. Organic default.
+
+The ads route prefix remains the strongest signal. Click IDs mark ads even on organic paths, and `utm_medium=paid` marks ads with no specific paid platform. Paid attribution is persisted in browser `localStorage` as `funnel_attribution` with a 30 day TTL. The stored value is used only when no stronger signal exists and is not overwritten by organic/default traffic. This is intentionally single-touch attribution; multi-touch modeling is not part of the core engine yet.

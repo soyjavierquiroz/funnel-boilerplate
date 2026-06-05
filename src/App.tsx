@@ -2,8 +2,7 @@ import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { DNA, resolveDnaDocumentTheme } from './site/current';
 import analytics from './core/services/analytics';
-import funnelConfig from './core/config/funnel.config';
-import { getTrafficChannel } from './core/routing/channel';
+import { resolveCurrentAttribution } from './core/attribution';
 import { getAdsRoutePrefix, withAdsRoutePrefix } from './core/routing/adsRoute';
 import { ExpertTheme } from './components/themes/expert/ExpertTheme';
 import { ExpertEventTheme } from './components/themes/expert/event/ExpertEventTheme';
@@ -24,8 +23,8 @@ function resolveHomeTheme() {
 
 function RoutedApp() {
   const location = useLocation();
-  const trafficChannel = getTrafficChannel(location.pathname);
-  const channelConfig = funnelConfig.trafficChannels[trafficChannel];
+  const attribution = resolveCurrentAttribution(location);
+  const trafficChannel = attribution.channel;
   const isSuccessRoute =
     location.pathname === '/confirmacion' || location.pathname === adsConfirmationPath;
 
@@ -38,7 +37,7 @@ function RoutedApp() {
     document.documentElement.setAttribute('data-theme', documentTheme);
     document.title = nextTitle;
 
-    if (channelConfig.trackingEnabled) {
+    if (attribution.shouldTrackAds) {
       void analytics.trackEvent('PageView', {
         source: 'AppLoad',
         theme: DNA.theme,
@@ -46,7 +45,7 @@ function RoutedApp() {
         traffic_channel: trafficChannel,
       });
     }
-  }, [channelConfig.trackingEnabled, isSuccessRoute, location.pathname, trafficChannel]);
+  }, [attribution.shouldTrackAds, isSuccessRoute, location.pathname, location.search, trafficChannel]);
 
   return (
     <Routes>

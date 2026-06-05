@@ -3,8 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { resolveDnaThemeStyle } from '../../../../site/current';
 import type { FunnelOfferConfig } from '../../../../core/config/funnel.config';
 import funnelConfig from '../../../../core/config/funnel.config';
-import { getTrafficChannel } from '../../../../core/routing/channel';
-import type { TrafficChannel } from '../../../../core/routing/channel';
+import { resolveCurrentAttribution, type TrafficChannel } from '../../../../core/attribution';
 import { ExpertOfferAnnouncementBar } from './ExpertOfferAnnouncementBar';
 import { ExpertOfferBonuses } from './ExpertOfferBonuses';
 import { ExpertOfferCredibilityStrip } from './ExpertOfferCredibilityStrip';
@@ -128,11 +127,11 @@ const expertOfferBlocks: ExpertOfferBlock[] = [
 
 export function ExpertOfferPage() {
   const location = useLocation();
-  const trafficChannel = getTrafficChannel(location.pathname);
-  const channelConfig = funnelConfig.trafficChannels[trafficChannel];
+  const attribution = resolveCurrentAttribution(location);
+  const trafficChannel = attribution.channel;
   const blockContext: ExpertOfferBlockContext = {
     offer: funnelConfig.offer,
-    trackingEnabled: channelConfig.trackingEnabled,
+    trackingEnabled: attribution.shouldTrackAds,
     trafficChannel,
   };
 
