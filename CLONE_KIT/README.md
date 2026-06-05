@@ -4,6 +4,8 @@ Este kit documenta como usar este repo como repo padre clonable para nuevos siti
 
 El objetivo del clon es cambiar identidad, copy, assets, checkout, CRM, WhatsApp, tracking y dominio sin tocar la arquitectura ni los componentes base.
 
+El repo padre no es Aprender Motores. Aprender Motores / Maneja Sin Miedo queda como baseline historico y site config activo de ejemplo; un clon debe reemplazar esa identidad desde `.env`, `src/site/**` y `public/assets/**`.
+
 ## Archivos del kit
 
 - `env.template`: variables de entorno recomendadas para un clon nuevo.
@@ -15,7 +17,7 @@ El objetivo del clon es cambiar identidad, copy, assets, checkout, CRM, WhatsApp
 ## Archivos que se editan por sitio
 
 - `.env`: dominio, metadata, checkout, video, CRM, WhatsApp y tracking.
-- `src/dna.config.ts`: marca, producto, copy, precios, colores, assets, oferta, evento, exito y fallbacks.
+- `src/site/**`: marca, producto, copy, precios, colores, assets, oferta, evento, exito y fallbacks.
 - `public/assets/...`: imagenes, logos, posters y recursos visuales del sitio.
 - `README.md`: notas especificas del clon, si aplica.
 - `docker-stack-boilerplate.yaml`: solo si el clon usa ese flujo legacy.
@@ -25,6 +27,7 @@ El objetivo del clon es cambiar identidad, copy, assets, checkout, CRM, WhatsApp
 - `src/components/**`: componentes visuales y Lego del boilerplate.
 - `src/core/**`: routing, tracking core, visitor context, analytics y configuracion derivada.
 - `src/pages/Success.tsx`: flujo de confirmacion/exito compartido.
+- `src/dna.config.ts`: facade temporal de compatibilidad; no es el contrato recomendado del clon.
 - `public/capture.php`: endpoint de captura compartido.
 - `deploy.sh`: script de despliegue base.
 - `package.json`, `vite.config.ts`, `tailwind.config.js`, `eslint.config.js`: tooling base.
@@ -36,7 +39,7 @@ Si un clon necesita tocar estos archivos, primero evalua si el cambio debe subir
 
 1. Crear repo clon desde el repo padre.
 2. Copiar `CLONE_KIT/env.template` a `.env` y completar valores reales.
-3. Editar `src/dna.config.ts` con marca, copy, assets, colores, precios, oferta, evento y exito.
+3. Editar `src/site/**` con marca, copy, assets, colores, precios, oferta, evento y exito.
 4. Reemplazar o agregar assets en `public/assets/<site>/`.
 5. Validar rutas organicas y ads:
    - `/`
@@ -55,7 +58,7 @@ npm run build
 
 ## Como cambiar marca, copy y assets
 
-Edita `src/dna.config.ts`:
+Edita `src/site/dna.config.ts` o los archivos de site config bajo `src/site/**`:
 
 - `productName`, `domain`, `siteId`.
 - `seo`.
@@ -67,6 +70,8 @@ Edita `src/dna.config.ts`:
 
 Agrega assets en `public/assets/<site-slug>/` y referencia las rutas desde `DNA`. No hardcodees rutas de assets en componentes.
 
+Los assets heredados bajo `public/assets/msm/` pertenecen al baseline historico. Pueden servir como referencia temporal, pero no como identidad final de otro clon.
+
 ## Como cambiar CRM, WhatsApp y tracking
 
 Configura `.env`:
@@ -75,13 +80,13 @@ Configura `.env`:
 - WhatsApp: `VITE_WHATSAPP_GROUP_URL`, `VITE_ORGANIC_WHATSAPP_GROUP_URL`, `VITE_WHATSAPP_REDIRECT_BASE_URL`.
 - Tracking: `VITE_META_PIXEL_ID`, `VITE_TIKTOK_PIXEL_ID`, `VITE_CAPI_RELAY_URL`.
 
-Configura `src/dna.config.ts` solo si necesitas cambiar defaults o comportamiento por sitio. No edites analytics core en clones.
+Configura `src/site/**` solo si necesitas cambiar defaults o comportamiento por sitio. No edites analytics core en clones.
 
 ## Como clonar a otro dominio
 
 1. Cambia `VITE_DOMAIN`.
 2. Cambia `VITE_SITE_TITLE`, `VITE_SITE_DESCRIPTION` y `VITE_SOCIAL_IMAGE`.
-3. Cambia `DNA.domain`, `DNA.productName`, `DNA.siteId` y `DNA.seo`.
+3. Cambia `DNA.domain`, `DNA.productName`, `DNA.siteId` y `DNA.seo` desde `src/site/**`.
 4. Actualiza checkout, video, CRM, WhatsApp y tracking del nuevo dominio.
 5. Genera build y despliega `dist/` en el hosting del nuevo dominio.
 6. Prueba rutas directas con refresh para confirmar fallback SPA.

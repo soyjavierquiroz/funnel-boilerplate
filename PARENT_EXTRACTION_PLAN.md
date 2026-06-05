@@ -4,9 +4,9 @@ Auditoria para preparar este repo como repo padre clonable sin romper el sitio a
 
 ## Estado actual
 
-El repo ya esta cerca de un boilerplate clonable: existe `CLONE_KIT/`, la configuracion editable se concentra en `src/dna.config.ts`, la resolucion runtime vive en `src/core/config/funnel.config.ts`, y los componentes principales consumen `DNA` o `funnelConfig`.
+El repo ya esta cerca de un boilerplate clonable: existe `CLONE_KIT/`, la configuracion editable se concentra ahora en `src/site/**`, la resolucion runtime vive en `src/core/config/funnel.config.ts`, y los componentes principales consumen `DNA` o `funnelConfig`.
 
-El sitio actual todavia es el primer hijo implicito. MSM no esta aislado en una carpeta propia: su marca, copy, assets, rutas, evento, oferta, success, listas de captura y defaults de dominio viven mezclados en `src/dna.config.ts`, `.env.example`, `vite.config.ts`, `deploy.sh`, `docker-stack-boilerplate.yaml`, `public/assets/msm/` y `public/capture.php`.
+El sitio actual todavia es el primer hijo implicito. MSM ya vive detras del boundary `src/site/current.ts`, con su config real en `src/site/dna.config.ts`, pero aun no esta extraido como hijo: su marca, copy, assets, rutas, evento, oferta, success, listas de captura y defaults de dominio siguen presentes en `src/site/dna.config.ts`, `deploy.sh`, `docker-stack-boilerplate.yaml`, `public/assets/msm/` y `public/capture.php`. `.env.example` y `vite.config.ts` ya usan defaults genericos del padre.
 
 La arquitectura activa es:
 
@@ -47,7 +47,7 @@ Notas de acoplamiento dentro del engine:
 
 ## Site config
 
-El sitio MSM actual esta principalmente en `src/dna.config.ts`.
+El sitio MSM actual esta principalmente en `src/site/dna.config.ts`.
 
 Valores MSM/site-specific detectados:
 
@@ -62,8 +62,8 @@ Valores MSM/site-specific detectados:
 
 Archivos que tambien contienen site config:
 
-- `.env.example`: dominio `aprendermotores.com`, title Aprender Motores, listas `msm-junio-2026` y `msm-organico-2026`.
-- `vite.config.ts`: defaults HTML con `aprendermotores.com` y `Aprender Motores`.
+- `.env.example`: plantilla generica con `example.com`, `EXAMPLE_SITE` y listas example.
+- `vite.config.ts`: defaults HTML genericos con `example.com` y metadata placeholder.
 - `deploy.sh`: `DOMAIN="aprendermotores.com"` y cache path de LiteSpeed.
 - `docker-stack-boilerplate.yaml`: fallback `FUNNEL_DOMAIN:-aprendermotores.com`.
 - `README.md` y auditorias existentes: mencionan el estado actual del sitio/base.
@@ -72,7 +72,7 @@ Destino eventual recomendado:
 
 - `src/site/` o `src/sites/current/` para el DNA actual.
 - `src/sites/msm/` para MSM como primer hijo versionado, cuando ya exista la interfaz de site config.
-- Mantener `src/dna.config.ts` como facade temporal que reexporte `src/sites/current/dna.config` durante la migracion, para no cambiar imports de runtime de golpe.
+- Mantener `src/dna.config.ts` como facade temporal que reexporte `src/site/dna.config.ts` durante la migracion, para no romper compatibilidad con imports antiguos.
 
 ## Assets
 
@@ -134,16 +134,16 @@ Regla para el padre:
 
 Claramente site-specific:
 
-- `src/dna.config.ts` en su bloque de valores actuales.
+- `src/site/dna.config.ts` en su bloque de valores actuales.
 - `public/assets/msm/**`.
-- `.env` y `.env.example` cuando contienen valores MSM.
+- `.env` real del sitio cuando contiene valores MSM.
 - `public/capture.php` por sus webhooks FluentCRM actuales.
 - `deploy.sh` por dominio/cache/hosting.
 - `docker-stack-boilerplate.yaml` por fallback de dominio legacy.
 
 Parcialmente site-specific:
 
-- `vite.config.ts`: el plugin HTML es core, pero los defaults son MSM.
+- `vite.config.ts`: el plugin HTML es core y sus defaults ya son genericos del padre.
 - `README.md`, `ARCHITECTURE.md`, `CLONE_VALIDATION.md`, auditorias: documentacion base con referencias al sitio actual.
 - `src/pages/Success.tsx`: componente compartido con UX todavia orientada a WhatsApp.
 - `src/core/config/funnel.config.ts`: core adapter con lectura directa de env organico/WhatsApp y rutas fijas.
@@ -152,7 +152,7 @@ Parcialmente site-specific:
 
 Mover eventualmente:
 
-- Constantes site-specific de `src/dna.config.ts`: identidad, copy, offer, event, success, assets, prices, product IDs y defaults de rutas.
+- Constantes site-specific de `src/site/dna.config.ts`: identidad, copy, offer, event, success, assets, prices, product IDs y defaults de rutas.
 - Valores de canal: list slugs, confirmation paths, tracking enabled, success action por canal.
 - Defaults por entorno no secretos: site title, description, social image, landing slug, event starts at.
 - Mapas de assets del sitio actual.
@@ -173,9 +173,11 @@ src/
   pages/
   site/
     current.ts
+  site/
+    current.ts
+    dna.config.ts
   sites/
     msm/
-      dna.config.ts
       assets.md
       env.example
 ```
@@ -183,8 +185,8 @@ src/
 `src/dna.config.ts` puede quedar temporalmente como facade:
 
 ```ts
-export { DNA, dnaNumericPrices, resolveDnaDocumentTheme, resolveDnaFunnelTheme, resolveDnaThemeStyle } from './site/current';
-export type { DnaConfig, DnaTheme, DnaFunnelType, DnaSuccessActionType } from './site/current';
+export { DNA, dnaNumericPrices, resolveDnaDocumentTheme, resolveDnaFunnelTheme, resolveDnaThemeStyle } from './site/dna.config';
+export type { DnaConfig, DnaTheme, DnaFunnelType, DnaSuccessActionType } from './site/dna.config';
 ```
 
 ## Que NO mover todavia
@@ -204,15 +206,13 @@ Por seguridad del sitio MSM actual, no mover todavia:
 
 AprenderMotores/MSM:
 
-- `src/dna.config.ts`: producto, evento, copy, assets, product IDs, landing slug y copy de oferta.
-- `.env.example`: dominio, title, social image y listas MSM.
-- `vite.config.ts`: defaults HTML MSM.
+- `src/site/dna.config.ts`: producto, evento, copy, assets, product IDs, landing slug y copy de oferta.
 - `deploy.sh`: dominio y cache MSM.
 - `docker-stack-boilerplate.yaml`: fallback de dominio MSM.
 
 Assets:
 
-- `src/dna.config.ts` apunta a `/assets/msm/...`.
+- `src/site/dna.config.ts` apunta a `/assets/msm/...`.
 - `public/assets/msm/**` es contenido del hijo MSM.
 
 FluentCRM:
@@ -244,31 +244,32 @@ Meta/TikTok/CAPI:
 
 ### Fase 1 - Definir contrato de site config
 
-- Separar tipos/helpers agnosticos de `src/dna.config.ts`.
-- Crear una interfaz estable para `SiteConfig` o mantener `DnaConfig` como contrato.
-- Decidir si el padre exporta un `src/site/current.ts` apuntando a un sitio activo.
+- Mover la configuracion real de DNA a `src/site/dna.config.ts`.
+- Mantener `DnaConfig` y los helpers actuales como contrato sin cambiar nombres publicos.
+- Mantener `src/site/current.ts` apuntando al sitio activo.
 - Documentar que los clones editan solo site config, env y assets.
 
 ### Fase 1 implementada: src/site boundary
 
-Se creo `src/site/` como frontera documental inicial entre core engine y configuracion por sitio. Esta fase no mueve MSM ni cambia imports runtime.
+Se creo `src/site/` como frontera entre core engine y configuracion por sitio. Esta fase mueve MSM detras del boundary sin cambiar valores ni comportamiento runtime.
 
-- `src/site/README.md` documenta que los clones futuros deberan concentrar aqui la configuracion activa del sitio, junto con env y assets.
-- `src/site/current.ts` re-exporta `DNA` desde `../dna.config`, por lo que MSM sigue usando la configuracion actual sin cambios de comportamiento.
+- `src/site/README.md` documenta que los clones deberan concentrar aqui la configuracion activa del sitio, junto con env y assets.
+- `src/site/dna.config.ts` contiene los valores MSM actuales.
+- `src/site/current.ts` re-exporta `DNA` desde `./dna.config`, por lo que core/componentes leen desde el boundary.
+- `src/dna.config.ts` queda como facade temporal de compatibilidad hacia `./site/dna.config`.
 - No se modificaron componentes, core, rutas, tracking, diseno ni `public/capture.php`.
 
 ### Fase 2 - Extraer MSM sin cambiar imports publicos
 
-- Fase 2 implementada: core imports read from site boundary.
-- Crear `src/sites/msm/dna.config.ts` con los valores actuales.
-- Dejar `src/dna.config.ts` como facade que reexporta MSM/current.
+- Completar la extraccion del sitio MSM como hijo o fixture del padre cuando se defina la estructura final (`src/site/**` o `src/sites/msm/**`).
+- Mantener `src/dna.config.ts` como facade hasta que no queden consumidores externos.
 - Mantener las mismas rutas, valores, copy, colores, assets y tracking.
 - Correr validaciones y comparar build.
 
 ### Fase 3 - Neutralizar defaults del padre
 
-- Cambiar defaults de `vite.config.ts` y `.env.example` a valores example/placeholder en el padre.
-- Mover valores MSM reales a `src/sites/msm/` y/o documentacion del hijo.
+- Fase 2A implementada: `.env.example`, `CLONE_KIT/env.template`, `vite.config.ts` y `package.json` usan identidad generica del padre.
+- Mover valores MSM reales de `src/site/dna.config.ts` a `src/sites/msm/` y/o documentacion del hijo cuando se defina la estructura final.
 - Mantener `CLONE_KIT/env.template` como plantilla canonica.
 - Decidir si `public/assets/msm/**` sale del padre o queda temporalmente como fixture del primer hijo.
 
@@ -313,7 +314,7 @@ Se creo `src/site/` como frontera documental inicial entre core engine y configu
 - [ ] `npm run lint` pasa.
 - [ ] `npm run build` pasa.
 - [ ] `git status` solo muestra cambios documentales esperados.
-- [ ] `src/dna.config.ts` tiene destino decidido: facade o site config actual.
+- [x] `src/dna.config.ts` tiene destino decidido: facade temporal de compatibilidad.
 - [ ] Valores MSM estan inventariados: dominio, siteId, copy, oferta, assets, listas, WhatsApp, tracking y checkout.
 - [ ] `public/capture.php` queda congelado o tiene plan server-env antes de extraerse.
 - [ ] `.env.example` y `CLONE_KIT/env.template` no exponen secretos.
@@ -327,4 +328,4 @@ Se creo `src/site/` como frontera documental inicial entre core engine y configu
 
 ## Conclusion
 
-El repo puede convertirse en padre clonable con bajo riesgo si la primera extraccion es documental y de frontera, no de comportamiento. El siguiente paso seguro es crear una capa `src/site/current` o `src/sites/msm` manteniendo `src/dna.config.ts` como facade, y recien despues neutralizar defaults del padre. `capture.php`, deploy y assets MSM deben tratarse como piezas del hijo hasta que exista una configuracion server-side segura.
+El repo puede convertirse en padre clonable con bajo riesgo si la extraccion sigue siendo de frontera, no de comportamiento. La capa `src/site/current.ts` ya existe y MSM vive detras de ella; el siguiente paso seguro es neutralizar defaults del padre o separar MSM como hijo/fixture manteniendo `src/dna.config.ts` como facade hasta cerrar compatibilidad. `capture.php`, deploy y assets MSM deben tratarse como piezas del hijo hasta que exista una configuracion server-side segura.

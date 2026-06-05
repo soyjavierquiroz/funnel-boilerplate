@@ -1,5 +1,6 @@
 {
-  "name": "vite-react-typescript-starter",
+  "name": "funnel-boilerplate",
+  "description": "Clonable funnel boilerplate with a site configuration boundary.",
   "private": true,
   "version": "0.0.0",
   "type": "module",

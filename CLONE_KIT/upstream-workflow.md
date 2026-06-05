@@ -58,11 +58,13 @@ Usa un solo metodo por clon para evitar historial confuso.
 
 Los conflictos mas comunes ocurren en:
 
-- `src/dna.config.ts`
+- `src/site/**`
 - `.env.example`
 - `README.md`
 - `public/assets/...`
 - `src/components/...` si el clon rompio la regla y edito componentes.
+
+`src/dna.config.ts` existe como facade temporal de compatibilidad y normalmente no deberia recibir cambios especificos del clon.
 
 Regla practica:
 
@@ -75,6 +77,7 @@ Regla practica:
 - `src/components/**`
 - `src/core/**`
 - `src/pages/Success.tsx`
+- `src/dna.config.ts`
 - `public/capture.php`
 - `deploy.sh`
 - tooling base

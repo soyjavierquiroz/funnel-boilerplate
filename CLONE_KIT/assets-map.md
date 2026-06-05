@@ -18,7 +18,7 @@ public/assets/marca-demo/hero.webp
 public/assets/marca-demo/social.webp
 ```
 
-Luego referencia esas rutas desde `src/dna.config.ts`.
+Luego referencia esas rutas desde `src/site/**`, normalmente en `src/site/dna.config.ts`.
 
 ## Assets principales
 
@@ -38,11 +38,11 @@ Luego referencia esas rutas desde `src/dna.config.ts`.
 
 ## Assets existentes en el boilerplate
 
-Los assets actuales bajo `public/assets/msm/` son placeholders del sitio base. En un clon:
+Los assets actuales bajo `public/assets/msm/` son heredados del baseline historico Aprender Motores / Maneja Sin Miedo. En un clon:
 
 - Puedes dejarlos como referencia temporal.
 - No los uses como identidad final de otro sitio.
-- No cambies rutas en componentes; cambia rutas desde `src/dna.config.ts`.
+- No cambies rutas en componentes; cambia rutas desde `src/site/**`.
 
 ## Reglas de reemplazo
 

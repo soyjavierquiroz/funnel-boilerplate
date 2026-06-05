@@ -2,6 +2,8 @@
 
 Usa esta lista al crear un nuevo sitio desde el repo padre.
 
+El repo padre no es Aprender Motores / Maneja Sin Miedo. Ese sitio queda como baseline historico dentro del site config activo hasta completar la extraccion.
+
 ## 1. Crear repo clon
 
 - [ ] Crear nuevo repo desde el repo padre.
@@ -31,9 +33,9 @@ npm run build
 - [ ] Completar checkout principal y checkout de oferta.
 - [ ] Completar video principal y video de oferta.
 
-## 3. Configurar DNA
+## 3. Configurar Site Config
 
-Editar `src/dna.config.ts`:
+Editar `src/site/dna.config.ts` o los archivos bajo `src/site/**` exportados por `src/site/current.ts`:
 
 - [ ] `productName`.
 - [ ] `domain`.
@@ -49,6 +51,8 @@ Editar `src/dna.config.ts`:
 - [ ] `copy`.
 - [ ] `offer`.
 
+Nota: `src/dna.config.ts` queda solo como facade temporal de compatibilidad. No lo uses como contrato del clon.
+
 ## 4. Cambiar marca, copy y assets
 
 - [ ] Reemplazar assets en `public/assets/<site-slug>/`.
@@ -57,6 +61,7 @@ Editar `src/dna.config.ts`:
 - [ ] Actualizar copy de oferta `/oferta` y `/a/oferta`.
 - [ ] Actualizar FAQ, garantia, bonos, value stack y proof.
 - [ ] Revisar que no quede copy del sitio base salvo placeholders aceptados.
+- [ ] Confirmar que no se usen assets heredados `public/assets/msm/` como identidad final del clon.
 
 ## 5. Configurar CRM y WhatsApp
 

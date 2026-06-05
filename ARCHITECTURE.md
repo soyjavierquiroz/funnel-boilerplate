@@ -11,9 +11,12 @@
 
 ## Configuration layers
 
-- `src/dna.config.ts` is the clone DNA and owns product identity, domain, checkout, video, pricing, copy, tracking, assets, theme family, funnel variant and theme tokens.
+- `src/site/**` owns the editable site configuration: product identity, domain, checkout, video, pricing, copy, tracking, assets, theme family, funnel variant and theme tokens.
+- `src/site/current.ts` is the official boundary between the Core Engine and the active Site Config.
+- `src/dna.config.ts` is a temporary compatibility facade that reexports from `src/site/dna.config.ts`; new runtime imports should not depend on it.
 - `src/core/config/funnel.config.ts` adapts DNA into runtime structures for video, forms, pricing, integrations and variant-specific content.
 - `.env` is for runtime/build values that differ by deployment, such as public metadata, checkout URL, video ID and tracking IDs.
+- `.env.example` and `CLONE_KIT/env.template` are generic parent templates. They intentionally do not use Aprender Motores/MSM values.
 - `src/index.css` defines CSS variables and global player styling.
 - `tailwind.config.js` exposes semantic classes such as `brand-primary`, `cta`, `surface-muted`, `text-main`, `success`, `warning`, `error` and event-specific aliases under `event.*`.
 
@@ -33,6 +36,10 @@ This keeps the path open for combinations such as `expert/tripwire`, `panda/even
 ## Clone boundaries
 
 Components should consume `DNA` or `funnelConfig`; they should not contain product names, checkout URLs, dates, CTA copy, tracking IDs, testimonials, guarantee text or brand colors.
+
+Runtime, core, page and component modules should import site values through `src/site/current.ts`. Clones normally edit `.env`, `src/site/**` and `public/assets/**`; they should not edit `src/components/**`, `src/core/**` or `src/pages/**` unless the change belongs in the parent repo.
+
+Aprender Motores / Maneja Sin Miedo is the historical baseline currently represented by the active site config, not the parent repo identity or the recommended default for clones.
 
 Allowed component classes are structural utilities such as layout, spacing, borders, shadows, responsive sizing and typography scale. Brand and state colors should use semantic tokens.
 

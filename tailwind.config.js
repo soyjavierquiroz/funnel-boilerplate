@@ -1,4 +1,4 @@
-import { DNA } from './src/dna.config.ts';
+import { DNA } from './src/site/current.ts';
 
 /** @type {import('tailwindcss').Config} */
 export default {

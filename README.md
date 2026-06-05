@@ -1,23 +1,21 @@
 # Funnel Boilerplate
 
-Boilerplate limpio para clonar funnels sin arrastrar identidad, checkout, tracking, copy o estilos del proyecto anterior.
+Boilerplate padre para clonar funnels sin arrastrar identidad, checkout, tracking, copy o estilos de un sitio hijo. Este repo no es Aprender Motores: Aprender Motores / Maneja Sin Miedo queda solo como baseline historico y site config activo de ejemplo mientras termina la extraccion.
 
 ## Configuracion principal
 
-- `src/dna.config.ts`: identidad, dominio, producto, checkout, video, pricing, copy, tracking, assets, theme family y funnel variant.
+- `src/site/**`: configuracion editable por sitio: identidad, dominio, producto, checkout, video, pricing, copy, tracking, assets, theme family y funnel variant.
+- `src/site/current.ts`: boundary oficial entre Core Engine y Site Config. Runtime/core/componentes deben consumir el site activo desde aqui.
+- `src/dna.config.ts`: facade temporal de compatibilidad que reexporta desde `src/site/dna.config.ts`; no es el contrato recomendado para clones.
 - `.env.example`: variables necesarias para build/runtime. Copialas a `.env` en cada clon.
 - `src/index.css`: tokens CSS base y ajustes globales.
 - `tailwind.config.js`: tokens semanticos consumidos por componentes.
 
-Valores seguros actuales:
+Defaults genericos del padre:
 
-- `productName`: `Aprender Motores`
-- `domain`: `aprendermotores.com`
-- `siteId`: `APRENDER_MOTORES`
-- `checkoutUrl`: placeholder editable
-- `vslVideoId`: placeholder editable
-- `theme`: `expert`
-- `funnelType`: `event`
+- `.env.example` y `CLONE_KIT/env.template` usan `example.com`, `EXAMPLE_SITE` y placeholders sin secretos.
+- `vite.config.ts` usa metadata generica solo como fallback cuando no existen variables `VITE_*`.
+- El site config activo todavia conserva MSM como baseline historico, pero no es el default recomendado para clones.
 
 ## Theme family + funnel variant
 
@@ -30,7 +28,7 @@ funnelType: 'event',
 
 La landing de evento vive en `src/components/themes/expert/event/` y mantiene el lenguaje visual de `ExpertTheme` sin modificar el VSL actual. Esta ruta deja espacio para variantes futuras como `theme: 'expert', funnelType: 'tripwire'`, `theme: 'panda', funnelType: 'event'` o `theme: 'panda', funnelType: 'tripwire'`.
 
-El contenido editable del evento, countdown, CTAs, campos de captura y assets temporales se configura desde `src/dna.config.ts` y se adapta en `src/core/config/funnel.config.ts`.
+El contenido editable del evento, countdown, CTAs, campos de captura y assets temporales se configura desde `src/site/**` y se adapta en `src/core/config/funnel.config.ts` a traves de `src/site/current.ts`.
 
 ## Scripts
 
@@ -44,8 +42,8 @@ No ejecutes `npm audit fix` como parte de la clonacion.
 
 ## Clonar un nuevo funnel
 
-1. Actualiza `src/dna.config.ts` con producto, copy, precios, assets, checkout, video, theme y funnelType.
-2. Copia `.env.example` a `.env` y completa dominio, metadata, tracking y URLs runtime.
+1. Actualiza `src/site/**` con producto, copy, precios, assets, checkout, video, theme y funnelType.
+2. Copia `.env.example` o `CLONE_KIT/env.template` a `.env` y completa dominio, metadata, tracking y URLs runtime.
 3. Reemplaza `public/assets/funnel-placeholder.svg` por los assets reales o agrega nuevas rutas en `DNA.assets`, incluyendo `DNA.assets.event` para variantes de evento.
 4. Ajusta colores en `DNA.colors`, `DNA.surface`, `DNA.text` y `DNA.cta`.
 5. Valida con `npm run typecheck`, `npm run build` y `npm run lint`.
@@ -61,7 +59,7 @@ No ejecutes `npm audit fix` como parte de la clonacion.
 - `CLONE_KIT/launch-checklist.md`: validacion antes de publicar.
 - `CLONE_KIT/upstream-workflow.md`: flujo para traer cambios del repo padre a clones.
 
-La regla base: en clones se edita `.env`, `src/dna.config.ts` y `public/assets/...`; componentes, tracking core, `capture.php`, `Success.tsx` y `deploy.sh` se mantienen como base compartida salvo cambios agnosticos que deban subir al repo padre.
+La regla base: en clones se edita `.env`, `src/site/**` y `public/assets/...`; componentes, tracking core, `capture.php`, `Success.tsx` y `deploy.sh` se mantienen como base compartida salvo cambios agnosticos que deban subir al repo padre. MSM sigue siendo el site config actual de ejemplo/baseline, vive detras del boundary `src/site/current.ts` y no debe copiarse como identidad final de otro clon.
 
 ## Deploy
 

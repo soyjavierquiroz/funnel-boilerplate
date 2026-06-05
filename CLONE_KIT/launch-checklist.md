@@ -11,7 +11,9 @@ Checklist previo a publicar un clon.
 
 ## Contenido
 
+- [ ] La configuracion editable del sitio esta concentrada en `.env`, `src/site/**` y `public/assets/**`.
 - [ ] No queda copy accidental del sitio base.
+- [ ] No se usan assets heredados `public/assets/msm/` como identidad final del clon.
 - [ ] Marca, producto y dominio son correctos.
 - [ ] Titulos SEO y description son correctos.
 - [ ] Social image carga en URL publica.
@@ -23,7 +25,7 @@ Checklist previo a publicar un clon.
 
 - [ ] Formulario ads captura al webhook/lista correcta.
 - [ ] Formulario organico captura al webhook/lista correcta si aplica.
-- [ ] Campos requeridos coinciden con `DNA.forms.captureFields`.
+- [ ] Campos requeridos coinciden con `DNA.forms.captureFields` desde el site config activo.
 - [ ] Confirmacion redirige al destino correcto.
 - [ ] WhatsApp ads y organico apuntan al grupo correcto si aplica.
 
