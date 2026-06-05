@@ -8,6 +8,12 @@ interface ExpertCtaButtonProps extends ComponentPropsWithoutRef<'a'> {
   fullWidth?: boolean;
 }
 
+/**
+ * Legacy VSL CTA.
+ *
+ * New event/offer CTAs should pass `ResolvedAttribution` into analytics like
+ * `ExpertOfferCta` does. This component relies on analytics fallback behavior.
+ */
 export function ExpertCtaButton({
   label,
   subLabel,

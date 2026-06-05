@@ -45,6 +45,12 @@ function resolveSuccessRedirectUrl() {
   return successRedirectUrl;
 }
 
+/**
+ * Legacy VSL capture form.
+ *
+ * Do not use this as a clone-safe capture form without adapting it to
+ * `ResolvedAttribution` and `buildAttributionEventFields`.
+ */
 export function AdvancedCaptureForm() {
   const { visitorData, isLoading } = useVisitor();
 

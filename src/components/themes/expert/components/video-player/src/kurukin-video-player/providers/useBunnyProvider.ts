@@ -21,6 +21,7 @@ export function useBunnyProvider({
 }: ProviderHookOptions): ProviderBinding<HTMLVideoElement> {
   const mountRef = useRef<HTMLVideoElement | null>(null);
   const providerRef = useRef<ReturnType<typeof createNativeVideoProvider> | null>(null);
+  const playbackOptionsRef = useRef({ muted, autoPlay, loop });
   const callbacksRef = useRef({
     onReady,
     onPlay,
@@ -30,6 +31,8 @@ export function useBunnyProvider({
     onMuteChange,
     onAutoplayBlocked,
   });
+
+  playbackOptionsRef.current = { muted, autoPlay, loop };
 
   useEffect(() => {
     callbacksRef.current = {
@@ -76,9 +79,10 @@ export function useBunnyProvider({
     providerRef.current = provider;
     videoElement.playsInline = true;
     videoElement.preload = 'metadata';
-    videoElement.muted = muted;
-    videoElement.autoplay = autoPlay;
-    videoElement.loop = loop;
+    const initialPlaybackOptions = playbackOptionsRef.current;
+    videoElement.muted = initialPlaybackOptions.muted;
+    videoElement.autoplay = initialPlaybackOptions.autoPlay;
+    videoElement.loop = initialPlaybackOptions.loop;
 
     const cleanupEvents = bindNativeVideoEvents(videoElement, eventHub, notifyReady);
 

@@ -14,6 +14,8 @@ The default ads route prefix is `VITE_ADS_ROUTE_PREFIX=/x9m`. It is public, not 
 
 Traffic attribution uses this priority: ads route prefix, `fbclid`, `ttclid`, `gclid`, `utm_medium=paid`, stored attribution, then organic/default. The prefix is still a strong ads signal, but click IDs can mark ads without the prefix. Paid attribution is stored in `localStorage` as `funnel_attribution` for 30 days to keep the paid channel through later navigation. This is not multi-touch attribution.
 
+For new capture forms and checkout CTAs, use `resolveCurrentAttribution` and pass `ResolvedAttribution` through analytics/capture. Capture payloads should include `buildAttributionEventFields(attribution)`. Do not reuse legacy VSL capture or pricing helpers as clone-safe templates until they are adapted to this contract.
+
 ## What Not To Assume
 
 - No deploy script is included as the recommended flow.

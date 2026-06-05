@@ -11,6 +11,12 @@ export interface PricingCardProps {
   productName?: string;
 }
 
+/**
+ * Legacy pricing card for the VSL flow.
+ *
+ * New checkout tracking should pass `ResolvedAttribution` explicitly, instead
+ * of relying on analytics fallback attribution.
+ */
 export function PricingCard({ productId, productName }: PricingCardProps) {
   const { visitorData } = useVisitor();
   const { product, resolvedProductKey, scrapedData, status, hasRequestedProduct } = useCheckoutPrices(productId);

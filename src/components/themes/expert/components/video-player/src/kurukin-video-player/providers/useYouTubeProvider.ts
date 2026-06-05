@@ -22,6 +22,7 @@ export function useYouTubeProvider({
 }: ProviderHookOptions): ProviderBinding<HTMLDivElement> {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const providerRef = useRef<IVideoProvider | null>(null);
+  const playbackOptionsRef = useRef({ muted, autoPlay, loop });
   const callbacksRef = useRef({
     onReady,
     onPlay,
@@ -31,6 +32,8 @@ export function useYouTubeProvider({
     onMuteChange,
     onAutoplayBlocked,
   });
+
+  playbackOptionsRef.current = { muted, autoPlay, loop };
 
   useEffect(() => {
     callbacksRef.current = {
@@ -59,9 +62,10 @@ export function useYouTubeProvider({
     container.dataset.plyrProvider = 'youtube';
     container.dataset.plyrEmbedId = videoId;
 
+    const initialPlaybackOptions = playbackOptionsRef.current;
     const player = new Plyr(container, {
-      autoplay: autoPlay,
-      muted,
+      autoplay: initialPlaybackOptions.autoPlay,
+      muted: initialPlaybackOptions.muted,
       clickToPlay: false,
       controls,
       youtube: {
@@ -76,7 +80,7 @@ export function useYouTubeProvider({
       },
     });
 
-    let loopEnabled = loop;
+    let loopEnabled = initialPlaybackOptions.loop;
 
     const provider: IVideoProvider = {
       async play() {

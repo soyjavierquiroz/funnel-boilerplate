@@ -38,6 +38,8 @@ Traffic attribution is resolved by `src/core/attribution`. The canonical priorit
 
 Analytics, browser pixels, CAPI relay payloads, and the event capture payload should consume this resolver as the canonical attribution source. `src/core/services/analytics.ts` must not parse click IDs or UTMs independently. If an event passes `trackingEnabled` explicitly, that value takes priority; otherwise ads tracking follows `ResolvedAttribution.shouldTrackAds`. Organic/default events do not fire Meta, TikTok, or CAPI ads tracking by default. Paid attribution may come from the ads route, a click ID, a paid-like UTM, or fresh stored attribution.
 
+For new forms and checkout CTAs, resolve attribution once in the route/component and pass the `ResolvedAttribution` object into analytics. Capture payloads should include the shared `buildAttributionEventFields(attribution)` output. Legacy VSL helpers such as `AdvancedCaptureForm`, `PricingCard`, and `ExpertCtaButton` are not clone-safe capture/tracking templates until they are adapted to that contract.
+
 Keep shared components, analytics helpers, routing, and capture relay generic unless the change should flow back to every clone.
 
 ## Validation

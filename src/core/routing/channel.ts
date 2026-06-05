@@ -12,6 +12,13 @@ function includesAttributionSignals(value: string): boolean {
   return value.includes('?') || value.startsWith('http://') || value.startsWith('https://');
 }
 
+/**
+ * Compatibility helper for older route-only callers.
+ *
+ * New tracking and capture decisions should use `resolveCurrentAttribution`
+ * or `resolveAttribution` so click IDs, UTMs, and stored attribution are
+ * included. Plain pathname strings here fall back to ads-route matching only.
+ */
 export function getTrafficChannel(pathnameOrUrl: string | URL): TrafficChannel {
   if (pathnameOrUrl instanceof URL) {
     return resolveAttribution({ url: pathnameOrUrl }).channel;

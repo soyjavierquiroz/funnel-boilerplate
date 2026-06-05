@@ -13,6 +13,7 @@ Status: neutral parent baseline.
 - `src/core/services/analytics.ts` enriches browser pixel and CAPI event data from `ResolvedAttribution`; it should not parse click IDs or UTMs directly.
 - An explicit analytics `trackingEnabled` value wins over `ResolvedAttribution.shouldTrackAds`. Without that explicit flag, organic/default attribution does not fire Meta, TikTok, or CAPI ads tracking.
 - Paid attribution can come from an ads route, `fbclid`, `ttclid`, `gclid`, paid-like `utm_medium`, or fresh stored attribution.
+- New forms should use `resolveCurrentAttribution` and include `buildAttributionEventFields(attribution)` in capture payloads. Legacy VSL capture/checkout helpers are documentation-only starting points until adapted to the resolver contract.
 
 ## Clone Requirements
 
