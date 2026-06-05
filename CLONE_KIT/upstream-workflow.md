@@ -83,7 +83,7 @@ Regla practica:
 - `docker-stack-boilerplate.yaml`
 - tooling base
 
-`public/capture.php` sigue siendo legacy/shared y sera tratado en Fase 3. `deploy.sh` y `docker-stack-boilerplate.yaml` son site-specific/legacy; los clones no deben asumir que esos archivos apuntan a su destino correcto despues de un sync desde upstream.
+`public/capture.php` debe mantenerse agnostico y configurado solo por server env `CAPTURE_*`. `deploy.sh` y `docker-stack-boilerplate.yaml` son site-specific/legacy; los clones no deben asumir que esos archivos apuntan a su destino correcto despues de un sync desde upstream.
 
 ## Flujo para cambios compartidos
 

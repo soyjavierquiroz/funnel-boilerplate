@@ -71,9 +71,11 @@ Nota: `src/dna.config.ts` queda solo como facade temporal de compatibilidad. No 
 - [ ] Definir `VITE_CAPTURE_WEBHOOK_URL`.
 - [ ] Definir `VITE_CAPTURE_LIST_SLUG` para ads.
 - [ ] Definir `VITE_ORGANIC_CAPTURE_LIST_SLUG` para organico.
+- [ ] Configurar server env `CAPTURE_ALLOWED_ORIGINS`.
+- [ ] Configurar server env `CAPTURE_ADS_WEBHOOK_URL` y `CAPTURE_ORGANIC_WEBHOOK_URL`, o `CAPTURE_WEBHOOK_URL` como fallback.
+- [ ] Probar `public/capture.php` con `CAPTURE_DRY_RUN=true`.
 - [ ] Definir `VITE_WHATSAPP_GROUP_URL` si la confirmacion ads usa WhatsApp.
 - [ ] Definir `VITE_ORGANIC_WHATSAPP_GROUP_URL` si organico usa otro grupo.
-- [ ] Revisar `public/capture.php`; sigue siendo legacy/shared y sera tratado en Fase 3.
 - [ ] Probar captura con datos de prueba.
 - [ ] Confirmar que el CRM recibe canal/lista esperada.
 - [ ] Confirmar que ningun lead de prueba llega a Aprender Motores/MSM.

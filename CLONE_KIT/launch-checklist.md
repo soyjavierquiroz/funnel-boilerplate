@@ -26,7 +26,10 @@ Checklist previo a publicar un clon.
 
 - [ ] Formulario ads captura al webhook/lista correcta.
 - [ ] Formulario organico captura al webhook/lista correcta si aplica.
-- [ ] `public/capture.php` fue revisado como endpoint legacy/shared, no asumido como seguro por sitio.
+- [ ] `public/capture.php` usa variables server-side `CAPTURE_*`, no webhooks en codigo ni variables `VITE_*` con secretos.
+- [ ] `CAPTURE_ALLOWED_ORIGINS` contiene solo dominios del clon.
+- [ ] `CAPTURE_DRY_RUN=true` fue probado con origen permitido y origen bloqueado.
+- [ ] `CAPTURE_DRY_RUN=false` solo se activa despues de validar el webhook/lista del clon.
 - [ ] Campos requeridos coinciden con `DNA.forms.captureFields` desde el site config activo.
 - [ ] Confirmacion redirige al destino correcto.
 - [ ] WhatsApp ads y organico apuntan al grupo correcto si aplica.

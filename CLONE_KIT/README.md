@@ -8,7 +8,8 @@ El repo padre no es Aprender Motores. Aprender Motores / Maneja Sin Miedo queda 
 
 ## Archivos del kit
 
-- `env.template`: variables de entorno recomendadas para un clon nuevo.
+- `env.template`: variables frontend recomendadas para un clon nuevo.
+- `server-env.template`: variables server-side privadas para `public/capture.php`.
 - `assets-map.md`: inventario de assets que se reemplazan por sitio.
 - `clone-checklist.md`: pasos para crear un clon desde el repo padre.
 - `launch-checklist.md`: validaciones antes de publicar.
@@ -17,7 +18,8 @@ El repo padre no es Aprender Motores. Aprender Motores / Maneja Sin Miedo queda 
 
 ## Archivos que se editan por sitio
 
-- `.env`: dominio, metadata, checkout, video, CRM, WhatsApp y tracking.
+- `.env`: dominio, metadata, checkout, video, endpoint publico de captura, WhatsApp y tracking.
+- Server env `CAPTURE_*`: webhooks privados de CRM, origins permitidos, listas server-side, dry-run y logging.
 - `src/site/**`: marca, producto, copy, precios, colores, assets, oferta, evento, exito y fallbacks.
 - `public/assets/...`: imagenes, logos, posters y recursos visuales del sitio.
 - `README.md`: notas especificas del clon, si aplica.
@@ -30,7 +32,7 @@ El repo padre no es Aprender Motores. Aprender Motores / Maneja Sin Miedo queda 
 - `src/core/**`: routing, tracking core, visitor context, analytics y configuracion derivada.
 - `src/pages/Success.tsx`: flujo de confirmacion/exito compartido.
 - `src/dna.config.ts`: facade temporal de compatibilidad; no es el contrato recomendado del clon.
-- `public/capture.php`: endpoint de captura legacy/shared. Revisar antes de launch; sera tratado en Fase 3.
+- `public/capture.php`: relay de captura compartido; en clones se configura con server env `CAPTURE_*`, no editando el archivo.
 - `deploy.sh`: script de despliegue site-specific/legacy con guard contra ejecucion accidental.
 - `package.json`, `vite.config.ts`, `tailwind.config.js`, `eslint.config.js`: tooling base.
 - `dist/`: artefacto generado; nunca se edita a mano.
@@ -40,18 +42,19 @@ Si un clon necesita tocar estos archivos, primero evalua si el cambio debe subir
 ## Flujo recomendado
 
 1. Crear repo clon desde el repo padre.
-2. Copiar `CLONE_KIT/env.template` a `.env` y completar valores reales.
-3. Editar `src/site/**` con marca, copy, assets, colores, precios, oferta, evento y exito.
-4. Reemplazar o agregar assets en `public/assets/<site>/`.
-5. Revisar `CLONE_KIT/operational-safety.md` antes de configurar captura, tracking o deploy.
-6. Validar rutas organicas y ads:
+2. Copiar `CLONE_KIT/env.template` a `.env` y completar valores frontend reales.
+3. Configurar en el servidor las variables privadas de `CLONE_KIT/server-env.template`.
+4. Editar `src/site/**` con marca, copy, assets, colores, precios, oferta, evento y exito.
+5. Reemplazar o agregar assets en `public/assets/<site>/`.
+6. Revisar `CLONE_KIT/operational-safety.md` antes de configurar captura, tracking o deploy.
+7. Validar rutas organicas y ads:
    - `/`
    - `/a`
    - `/oferta`
    - `/a/oferta`
    - `/confirmacion`
    - `/a/confirmacion`
-6. Ejecutar validaciones:
+8. Ejecutar validaciones:
 
 ```bash
 npm run typecheck
@@ -77,15 +80,25 @@ Los assets heredados bajo `public/assets/msm/` pertenecen al baseline historico.
 
 ## Como cambiar CRM, WhatsApp y tracking
 
-Configura `.env`:
+Configura `.env` para valores visibles por el navegador:
 
-- CRM/captura: `VITE_CAPTURE_WEBHOOK_URL`, `VITE_CAPTURE_LIST_SLUG`, `VITE_ORGANIC_CAPTURE_LIST_SLUG`.
+- Captura frontend: `VITE_CAPTURE_WEBHOOK_URL`, `VITE_CAPTURE_LIST_SLUG`, `VITE_ORGANIC_CAPTURE_LIST_SLUG`.
 - WhatsApp: `VITE_WHATSAPP_GROUP_URL`, `VITE_ORGANIC_WHATSAPP_GROUP_URL`, `VITE_WHATSAPP_REDIRECT_BASE_URL`.
 - Tracking: `VITE_META_PIXEL_ID`, `VITE_TIKTOK_PIXEL_ID`, `VITE_CAPI_RELAY_URL`.
 
+Configura server env para secretos de CRM:
+
+- `CAPTURE_ALLOWED_ORIGINS`
+- `CAPTURE_ADS_WEBHOOK_URL`
+- `CAPTURE_ORGANIC_WEBHOOK_URL`
+- `CAPTURE_WEBHOOK_URL` como fallback si aplica
+- `CAPTURE_DEFAULT_LIST_SLUG`
+- `CAPTURE_ORGANIC_LIST_SLUG`
+- `CAPTURE_DRY_RUN`
+
 Configura `src/site/**` solo si necesitas cambiar defaults o comportamiento por sitio. No edites analytics core en clones.
 
-`public/capture.php` sigue siendo legacy/shared. No asumas que apunta al CRM correcto: antes de publicar, envia un lead de prueba y confirma que no llega a Aprender Motores/MSM por accidente.
+`public/capture.php` no contiene webhooks reales. Prueba primero con `CAPTURE_DRY_RUN=true`, luego apaga dry-run y envia un lead de prueba para confirmar que llega al CRM correcto del clon. Si existieron hashes/webhooks reales en historial Git o deployments previos, rotalos.
 
 ## Como clonar a otro dominio
 
