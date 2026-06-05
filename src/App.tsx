@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { DNA, resolveDnaDocumentTheme } from './site/current';
 import analytics from './core/services/analytics';
@@ -23,7 +23,7 @@ function resolveHomeTheme() {
 
 function RoutedApp() {
   const location = useLocation();
-  const attribution = resolveCurrentAttribution(location);
+  const attribution = useMemo(() => resolveCurrentAttribution(location), [location]);
   const trafficChannel = attribution.channel;
   const isSuccessRoute =
     location.pathname === '/confirmacion' || location.pathname === adsConfirmationPath;
@@ -43,9 +43,10 @@ function RoutedApp() {
         theme: DNA.theme,
         funnel_type: DNA.funnelType,
         traffic_channel: trafficChannel,
+        attribution,
       });
     }
-  }, [attribution.shouldTrackAds, isSuccessRoute, location.pathname, location.search, trafficChannel]);
+  }, [attribution, attribution.shouldTrackAds, isSuccessRoute, location.pathname, location.search, trafficChannel]);
 
   return (
     <Routes>

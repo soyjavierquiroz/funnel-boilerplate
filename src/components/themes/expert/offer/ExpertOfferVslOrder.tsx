@@ -1,5 +1,6 @@
 import { Volume2 } from 'lucide-react';
 import type { FunnelOfferConfig } from '../../../../core/config/funnel.config';
+import type { ResolvedAttribution } from '../../../../core/attribution';
 import type { TrafficChannel } from '../../../../core/routing/channel';
 import { KurukinPlayer } from '../components/video-player/src/kurukin-video-player';
 import { ExpertOfferOrderCard } from './ExpertOfferOrderCard';
@@ -8,9 +9,15 @@ interface ExpertOfferVslOrderProps {
   offer: FunnelOfferConfig;
   trackingEnabled: boolean;
   trafficChannel: TrafficChannel;
+  attribution: ResolvedAttribution;
 }
 
-export function ExpertOfferVslOrder({ offer, trackingEnabled, trafficChannel }: ExpertOfferVslOrderProps) {
+export function ExpertOfferVslOrder({
+  offer,
+  trackingEnabled,
+  trafficChannel,
+  attribution,
+}: ExpertOfferVslOrderProps) {
   const video = offer.video;
   const videoSource = video.url || video.videoId;
   const hasVideo = videoSource.trim().length > 0 && videoSource !== 'REPLACE_WITH_VSL_VIDEO_ID';
@@ -76,6 +83,7 @@ export function ExpertOfferVslOrder({ offer, trackingEnabled, trafficChannel }: 
           offer={offer}
           trackingEnabled={trackingEnabled}
           trafficChannel={trafficChannel}
+          attribution={attribution}
           className="lg:sticky lg:top-6"
         />
       </div>

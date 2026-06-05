@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import analytics from '../core/services/analytics';
 import funnelConfig from '../core/config/funnel.config';
-import { resolveCurrentAttribution, type TrafficChannel } from '../core/attribution';
+import { resolveCurrentAttribution, type ResolvedAttribution, type TrafficChannel } from '../core/attribution';
 import { DNA } from '../site/current';
 
-function trackCompleteRegistrationOnce(channel: TrafficChannel) {
+function trackCompleteRegistrationOnce(channel: TrafficChannel, attribution: ResolvedAttribution) {
   const trackingKey = `${DNA.siteId}.${channel}.success.complete-registration`;
 
   try {
@@ -23,12 +23,13 @@ function trackCompleteRegistrationOnce(channel: TrafficChannel) {
     funnel_type: DNA.funnelType,
     site_id: DNA.siteId,
     traffic_channel: channel,
+    attribution,
   });
 }
 
 export function Success() {
   const location = useLocation();
-  const attribution = resolveCurrentAttribution(location);
+  const attribution = useMemo(() => resolveCurrentAttribution(location), [location]);
   const trafficChannel = attribution.channel;
   const channelConfig = funnelConfig.trafficChannels[trafficChannel];
   const successConfig = channelConfig.success;
@@ -41,9 +42,9 @@ export function Success() {
 
   useEffect(() => {
     if (attribution.shouldTrackAds) {
-      trackCompleteRegistrationOnce(trafficChannel);
+      trackCompleteRegistrationOnce(trafficChannel, attribution);
     }
-  }, [attribution.shouldTrackAds, trafficChannel]);
+  }, [attribution, attribution.shouldTrackAds, trafficChannel]);
 
   useEffect(() => {
     setSecondsRemaining(redirectSeconds);

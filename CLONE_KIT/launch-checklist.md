@@ -18,6 +18,8 @@
 - [ ] Pixel and relay env values belong to the clone.
 - [ ] Attribution behavior is verified: prefix routes, click IDs, `utm_medium=paid`, stored attribution, and organic/default fallback.
 - [ ] `localStorage.funnel_attribution` uses the expected 30 day TTL and is understood as single-touch attribution.
+- [ ] Capture, browser pixel, and CAPI payloads use the resolver fields consistently; analytics does not parse click IDs or UTMs on its own.
+- [ ] Organic/default events do not fire ads tracking unless `trackingEnabled` is passed explicitly.
 - [ ] Deploy process is documented in the clone, not assumed from the parent.
 
 ## Final Checks

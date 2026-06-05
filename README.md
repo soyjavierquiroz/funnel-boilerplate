@@ -36,6 +36,8 @@ Traffic attribution is resolved by `src/core/attribution`. The canonical priorit
 
 `VITE_ADS_ROUTE_PREFIX` remains a strong ads signal, but click IDs can also mark traffic as ads on organic-looking routes such as `/oferta?fbclid=abc`. Paid attribution is stored in `localStorage` under `funnel_attribution` for 30 days so later navigation does not lose the paid channel. This is a single-touch resolver, not a multi-touch attribution system.
 
+Analytics, browser pixels, CAPI relay payloads, and the event capture payload should consume this resolver as the canonical attribution source. `src/core/services/analytics.ts` must not parse click IDs or UTMs independently. If an event passes `trackingEnabled` explicitly, that value takes priority; otherwise ads tracking follows `ResolvedAttribution.shouldTrackAds`. Organic/default events do not fire Meta, TikTok, or CAPI ads tracking by default. Paid attribution may come from the ads route, a click ID, a paid-like UTM, or fresh stored attribution.
+
 Keep shared components, analytics helpers, routing, and capture relay generic unless the change should flow back to every clone.
 
 ## Validation

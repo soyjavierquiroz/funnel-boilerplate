@@ -1,5 +1,6 @@
 import { CheckCircle2 } from 'lucide-react';
 import type { FunnelOfferConfig } from '../../../../core/config/funnel.config';
+import type { ResolvedAttribution } from '../../../../core/attribution';
 import type { TrafficChannel } from '../../../../core/routing/channel';
 import { ExpertOfferCta } from './ExpertOfferCta';
 import { isOfferCheckoutConfigured } from './offerUtils';
@@ -8,9 +9,15 @@ interface ExpertOfferHeroProps {
   offer: FunnelOfferConfig;
   trackingEnabled: boolean;
   trafficChannel: TrafficChannel;
+  attribution: ResolvedAttribution;
 }
 
-export function ExpertOfferHero({ offer, trackingEnabled, trafficChannel }: ExpertOfferHeroProps) {
+export function ExpertOfferHero({
+  offer,
+  trackingEnabled,
+  trafficChannel,
+  attribution,
+}: ExpertOfferHeroProps) {
   const isCheckoutConfigured = isOfferCheckoutConfigured(offer.checkoutUrl);
 
   return (
@@ -76,7 +83,12 @@ export function ExpertOfferHero({ offer, trackingEnabled, trafficChannel }: Expe
           </div>
 
           <div className="mt-5">
-            <ExpertOfferCta offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} />
+            <ExpertOfferCta
+              offer={offer}
+              trackingEnabled={trackingEnabled}
+              trafficChannel={trafficChannel}
+              attribution={attribution}
+            />
           </div>
 
           <p className="expert-body mt-3 text-sm font-semibold leading-6 text-event-muted">

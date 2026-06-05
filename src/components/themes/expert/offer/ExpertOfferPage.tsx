@@ -1,9 +1,9 @@
-import type { CSSProperties, ReactElement } from 'react';
+import { useMemo, type CSSProperties, type ReactElement } from 'react';
 import { useLocation } from 'react-router-dom';
 import { resolveDnaThemeStyle } from '../../../../site/current';
 import type { FunnelOfferConfig } from '../../../../core/config/funnel.config';
 import funnelConfig from '../../../../core/config/funnel.config';
-import { resolveCurrentAttribution, type TrafficChannel } from '../../../../core/attribution';
+import { resolveCurrentAttribution, type ResolvedAttribution, type TrafficChannel } from '../../../../core/attribution';
 import { ExpertOfferAnnouncementBar } from './ExpertOfferAnnouncementBar';
 import { ExpertOfferBonuses } from './ExpertOfferBonuses';
 import { ExpertOfferCredibilityStrip } from './ExpertOfferCredibilityStrip';
@@ -25,6 +25,7 @@ interface ExpertOfferBlockContext {
   offer: FunnelOfferConfig;
   trackingEnabled: boolean;
   trafficChannel: TrafficChannel;
+  attribution: ResolvedAttribution;
 }
 
 interface ExpertOfferBlock {
@@ -43,8 +44,13 @@ const expertOfferBlocks: ExpertOfferBlock[] = [
   },
   {
     id: 'vsl-order-card',
-    render: ({ offer, trackingEnabled, trafficChannel }) => (
-      <ExpertOfferVslOrder offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} />
+    render: ({ offer, trackingEnabled, trafficChannel, attribution }) => (
+      <ExpertOfferVslOrder
+        offer={offer}
+        trackingEnabled={trackingEnabled}
+        trafficChannel={trafficChannel}
+        attribution={attribution}
+      />
     ),
   },
   {
@@ -65,8 +71,14 @@ const expertOfferBlocks: ExpertOfferBlock[] = [
   },
   {
     id: 'repeated-offer-1',
-    render: ({ offer, trackingEnabled, trafficChannel }) => (
-      <ExpertRepeatedOffer offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} index={0} />
+    render: ({ offer, trackingEnabled, trafficChannel, attribution }) => (
+      <ExpertRepeatedOffer
+        offer={offer}
+        trackingEnabled={trackingEnabled}
+        trafficChannel={trafficChannel}
+        attribution={attribution}
+        index={0}
+      />
     ),
   },
   {
@@ -79,14 +91,25 @@ const expertOfferBlocks: ExpertOfferBlock[] = [
   },
   {
     id: 'repeated-offer-2',
-    render: ({ offer, trackingEnabled, trafficChannel }) => (
-      <ExpertRepeatedOffer offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} index={1} />
+    render: ({ offer, trackingEnabled, trafficChannel, attribution }) => (
+      <ExpertRepeatedOffer
+        offer={offer}
+        trackingEnabled={trackingEnabled}
+        trafficChannel={trafficChannel}
+        attribution={attribution}
+        index={1}
+      />
     ),
   },
   {
     id: 'value-stack',
-    render: ({ offer, trackingEnabled, trafficChannel }) => (
-      <ExpertOfferStack offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} />
+    render: ({ offer, trackingEnabled, trafficChannel, attribution }) => (
+      <ExpertOfferStack
+        offer={offer}
+        trackingEnabled={trackingEnabled}
+        trafficChannel={trafficChannel}
+        attribution={attribution}
+      />
     ),
   },
   {
@@ -95,8 +118,14 @@ const expertOfferBlocks: ExpertOfferBlock[] = [
   },
   {
     id: 'repeated-offer-3',
-    render: ({ offer, trackingEnabled, trafficChannel }) => (
-      <ExpertRepeatedOffer offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} index={2} />
+    render: ({ offer, trackingEnabled, trafficChannel, attribution }) => (
+      <ExpertRepeatedOffer
+        offer={offer}
+        trackingEnabled={trackingEnabled}
+        trafficChannel={trafficChannel}
+        attribution={attribution}
+        index={2}
+      />
     ),
   },
   {
@@ -109,8 +138,14 @@ const expertOfferBlocks: ExpertOfferBlock[] = [
   },
   {
     id: 'repeated-offer-4',
-    render: ({ offer, trackingEnabled, trafficChannel }) => (
-      <ExpertRepeatedOffer offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} index={3} />
+    render: ({ offer, trackingEnabled, trafficChannel, attribution }) => (
+      <ExpertRepeatedOffer
+        offer={offer}
+        trackingEnabled={trackingEnabled}
+        trafficChannel={trafficChannel}
+        attribution={attribution}
+        index={3}
+      />
     ),
   },
   {
@@ -119,20 +154,26 @@ const expertOfferBlocks: ExpertOfferBlock[] = [
   },
   {
     id: 'final-cta',
-    render: ({ offer, trackingEnabled, trafficChannel }) => (
-      <ExpertOfferFinalCta offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} />
+    render: ({ offer, trackingEnabled, trafficChannel, attribution }) => (
+      <ExpertOfferFinalCta
+        offer={offer}
+        trackingEnabled={trackingEnabled}
+        trafficChannel={trafficChannel}
+        attribution={attribution}
+      />
     ),
   },
 ];
 
 export function ExpertOfferPage() {
   const location = useLocation();
-  const attribution = resolveCurrentAttribution(location);
+  const attribution = useMemo(() => resolveCurrentAttribution(location), [location]);
   const trafficChannel = attribution.channel;
   const blockContext: ExpertOfferBlockContext = {
     offer: funnelConfig.offer,
     trackingEnabled: attribution.shouldTrackAds,
     trafficChannel,
+    attribution,
   };
 
   return (

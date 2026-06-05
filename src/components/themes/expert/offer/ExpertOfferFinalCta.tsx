@@ -1,4 +1,5 @@
 import type { FunnelOfferConfig } from '../../../../core/config/funnel.config';
+import type { ResolvedAttribution } from '../../../../core/attribution';
 import type { TrafficChannel } from '../../../../core/routing/channel';
 import { ExpertOfferOrderCard } from './ExpertOfferOrderCard';
 import { formatOfferPriceLine } from './offerUtils';
@@ -7,9 +8,15 @@ interface ExpertOfferFinalCtaProps {
   offer: FunnelOfferConfig;
   trackingEnabled: boolean;
   trafficChannel: TrafficChannel;
+  attribution: ResolvedAttribution;
 }
 
-export function ExpertOfferFinalCta({ offer, trackingEnabled, trafficChannel }: ExpertOfferFinalCtaProps) {
+export function ExpertOfferFinalCta({
+  offer,
+  trackingEnabled,
+  trafficChannel,
+  attribution,
+}: ExpertOfferFinalCtaProps) {
   const priceLine = formatOfferPriceLine(offer.finalCta.priceLine, offer);
 
   return (
@@ -30,7 +37,12 @@ export function ExpertOfferFinalCta({ offer, trackingEnabled, trafficChannel }: 
           </p>
         </div>
 
-        <ExpertOfferOrderCard offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} />
+        <ExpertOfferOrderCard
+          offer={offer}
+          trackingEnabled={trackingEnabled}
+          trafficChannel={trafficChannel}
+          attribution={attribution}
+        />
       </div>
     </section>
   );

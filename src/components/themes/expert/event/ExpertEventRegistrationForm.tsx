@@ -1,9 +1,12 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DNA } from '../../../../site/current';
 import funnelConfig from '../../../../core/config/funnel.config';
 import { resolveCurrentAttribution, type TrafficChannel } from '../../../../core/attribution';
-import analytics from '../../../../core/services/analytics';
+import analytics, {
+  buildAttributionEventFields,
+  type AttributionEventFields,
+} from '../../../../core/services/analytics';
 import { useVisitor } from '../../../../core/visitor/VisitorContext';
 import { buildVisitorPayload, type VisitorPayload } from '../../../../core/visitor/visitorPayload';
 
@@ -12,7 +15,7 @@ interface FormErrors {
   email?: string;
 }
 
-interface EventLeadPayload extends VisitorPayload {
+interface EventLeadPayload extends VisitorPayload, AttributionEventFields {
   first_name: string;
   name: string;
   email: string;
@@ -42,7 +45,7 @@ function isValidEmail(value: string): boolean {
 
 export function ExpertEventRegistrationForm() {
   const location = useLocation();
-  const attribution = resolveCurrentAttribution(location);
+  const attribution = useMemo(() => resolveCurrentAttribution(location), [location]);
   const trafficChannel = attribution.channel;
   const channelConfig = funnelConfig.trafficChannels[trafficChannel];
   const content = funnelConfig.content.event;
@@ -108,12 +111,12 @@ export function ExpertEventRegistrationForm() {
     const submittedAt = new Date().toISOString();
     const pageUrl = window.location.href;
     const visitorPayload = buildVisitorPayload(visitorData);
+    const attributionFields = buildAttributionEventFields(attribution);
     const payload: EventLeadPayload = {
       first_name: trimmedFirstName,
       name: trimmedFirstName,
       email: trimmedEmail,
       list: captureListSlug,
-      traffic_channel: trafficChannel,
       capture_list_slug: captureListSlug,
       confirmation_path: channelConfig.confirmationPath,
       source: capture.tracking.source,
@@ -123,6 +126,7 @@ export function ExpertEventRegistrationForm() {
       page_url: pageUrl,
       submitted_at: submittedAt,
       event_name: capture.tracking.payloadEventName,
+      ...attributionFields,
       ...visitorPayload,
       meta: {
         ip: visitorPayload.visitor_ip,
@@ -166,6 +170,7 @@ export function ExpertEventRegistrationForm() {
             form_id: capture.tracking.formId,
             content_name: funnelConfig.brandName,
             status: capture.tracking.status,
+            attribution,
           });
         } catch (trackingError) {
           console.warn('[ExpertEventRegistrationForm] lead tracking failed', trackingError);

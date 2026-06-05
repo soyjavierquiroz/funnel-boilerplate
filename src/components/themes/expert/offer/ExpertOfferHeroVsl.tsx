@@ -1,5 +1,6 @@
 import { CheckCircle2, Volume2 } from 'lucide-react';
 import type { FunnelOfferConfig } from '../../../../core/config/funnel.config';
+import type { ResolvedAttribution } from '../../../../core/attribution';
 import type { TrafficChannel } from '../../../../core/routing/channel';
 import { KurukinPlayer } from '../components/video-player/src/kurukin-video-player';
 import { ExpertOfferCta } from './ExpertOfferCta';
@@ -9,9 +10,15 @@ interface ExpertOfferHeroVslProps {
   offer: FunnelOfferConfig;
   trackingEnabled: boolean;
   trafficChannel: TrafficChannel;
+  attribution: ResolvedAttribution;
 }
 
-export function ExpertOfferHeroVsl({ offer, trackingEnabled, trafficChannel }: ExpertOfferHeroVslProps) {
+export function ExpertOfferHeroVsl({
+  offer,
+  trackingEnabled,
+  trafficChannel,
+  attribution,
+}: ExpertOfferHeroVslProps) {
   const video = offer.video;
   const isCheckoutConfigured = isOfferCheckoutConfigured(offer.checkoutUrl);
   const videoSource = video.url || video.videoId;
@@ -113,7 +120,12 @@ export function ExpertOfferHeroVsl({ offer, trackingEnabled, trafficChannel }: E
             </div>
 
             <div className="mt-5">
-              <ExpertOfferCta offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} />
+              <ExpertOfferCta
+                offer={offer}
+                trackingEnabled={trackingEnabled}
+                trafficChannel={trafficChannel}
+                attribution={attribution}
+              />
             </div>
 
             <p className="expert-body mt-3 text-sm font-semibold leading-6 text-event-muted">

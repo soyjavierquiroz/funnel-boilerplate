@@ -1,4 +1,12 @@
 import funnelConfig from '../config/funnel.config';
+import {
+  resolveCurrentAttribution,
+  type AttributionClickIds,
+  type AttributionSource,
+  type PaidPlatform,
+  type ResolvedAttribution,
+  type TrafficChannel,
+} from '../attribution';
 import { DNA } from '../../site/current';
 
 type AnalyticsPrimitive = string | number | boolean | null | undefined;
@@ -9,6 +17,22 @@ export type AnalyticsEventData =
   | {
       [key: string]: AnalyticsEventData;
     };
+
+export interface AttributionEventFields {
+  traffic_channel: TrafficChannel;
+  attribution_source: AttributionSource;
+  paid_platform: PaidPlatform;
+  click_ids: AttributionClickIds;
+  utms: Record<string, string>;
+  landing_path: string;
+  current_path: string;
+  should_track_ads: boolean;
+}
+
+export interface AnalyticsTrackEventData extends Record<string, unknown> {
+  attribution?: ResolvedAttribution;
+  trackingEnabled?: boolean;
+}
 
 export interface TrackEventResult {
   eventId: string;
@@ -60,6 +84,7 @@ interface AttributionData {
   utm_id: string | null;
   fbclid: string | null;
   ttclid: string | null;
+  gclid: string | null;
   landing_page: string | null;
   referrer: string | null;
   captured_at: string | null;
@@ -123,7 +148,6 @@ const META_PIXEL_SCRIPT_URL = DNA.tracking.metaPixelScriptUrl;
 const TIKTOK_PIXEL_SCRIPT_ID = 'boilerplate-tiktok-pixel-script';
 const TIKTOK_PIXEL_SCRIPT_BASE_URL = DNA.tracking.tiktokPixelScriptBaseUrl;
 const ANALYTICS_STORAGE_PREFIX = 'boilerplate.analytics';
-const ATTRIBUTION_STORAGE_KEY = `${ANALYTICS_STORAGE_PREFIX}.attribution`;
 const ANONYMOUS_ID_STORAGE_KEY = `${ANALYTICS_STORAGE_PREFIX}.anonymous_id`;
 const META_STANDARD_EVENTS = new Set([
   'PageView',
@@ -145,20 +169,6 @@ const META_STANDARD_EVENTS = new Set([
   'SubmitApplication',
   'Subscribe',
 ]);
-
-const DEFAULT_ATTRIBUTION: AttributionData = {
-  utm_source: null,
-  utm_medium: null,
-  utm_campaign: null,
-  utm_term: null,
-  utm_content: null,
-  utm_id: null,
-  fbclid: null,
-  ttclid: null,
-  landing_page: null,
-  referrer: null,
-  captured_at: null,
-};
 
 let isInitialized = false;
 let metaScriptPromise: Promise<void> | null = null;
@@ -185,18 +195,6 @@ const toRecord = (value: unknown): Record<string, unknown> => {
   }
 
   return value as Record<string, unknown>;
-};
-
-const safeJsonParse = <T,>(value: string | null): T | null => {
-  if (!value) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(value) as T;
-  } catch {
-    return null;
-  }
 };
 
 const readStorageValue = (key: string): string | null => {
@@ -277,50 +275,70 @@ const createMetaFbp = (): string => `fb.1.${Date.now()}.${Math.floor(Math.random
 
 const createMetaFbc = (fbclid: string): string => `fb.1.${Date.now()}.${fbclid}`;
 
-const parseAttributionFromUrl = (): AttributionData => {
-  if (!isBrowserEnvironment()) {
-    return { ...DEFAULT_ATTRIBUTION };
+const getUtmValue = (attribution: ResolvedAttribution, key: string): string | null =>
+  normalizeNullable(attribution.utms[key]);
+
+const toLegacyAttributionData = (attribution: ResolvedAttribution): AttributionData => ({
+  utm_source: getUtmValue(attribution, 'utm_source'),
+  utm_medium: getUtmValue(attribution, 'utm_medium'),
+  utm_campaign: getUtmValue(attribution, 'utm_campaign'),
+  utm_term: getUtmValue(attribution, 'utm_term'),
+  utm_content: getUtmValue(attribution, 'utm_content'),
+  utm_id: getUtmValue(attribution, 'utm_id'),
+  fbclid: normalizeNullable(attribution.clickIds.fbclid),
+  ttclid: normalizeNullable(attribution.clickIds.ttclid),
+  gclid: normalizeNullable(attribution.clickIds.gclid),
+  landing_page: attribution.landingPath,
+  referrer: isBrowserEnvironment() ? normalizeNullable(document.referrer) : null,
+  captured_at: new Date().toISOString(),
+});
+
+export const buildAttributionEventFields = (
+  attribution: ResolvedAttribution,
+): AttributionEventFields => ({
+  traffic_channel: attribution.channel,
+  attribution_source: attribution.source,
+  paid_platform: attribution.paidPlatform,
+  click_ids: attribution.clickIds,
+  utms: attribution.utms,
+  landing_path: attribution.landingPath,
+  current_path: attribution.currentPath,
+  should_track_ads: attribution.shouldTrackAds,
+});
+
+const resolveEventAttribution = (data: AnalyticsTrackEventData): ResolvedAttribution => {
+  if (data.attribution) {
+    return data.attribution;
   }
 
-  const params = new URLSearchParams(window.location.search);
-
-  return {
-    utm_source: normalizeNullable(params.get('utm_source')),
-    utm_medium: normalizeNullable(params.get('utm_medium')),
-    utm_campaign: normalizeNullable(params.get('utm_campaign')),
-    utm_term: normalizeNullable(params.get('utm_term')),
-    utm_content: normalizeNullable(params.get('utm_content')),
-    utm_id: normalizeNullable(params.get('utm_id')),
-    fbclid: normalizeNullable(params.get('fbclid')),
-    ttclid: normalizeNullable(params.get('ttclid')),
-    landing_page: `${window.location.pathname}${window.location.search}${window.location.hash}`,
-    referrer: normalizeNullable(document.referrer),
-    captured_at: new Date().toISOString(),
-  };
+  return resolveCurrentAttribution();
 };
 
-const mergeAttribution = (incoming: AttributionData): AttributionData => {
-  const persisted = safeJsonParse<AttributionData>(readStorageValue(ATTRIBUTION_STORAGE_KEY));
-  const current = persisted ?? DEFAULT_ATTRIBUTION;
+const resolveAdsTrackingEnabled = (
+  data: AnalyticsTrackEventData,
+  attribution: ResolvedAttribution,
+): boolean => {
+  if (typeof data.trackingEnabled === 'boolean') {
+    return data.trackingEnabled;
+  }
 
-  const next: AttributionData = {
-    utm_source: incoming.utm_source ?? current.utm_source,
-    utm_medium: incoming.utm_medium ?? current.utm_medium,
-    utm_campaign: incoming.utm_campaign ?? current.utm_campaign,
-    utm_term: incoming.utm_term ?? current.utm_term,
-    utm_content: incoming.utm_content ?? current.utm_content,
-    utm_id: incoming.utm_id ?? current.utm_id,
-    fbclid: incoming.fbclid ?? current.fbclid,
-    ttclid: incoming.ttclid ?? current.ttclid,
-    landing_page: incoming.landing_page ?? current.landing_page,
-    referrer: incoming.referrer ?? current.referrer,
-    captured_at: incoming.captured_at ?? current.captured_at,
-  };
-
-  writeStorageValue(ATTRIBUTION_STORAGE_KEY, JSON.stringify(next));
-
-  return next;
+  return attribution.shouldTrackAds;
 };
+
+const stripAnalyticsControlFields = (data: AnalyticsTrackEventData): Record<string, unknown> => {
+  const eventData = { ...data };
+  delete eventData.attribution;
+
+  return eventData;
+};
+
+const enrichEventData = (
+  data: AnalyticsTrackEventData,
+  attribution: ResolvedAttribution,
+): Record<string, unknown> => ({
+  ...stripAnalyticsControlFields(data),
+  ...buildAttributionEventFields(attribution),
+});
 
 const syncTrackingCookies = (attribution: AttributionData): TrackingCookies => {
   let fbp = readCookieValue('_fbp');
@@ -349,16 +367,17 @@ const syncTrackingCookies = (attribution: AttributionData): TrackingCookies => {
   };
 };
 
-const ensureInitialized = (): { anonymousId: string; attribution: AttributionData; cookies: TrackingCookies } => {
+const ensureInitialized = (
+  attribution: AttributionData,
+): { anonymousId: string; cookies: TrackingCookies } => {
   const anonymousId = getAnonymousId();
-  const attribution = mergeAttribution(parseAttributionFromUrl());
   const cookies = syncTrackingCookies(attribution);
 
   if (!isInitialized) {
     isInitialized = true;
   }
 
-  return { anonymousId, attribution, cookies };
+  return { anonymousId, cookies };
 };
 
 const createEventId = (): string => {
@@ -629,11 +648,29 @@ const buildCapiPayload = ({
 
 const isMetaStandardEvent = (eventName: string): boolean => META_STANDARD_EVENTS.has(eventName);
 
-const trackEvent = async (eventName: string, data: Record<string, unknown> = {}): Promise<TrackEventResult> => {
-  const { anonymousId, attribution, cookies } = ensureInitialized();
+const trackEvent = async (
+  eventName: string,
+  data: AnalyticsTrackEventData = {},
+): Promise<TrackEventResult> => {
+  const attribution = resolveEventAttribution(data);
   const eventId = createEventId();
+  const shouldSendAdsTracking = resolveAdsTrackingEnabled(data, attribution);
+
+  if (!shouldSendAdsTracking) {
+    return {
+      eventId,
+      metaBrowserSent: false,
+      tiktokBrowserSent: false,
+      capiSent: false,
+      capiStatus: null,
+    };
+  }
+
+  const legacyAttribution = toLegacyAttributionData(attribution);
+  const eventData = enrichEventData(data, attribution);
+  const { anonymousId, cookies } = ensureInitialized(legacyAttribution);
   const eventTime = Math.floor(Date.now() / 1000);
-  const preparedUserData = await prepareUserData(data);
+  const preparedUserData = await prepareUserData(eventData);
   const metaPixelId = normalizePixelId(funnelConfig.integrations.metaPixelId);
   const tiktokPixelId = normalizePixelId(funnelConfig.integrations.tiktokPixelId);
   const capiWebhookUrl = normalizePixelId(funnelConfig.integrations.capiWebhookUrl);
@@ -646,7 +683,7 @@ const trackEvent = async (eventName: string, data: Record<string, unknown> = {})
 
       if (typeof fbq === 'function') {
         const method = isMetaStandardEvent(eventName) ? 'track' : 'trackCustom';
-        fbq(method, eventName, data, { eventID: eventId });
+        fbq(method, eventName, eventData, { eventID: eventId });
         metaBrowserSent = true;
       }
     } catch {
@@ -669,9 +706,9 @@ const trackEvent = async (eventName: string, data: Record<string, unknown> = {})
       }
 
       if (eventName === 'PageView') {
-        ttq?.page?.(data, tiktokEventOptions);
+        ttq?.page?.(eventData, tiktokEventOptions);
       } else {
-        ttq?.track?.(eventName, data, tiktokEventOptions);
+        ttq?.track?.(eventName, eventData, tiktokEventOptions);
       }
 
       tiktokBrowserSent = Boolean(ttq?.page || ttq?.track);
@@ -692,9 +729,9 @@ const trackEvent = async (eventName: string, data: Record<string, unknown> = {})
 
   const capiPayload = buildCapiPayload({
     anonymousId,
-    attribution,
+    attribution: legacyAttribution,
     cookies,
-    data,
+    data: eventData,
     eventId,
     eventName,
     eventTime,

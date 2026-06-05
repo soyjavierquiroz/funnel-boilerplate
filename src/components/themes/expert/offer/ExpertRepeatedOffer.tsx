@@ -1,4 +1,5 @@
 import type { FunnelOfferConfig } from '../../../../core/config/funnel.config';
+import type { ResolvedAttribution } from '../../../../core/attribution';
 import type { TrafficChannel } from '../../../../core/routing/channel';
 import { ExpertOfferOrderCard } from './ExpertOfferOrderCard';
 import { formatOfferPriceLine } from './offerUtils';
@@ -7,10 +8,17 @@ interface ExpertRepeatedOfferProps {
   offer: FunnelOfferConfig;
   trackingEnabled: boolean;
   trafficChannel: TrafficChannel;
+  attribution: ResolvedAttribution;
   index: number;
 }
 
-export function ExpertRepeatedOffer({ offer, trackingEnabled, trafficChannel, index }: ExpertRepeatedOfferProps) {
+export function ExpertRepeatedOffer({
+  offer,
+  trackingEnabled,
+  trafficChannel,
+  attribution,
+  index,
+}: ExpertRepeatedOfferProps) {
   const repeatedOffer = offer.repeatedOffers[index];
 
   if (!repeatedOffer) {
@@ -41,6 +49,7 @@ export function ExpertRepeatedOffer({ offer, trackingEnabled, trafficChannel, in
           offer={offer}
           trackingEnabled={trackingEnabled}
           trafficChannel={trafficChannel}
+          attribution={attribution}
           offerBox={offerBox}
         />
       </div>

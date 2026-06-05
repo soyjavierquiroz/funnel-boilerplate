@@ -1,5 +1,6 @@
 import { CheckCircle2 } from 'lucide-react';
 import type { FunnelOfferConfig, OfferBoxConfig } from '../../../../core/config/funnel.config';
+import type { ResolvedAttribution } from '../../../../core/attribution';
 import type { TrafficChannel } from '../../../../core/routing/channel';
 import { ExpertOfferCta } from './ExpertOfferCta';
 import { isOfferCheckoutConfigured } from './offerUtils';
@@ -8,6 +9,7 @@ interface ExpertOfferOrderCardProps {
   offer: FunnelOfferConfig;
   trackingEnabled: boolean;
   trafficChannel: TrafficChannel;
+  attribution: ResolvedAttribution;
   className?: string;
   offerBox?: OfferBoxConfig;
 }
@@ -16,6 +18,7 @@ export function ExpertOfferOrderCard({
   offer,
   trackingEnabled,
   trafficChannel,
+  attribution,
   className = '',
   offerBox,
 }: ExpertOfferOrderCardProps) {
@@ -73,7 +76,12 @@ export function ExpertOfferOrderCard({
       </div>
 
       <div className="mt-6">
-        <ExpertOfferCta offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} />
+        <ExpertOfferCta
+          offer={offer}
+          trackingEnabled={trackingEnabled}
+          trafficChannel={trafficChannel}
+          attribution={attribution}
+        />
       </div>
 
       <p className="expert-body mt-3 text-center text-xs font-bold leading-5 text-event-muted">

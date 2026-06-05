@@ -1,5 +1,6 @@
 import { CheckCircle2 } from 'lucide-react';
 import type { FunnelOfferConfig } from '../../../../core/config/funnel.config';
+import type { ResolvedAttribution } from '../../../../core/attribution';
 import type { TrafficChannel } from '../../../../core/routing/channel';
 import { ExpertOfferCta } from './ExpertOfferCta';
 
@@ -7,9 +8,15 @@ interface ExpertOfferValueStackProps {
   offer: FunnelOfferConfig;
   trackingEnabled: boolean;
   trafficChannel: TrafficChannel;
+  attribution: ResolvedAttribution;
 }
 
-export function ExpertOfferValueStack({ offer, trackingEnabled, trafficChannel }: ExpertOfferValueStackProps) {
+export function ExpertOfferValueStack({
+  offer,
+  trackingEnabled,
+  trafficChannel,
+  attribution,
+}: ExpertOfferValueStackProps) {
   const stack = offer.valueStack;
 
   return (
@@ -66,7 +73,12 @@ export function ExpertOfferValueStack({ offer, trackingEnabled, trafficChannel }
             </p>
 
             <div className="mt-6">
-              <ExpertOfferCta offer={offer} trackingEnabled={trackingEnabled} trafficChannel={trafficChannel} />
+              <ExpertOfferCta
+                offer={offer}
+                trackingEnabled={trackingEnabled}
+                trafficChannel={trafficChannel}
+                attribution={attribution}
+              />
             </div>
           </aside>
         </div>
