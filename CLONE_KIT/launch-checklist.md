@@ -14,6 +14,7 @@ Checklist previo a publicar un clon.
 - [ ] La configuracion editable del sitio esta concentrada en `.env`, `src/site/**` y `public/assets/**`.
 - [ ] No queda copy accidental del sitio base.
 - [ ] No se usan assets heredados `public/assets/msm/` como identidad final del clon.
+- [ ] La identidad final usa assets propios en `public/assets/<site-slug>/`.
 - [ ] Marca, producto y dominio son correctos.
 - [ ] Titulos SEO y description son correctos.
 - [ ] Social image carga en URL publica.
@@ -25,9 +26,11 @@ Checklist previo a publicar un clon.
 
 - [ ] Formulario ads captura al webhook/lista correcta.
 - [ ] Formulario organico captura al webhook/lista correcta si aplica.
+- [ ] `public/capture.php` fue revisado como endpoint legacy/shared, no asumido como seguro por sitio.
 - [ ] Campos requeridos coinciden con `DNA.forms.captureFields` desde el site config activo.
 - [ ] Confirmacion redirige al destino correcto.
 - [ ] WhatsApp ads y organico apuntan al grupo correcto si aplica.
+- [ ] Lead de prueba no llega a Aprender Motores/MSM.
 
 ## Checkout
 
@@ -46,6 +49,7 @@ Checklist previo a publicar un clon.
 - [ ] Meta Pixel ID correcto.
 - [ ] TikTok Pixel ID correcto si aplica.
 - [ ] CAPI relay correcto si aplica.
+- [ ] CAPI Relay, CRM, Pixel, TikTok y WhatsApp pertenecen al clon.
 
 ## Responsive y navegador
 
@@ -60,6 +64,9 @@ Checklist previo a publicar un clon.
 ## Deploy
 
 - [ ] Ejecutar build final.
+- [ ] No ejecutar `deploy.sh` sin revisar destino, dominio, permisos y cache.
+- [ ] Si se usa `deploy.sh`, ejecutar solo despues de confirmar el flujo del clon y con `ALLOW_SITE_SPECIFIC_DEPLOY=1`.
+- [ ] Si se usa `docker-stack-boilerplate.yaml`, revisar dominio, rutas, volumenes, env, servicios, redes y certificados.
 - [ ] Subir/sincronizar `dist/` al hosting.
 - [ ] Confirmar fallback SPA en hosting.
 - [ ] Probar dominio final con HTTPS.

@@ -8,6 +8,7 @@ El repo padre no es Aprender Motores / Maneja Sin Miedo. Ese sitio queda como ba
 
 - [ ] Crear nuevo repo desde el repo padre.
 - [ ] Confirmar que el clon conserva historial o registra el repo padre como `upstream`.
+- [ ] Leer `CLONE_KIT/operational-safety.md` antes de configurar captura, tracking o deploy.
 - [ ] Instalar dependencias:
 
 ```bash
@@ -32,6 +33,7 @@ npm run build
 - [ ] Completar `VITE_SOCIAL_IMAGE`.
 - [ ] Completar checkout principal y checkout de oferta.
 - [ ] Completar video principal y video de oferta.
+- [ ] Confirmar que `.env` no contiene dominios, webhooks, Pixel, TikTok, WhatsApp o checkout de Aprender Motores/MSM.
 
 ## 3. Configurar Site Config
 
@@ -62,6 +64,7 @@ Nota: `src/dna.config.ts` queda solo como facade temporal de compatibilidad. No 
 - [ ] Actualizar FAQ, garantia, bonos, value stack y proof.
 - [ ] Revisar que no quede copy del sitio base salvo placeholders aceptados.
 - [ ] Confirmar que no se usen assets heredados `public/assets/msm/` como identidad final del clon.
+- [ ] Confirmar que existe una carpeta propia `public/assets/<site-slug>/` para la identidad final del clon.
 
 ## 5. Configurar CRM y WhatsApp
 
@@ -70,18 +73,27 @@ Nota: `src/dna.config.ts` queda solo como facade temporal de compatibilidad. No 
 - [ ] Definir `VITE_ORGANIC_CAPTURE_LIST_SLUG` para organico.
 - [ ] Definir `VITE_WHATSAPP_GROUP_URL` si la confirmacion ads usa WhatsApp.
 - [ ] Definir `VITE_ORGANIC_WHATSAPP_GROUP_URL` si organico usa otro grupo.
+- [ ] Revisar `public/capture.php`; sigue siendo legacy/shared y sera tratado en Fase 3.
 - [ ] Probar captura con datos de prueba.
 - [ ] Confirmar que el CRM recibe canal/lista esperada.
+- [ ] Confirmar que ningun lead de prueba llega a Aprender Motores/MSM.
 
 ## 6. Configurar tracking
 
 - [ ] Definir `VITE_META_PIXEL_ID` si aplica.
 - [ ] Definir `VITE_TIKTOK_PIXEL_ID` si aplica.
 - [ ] Definir `VITE_CAPI_RELAY_URL` si aplica.
+- [ ] Confirmar que CAPI Relay, CRM, Pixel, TikTok y WhatsApp pertenecen al clon.
 - [ ] Confirmar que `/` y `/oferta` organicos no disparan ads tracking.
 - [ ] Confirmar que `/a` y `/a/oferta` usan tracking segun configuracion.
 
-## 7. Validar rutas
+## 7. Revisar deploy legacy
+
+- [ ] No ejecutar `deploy.sh` sin revisar dominio, destino, permisos y cache.
+- [ ] Si se usa `deploy.sh`, documentar que el flujo pertenece al clon y ejecutar solo con `ALLOW_SITE_SPECIFIC_DEPLOY=1`.
+- [ ] Si se usa `docker-stack-boilerplate.yaml`, revisar dominio, rutas, volumenes, env, servicios, redes y certificados.
+
+## 8. Validar rutas
 
 - [ ] `/`
 - [ ] `/a`
@@ -90,7 +102,7 @@ Nota: `src/dna.config.ts` queda solo como facade temporal de compatibilidad. No 
 - [ ] `/confirmacion`
 - [ ] `/a/confirmacion`
 
-## 8. Validacion final
+## 9. Validacion final
 
 ```bash
 npm run typecheck

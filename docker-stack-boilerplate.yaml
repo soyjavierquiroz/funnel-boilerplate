@@ -1,7 +1,9 @@
 version: "3.8"
 
-# LEGACY: kept only for older Docker Swarm deployments. The active CyberPanel
-# flow builds dist/ and syncs it to public_html/ with deploy.sh.
+# LEGACY Docker Swarm reference only.
+# This is not the recommended deploy flow for clones.
+# Before using it, review domain, routes, volumes, env, services, networks and certificates.
+# The active CyberPanel flow builds dist/ and syncs it to public_html/ with deploy.sh.
 services:
   boilerplate-v1:
     image: nginx:1.27-alpine

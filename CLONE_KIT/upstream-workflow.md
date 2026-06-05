@@ -80,7 +80,10 @@ Regla practica:
 - `src/dna.config.ts`
 - `public/capture.php`
 - `deploy.sh`
+- `docker-stack-boilerplate.yaml`
 - tooling base
+
+`public/capture.php` sigue siendo legacy/shared y sera tratado en Fase 3. `deploy.sh` y `docker-stack-boilerplate.yaml` son site-specific/legacy; los clones no deben asumir que esos archivos apuntan a su destino correcto despues de un sync desde upstream.
 
 ## Flujo para cambios compartidos
 
@@ -112,12 +115,14 @@ Cambios especificos se quedan en el clon:
 - CRM/webhook/listas.
 - WhatsApp.
 - Precios.
+- Deploy site-specific si el clon mantiene `deploy.sh` o Docker Swarm.
 
 ## Antes de sincronizar upstream
 
 - [ ] El clon tiene commit local limpio.
 - [ ] Se entiende que archivos cambio el repo padre.
 - [ ] Hay backup o rama temporal.
+- [ ] Se revisan `public/capture.php`, `deploy.sh` y `docker-stack-boilerplate.yaml` si upstream los modifico.
 - [ ] Se ejecutan validaciones despues del merge/rebase.
 
 ## Despues de sincronizar upstream

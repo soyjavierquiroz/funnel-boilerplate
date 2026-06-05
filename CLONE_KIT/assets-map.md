@@ -43,6 +43,8 @@ Los assets actuales bajo `public/assets/msm/` son heredados del baseline histori
 - Puedes dejarlos como referencia temporal.
 - No los uses como identidad final de otro sitio.
 - No cambies rutas en componentes; cambia rutas desde `src/site/**`.
+- Antes de publicar, confirma que `DNA.assets`, `DNA.assets.event`, `DNA.offer.heroImage`, `DNA.offer.video.posterImage`, `DNA.assets.socialImage` y `DNA.seo.socialImage` ya no apuntan a `public/assets/msm/` salvo que el clon sea MSM.
+- Lee tambien `public/assets/msm/README.md`.
 
 ## Reglas de reemplazo
 
@@ -63,3 +65,4 @@ Los assets actuales bajo `public/assets/msm/` son heredados del baseline histori
 - [ ] Imagenes de proof/testimonios actualizadas.
 - [ ] Imagen final CTA actualizada.
 - [ ] `alt` text configurado en `DNA`.
+- [ ] No quedan assets MSM como identidad final de un clon no-MSM.

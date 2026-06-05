@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 
+if [ "${ALLOW_SITE_SPECIFIC_DEPLOY:-}" != "1" ]; then
+  echo "Error: deploy.sh is site-specific/legacy and is not safe to run by default." >&2
+  echo "Review domain, destination, permissions and cache paths before using it in a clone." >&2
+  echo "Set ALLOW_SITE_SPECIFIC_DEPLOY=1 only after confirming this deploy script belongs to this site." >&2
+  exit 1
+fi
+
 DOMAIN="aprendermotores.com"
 CACHE_DIR="/usr/local/lsws/cachedata/aprendermotores.com"
 

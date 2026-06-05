@@ -57,12 +57,15 @@ No ejecutes `npm audit fix` como parte de la clonacion.
 - `CLONE_KIT/assets-map.md`: mapa de assets reemplazables por sitio.
 - `CLONE_KIT/clone-checklist.md`: pasos para crear y configurar un clon.
 - `CLONE_KIT/launch-checklist.md`: validacion antes de publicar.
+- `CLONE_KIT/operational-safety.md`: riesgos operativos legacy/site-specific antes de launch.
 - `CLONE_KIT/upstream-workflow.md`: flujo para traer cambios del repo padre a clones.
 
-La regla base: en clones se edita `.env`, `src/site/**` y `public/assets/...`; componentes, tracking core, `capture.php`, `Success.tsx` y `deploy.sh` se mantienen como base compartida salvo cambios agnosticos que deban subir al repo padre. MSM sigue siendo el site config actual de ejemplo/baseline, vive detras del boundary `src/site/current.ts` y no debe copiarse como identidad final de otro clon.
+La regla base: en clones se edita `.env`, `src/site/**` y `public/assets/...`; componentes, tracking core, `capture.php`, `Success.tsx`, `deploy.sh` y `docker-stack-boilerplate.yaml` se mantienen como base compartida o legacy salvo cambios agnosticos que deban subir al repo padre. MSM sigue siendo el site config actual de ejemplo/baseline, vive detras del boundary `src/site/current.ts` y no debe copiarse como identidad final de otro clon.
 
 ## Deploy
 
 `dist/` es un artefacto generado y no debe editarse a mano. En CyberPanel/LiteSpeed, `public/.htaccess` queda trackeado para fallback SPA.
 
-`docker-stack-boilerplate.yaml` se conserva solo como referencia legacy de Docker Swarm; el flujo recomendado es build de Vite y sincronizacion de `dist/` al hosting.
+`deploy.sh` es site-specific/legacy y requiere `ALLOW_SITE_SPECIFIC_DEPLOY=1` para evitar ejecucion accidental. Revisa dominio, destino, permisos y cache antes de usarlo en un clon.
+
+`docker-stack-boilerplate.yaml` se conserva solo como referencia legacy de Docker Swarm; el flujo recomendado es build de Vite y sincronizacion de `dist/` al hosting. Revisa dominio, rutas, volumenes, env y servicios antes de usar ese stack.

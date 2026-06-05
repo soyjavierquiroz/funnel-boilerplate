@@ -12,6 +12,7 @@ El repo padre no es Aprender Motores. Aprender Motores / Maneja Sin Miedo queda 
 - `assets-map.md`: inventario de assets que se reemplazan por sitio.
 - `clone-checklist.md`: pasos para crear un clon desde el repo padre.
 - `launch-checklist.md`: validaciones antes de publicar.
+- `operational-safety.md`: riesgos legacy/site-specific que deben revisarse antes de deploy.
 - `upstream-workflow.md`: como mantener cambios del repo padre en clones.
 
 ## Archivos que se editan por sitio
@@ -20,7 +21,8 @@ El repo padre no es Aprender Motores. Aprender Motores / Maneja Sin Miedo queda 
 - `src/site/**`: marca, producto, copy, precios, colores, assets, oferta, evento, exito y fallbacks.
 - `public/assets/...`: imagenes, logos, posters y recursos visuales del sitio.
 - `README.md`: notas especificas del clon, si aplica.
-- `docker-stack-boilerplate.yaml`: solo si el clon usa ese flujo legacy.
+- `deploy.sh`: solo si el clon documenta y asume ese flujo de hosting site-specific.
+- `docker-stack-boilerplate.yaml`: solo si el clon usa ese flujo legacy despues de revisar dominio, rutas, volumenes, env y servicios.
 
 ## Archivos que normalmente NO se editan en clones
 
@@ -28,8 +30,8 @@ El repo padre no es Aprender Motores. Aprender Motores / Maneja Sin Miedo queda 
 - `src/core/**`: routing, tracking core, visitor context, analytics y configuracion derivada.
 - `src/pages/Success.tsx`: flujo de confirmacion/exito compartido.
 - `src/dna.config.ts`: facade temporal de compatibilidad; no es el contrato recomendado del clon.
-- `public/capture.php`: endpoint de captura compartido.
-- `deploy.sh`: script de despliegue base.
+- `public/capture.php`: endpoint de captura legacy/shared. Revisar antes de launch; sera tratado en Fase 3.
+- `deploy.sh`: script de despliegue site-specific/legacy con guard contra ejecucion accidental.
 - `package.json`, `vite.config.ts`, `tailwind.config.js`, `eslint.config.js`: tooling base.
 - `dist/`: artefacto generado; nunca se edita a mano.
 
@@ -41,7 +43,8 @@ Si un clon necesita tocar estos archivos, primero evalua si el cambio debe subir
 2. Copiar `CLONE_KIT/env.template` a `.env` y completar valores reales.
 3. Editar `src/site/**` con marca, copy, assets, colores, precios, oferta, evento y exito.
 4. Reemplazar o agregar assets en `public/assets/<site>/`.
-5. Validar rutas organicas y ads:
+5. Revisar `CLONE_KIT/operational-safety.md` antes de configurar captura, tracking o deploy.
+6. Validar rutas organicas y ads:
    - `/`
    - `/a`
    - `/oferta`
@@ -82,6 +85,8 @@ Configura `.env`:
 
 Configura `src/site/**` solo si necesitas cambiar defaults o comportamiento por sitio. No edites analytics core en clones.
 
+`public/capture.php` sigue siendo legacy/shared. No asumas que apunta al CRM correcto: antes de publicar, envia un lead de prueba y confirma que no llega a Aprender Motores/MSM por accidente.
+
 ## Como clonar a otro dominio
 
 1. Cambia `VITE_DOMAIN`.
@@ -101,7 +106,9 @@ npm run build
 
 Luego subir o sincronizar `dist/` al hosting del sitio. `dist/` es generado; no lo edites a mano ni lo uses como fuente.
 
-Si el clon usa `deploy.sh`, revisa primero que sus rutas/destino sean correctos para el dominio. No cambies `deploy.sh` en clones salvo que ese clon tenga un flujo de hosting propio documentado.
+Si el clon usa `deploy.sh`, revisa primero que sus rutas/destino sean correctos para el dominio. El script requiere `ALLOW_SITE_SPECIFIC_DEPLOY=1` porque es site-specific/legacy; no lo ejecutes sin confirmar destino, dominio, permisos y cache.
+
+Si el clon usa `docker-stack-boilerplate.yaml`, tratalo como referencia legacy de Docker Swarm. Revisa dominio, rutas, volumenes, env, servicios, redes y certificados antes de usarlo.
 
 ## Como validar
 
@@ -126,6 +133,8 @@ Validacion funcional:
 
 - `/oferta` debe quedar como organic y no disparar Pixel/CAPI.
 - `/a/oferta` debe quedar como ads y puede disparar tracking segun configuracion.
+- CAPI Relay, CRM, Pixel, TikTok, WhatsApp y checkout deben pertenecer al clon.
+- Antes de publicar, confirma que ningun lead se envie a Aprender Motores/MSM por accidente.
 - No cambies `src/core/services/analytics.ts` ni `src/core/routing/channel.ts` en un clon salvo que el cambio sea para todos los sitios.
 
 ## Documentos relacionados
@@ -135,3 +144,4 @@ Validacion funcional:
 - `../CLONE_VALIDATION.md`
 - `../TRACKING_AUDIT.md`
 - `../CAPI_RELAY_SITE_AUDIT.md`
+- `operational-safety.md`
