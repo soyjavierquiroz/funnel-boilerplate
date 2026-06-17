@@ -31,6 +31,12 @@ describe('isAdsRoutePath', () => {
     expect(isAdsRoutePath('/', '/x9m')).toBe(false);
     expect(isAdsRoutePath('/oferta', '/x9m')).toBe(false);
   });
+
+  it('supports a clone-specific prefix', () => {
+    expect(isAdsRoutePath('/vxdr', '/vxdr')).toBe(true);
+    expect(isAdsRoutePath('/vxdr/oferta', '/vxdr')).toBe(true);
+    expect(isAdsRoutePath('/x9m/oferta', '/vxdr')).toBe(false);
+  });
 });
 
 describe('stripAdsRoutePrefix', () => {

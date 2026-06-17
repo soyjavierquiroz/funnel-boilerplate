@@ -7,6 +7,7 @@ import {
   type ResolvedAttribution,
   type TrafficChannel,
 } from '../attribution';
+import { isAdsRoutePath } from '../routing/adsRoute';
 import { DNA } from '../../site/current';
 
 type AnalyticsPrimitive = string | number | boolean | null | undefined;
@@ -315,19 +316,17 @@ const resolveEventAttribution = (data: AnalyticsTrackEventData): ResolvedAttribu
 };
 
 const resolveAdsTrackingEnabled = (
-  data: AnalyticsTrackEventData,
   attribution: ResolvedAttribution,
 ): boolean => {
-  if (typeof data.trackingEnabled === 'boolean') {
-    return data.trackingEnabled;
-  }
+  const currentPath = isBrowserEnvironment() ? window.location.pathname : attribution.currentPath;
 
-  return attribution.shouldTrackAds;
+  return isAdsRoutePath(currentPath);
 };
 
 const stripAnalyticsControlFields = (data: AnalyticsTrackEventData): Record<string, unknown> => {
   const eventData = { ...data };
   delete eventData.attribution;
+  delete eventData.trackingEnabled;
 
   return eventData;
 };
@@ -654,7 +653,7 @@ const trackEvent = async (
 ): Promise<TrackEventResult> => {
   const attribution = resolveEventAttribution(data);
   const eventId = createEventId();
-  const shouldSendAdsTracking = resolveAdsTrackingEnabled(data, attribution);
+  const shouldSendAdsTracking = resolveAdsTrackingEnabled(attribution);
 
   if (!shouldSendAdsTracking) {
     return {
